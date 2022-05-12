@@ -68,6 +68,12 @@ export default {
         return;
       }
       try {
+        const bankResult = await this.$axios.get('/profile/banks');
+        if (bankResult.data.length === 0) {
+          this.inProgress = false;
+          this.$toasted.error('you have no bank accounts. Pls add bank account in the profile menu')
+          return;
+        }
         await this.$axios.post(`/accounts/${this.account.id}/withdraw`, {
           amount: this.requestedAmount
         });

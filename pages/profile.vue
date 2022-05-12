@@ -83,7 +83,7 @@ export default {
       }
       try {
         await this.$axios.post('/profile/banks', this.bank);
-        this.$toast.error('Bank details updated successfully');
+        this.$toast.info('Bank details updated successfully');
         this.disableEditMode();
       } catch (err) {
         this.$toast.success('failed to update account details');
