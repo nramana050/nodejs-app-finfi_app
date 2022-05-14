@@ -20,7 +20,7 @@
           div.flex.flex-row.justify-between(v-if="recentTransaction")
             div
               p.text-xs {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
-              p.font-thin.text-lg &#8377; {{ parseFloat(recentTransaction.amount).toFixed(2) }}
+              p.font-thin.text-lg &#8377; {{ parseFloat(recentTransaction.requested_amount).toFixed(2) }}
             div.self-center
               TransferredLabel(v-if="recentTransaction.is_approved")
               InProgressLabel(v-else)
