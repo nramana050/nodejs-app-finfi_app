@@ -54,6 +54,7 @@ export default {
   },
   methods: {
     async initiateOTP() {
+      this.otp = null
       try {
         await this.$axios.$post('/auth/otp', { mobile: Number(this.mobile) }); 
         this.$toast.success('OTP sent!');
@@ -70,7 +71,7 @@ export default {
             organization_code: this.organization.code
           }
         })
-        await this.$auth.setUserToken(result.data.token);
+        await this.$auth.setUserToken(result.data.access_token);
         this.$auth.strategy.token.sync();
         this.$router.push('/passcode');
       } catch (err) {
@@ -86,7 +87,7 @@ export default {
             organization_code: this.organization.code
           }
         })
-        await this.$auth.setUserToken(result.data.token);
+        await this.$auth.setUserToken(result.data.access_token);
         this.$auth.strategy.token.sync();
         this.$router.push('/dashboard');
       } catch (err) {

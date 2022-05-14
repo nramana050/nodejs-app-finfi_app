@@ -10,6 +10,8 @@
           DatePicker(range input-class="border w-full px-4" placeholder="Select Date Range" v-model="dates" range-separator=' ⟺ ' @change="fetchTransactions")
     div.p-4.text-center(v-if="transactions.length > 0")
       TransactionLineItem.pr-4(:transaction="transaction" v-for="(transaction, index) in transactions" :key="index")
+    div.p-4.text-center(v-else-if="isLoading")
+      p.text-sm Loading ...
     div.p-4.text-center(v-else)
       p.text-sm No transactions found
 </template>
@@ -23,6 +25,7 @@ export default {
     return {
       dates: [new Date(), new Date()],
       transactions: [],
+      isLoading: false,
     }
   },
 
@@ -32,6 +35,8 @@ export default {
 
   methods: {
     async fetchTransactions() {
+      this.transactions = []
+      this.isLoading = true;
       const startDate = this.$dayjs(this.dates[0]).format('YYYY-MM-DD')
       const endDate = this.$dayjs(this.dates[1]).format('YYYY-MM-DD')
       try {
@@ -41,8 +46,10 @@ export default {
           const transactions = await this.$axios.get(`/accounts/${data.id}/transactions?start_date=${startDate}&end_date=${endDate}`);
           this.transactions = transactions.data;
         }
+        this.isLoading = false;
       } catch (err) {
         this.$toast.error('Failed to fetch accounts');
+        this.isLoading = false;
       }
     }
   }
