@@ -30,8 +30,6 @@
         div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
           button.bg-red-700.w-full.h-6.rounded.text-white.mx-2(@click="cancelEdit") Cancel
           button.bg-green-700.w-full.h-6.rounded.text-white.mx-2(@click="saveBankDetail") Save
-      div.flex-0.p-4.mt-4
-        button.h-12.bg-red-700.text-white.uppercase.text-lg.w-full.rounded-md(@click="logout") logout
 </template>
 
 <script>
@@ -104,9 +102,6 @@ export default {
       await this.getBankAccount();
       this.disableEditMode();
     },
-    logout() {
-      this.$auth.logout();
-    }
   }
 }
 </script>
