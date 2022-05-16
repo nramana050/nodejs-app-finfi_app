@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gradient-to-tr.from-pink-700.to-gray-900.text-white
+  div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gradient-to-tr.from-green-700.to-blue-800.text-white
     div
       p.tracking-wider.uppercase.font-bold {{ user.first_name }} {{ user.last_name }}
       p.tracking-wide.text-md {{ account.provider }}
