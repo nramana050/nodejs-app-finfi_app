@@ -2,9 +2,9 @@
   div.flex.flex-col
     div.flex-0
       PageHeader(:title="'Dashboard'")
-    div(v-if="account")
+    div(v-if="account && organization")
       div.flex-0.p-4
-        AccountCard(:account="account")
+        AccountCard(:account="account" :provider="organization")
       div.p-4
         p.uppercase.py-4.font-bold.tracking-wider Request for Cash
         div.relative
@@ -34,7 +34,7 @@ export default {
 
   data() {
     return {
-      organization: this.$store.getters.organization,
+      organization: null,
       account: null,
       requestedAmount: null,
       recentTransaction: null,
@@ -51,13 +51,16 @@ export default {
           id: data.id,
           number: data.account_number,
           balance: data.account_balance,
-          provider: this.organization.name,
         };
       }
       this.fetchRecentWithdrawal();
     } catch (err) {
       this.$toast.error('Failed to fetch accounts');
     }
+  },
+
+  mounted() {
+    this.organization = this.$store.getters.organization
   },
 
   methods: {

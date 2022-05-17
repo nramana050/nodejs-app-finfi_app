@@ -5,7 +5,7 @@
     div.flex-0.p-4.leading-7
       p.text-md.text-lg.pb-5 Set Passcode
       input.w-full.rounded.border.h-10.px-4.mb-4(type="number" v-model="passcode_1" placeholder="Enter 6 digit numbers")
-      input.w-full.rounded.border.h-10.px-4.mb-8(type="number" v-model="passcode_2" placeholder="Repeat passcode")
+      input.w-full.rounded.border.h-10.px-4.mb-8(type="number" v-model="passcode_2" placeholder="Confirm passcode")
       button.h-8.bg-primary.text-white.uppercase.w-full.rounded-md.font-bold(@click="setPasscode") Update
     div.flex-0.p-4.mt-24
       p.text-md.text-lg.pb-5 Are you sure to logout ?
@@ -19,8 +19,8 @@ export default {
 
   data() {
     return {
-      passcode_1: null,
-      passcode_2: null,
+      passcode_1: '',
+      passcode_2: '',
     }
   },
 

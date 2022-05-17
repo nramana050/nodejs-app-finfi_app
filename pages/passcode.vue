@@ -18,15 +18,15 @@ export default {
   data() {
     return {
       user: this.$auth.user,
-      passcode_1: null,
-      passcode_2: null,
+      passcode_1: '',
+      passcode_2: '',
       hasError: false,
     }
   },
   methods: {
     async setPasscode() {
       if (this.passcode_1.length !== 6 || this.passcode_2.length !== 6) {
-        this.$toast.error('Enter 6 digit passcode');
+        this.$toast.error('Enter 6 digit numeric passcode');
         return;
       }
       if (this.passcode_1 !== this.passcode_2) {
