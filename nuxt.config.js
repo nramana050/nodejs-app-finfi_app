@@ -46,7 +46,7 @@ export default {
   components: true,
 
   axios: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://devapi.myfinfi.com',
   },
 
   pwa: {
@@ -69,7 +69,7 @@ export default {
 
   server: {
     host: '0.0.0.0',
-    port: 3001
+    port: 8002
   },
 
   router: {

@@ -2,11 +2,11 @@
   div.flex.flex-col
     LeadHeader.flex(:title="`Hello ${user.first_name},`" :lead="'Set 6 digit login passcode. You can also set it later under profile menu.'")
     div.flex.flex-col.py-12
-      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3(class="focus:outline-none focus:shadow-outline" placeholder="Passcode" v-model="passcode")
-      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.my-4(class="focus:outline-none focus:shadow-outline" placeholder="Confirm passcode" v-model="passcode_2")
+      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3(class="focus:outline-none focus:shadow-outline" placeholder="Enter 6 digit passcode" type="number" v-model="passcode_1")
+      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.my-4(class="focus:outline-none focus:shadow-outline" placeholder="Confirm passcode" type="number" v-model="passcode_2")
     div.flex.flex-1.justify-between.py-8
       p.text-sm.text-white.underline(@click="navToDashboard") Skip to Dashboard
-      button.text-white.inline-flex.items-start(@click="set")
+      button.text-white.inline-flex.items-start(@click="setPasscode")
         span.text-xl.tracking-wide Set
         outline-arrow-circle-right-icon.w-8.h-8.ml-2
       
@@ -18,24 +18,29 @@ export default {
   data() {
     return {
       user: this.$auth.user,
-      passcode: null,
-      passcode_2: null,
+      passcode_1: '',
+      passcode_2: '',
       hasError: false,
     }
   },
   methods: {
-    async set() {
+    async setPasscode() {
+      if (this.passcode_1.length !== 6 || this.passcode_2.length !== 6) {
+        this.$toast.error('Enter 6 digit numeric passcode');
+        return;
+      }
+      if (this.passcode_1 !== this.passcode_2) {
+        this.$toast.error('passcode didnot match');
+        return;
+      }
       try {
-        if (Number(this.passcode) !== Number(this.passcode_2)) {
-          this.$toast.error('Passcode not matched');
-          return;
-        }
-        await this.$axios.$post('/profile/passcode', { passcode: Number(this.passcode) }); 
-        this.$toast.success('Passcode set successfully');
-        setTimeout(() => this.navToDashboard() , 2000);
+        await this.$axios.post('/profile/passcode', {
+          passcode: Number(this.passcode_1),
+        });
+        this.$toast.info('Passcode updated successfully');
+        this.navToDashboard();
       } catch (err) {
-        this.hasError = true;
-        this.$toast.error('Failed');
+        this.$toast.error('failed to update passcode');
       }
     },
     navToDashboard() {
