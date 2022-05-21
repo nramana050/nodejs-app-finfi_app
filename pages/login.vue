@@ -9,7 +9,7 @@
     div.flex.flex-col.pb-4(v-if="isUserRegistered")
       div(v-if="skipOTP")
         input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="Passcode" v-model="passcode")
-        p.text-sm.text-white.pt-8.underline Forgot passcode?
+        p.text-sm.text-white.pt-8.underline(@click="switchToOTPMode") Forgot passcode?
       div(v-else)
         input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" v-model="otp")
         p.text-sm.text-white.pt-8.underline(@click="initiateOTP") Resend OTP
@@ -116,5 +116,10 @@ export default {
       this.skipOTP = true
     }
   },
+
+  switchToOTPMode() {
+    this.skipOTP = false;
+    this.initiateOTP();
+  }
 }
 </script>
