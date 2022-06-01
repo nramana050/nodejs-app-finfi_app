@@ -82,7 +82,10 @@ export default {
     strategies: {
       token: {
         scheme: 'local',
-        token: { global: true },
+        token: {
+          maxAge: 60 * 60 * 24 * 30,
+          global: true
+        },
         user: { autoFetch: false, property: false },
         endpoints: {
           login: { url: 'auth/login', method: 'post' },
