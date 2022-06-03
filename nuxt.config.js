@@ -15,13 +15,15 @@ export default {
 
   css: [
     '~/assets/style.css',
-    '~/node_modules/vue2-datepicker/index.css'
+    '~/node_modules/vue2-datepicker/index.css',
+    '~/node_modules/vue-stepper/src/HorizontalStepper.scss'
   ],
 
   plugins: [
     { src: '~/plugins/vue.modal.js' },
     { src: '~/plugins/date.picker', ssr: false },
-    { src: '~/plugins/vuex.persist', ssr: false }
+    { src: '~/plugins/vuex.persist', ssr: false },
+    { src: '~/plugins/vue.stepper', ssr: false },
   ],
 
   buildModules: [

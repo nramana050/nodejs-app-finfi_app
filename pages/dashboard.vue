@@ -44,7 +44,7 @@ export default {
 
   async fetch() {
     try {
-      const account = await this.$axios.get('/accounts');
+      const account = await this.$axios.get('/accounts?type=salary');
       const { data } = account;
       if (data) {
         this.account = {
@@ -92,7 +92,7 @@ export default {
     },
     async fetchRecentWithdrawal() {
       try {
-        const result = await this.$axios.get(`/accounts/${this.account.id}/withdrawals?limit=1`);
+        const result = await this.$axios.get(`/accounts/${this.account.id}/transfers?limit=1`);
         if (result.data.length > 0) {
           this.recentTransaction = result.data[0]
         }

@@ -28,6 +28,7 @@
     "vue": "^2.6.14",
     "vue-final-modal": "^2.4.1",
     "vue-server-renderer": "^2.6.14",
+    "vue-stepper": "^1.4.2",
     "vue-template-compiler": "^2.6.14",
     "vue2-datepicker": "^3.10.4",
     "vuex-persistedstate": "^3.2.1",
@@ -52,6 +53,8 @@
     "prettier": "^2.5.1",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
+    "sass": "^1.52.2",
+    "sass-loader": "^10.2.1",
     "vue-jest": "^3.0.4"
   }
 }
