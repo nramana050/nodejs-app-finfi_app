@@ -15,15 +15,14 @@ export default {
 
   css: [
     '~/assets/style.css',
-    '~/node_modules/vue2-datepicker/index.css',
-    '~/node_modules/vue-stepper/src/HorizontalStepper.scss'
+    '~/node_modules/vue2-datepicker/index.css'
   ],
 
   plugins: [
     { src: '~/plugins/vue.modal.js' },
     { src: '~/plugins/date.picker', ssr: false },
     { src: '~/plugins/vuex.persist', ssr: false },
-    { src: '~/plugins/vue.stepper', ssr: false },
+    { src: '~/plugins/vue.modal.2.js', ssr: false },
   ],
 
   buildModules: [
@@ -31,6 +30,7 @@ export default {
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
     '@nuxtjs/device',
+    '@braid/vue-formulate/nuxt',
     '@nuxt-hero-icons/outline/nuxt',
     '@nuxt-hero-icons/solid/nuxt'
   ],
@@ -48,7 +48,8 @@ export default {
   components: true,
 
   axios: {
-    baseURL: 'https://devapi.myfinfi.com',
+    // baseURL: 'https://devapi.myfinfi.com',
+    baseURL: 'http://localhost:3000'
   },
 
   pwa: {
@@ -106,6 +107,10 @@ export default {
         }
       }
     },
+  },
+
+  formulate: {
+    configPath: '~/formulate.config.js'
   },
 
   googleFonts: {
