@@ -1,29 +1,29 @@
 <template lang="pug">
-  div.flex.flex-col
-    div.flex.mb-4
-      NuxtLink(to="/")
-        outline-arrow-circle-left-icon.w-8.h-8.mr-2.text-white
-    LeadHeader.flex(:title="organization ? organization.name : ''" :lead="'Please login with your registered mobile number'")
-    div.flex.flex-col.py-4
-      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
-    div.flex.flex-col.pb-4(v-if="isUserRegistered")
-      div(v-if="skipOTP")
-        input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="Passcode" v-model="passcode")
-        p.text-sm.text-white.pt-8.underline(@click="switchToOTPMode") Forgot passcode?
-      div(v-else)
-        input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" v-model="otp")
-        p.text-sm.text-white.pt-8.underline(@click="initiateOTP") Resend OTP
-    div.flex.flex-1.justify-end.py-8(v-if="isUserRegistered")
-      button.text-white.inline-flex.items-start(@click="login" v-if="skipOTP")
-        span.text-xl.tracking-wide Login
-        outline-arrow-circle-right-icon.w-8.h-8.ml-2
-      button.text-white.inline-flex.items-start(@click="verifyOTP" v-else)
-        span.text-xl.tracking-wide Verify
-        outline-arrow-circle-right-icon.w-8.h-8.ml-2
-    div.flex.flex-1.justify-end.py-8(v-else)
-      button.text-white.inline-flex.items-start(@click="validate")
-        span.text-xl.tracking-wide Proceed
-        outline-arrow-circle-right-icon.w-8.h-8.ml-2
+div.flex.flex-col
+  div.flex.mb-4
+    NuxtLink(to="/")
+      outline-arrow-circle-left-icon.w-8.h-8.mr-2.text-white
+  LeadHeader.flex(:title="organization ? organization.name : ''" :lead="'Please login with your registered mobile number'")
+  div.flex.flex-col.py-4
+    input.shadow.appearance-none.border.rounded.w-full.py-2.px-3(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
+  div.flex.flex-col.pb-4(v-if="isUserRegistered")
+    div(v-if="skipOTP")
+      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="Passcode" v-model="passcode")
+      p.text-sm.text-white.pt-8.underline(@click="switchToOTPMode") Forgot passcode?
+    div(v-else)
+      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" v-model="otp")
+      p.text-sm.text-white.pt-8.underline(@click="initiateOTP") Resend OTP
+  div.flex.flex-1.justify-end.py-8(v-if="isUserRegistered")
+    button.text-white.inline-flex.items-start(@click="login" v-if="skipOTP")
+      span.text-xl.tracking-wide Login
+      outline-arrow-circle-right-icon.w-8.h-8.ml-2
+    button.text-white.inline-flex.items-start(@click="verifyOTP" v-else)
+      span.text-xl.tracking-wide Verify
+      outline-arrow-circle-right-icon.w-8.h-8.ml-2
+  div.flex.flex-1.justify-end.py-8(v-else)
+    button.text-white.inline-flex.items-start(@click="validate")
+      span.text-xl.tracking-wide Proceed
+      outline-arrow-circle-right-icon.w-8.h-8.ml-2
 </template>
 
 <script>
@@ -45,7 +45,7 @@ export default {
     },
   },
   beforeMount() {
-    if (this.$auth.loggedIn) {
+    if (this.$auth.strategy.token.status().valid()) {
       this.$router.push('/dashboard');
     }
     if (!this.organization) {

@@ -40,12 +40,8 @@ export default {
       const startDate = this.$dayjs(this.dates[0]).format('YYYY-MM-DD')
       const endDate = this.$dayjs(this.dates[1]).format('YYYY-MM-DD')
       try {
-        const account = await this.$axios.get('/accounts');
-        const { data } = account;
-        if (data) {
-          const transactions = await this.$axios.get(`/accounts/${data.id}/transactions?start_date=${startDate}&end_date=${endDate}`);
-          this.transactions = transactions.data;
-        }
+        const transactions = await this.$axios.get(`/accounts/transactions?start_date=${startDate}&end_date=${endDate}`);
+        this.transactions = transactions.data;
         this.isLoading = false;
       } catch (err) {
         this.$toast.error('Failed to fetch accounts');

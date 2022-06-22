@@ -64,7 +64,8 @@ export default {
       } catch (err) {}
       this.$emit('next', this.form);
     },
-    cancel() {
+    cancel(e) {
+      e.preventDefault();
       this.$emit('close');
     }
   }

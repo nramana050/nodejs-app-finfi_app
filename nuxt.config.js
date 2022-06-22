@@ -19,10 +19,11 @@ export default {
   ],
 
   plugins: [
-    { src: '~/plugins/vue.modal.js' },
+    { src: '~/plugins/vue.modal' },
     { src: '~/plugins/date.picker', ssr: false },
     { src: '~/plugins/vuex.persist', ssr: false },
-    { src: '~/plugins/vue.modal.2.js', ssr: false },
+    { src: '~/plugins/vue.modal.2', ssr: false },
+    { src: '~/plugins/vue.iframe', ssr: false }
   ],
 
   buildModules: [
@@ -85,10 +86,7 @@ export default {
     strategies: {
       token: {
         scheme: 'local',
-        token: {
-          maxAge: 60 * 60 * 24 * 30,
-          global: true
-        },
+        token: { maxAge: 60 * 60 * 24, global: true },
         user: { autoFetch: false, property: false },
         endpoints: {
           login: { url: 'auth/login', method: 'post' },
@@ -98,7 +96,7 @@ export default {
       },
       otp: {
         scheme: 'local',
-        token: { global: true },
+        token: { maxAge: 60 * 60 * 24, global: true },
         user: { autoFetch: false, property: false },
         endpoints: {
           login: { url: 'auth/otp/verify', method: 'post' },

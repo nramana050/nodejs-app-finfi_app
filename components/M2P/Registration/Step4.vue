@@ -1,9 +1,17 @@
 <template lang="pug">
 div.flex.flex-col
-  p(v-if="isLoading") Registering... 
-  p(v-else) User registered successfully
-  div
-    p {{ result }}
+  div(v-if="isLoading")
+    p Registering... Please wait
+  div(v-else)
+    div(v-if="isSuccess")
+      p Card created successfully
+      div.flex
+        button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Close
+    div(v-else)
+      p Failed to register card
+      div.flex.flex-col
+        button.h-10.px-4.text-white.rounded.bg-primary.font-bold.my-5(@click="restart") Try Again
+        button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
 </template>
 
 <script>
@@ -15,7 +23,7 @@ export default {
   data() {
     return {
       isLoading: true,
-      result: null,
+      isSuccess: true,
     }
   },
 
@@ -25,15 +33,26 @@ export default {
 
   methods: {
     async registerAction() {
-      const result = await this.$axios.$post('/m2p/register', this.form, {
-        headers: {
-          'Authorization': this.token
-        }
-      });
-      if (result) {
-        this.result = result;
+      try {
+        await this.$axios.$post('/m2p/register', this.form, {
+          headers: {
+            'Authorization': this.token
+          }
+        });
+        this.isSuccess = true;
+      } catch (err) {
+        this.isSuccess = false;
+      } finally {
         this.isLoading = false;
       }
+    },
+    restart(e) {
+      e.preventDefault();
+      this.$emit('restart');
+    },
+    cancel(e) {
+      e.preventDefault();
+      this.$emit('close');
     }
   }
 }

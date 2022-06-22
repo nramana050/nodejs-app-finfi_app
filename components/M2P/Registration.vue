@@ -9,7 +9,7 @@ div.flex.flex-col.px-5.py-8#container
     Step1Component(v-if="step.id === 1" v-on:next="step1next" v-on:close="close")
     Step2Component(v-if="step.id === 2" v-on:next="step2next" v-on:close="close")
     Step3Component(v-if="step.id === 3" v-on:next="step3next" v-on:close="close")
-    Step4Component(v-if="step.id === 4" v-on:next="next" v-on:close="close" :form="form")
+    Step4Component(v-if="step.id === 4" v-on:restart="restart" v-on:close="close" :form="form")
 </template>
 
 <script>
@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       form: {
-        otp: '',
+        user: {},
         address: {},
         kyc: {},
       },
@@ -47,7 +47,7 @@ export default {
         id: 4,
         title: 'Status'
       }],
-      currentStep: 1 
+      currentStep: 1
     }
   },
 
@@ -62,7 +62,7 @@ export default {
       this.currentStep += 1
     },
     step1next(data) {
-      this.form.otp = data.otp;
+      this.form.user = data;
       this.next();
     },
     step2next(data) {
@@ -72,6 +72,12 @@ export default {
     step3next(data) {
       this.form.kyc = data;
       this.next();
+    },
+    restart() {
+      const _this = this;
+      setTimeout(function () {
+        _this.currentStep = 1;
+      }, 500);
     },
     close() {
       this.$FModal.hide();
