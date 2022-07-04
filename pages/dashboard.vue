@@ -55,6 +55,7 @@ export default {
         const promiseArray = [];
         promiseArray.push(this.$axios.get('/accounts?type=CASH'));
         promiseArray.push(this.$axios.get('/accounts?type=CARD'));
+        promiseArray.push(this.$axios.get('/accounts?type=PAYABLE'));
         const result = await Promise.all(promiseArray);
         this.accounts = [];
         for (const item of result) {

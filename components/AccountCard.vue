@@ -3,9 +3,15 @@ div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gradient-to-tr.from-green-8
   div.uppercase.pb-5
     p.tracking-wider.font-bold {{ user.first_name }} {{ user.last_name }}
     p.tracking-wider.text-sm {{ provider.name }}
-  div.flex-0.pb-5
-    p.tracking-wide.text-xs Available Balance
-    p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(availableLimit).toFixed(2) }}
+  div.flex.justify-between.pb-5
+    div.flex-0
+      p.tracking-wide.text-xs Available Balance
+      p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(availableLimit).toFixed(2) }}
+    div.flex-0.text-right
+      p.tracking-wide.text-xs
+        | Salary Used
+        sup.pl-1 *
+      p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(payableAmount).toFixed(2) }}
   div.flex.justify-between
     div.flex-0
       p.tracking-wide.text-xs Cash Limit
@@ -13,6 +19,10 @@ div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gradient-to-tr.from-green-8
     div.flex-0.text-right
       p.tracking-wide.text-xs Card Limit
       p.font-bold.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toFixed(2) }}
+  div.flex.pt-4
+    p.text-xs
+      sup.pr-1 *
+      | Employer will deduct from the next salary
 </template>
 
 <script>
@@ -39,6 +49,10 @@ export default {
         balance += item.account_balance
       }
       return balance;
+    },
+    payableAmount() {
+      const payableAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'PAYABLE' );
+      return payableAccount[0].account_balance;
     },
     cashLimit() {
       const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
