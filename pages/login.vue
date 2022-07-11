@@ -114,12 +114,11 @@ export default {
         return;
       }
       this.skipOTP = true
+    },
+    switchToOTPMode() {
+      this.skipOTP = false;
+      this.initiateOTP();
     }
-  },
-
-  switchToOTPMode() {
-    this.skipOTP = false;
-    this.initiateOTP();
   }
 }
 </script>

@@ -3,7 +3,7 @@ div.flex.flex-col.p-8
   div.flex
     p.font-bold.tracking-wide.text-lg Confirmation
   div.flex.py-2
-    p Are you sure to lock your card ?
+    p Are you sure to block your card ?
   div.flex.flex-row.justify-between.pt-4
     button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="close") Cancel
     button.h-8.px-4.text-white.rounded.bg-primary.font-bold(@click="confirm") Yes, Confirm
@@ -15,6 +15,7 @@ export default {
 
   methods: {
     close() {
+      this.$attrs.revert();
       this.$FModal.hide();
     },
     async confirm() {
@@ -24,10 +25,11 @@ export default {
             'Authorization': this.token
           }
         });
+        this.$toast.success('Card Blocked Successfully');
       } catch (err) {
         this.$toast.error('Failed')
       }
-      this.close();
+      this.$FModal.hide();
     },
   }
 }

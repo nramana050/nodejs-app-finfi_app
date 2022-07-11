@@ -13,27 +13,29 @@ div
       div.flex-flex-col.mt-5.bg-gray-100
         div.flex.flex-row.justify-between.py-2.px-8
           span Kit Number
-          span.font-bold.uppercase.tracking-wide {{ card.kit_number }}
+          span.font-bold.uppercase.tracking-wide {{ card.kitList }}
         div.flex.flex-row.justify-between.pb-2.px-8
           span Card Status
-          span.font-bold.uppercase.tracking-wide {{ card.cardStatusList }}
+          span.font-bold.uppercase.tracking-wide {{ isCardBlocked ? 'BLOCKED' : 'ACTIVE' }}
+        div.px-8.bg-white.pt-4
+          div.flex.justify-between.pb-2
+            div.miam.miam-active Block Card
+            label.inline-flex.relative.items-center.cursor-pointer(for='default-toggle2')
+              input#default-toggle2.sr-only.peer(type='checkbox' v-model="isCardBlocked" @change="toggleCardStatus")
+              .w-11.h-6.bg-gray-200.rounded-full.peer(class="peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600")
+              span.ml-3.text-sm.font-medium.text-gray-900(class='dark:text-gray-300')
         div.px-8.bg-white.pt-4
           div.grid.grid-cols-1.divide-y.border.rounded
             div.flex.justify-between.px-4.py-2(@click="openCardSetting")
-              span Card Settings 
-              span &#8250;
-            div.flex.justify-between.px-4.py-2(@click="openCardBlock" v-if="!isCardBlocked")
-              span Block Card
-              span &#8250;
-            div.flex.justify-between.px-4.py-2(@click="openCardUnblock" v-if="isCardBlocked")
-              span Unblock Card
+              span Card Preferences 
               span &#8250;
             div.flex.justify-between.px-4.py-2(@click="openCardPIN")
               span Set PIN 
               span &#8250;  
 
-    div.flex.p-4(v-else)
-      button.h-12.w-24.text-white.rounded.bg-primary.uppercase.font-bold(@click="openRegistrationModal")
+    div.flex.flex-col.p-4(v-else)
+      p.pb-8 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(@click="openRegistrationModal")
         span Get Card
 
 </template>
@@ -58,6 +60,7 @@ export default {
       card: null,
     }
   },
+
   mounted() {
     this.fetchCards();
   },
@@ -69,10 +72,10 @@ export default {
       this.$FModal.show({ component: SetPreference })
     },
     openCardBlock() {
-      this.$FModal.show({ component: BlockCard })
+      this.$FModal.show({ component: BlockCard }, { revert: this.revertLKUL })
     },
     openCardUnblock() {
-      this.$FModal.show({ component: UnblockCard })
+      this.$FModal.show({ component: UnblockCard }, { revert: this.revertLKUL })
     },
     openCardPIN() {
       this.$FModal.show({ component: SetPIN })
@@ -90,13 +93,23 @@ export default {
         this.isLoading = false;
       } catch (err) {
         this.isLoading = false;
-        this.$toasted.error('Failed to fetch cards');
+        // this.$toasted.error('Failed to fetch cards');
       }
+    },
+    toggleCardStatus() {
+      if (this.isCardBlocked) {
+        this.openCardBlock();
+      } else {
+        this.openCardUnblock();
+      }
+    },
+    revertLKUL() {
+      this.isCardBlocked = !this.isCardBlocked
     },
     close() {
       this.$FModal.hide();
     }
-  },
+  }
 }
 </script>
 
