@@ -6,16 +6,16 @@ div.flex.flex-col
     div.flex-0.p-4
       AccountCard(:accounts="accounts" :provider="organization")
     div.p-4
-      p.uppercase.py-4.font-bold.tracking-wider Request for Cash
+      p.uppercase.py-4.font-bold.tracking-wider Transfer to my bank account
       div.relative
         input.h-12.pl-5.rounded.z-0.border.border-purple-100.w-full(class="focus:shadow focus:outline-none" type="number" placeholder="Enter amount" v-model="requestedAmount")
         div.absolute.top-0.right-0(v-if="requestedAmount > 0")
           button.h-12.w-24.text-white.rounded.bg-purple-700.uppercase.font-bold(@click="initCashRequest")
             span(v-if="inProgress")
               LoadingIcon.w-6.h-6.text-white.mx-auto
-            span(v-else) Get Cash
+            span(v-else) Send
     div.p-4
-      p.uppercase.py-4.font-bold.tracking-wider Last Cash Request 
+      p.uppercase.py-4.font-bold.tracking-wider Cash Request Status
       div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gray-50
         div.flex.flex-row.justify-between(v-if="recentTransaction")
           div
