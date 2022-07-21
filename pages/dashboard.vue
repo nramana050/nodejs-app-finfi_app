@@ -15,7 +15,7 @@ div.flex.flex-col
               LoadingIcon.w-6.h-6.text-white.mx-auto
             span(v-else) Send
     div.p-4
-      p.uppercase.py-4.font-bold.tracking-wider Cash Request Status
+      p.uppercase.py-4.font-bold.tracking-wider Bank Transfer Status
       div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gray-50
         div.flex.flex-row.justify-between(v-if="recentTransaction")
           div
