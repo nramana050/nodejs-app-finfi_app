@@ -9,7 +9,7 @@ div.flex.flex-col.px-5.py-8#container
     Step1Component(v-if="step.id === 1" v-on:next="step1next" v-on:close="close")
     Step2Component(v-if="step.id === 2" v-on:next="step2next" v-on:close="close")
     Step3Component(v-if="step.id === 3" v-on:next="step3next" v-on:close="close")
-    Step4Component(v-if="step.id === 4" v-on:restart="restart" v-on:close="close" :form="form")
+    Step4Component(v-if="step.id === 4" v-on:restart="restart" v-on:reload="reload" v-on:close="close" :form="form")
 </template>
 
 <script>
@@ -72,6 +72,9 @@ export default {
     step3next(data) {
       this.form.kyc = data;
       this.next();
+    },
+    reload() {
+      window.location.reload();
     },
     restart() {
       const _this = this;

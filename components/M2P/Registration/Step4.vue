@@ -6,7 +6,7 @@ div.flex.flex-col
     div(v-if="isSuccess")
       p Card created successfully
       div.flex
-        button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Close
+        button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="reload") View Card
     div(v-else)
       p Failed to register card
       div.flex.flex-col
@@ -45,6 +45,10 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    reload(e) {
+      e.preventDefault();
+      this.$emit('reload');
     },
     restart(e) {
       e.preventDefault();

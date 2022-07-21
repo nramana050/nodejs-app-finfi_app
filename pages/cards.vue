@@ -3,13 +3,15 @@ div
   div.flex.flex-col
     div.flex-0
       PageHeader(:title="'Cards'")
-  div(v-if="!isLoading")
+  div(v-if="isLoading")
+    img#loader(src="~/assets/loader.gif")
+  div(v-else)
     div.flex.flex-col(v-if="isCardAvailable")
       div.flex(v-if="card.url")
         iframe(:src="card.url" width="100%" height="320px")
       div.flex(v-else)
         div(width="100%" style="height:270px !important;")
-          img(src="https://static.thenounproject.com/png/2028787-200.png")
+          img#dummycard(src="https://static.thenounproject.com/png/2028787-200.png")
       div.flex-flex-col.mt-5.bg-gray-100
         div.flex.flex-row.justify-between.py-2.px-8
           span Kit Number
@@ -84,12 +86,14 @@ export default {
       this.isLoading = true;
       try {
         const cardList = await this.$axios.get(`/m2p/cards/list`);
-        this.isCardAvailable = true;
-        this.card = cardList.data[0];
-        this.isCardBlocked = this.card.cardStatusList.toUpperCase() === 'LOCKED'
-        const result2 = await this.$axios.get(`/m2p/cards`);
-        this.card.kit_number = result2.data ? result2.data.kit_number : '';
-        this.card.url = result2.data ? result2.data.result : '';
+        if (cardList.data.length > 0) {
+          this.isCardAvailable = true;
+          this.card = cardList.data[0];
+          this.isCardBlocked = this.card.cardStatusList.toUpperCase() === 'LOCKED'
+          const result2 = await this.$axios.get(`/m2p/cards`);
+          this.card.kit_number = result2.data ? result2.data.kit_number : '';
+          this.card.url = result2.data ? result2.data.result : '';
+        }
         this.isLoading = false;
       } catch (err) {
         this.isLoading = false;
@@ -114,11 +118,15 @@ export default {
 </script>
 
 <style scoped>
-img {
+#dummycard {
   margin: auto !important;
   left: 50%;
   right: 50%;
   position: relative;
   top: 20%;
+}
+#loader {
+  position: absolute;
+  top: 25%;
 }
 </style>
