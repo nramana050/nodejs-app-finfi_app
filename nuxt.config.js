@@ -19,9 +19,11 @@ export default {
   ],
 
   plugins: [
-    { src: '~/plugins/vue.modal.js' },
+    { src: '~/plugins/vue.modal' },
     { src: '~/plugins/date.picker', ssr: false },
-    { src: '~/plugins/vuex.persist', ssr: false }
+    { src: '~/plugins/vuex.persist', ssr: false },
+    { src: '~/plugins/vue.modal.2', ssr: false },
+    { src: '~/plugins/vue.iframe', ssr: false }
   ],
 
   buildModules: [
@@ -29,6 +31,7 @@ export default {
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
     '@nuxtjs/device',
+    '@braid/vue-formulate/nuxt',
     '@nuxt-hero-icons/outline/nuxt',
     '@nuxt-hero-icons/solid/nuxt'
   ],
@@ -47,6 +50,7 @@ export default {
 
   axios: {
     baseURL: 'https://devapi.myfinfi.com',
+    // baseURL: 'http://localhost:3000'
   },
 
   pwa: {
@@ -82,7 +86,7 @@ export default {
     strategies: {
       token: {
         scheme: 'local',
-        token: { global: true },
+        token: { maxAge: 60 * 60 * 24, global: true },
         user: { autoFetch: false, property: false },
         endpoints: {
           login: { url: 'auth/login', method: 'post' },
@@ -92,7 +96,7 @@ export default {
       },
       otp: {
         scheme: 'local',
-        token: { global: true },
+        token: { maxAge: 60 * 60 * 24, global: true },
         user: { autoFetch: false, property: false },
         endpoints: {
           login: { url: 'auth/otp/verify', method: 'post' },
@@ -101,6 +105,10 @@ export default {
         }
       }
     },
+  },
+
+  formulate: {
+    configPath: '~/formulate.config.js'
   },
 
   googleFonts: {

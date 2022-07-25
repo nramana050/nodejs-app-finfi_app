@@ -9,27 +9,27 @@
         p.text-lg {{ profile.first_name }} {{ profile.last_name }}
         p {{ profile.email }}
         p {{ profile.mobile }}
-      div.flex-0.p-4.leading-7.px-8
-        div.flex.flex-row.justify-between.pb-2
-          p Date of Birth
-          p.text-gray-500 {{ dob }}
-        div.flex.flex-row.justify-between.pb-2
-          p Gender
-          p.text-gray-500 {{ profile.gender === 'M' ? 'Male' : 'Female' }}
-      div.flex-0.p-4.bg-gray-100.leading-5.mx-4.shadow-xl.rounded-md
+        button.h-10.bg-gray-700.text-white.uppercase.text-lg.rounded-md.font-bold.my-4.tracking-wider.px-8(@click="logout") logout
+      //- div.flex-0.p-4.leading-7.px-8
+      //-   div.flex.flex-row.justify-between.pb-2
+      //-     p Date of Birth
+      //-     p.text-gray-500 {{ dob }}
+      //-   div.flex.flex-row.justify-between.pb-2
+      //-     p Gender
+      //-     p.text-gray-500 {{ profile.gender === 'M' ? 'Male' : 'Female' }}
+      div.flex-0.p-4.leading-5.mx-4.mt-4
         div.flex.flex-row.justify-between.pb-6
           p.text-md.tracking-wide.font-bold.uppercase.underline Bank Details
           p.text-right(v-if="!isEditMode" @click="enableEditMode")
             outline-pencil-alt-icon.w-5.h-5
-        div.flex.flex-row.justify-between.pb-4
-          p IFSC Code
-          input.text-right.w-40.rounded.text-sm.uppercase(type="text" :disabled="!isEditMode" :class="classObject" v-model="bank.ifsc_code")
-        div.flex.flex-row.justify-between.pb-4
-          p Account Number
-          input.text-right.w-40.rounded.text-sm(type="text" :disabled="!isEditMode" :class="classObject" v-model="bank.account_number")
-        div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
-          button.bg-red-700.w-full.h-6.rounded.text-white.mx-2(@click="cancelEdit") Cancel
-          button.bg-green-700.w-full.h-6.rounded.text-white.mx-2(@click="saveBankDetail") Save
+        div.flex
+          FormulateForm(v-model="bank" @submit="saveBankDetail")
+            div.flex.flex-row.justify-between.pb-4
+              FormulateInput.pr-3(type="text" label="IFSC Code" name="ifsc_code" :disabled="!isEditMode" validation="required")
+              FormulateInput.pr-3(type="text" label="Account Number" name="account_number" :disabled="!isEditMode" validation="required")
+            div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
+              button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
+              button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit") Save     
 </template>
 
 <script>
@@ -54,20 +54,6 @@ export default {
     await this.getBankAccount();
   },
 
-  computed: {
-    classObject() {
-      return {
-        'bg-gray-100': !this.isEditMode
-      }
-    },
-    dob() {
-      if (!this.profile.dob) {
-        return
-      }
-      return this.$dayjs(this.profile.dob).format('YYYY-MM-DD')
-    }
-  },
-
   methods: {
     enableEditMode() {
       this.isEditMode = true
@@ -76,10 +62,6 @@ export default {
       this.isEditMode = false
     },
     async saveBankDetail() {
-      if (!this.bank.ifsc_code || !this.bank.account_number) {
-        this.$toast.error('provide valid details')
-        return;
-      }
       try {
         await this.$axios.post('/profile/banks', this.bank);
         this.$toast.info('Bank details updated successfully');
@@ -91,17 +73,21 @@ export default {
     async getBankAccount() {
       try {
         const bankResult = await this.$axios.get('/profile/banks');
-        if (bankResult.data.length > 0) {
-          this.bank = bankResult.data[0];
+        if (bankResult.data) {
+          this.bank = bankResult.data;
         }
       } catch (err) {
         this.$toast.error('Failed to fetch profile');
       }
     },
-    async cancelEdit() {
+    async cancelEdit(e) {
+      e.preventDefault();
       await this.getBankAccount();
       this.disableEditMode();
     },
+    logout() {
+      this.$auth.logout();
+    }
   }
 }
 </script>
