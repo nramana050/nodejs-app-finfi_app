@@ -46,11 +46,29 @@ export default {
     '@nuxtjs/toast'
   ],
 
+  i18n: {
+    strategy: 'no_prefix',
+    langDir: '~/locales',
+    locales: [
+      { code: 'en', iso: 'en-US', name: 'English', file: 'en.js' },
+      { code: 'ta', iso: 'en-TA', name: 'Tamil', file: 'ta.js' },
+      { code: 'hi', iso: 'en-HI', name: 'Hindi', file: 'hi.js' }
+    ],
+    defaultLocale: 'en',
+    vueI18n: {
+      fallbackLocale: 'en'
+    },
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n'
+    }
+  },
+
   components: true,
 
   axios: {
-    baseURL: 'https://devapi.myfinfi.com',
-    // baseURL: 'http://localhost:3000'
+    // baseURL: 'https://uatapi.myfinfi.com',
+    baseURL: 'http://localhost:3000'
   },
 
   pwa: {
