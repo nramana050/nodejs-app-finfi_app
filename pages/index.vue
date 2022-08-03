@@ -34,7 +34,7 @@ export default {
         this.$toast.error('Organization code must be of 6 characters');
         return;
       }
-      const organization = await this.$axios.$get(`/ext/organization?code=${this.organizationCode}`);
+      const organization = await this.$axios.$post(`/ext/organization`,{ code: this.organizationCode });
       const { status, code, name } = organization;
       if (!status) {
         this.$toast.error('Organization not registered');
