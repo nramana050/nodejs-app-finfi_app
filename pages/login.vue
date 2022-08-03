@@ -125,7 +125,7 @@ export default {
         this.$toast.error('Mobile number must contain only numbers');
         return;
       }
-      const user = await this.$axios.$post(`/ext/user`,{mobile : this.mobile});
+      const user = await this.$axios.$post(`/ext/user`,{mobile : Number(this.mobile)});
       // eslint-disable-next-line camelcase
       const { status } = user;
       if (!status) {
