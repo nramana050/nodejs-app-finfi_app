@@ -38,6 +38,7 @@ export default {
 
   methods: {
     async next() {
+      this.form.document_number=Buffer.from(this.form.document_number).toString('base64')
       try {
         await this.$axios.$post('/profile/kyc/docs', this.form, {
           headers: {
