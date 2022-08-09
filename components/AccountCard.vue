@@ -43,13 +43,6 @@ export default {
     }
   },
   computed: {
-    availableLimit() {
-      let balance = 0;
-      for (const item of this.accounts) {
-        balance += item.account_balance
-      }
-      return balance;
-    },
     payableAmount() {
       const payableAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'PAYABLE' );
       return payableAccount[0].account_balance;
@@ -61,7 +54,10 @@ export default {
     cardLimit() {
       const cardAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' );
       return cardAccount[0].account_balance;
-    }
+    },
+    availableLimit() {
+      return Number(this.cashLimit) + Number(this.cardLimit)
+    },
   }
 }
 </script>
