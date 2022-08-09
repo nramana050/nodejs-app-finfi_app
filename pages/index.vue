@@ -5,7 +5,7 @@ div.flex.flex-col
     input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.uppercase(class="focus:outline-none focus:shadow-outline" placeholder="Organization code" v-model="organizationCode")
   div.flex.justify-end
     button.text-white.inline-flex.items-start(@click="validate")
-      span.text-xl.tracking-wide Proceed
+      span.text-xl.tracking-wide {{ $t('proceed') }}
       outline-arrow-circle-right-icon.w-8.h-8.ml-2
 </template>
 
@@ -30,7 +30,11 @@ export default {
         this.$toast.error('Provide organization code');
         return;
       }
-      const organization = await this.$axios.$get(`/ext/organization?code=${this.organizationCode}`);
+      if(this.organizationCode.length!==6){
+        this.$toast.error('Organization code must be of 6 characters');
+        return;
+      }
+      const organization = await this.$axios.$post(`/ext/organization`,{ code: this.organizationCode });
       const { status, code, name } = organization;
       if (!status) {
         this.$toast.error('Organization not registered');

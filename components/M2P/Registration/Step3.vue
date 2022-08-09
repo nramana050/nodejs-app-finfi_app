@@ -31,13 +31,16 @@ export default {
     });
     if (apiResult.length > 0) {
       const data = apiResult[0];
+      data.document_number=Buffer.from(data.document_number,'base64').toString('ascii')
       this.form.document_type = data.document_type;
-      this.form.document_number = data.document_number;
+      this.form.document_number = data.document_number; 
     }
+
   },
 
   methods: {
     async next() {
+      this.form.document_number=Buffer.from(this.form.document_number).toString('base64')
       try {
         await this.$axios.$post('/profile/kyc/docs', this.form, {
           headers: {

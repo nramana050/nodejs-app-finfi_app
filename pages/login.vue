@@ -12,7 +12,8 @@ div.flex.flex-col
       p.text-sm.text-white.pt-8.underline(@click="switchToOTPMode") Forgot passcode?
     div(v-else)
       input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" v-model="otp")
-      p.text-sm.text-white.pt-8.underline(@click="initiateOTP") Resend OTP
+      p.text-sm.text-white.pt-8.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
+      p.text-sm.text-white.pt-8( id="waitTime" :hidden='!this.blockResend' )
   div.flex.flex-1.justify-end.py-8(v-if="isUserRegistered")
     button.text-white.inline-flex.items-start(@click="login" v-if="skipOTP")
       span.text-xl.tracking-wide Login
@@ -37,6 +38,8 @@ export default {
       otp: null,
       isUserRegistered: false,
       skipOTP: false,
+      initiateOTPCount:0,
+      blockResend: false,
     }
   },
   computed: { 
@@ -56,8 +59,27 @@ export default {
     async initiateOTP() {
       this.otp = null
       try {
+        this.initiateOTPCount+=1
         await this.$axios.$post('/auth/otp', { mobile: Number(this.mobile) }); 
-        this.$toast.success('OTP sent!');
+        // this.$toast.success('OTP sent!');
+        if (this.initiateOTPCount>1){
+          this.$toast.error('Too many resend attempts !')
+          this.blockResend = true
+          let i = 60;
+          const startCount = setInterval(()=>{
+            document.getElementById("waitTime").innerHTML = 'wait for ' + String(i)+' seconds';
+            if (i === 0){
+              clearInterval(startCount)
+              document.getElementById("waitTime").innerHTML = null;
+              this.initiateOTPCount=0
+              this.blockResend = false
+            }else{
+              i--;
+            }
+          },1000);
+        }else{
+          this.$toast.success('OTP sent!');
+        }
       } catch (err) {
         this.$toast.error('Failed to send OTP');    
       }
@@ -99,7 +121,11 @@ export default {
         this.$toast.error('Provide 10 digit mobile number');
         return;
       }
-      const user = await this.$axios.$get(`/ext/user?mobile=${this.mobile}`);
+      if (isNaN(this.mobile)){
+        this.$toast.error('Mobile number must contain only numbers');
+        return;
+      }
+      const user = await this.$axios.$post(`/ext/user`,{mobile : Number(this.mobile)});
       // eslint-disable-next-line camelcase
       const { status } = user;
       if (!status) {
