@@ -60,7 +60,7 @@ export default {
       this.otp = null
       try {
         this.initiateOTPCount+=1
-        await this.$axios.$post('/auth/otp', { mobile: Number(this.mobile) }); 
+        await this.$axios.$post('/auth/otp', { mobile: Number(this.mobile), source:'app' }); 
         // this.$toast.success('OTP sent!');
         if (this.initiateOTPCount>1){
           this.$toast.error('Too many resend attempts !')
