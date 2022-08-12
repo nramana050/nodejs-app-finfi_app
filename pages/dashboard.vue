@@ -87,11 +87,12 @@ export default {
           return;
         }
         await this.$axios.post(`/accounts/${cashAccount[0].id}/withdrawals`, {
-          amount: this.requestedAmount
-        });
+          amount: this.requestedAmount 
+          });
         this.$toast.success('Cash request accepted');
         this.getAccountDetails();
         this.fetchRecentWithdrawal();
+        this.requestedAmount=null;
         this.inProgress = false;
       } catch (err) {
         this.inProgress = false;
