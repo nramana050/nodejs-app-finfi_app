@@ -8,7 +8,7 @@ div
   div(v-else)
     div.flex.flex-col(v-if="isCardAvailable")
       div.flex(v-if="card.url")
-        iframe(:src="card.url" width="100%" height="320px")
+        iframe(:src="card.url" width="100%" height="220px")
       div.flex(v-else)
         div(width="100%" style="height:270px !important;")
           img#dummycard(src="https://static.thenounproject.com/png/2028787-200.png")
@@ -26,17 +26,15 @@ div
               input#default-toggle2.sr-only.peer(type='checkbox' v-model="isCardBlocked" @change="toggleCardStatus")
               .w-11.h-6.bg-gray-200.rounded-full.peer(class="peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600")
               span.ml-3.text-sm.font-medium.text-gray-900(class='dark:text-gray-300')
-          button.h-8.px-4.text-white.rounded.bg-primary.uppercase(@click="vkyc")
-            span Complete VKYC 
+          button.h-8.px-4.text-white.rounded.bg-primary.uppercase(@click="vkyc") Complete VKYC
         div.px-8.bg-white.pt-4
-          div.grid.grid-cols-1.divide-y.border.rounded
+          div.grid.grid-cols-1.divide-y.border.rounded 
             div.flex.justify-between.px-4.py-2(@click="openCardSetting")
               span Card Preferences 
               span &#8250;
             div.flex.justify-between.px-4.py-2(@click="openCardPIN")
               span Set PIN 
               span &#8250;  
-
     div.flex.flex-col.p-4(v-else)
       p.pb-8 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
       button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(@click="openRegistrationModal")
