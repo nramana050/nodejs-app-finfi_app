@@ -30,6 +30,8 @@ export default {
         this.$toast.error('Provide organization code');
         return;
       }
+      if(this.organizationCode) this.organizationCode = this.organizationCode.trim()
+  
       if(this.organizationCode.length!==6){
         this.$toast.error('Organization code must be of 6 characters');
         return;
