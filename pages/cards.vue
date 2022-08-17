@@ -26,6 +26,8 @@ div
               input#default-toggle2.sr-only.peer(type='checkbox' v-model="isCardBlocked" @change="toggleCardStatus")
               .w-11.h-6.bg-gray-200.rounded-full.peer(class="peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600")
               span.ml-3.text-sm.font-medium.text-gray-900(class='dark:text-gray-300')
+          button.h-8.px-4.text-white.rounded.bg-primary.uppercase(@click="vkyc")
+            span Complete VKYC 
         div.px-8.bg-white.pt-4
           div.grid.grid-cols-1.divide-y.border.rounded
             div.flex.justify-between.px-4.py-2(@click="openCardSetting")
@@ -67,6 +69,20 @@ export default {
     this.fetchCards();
   },
   methods: {
+    async vkyc(){
+      try{
+        const response = await this.$axios.post('/m2p/vkyc')
+        if (response.data.message==='Success'){
+          window.location.href = response.data.data.vciplink;
+        }else{
+          this.$toast.error('Failed to generate link')  
+        }
+      }catch(err){
+        console.log(err)
+        this.$toast.error('Failed')
+      }
+
+    },
     openRegistrationModal() {
       this.$FModal.show({ component: M2PRegistration })
     },
