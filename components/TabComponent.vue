@@ -3,9 +3,9 @@
     div.grid.text-center(@click="navToDashboard")
       outline-collection-icon.w-6.h-8.mx-auto
       p Dashboard
-    //div.grid.text-center(@click="navToCard")
-      //outline-credit-card-icon.w-6.h-8.mx-auto
-      //p Cards
+    div.grid.text-center(@click="navToCard" v-if="Number(this.organization) === 2")
+      outline-credit-card-icon.w-6.h-8.mx-auto
+      p Cards
     div.grid.text-center(@click="navToTransaction")
       outline-cash-icon.w-6.h-8.mx-auto
       p Transactions
@@ -19,6 +19,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      organization: this.$store.getters.organization
+    }
+  },
   methods: {
     navToDashboard() {
       this.$router.push('/dashboard')
