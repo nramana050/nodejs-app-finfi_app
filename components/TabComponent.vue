@@ -3,7 +3,7 @@
     div.grid.text-center(@click="navToDashboard")
       outline-collection-icon.w-6.h-8.mx-auto
       p Dashboard
-    div.grid.text-center(@click="navToCard" v-if="this.organization.code === 'MFINFI'")
+    div.grid.text-center(@click="navToCard" v-if="organization.code === 'MFINFI'")
       outline-credit-card-icon.w-6.h-8.mx-auto
       p Cards
     div.grid.text-center(@click="navToTransaction")
