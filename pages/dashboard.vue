@@ -5,7 +5,10 @@ div.flex.flex-col
   div(v-if="accounts.length > 0 && organization")
     div.flex-0.p-4
       AccountCard(:accounts="accounts" :provider="organization")
-    div.p-4
+    div.px-4
+      //- p You are eligible for higher limits, please complete Full VKYC 
+      p(v-if="this.vkycMessage==='complete' || this.vkycMessage==='continue'") You are eligible for higher limits, please {{this.vkycMessage}} Full VKYC 
+        button.w-full.h-6.px-2.text-white.rounded.bg-primary(@click="vkyc") Complete VKYC
       p.uppercase.py-4.font-bold.tracking-wider Transfer to my bank account
       div.relative
         input.h-12.pl-5.rounded.z-0.border.border-purple-100.w-full(class="focus:shadow focus:outline-none" type="number" placeholder="Enter amount" v-model="requestedAmount")
@@ -15,8 +18,8 @@ div.flex.flex-col
               LoadingIcon.w-6.h-6.text-white.mx-auto
             span(v-else) Send
     div.p-4
-      p.uppercase.py-4.font-bold.tracking-wider Bank Transfer Status
-      div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gray-50
+      p.uppercase.font-bold.tracking-wider Bank Transfer Status
+      div.flex.flex-col.p-2.rounded-md.shadow-md.w-full.bg-gray-50
         div.flex.flex-row.justify-between(v-if="recentTransaction")
           div
             p.text-xs {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
@@ -37,7 +40,8 @@ export default {
       accounts: [],
       requestedAmount: null,
       recentTransaction: null,
-      inProgress: false
+      inProgress: false,
+      vkycMessage:null,
     }
   },
 
@@ -47,6 +51,7 @@ export default {
 
   mounted() {
     this.organization = this.$store.getters.organization
+    this.fetchVkyc();
   },
 
   methods: {
@@ -108,6 +113,44 @@ export default {
         }
       } catch (err) {
         this.$toasted.error(err.response.data.message)
+      }
+    },
+    async vkyc(){
+      try{
+        const vkycResult = await this.$axios.post('/m2p/vkyc/vcipid');
+        if (vkycResult && vkycResult.data.data){
+          console.log('same link:',vkycResult.data.data.vcip_link)
+          window.open(vkycResult.data.data.vcip_link,'_blank');
+        }
+        if (vkycResult.data.data===undefined){
+          const response = await this.$axios.post('/m2p/vkyc')
+          if (response.data.message==='Success'){
+            console.log('new link:',response.data.data.vciplink)
+            window.open(response.data.data.vciplink,'_blank');
+          }else{
+            this.$toast.error('Failed to generate link')  
+          }
+        }
+      }catch(err){
+        console.log(err)
+        this.$toast.error('Failed')
+      }
+    },
+    async fetchVkyc(){
+      try{
+      const vkycResult = await this.$axios.post('/m2p/vkyc/vcipid');
+        if (vkycResult && vkycResult.data.data){
+          const status = vkycResult.data.data.status
+          if (status==="COMPLETED"){
+           this.vkycMessage = "no message"
+          }if (status === "PENDING"){
+           this.vkycMessage = "continue"
+          }
+        }else if(!vkycResult.data.data) this.vkycMessage = "complete"
+
+      }catch(err){
+        console.log(err)
+        this.$toast.error('Failed')
       }
     }
   }
