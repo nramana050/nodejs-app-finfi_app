@@ -139,18 +139,23 @@ export default {
     async fetchVkyc(){
       try{
       const vkycResult = await this.$axios.post('/m2p/vkyc/vcipid');
-        if (vkycResult && vkycResult.data.data){
-          const status = vkycResult.data.data.status
+        if (vkycResult && vkycResult.data){
+          if(vkycResult.data.message==='Fail' && vkycResult.data.content==='Not registered with M2P'){
+            this.vkycMessage = "no message"
+          }
+          else if(vkycResult.data.data===undefined) this.vkycMessage = "complete"
+          
+          const status = vkycResult.data.data ? vkycResult.data.data.status:null
           if (status==="COMPLETED"){
            this.vkycMessage = "no message"
-          }if (status === "PENDING"){
+          }
+          if (status === "PENDING"){
            this.vkycMessage = "continue"
           }
-        }else if(!vkycResult.data.data) this.vkycMessage = "complete"
-
+        }
       }catch(err){
         console.log(err)
-        this.$toast.error('Failed')
+        this.$toast.error('Failed to vkyc status')
       }
     }
   }

@@ -36,10 +36,13 @@ div
               span &#8250;  
     div.flex.flex-col.p-4(v-else)
       div.p-2
-        p Please go through the terms and condition
-          p.text-xs
-            a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
-      button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(@click="openRegistrationModal")
+        p.p-2 Please go through the 
+          a.font-bold(href='https://www.myfinfi.com/' target="_blank") terms and condition
+          //- p.text-xs
+          //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
+        input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
+        label  I accept the terms and condition 
+      button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(v-if="this.isTermsAccepted" @click="openRegistrationModal")
         span Get Card
 
 </template>
@@ -62,6 +65,7 @@ export default {
       isCardAvailable: false,
       isCardBlocked: false,
       card: null,
+      isTermsAccepted:false,
     }
   },
 
@@ -99,7 +103,7 @@ export default {
         this.isLoading = false;
       } catch (err) {
         this.isLoading = false;
-        // this.$toasted.error('Failed to fetch cards');
+        this.$toasted.error(`Failed: ${err}`);
       }
     },
     toggleCardStatus() {

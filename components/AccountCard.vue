@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       user: this.$auth.user,
-      fundCycle:{},
+      fundCycle:null,
     }
   },
   computed: {
@@ -71,8 +71,8 @@ export default {
   },
   methods:{
     async fetchFundCycle(){
-      const organiazaitons = await this.$axios.get(`/organizations`)
-      const response = await this.$axios.get(`/organizations/${organiazaitons.data[0].id}/funds/tada`)
+      // const organiazaitons = await this.$axios.get(`/organizations`)
+      const response = await this.$axios.get(`/organizations/0/funds/tada`)
       this.fundCycle = response.data.message==="Success"?`You are eligible for a limit of Rs: ${response.data.data.credit_value} per day between ${ response.data.data.credit_start_day } and ${response.data.data.credit_end_day} of the month`:null 
     },
     // async hover(){
