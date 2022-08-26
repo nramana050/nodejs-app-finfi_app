@@ -19,7 +19,9 @@ export default {
     }
   },
   beforeMount() {
-    if (this.$auth.strategy.token.status().valid()) {
+    console.log(this.$auth.loggedIn);
+    console.log(this.$auth.strategy.token.status().valid());
+    if (this.$auth.loggedIn && this.$auth.strategy.token.status().valid()) {
       this.$router.push('/dashboard');
     }
     this.$store.commit('clear', 'organization');

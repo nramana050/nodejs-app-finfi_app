@@ -15,7 +15,6 @@ export default {
 
   methods: {
     close() {
-      this.$attrs.revert();
       this.$FModal.hide();
     },
     async confirm() {
@@ -25,6 +24,7 @@ export default {
             'Authorization': this.token
           }
         });
+        this.$attrs.revert();
         this.$toast.success('Card unblocked');
       } catch (err) {
         this.$toast.error('Failed')

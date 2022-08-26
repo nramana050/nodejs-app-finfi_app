@@ -90,14 +90,14 @@ export default {
           data: {
             mobile: Number(this.mobile),
             otp: Number(this.otp),
-            organization_code: this.organization.code
+            organization_code: this.organization.code.toUpperCase()
           }
-        })
+        });
         await this.$auth.setUserToken(result.data.access_token);
         this.$auth.strategy.token.sync();
         this.$router.push('/passcode');
       } catch (err) {
-        this.$toast.error('Invalid OTP');
+        this.$toast.error(err.response.data.message);
       }
     },
     async login() {
@@ -106,14 +106,14 @@ export default {
           data: {
             mobile: Number(this.mobile),
             passcode: Number(this.passcode),
-            organization_code: this.organization.code
+            organization_code: this.organization.code.toUpperCase()
           }
-        })
+        });
         await this.$auth.setUserToken(result.data.access_token);
         this.$auth.strategy.token.sync();
         this.$router.push('/dashboard');
       } catch (err) {
-        this.$toast.error('Invalid Passcode');
+        this.$toast.error(err.response.data.message);
       }
     },
     async validate() {

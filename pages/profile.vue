@@ -86,6 +86,7 @@ export default {
       this.disableEditMode();
     },
     logout() {
+      this.$auth.strategy.token.reset();
       this.$auth.logout();
     }
   }
