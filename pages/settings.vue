@@ -44,6 +44,7 @@ export default {
       }
     },
     logout() {
+      this.$auth.strategy.token.reset();
       this.$auth.logout();
     }
   }

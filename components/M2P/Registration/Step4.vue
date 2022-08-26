@@ -9,6 +9,7 @@ div.flex.flex-col
         button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="reload") View Card
     div(v-else)
       p Failed to register card
+      p {{ errorMessage }}
       div.flex.flex-col
         button.h-10.px-4.text-white.rounded.bg-primary.font-bold.my-5(@click="restart") Try Again
         button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
@@ -24,6 +25,7 @@ export default {
     return {
       isLoading: true,
       isSuccess: true,
+      errorMessage: null,
     }
   },
 
@@ -33,6 +35,7 @@ export default {
 
   methods: {
     async registerAction() {
+      this.errorMessage = null;
       try {
         await this.$axios.$post('/m2p/register', this.form, {
           headers: {
@@ -42,6 +45,7 @@ export default {
         this.isSuccess = true;
       } catch (err) {
         this.isSuccess = false;
+        this.errorMessage = err.response.data.message;
       } finally {
         this.isLoading = false;
       }
