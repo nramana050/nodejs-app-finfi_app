@@ -40,7 +40,7 @@ div
     div.flex.flex-col.p-4(v-else)
       div.p-2
         p.p-2 Please go through the 
-          a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Condition
+          a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
           //- p.text-xs
           //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
         input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
