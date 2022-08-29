@@ -2,13 +2,13 @@
 div.flex.flex-col
   div.flex-0
     PageHeader(:title="'Dashboard'")
-  div(v-if="accounts.length > 0 && organization")
+  div.flex-1#dynamicheight(v-if="accounts.length > 0 && organization")
     div.flex-0.p-4
       AccountCard(:accounts="accounts" :provider="organization")
-    div.px-4
+    div.px-4.flex-0
       //- p You are eligible for higher limits, please complete Full VKYC 
-      p(v-if="this.vkycMessage==='complete' || this.vkycMessage==='continue'") You are eligible for higher limits, please {{this.vkycMessage}} Full VKYC 
-        button.w-full.h-6.px-2.text-white.rounded.bg-primary(@click="vkyc") Complete VKYC
+      p.tracking-wide(v-if="this.vkycMessage==='complete' || this.vkycMessage==='continue'") You are eligible for higher limits, please {{this.vkycMessage}} Full KYC 
+        button.w-full.h-10.px-2.text-white.rounded.bg-primary.my-3(@click="vkyc") Complete Full KYC
       p.uppercase.py-4.font-bold.tracking-wider Transfer to my bank account
       div.relative
         input.h-12.pl-5.rounded.z-0.border.border-purple-100.w-full(class="focus:shadow focus:outline-none" type="number" placeholder="Enter amount" v-model="requestedAmount")
@@ -18,7 +18,7 @@ div.flex.flex-col
               LoadingIcon.w-6.h-6.text-white.mx-auto
             span(v-else) Send
     div.p-4
-      p.uppercase.font-bold.tracking-wider Bank Transfer Status
+      p.uppercase.font-bold.tracking-wider.py-4 Bank Transfer Status
       div.flex.flex-col.p-2.rounded-md.shadow-md.w-full.bg-gray-50
         div.flex.flex-row.justify-between(v-if="recentTransaction")
           div
@@ -36,7 +36,6 @@ export default {
 
   data() {
     return {
-      organization: null,
       accounts: [],
       requestedAmount: null,
       recentTransaction: null,
@@ -49,11 +48,13 @@ export default {
     await this.getAccountDetails()
   },
 
-  mounted() {
-    this.organization = this.$store.getters.organization
+  computed: {
+    organization () {
+      return this.$auth.user.organization
+    }
   },
+
   beforeMount() {
-    this.organization = this.$auth.user.organization;
     this.fetchVkyc();
   },
 
@@ -97,7 +98,7 @@ export default {
         await this.$axios.post(`/accounts/${cashAccount[0].id}/withdrawals`, {
           amount: this.requestedAmount 
           });
-        this.$toast.success('Cash request accepted');
+        this.$toast.success('Cash request sent');
         this.getAccountDetails();
         this.fetchRecentWithdrawal();
         this.requestedAmount=null;
@@ -164,3 +165,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#dynamicheight {
+  margin-bottom: 96px;
+}
+</style>

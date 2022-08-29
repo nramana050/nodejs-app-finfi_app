@@ -8,7 +8,7 @@ div
   div(v-else)
     div.flex.flex-col(v-if="isCardAvailable")
       div.flex(v-if="card.url")
-        object(:data="card.url" width="100%" height="240" type="text/html")
+        object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}")
         //- iframe(:src="card.url" width="100%" height="320px")
       div.flex(v-else)
         div(width="100%" style="height:270px !important;")
@@ -138,5 +138,8 @@ export default {
 a:hover {
   color: blue;
   /* text-decoration: underline; */
+}
+object:focus {
+  outline: none;
 }
 </style>

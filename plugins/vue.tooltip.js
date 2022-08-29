@@ -1,6 +1,4 @@
 import Vue from 'vue'
-import VTooltip from 'v-tooltip'
+import VPopover from 'vue-js-popover'
 
-Vue.use(VTooltip, {
-    defaultClass: 'v-tooltip'
-})
+Vue.use(VPopover, { tooltip: true })

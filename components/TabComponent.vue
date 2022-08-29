@@ -18,13 +18,18 @@
 export default {
   data() {
     return {
-      organization: this.$store.getters.organization
+      token: this.$auth.strategy.token.get(),
+      organization: this.$store.getters.organization,
+      isCardEnabled: false,
     }
   },
-  computed: {
-    isCardEnabled() {
-      return this.organization && this.organization.code.toUpperCase() === 'TESTIN'
-    }
+  async beforeMount() {
+    const apiResult = await this.$axios.get('/organizations/config', {
+      headers: {
+        'Authorization': this.token
+      }
+    });
+    this.isCardEnabled = apiResult.data.is_card_enabled;
   },
   methods: {
     navToDashboard() {
