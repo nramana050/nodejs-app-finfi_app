@@ -7,9 +7,9 @@ div.flex.flex-col
       AccountCard(:accounts="accounts" :provider="organization")
     div.px-4.flex-0
       //- p You are eligible for higher limits, please complete Full VKYC 
-      p.tracking-wide(v-if="this.vkycMessage==='complete' || this.vkycMessage==='continue'") You are eligible for higher limits, please {{this.vkycMessage}} Full KYC 
-        button.w-full.h-10.px-2.text-white.rounded.bg-primary.my-3(@click="vkyc") Complete Full KYC
-      p.uppercase.py-4.font-bold.tracking-wider Transfer to my bank account
+      //- p.tracking-wide(v-if="this.vkycMessage==='complete' || this.vkycMessage==='continue'") You are eligible for higher limits, please {{this.vkycMessage}} Full KYC 
+      //-   button.w-full.h-10.px-2.text-white.rounded.bg-primary.my-3(@click="vkyc") Complete Full KYC
+      //- p.uppercase.py-4.font-bold.tracking-wider Transfer to my bank account
       div.relative
         input.h-12.pl-5.rounded.z-0.border.border-purple-100.w-full(class="focus:shadow focus:outline-none" type="number" placeholder="Enter amount" v-model="requestedAmount")
         div.absolute.top-0.right-0(v-if="requestedAmount > 0")
