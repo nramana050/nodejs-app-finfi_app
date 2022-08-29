@@ -8,7 +8,7 @@ div
   div(v-else)
     div.flex.flex-col(v-if="isCardAvailable")
       div.flex(v-if="card.url")
-        object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}")
+        object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
         //- iframe(:src="card.url" width="100%" height="320px")
       div.flex(v-else)
         div(width="100%" style="height:270px !important;")
@@ -40,7 +40,7 @@ div
     div.flex.flex-col.p-4(v-else)
       div.p-2
         p.p-2 Please go through the 
-          a.font-bold(href='https://www.myfinfi.com/' target="_blank") terms and condition
+          a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Condition
           //- p.text-xs
           //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
         input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
@@ -69,6 +69,7 @@ export default {
       isCardBlocked: false,
       card: null,
       isTermsAccepted:false,
+      cardFetch: 0,
     }
   },
 
@@ -109,6 +110,7 @@ export default {
     },
     async fetchCardDetail() {
       const result2 = await this.$axios.get(`/m2p/cards`);
+      this.cardFetch += 1
       this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
       this.card.url = result2.data && result2.data.result ? result2.data.result : '';
       setTimeout(async () => await this.fetchCardDetail(), 118000);
