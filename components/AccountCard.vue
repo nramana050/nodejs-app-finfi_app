@@ -16,19 +16,19 @@ div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gradient-to-tr.from-green-8
     div.flex-0
       p.tracking-wide.text-xs Cash Limit
       p.font-bold.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toFixed(2) }}
+      div(v-if="this.cashFundCycle.length > 0" v-tooltip="{ content: `You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`, classes: 'tooltip' }")
+        solid-information-circle-icon.w-4.h-4.mx-auto
     div.flex-0.text-right
       p.tracking-wide.text-xs
         | Card Limit
-        div(v-tooltip="{ content: `text`, classes: 'tooltip' }")
-          solid-information-circle-icon.w-4.h-4.mx-auto
       p.font-bold.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toFixed(2) }}
+      div(class="tooltip" v-if="this.cardFundCycle.length > 0" v-tooltip="{ content: `You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month` }")
+        solid-information-circle-icon.w-4.h-4.mx-auto
+        
   div.pt-2
     p.text-xs
       sup.pr-1 *
       | Employer will deduct from the next salary
-    p.text-xs.pt-1(v-if="this.fundCycle") 
-      sup.pr-1 * 
-      | {{this.fundCycle}}
 </template>
 
 <script>
@@ -46,7 +46,8 @@ export default {
   data() {
     return {
       user: this.$auth.user,
-      fundCycle:null,
+      cardFundCycle:[],  
+      cashFundCycle:[],  
     }
   },
   computed: {
@@ -71,14 +72,24 @@ export default {
   },
   methods:{
     async fetchFundCycle(){
-      // const organiazaitons = await this.$axios.get(`/organizations`)
-      const response = await this.$axios.get(`/organizations/0/funds/tada`)
-      this.fundCycle = response.data.message==="Success"?`You are eligible for a limit of Rs: ${response.data.data.credit_value} per day between ${ response.data.data.credit_start_day } and ${response.data.data.credit_end_day} of the month`:null 
+      const response = await this.$axios.get(`/fundConfig/message`)
+      if(response.data.message==="Fail"){
+        console.log('error ',response.data.content)
+      }
+      const fundCycle = response.data.message==="Success"? true : null
+      if(fundCycle){
+        this.cardFundCycle = response.data.data.filter(x=>x.account_type==='CARD')
+        if(this.cardFundCycle[0].credit_method==="PERCENTAGE"){
+          this.cardFundCycle[0].credit_value = parseFloat(this.cardFundCycle[0].salary).toFixed(2) * (parseFloat(this.cardFundCycle[0].credit_value).toFixed(2)/100) 
+        }
+        this.cashFundCycle = response.data.data.filter(x=>x.account_type==='CASH')
+        if(this.cashFundCycle[0].credit_method==="PERCENTAGE"){
+          this.cashFundCycle[0].credit_value = parseFloat(this.cashFundCycle[0].salary).toFixed(2) * (parseFloat(this.cashFundCycle[0].credit_value).toFixed(2)/100) 
+        }
+        // console.log('cardFundCycle: ',this.cardFundCycle)
+        // console.log('cashFundCycle: ',this.cashFundCycle)
+      }
     },
-    // async hover(){
-    //   this.fundCycle = await this.fetchFundCycle()
-    //   console.log('fund cycle hovering',this.fundCycle)
-    // }
    }
   
 }
