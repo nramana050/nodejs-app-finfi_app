@@ -2,7 +2,7 @@
 div.flex.flex-col
   LeadHeader.flex(:title="`Let\'s get started!`" :lead="'Please enter your organization code sent to your registered email'")
   div.flex.flex-0.py-10
-    input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.uppercase(class="focus:outline-none focus:shadow-outline" placeholder="Organization code" v-model="organizationCode")
+    input.shadow.appearance-none.border.rounded.w-full.py-2.px-3(class="focus:outline-none focus:shadow-outline" placeholder="Organization code" v-model="organizationCode")
   div.flex.justify-end
     button.text-white.inline-flex.items-start(@click="validate")
       span.text-xl.tracking-wide {{ $t('proceed') }}
@@ -16,6 +16,11 @@ export default {
   data() {
     return {
       organizationCode: null,
+    }
+  },
+  watch: {
+    organizationCode(newValue) {
+      this.organizationCode = newValue.toUpperCase()
     }
   },
   beforeMount() {

@@ -8,7 +8,7 @@ div
   div(v-else)
     div.flex.flex-col(v-if="isCardAvailable")
       div.flex(v-if="card.url")
-        object(:data="card.url" width="100%" height="240" type="text/html")
+        object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
         //- iframe(:src="card.url" width="100%" height="320px")
       div.flex(v-else)
         div(width="100%" style="height:270px !important;")
@@ -30,17 +30,22 @@ div
               img(src="~/assets/toggle_on.png" v-if="isCardBlocked" @click="openUnblockCard")
               img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
         div.px-8.bg-white.pt-4
-          div.grid.grid-cols-1.divide-y.border.rounded
+          div.grid.grid-cols-1.divide-y.border.rounded 
             div.flex.justify-between.px-4.py-2(@click="openCardSetting")
               span Card Preferences 
               span &#8250;
             div.flex.justify-between.px-4.py-2(@click="openCardPIN")
               span Set PIN 
               span &#8250;  
-
     div.flex.flex-col.p-4(v-else)
-      p.pb-8 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(@click="openRegistrationModal")
+      div.p-2
+        p.p-2 Please go through the 
+          a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
+          //- p.text-xs
+          //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
+        input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
+        label  I accept the terms and condition 
+      button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(v-if="this.isTermsAccepted" @click="openRegistrationModal")
         span Get Card
 
 </template>
@@ -63,6 +68,8 @@ export default {
       isCardAvailable: false,
       isCardBlocked: false,
       card: null,
+      isTermsAccepted:false,
+      cardFetch: 0,
     }
   },
 
@@ -103,6 +110,7 @@ export default {
     },
     async fetchCardDetail() {
       const result2 = await this.$axios.get(`/m2p/cards`);
+      this.cardFetch += 1
       this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
       this.card.url = result2.data && result2.data.result ? result2.data.result : '';
       setTimeout(async () => await this.fetchCardDetail(), 118000);
@@ -128,5 +136,12 @@ export default {
 #loader {
   position: absolute;
   top: 25%;
+}
+a:hover {
+  color: blue;
+  /* text-decoration: underline; */
+}
+object:focus {
+  outline: none;
 }
 </style>

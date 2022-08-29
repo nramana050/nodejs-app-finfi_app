@@ -10,8 +10,9 @@ div.flex.flex-col
     div.flex.flex-row
       div.flex-1
         FormulateInput.pr-3(type="select" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")
-      div.flex-1
-        FormulateInput.pb-2.pr-3(type="text" label="Date Of Birth" name="dob" validation="required" placeholder="YYYY-MM-DD")
+      div.flex-1 
+        p.p-1 Date Of Birth
+        date-picker(v-model="form.dob" valueType="format" placeholder="DOB" :disabled-date="disabledRange") 
     div.flex.flex-cpl
       FormulateInput.pb-2.pr-3.w-full(type="number" label="OTP" name="otp" validation="required")
     div.flex-1.pr-4
@@ -78,6 +79,9 @@ export default {
     cancel(e) {
       e.preventDefault();
       this.$emit('close');
+    },
+    disabledRange(date) {
+      return date > new Date();
     }
   }
 }

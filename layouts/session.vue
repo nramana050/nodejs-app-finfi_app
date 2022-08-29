@@ -5,6 +5,7 @@ div.container.w-96.min-h-screen.mx-auto.font-primary.shadow-2xl
       Nuxt
     div.flex-0.fixed.bottom-0.w-96.rounded
       TabComponent
+  tooltip
 </template>
 
 <script>

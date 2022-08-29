@@ -4,6 +4,7 @@ div.container.w-96.min-h-screen.mx-auto.font-primary.bg-primary.shadow-2xl
     Nuxt.flex-1
     div.flex-0.mx-auto
       FooterLogo
+  tooltip
 </template>
 
 <script>

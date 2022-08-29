@@ -14,12 +14,19 @@ div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gradient-to-tr.from-green-8
       p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(payableAmount).toFixed(2) }}
   div.flex.justify-between
     div.flex-0
-      p.tracking-wide.text-xs Cash Limit
+      div.flex.tracking-wide.text-xs
+        div.flex-1 Cash Limit
+        div.flex-0(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
+          solid-information-circle-icon.w-4.h-4
       p.font-bold.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toFixed(2) }}
     div.flex-0.text-right
-      p.tracking-wide.text-xs Card Limit
+      div.flex.tracking-wide.text-xs
+        div.flex-1 Card Limit
+        div.flex-0.ml-2(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
+          solid-information-circle-icon.w-4.h-4
       p.font-bold.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toFixed(2) }}
-  div.flex.pt-4
+        
+  div.pt-2
     p.text-xs
       sup.pr-1 *
       | Employer will deduct from the next salary
@@ -40,6 +47,8 @@ export default {
   data() {
     return {
       user: this.$auth.user,
+      cardFundCycle:[],  
+      cashFundCycle:[],  
     }
   },
   computed: {
@@ -57,7 +66,30 @@ export default {
     },
     availableLimit() {
       return Number(this.cashLimit) + Number(this.cardLimit)
+    }
+  },
+  mounted(){
+    this.fetchFundCycle();
+  },
+  methods:{
+    async fetchFundCycle(){
+      const response = await this.$axios.get(`/fundConfig/message`)
+      if(response.data.message==="Fail"){
+        console.log('error ',response.data.content)
+      }
+      const fundCycle = response.data.message.toUpperCase() === 'SUCCESS' ? true : null
+      if(fundCycle){
+        this.cardFundCycle = response.data.data.filter(x=>x.account_type.toUpperCase()==='CARD')
+        if(this.cardFundCycle[0].credit_method.toUpperCase() ==="PERCENTAGE"){
+          this.cardFundCycle[0].credit_value = parseFloat(this.cardFundCycle[0].salary).toFixed(2) * (parseFloat(this.cardFundCycle[0].credit_value).toFixed(2)/100) 
+        }
+        this.cashFundCycle = response.data.data.filter(x=>x.account_type.toUpperCase()==='CASH')
+        if(this.cashFundCycle[0].credit_method.toUpperCase()==="PERCENTAGE"){
+          this.cashFundCycle[0].credit_value = parseFloat(this.cashFundCycle[0].salary).toFixed(2) * (parseFloat(this.cashFundCycle[0].credit_value).toFixed(2)/100) 
+        }
+      }
     },
-  }
+   }
+  
 }
 </script>

@@ -8,10 +8,10 @@ div.flex.flex-col
     input.shadow.appearance-none.border.rounded.w-full.py-2.px-3(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
   div.flex.flex-col.pb-4(v-if="isUserRegistered")
     div(v-if="skipOTP")
-      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="Passcode" v-model="passcode")
+      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" type="password" placeholder="Passcode" v-model="passcode")
       p.text-sm.text-white.pt-8.underline(@click="switchToOTPMode") Forgot passcode?
     div(v-else)
-      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" v-model="otp")
+      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" type="password" v-model="otp")
       p.text-sm.text-white.pt-8.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
       p.text-sm.text-white.pt-8( id="waitTime" :hidden='!this.blockResend' )
   div.flex.flex-1.justify-end.py-8(v-if="isUserRegistered")
@@ -60,7 +60,7 @@ export default {
       this.otp = null
       try {
         this.initiateOTPCount+=1
-        await this.$axios.$post('/auth/otp', { mobile: Number(this.mobile) }); 
+        await this.$axios.$post('/auth/otp', { mobile: Number(this.mobile), source:'app' }); 
         // this.$toast.success('OTP sent!');
         if (this.initiateOTPCount>1){
           this.$toast.error('Too many resend attempts !')

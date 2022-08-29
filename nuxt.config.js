@@ -23,7 +23,8 @@ export default {
     { src: '~/plugins/date.picker', ssr: false },
     { src: '~/plugins/vuex.persist', ssr: false },
     { src: '~/plugins/vue.modal.2', ssr: false },
-    { src: '~/plugins/vue.iframe', ssr: false }
+    { src: '~/plugins/vue.iframe', ssr: false },
+    { src: '~/plugins/vue.tooltip', ssr: false }
   ],
 
   buildModules: [
