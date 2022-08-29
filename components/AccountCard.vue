@@ -79,14 +79,14 @@ export default {
       }
       const fundCycle = response.data.message.toUpperCase() === 'SUCCESS' ? true : null
       if(fundCycle){
+        this.cardFundCycle = response.data.data.filter(x=>x.account_type.toUpperCase()==='CARD')
         if (this.cardFundCycle.length > 0) {
-          this.cardFundCycle = response.data.data.filter(x=>x.account_type.toUpperCase()==='CARD')
           if(this.cardFundCycle[0].credit_method.toUpperCase() ==="PERCENTAGE"){
             this.cardFundCycle[0].credit_value = parseFloat(this.cardFundCycle[0].salary).toFixed(2) * (parseFloat(this.cardFundCycle[0].credit_value).toFixed(2)/100) 
           }
         }
+        this.cashFundCycle = response.data.data.filter(x=>x.account_type.toUpperCase()==='CASH')
         if (this.cashFundCycle.length > 0) {
-          this.cashFundCycle = response.data.data.filter(x=>x.account_type.toUpperCase()==='CASH')
           if(this.cashFundCycle[0].credit_method.toUpperCase()==="PERCENTAGE"){
             this.cashFundCycle[0].credit_value = parseFloat(this.cashFundCycle[0].salary).toFixed(2) * (parseFloat(this.cashFundCycle[0].credit_value).toFixed(2)/100) 
           }
