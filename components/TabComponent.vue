@@ -3,7 +3,7 @@
     div.grid.text-center(@click="navToDashboard")
       outline-collection-icon.w-6.h-8.mx-auto
       p Dashboard
-    div.grid.text-center(@click="navToCard" v-if="organization.is_card_enabled")
+    div.grid.text-center(@click="navToCard" v-if="isCardEnabled")
       outline-credit-card-icon.w-6.h-8.mx-auto
       p Cards
     div.grid.text-center(@click="navToTransaction")
@@ -12,9 +12,6 @@
     div.grid.text-center(@click="navToProfile")
       outline-user-circle-icon.w-6.h-8.mx-auto
       p Profile
-    //- div.grid.text-center(@click="navToSettings")
-    //-   outline-cog-icon.w-6.h-8.mx-auto
-    //-   p Settings
 </template>
 
 <script>
@@ -22,6 +19,11 @@ export default {
   data() {
     return {
       organization: this.$store.getters.organization
+    }
+  },
+  computed: {
+    isCardEnabled() {
+      return this.organization && this.organization.code.toUpperCase() === 'TESTIN'
     }
   },
   methods: {

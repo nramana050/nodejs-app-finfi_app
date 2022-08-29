@@ -51,6 +51,9 @@ export default {
 
   mounted() {
     this.organization = this.$store.getters.organization
+  },
+  beforeMount() {
+    this.organization = this.$auth.user.organization;
     this.fetchVkyc();
   },
 
