@@ -1,32 +1,74 @@
 <template lang="pug">
-div.flex.flex-col
-  div.flex-0
-    PageHeader(:title="'Dashboard'")
-  div.flex-1#dynamicheight(v-if="accounts.length > 0 && organization")
-    div.flex-0.p-4
-      AccountCard(:accounts="accounts" :provider="organization")
-    div.px-4.flex-0
+div.ps-5
+  //- div.flex-0
+  //-   PageHeader(:title="'Dashboard'")
+  div.justify-between.ps-1
+    div.text-left
+      div
+      p.font-bold.tracking-wider.text-2xl &#8377; {{this.availableLimit}}
+      p.tracking-wide.text-xs Available Balance
+      div.rounded-full.mx-auto.ps-4(@click="navToProfile")
+        img.object-cover.h-12.w-12.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
+      //- div.text-right
+      //- p.font-bold.text-white {{ user.first_name }} {{ user.last_name }}
+  div#dynamicheight(v-if="accounts.length > 0 && organization")
+    div
+      AccountCard.ps-2(:accounts="accounts" :provider="organization")
+      
+    div
       //- p You are eligible for higher limits, please complete Full VKYC 
       //- p.tracking-wide(v-if="this.vkycMessage==='complete' || this.vkycMessage==='continue'") You are eligible for higher limits, please {{this.vkycMessage}} Full KYC 
       //-   button.w-full.h-10.px-2.text-white.rounded.bg-primary.my-3(@click="vkyc") Complete Full KYC
-      p.uppercase.py-4.font-bold.tracking-wider Transfer to my bank account
-      div.relative
-        input.h-12.pl-5.rounded.z-0.border.border-purple-100.w-full(class="focus:shadow focus:outline-none" type="number" placeholder="Enter amount" v-model="requestedAmount")
-        div.absolute.top-0.right-0(v-if="requestedAmount > 0")
-          button.h-12.w-24.text-white.rounded.bg-purple-700.uppercase.font-bold(@click="initCashRequest")
-            span(v-if="inProgress")
-              LoadingIcon.w-6.h-6.text-white.mx-auto
-            span(v-else) Send
-    div.p-4
-      p.uppercase.font-bold.tracking-wider.py-4 Bank Transfer Status
-      div.flex.flex-col.p-2.rounded-md.shadow-md.w-full.bg-gray-50
-        div.flex.flex-row.justify-between(v-if="recentTransaction")
-          div
-            p.text-xs {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
-            p.font-thin.text-lg &#8377; {{ parseFloat(recentTransaction.requested_amount).toFixed(2) }}
-          div.self-center
-            div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
-        p(v-else) No cash request found. You can raise a cash request and get money in your account 
+      //- p.uppercase.py-4.font-bold.tracking-wider Transfer to my bank account
+      //- div.relative
+      //-   input.h-12.pl-5.rounded.z-0.border.border-purple-100.w-full(class="focus:shadow focus:outline-none" type="number" placeholder="Enter amount" v-model="requestedAmount")
+      //-   div.absolute.top-0.right-0(v-if="requestedAmount > 0")
+      //-     button.h-12.w-24.text-white.rounded.bg-purple-700.uppercase.font-bold(@click="initCashRequest")
+      //-       span(v-if="inProgress")
+      //-         LoadingIcon.w-6.h-6.text-white.mx-auto
+      //-       span(v-else) Send
+    //- div.p-4
+    //-   p.uppercase.font-bold.tracking-wider.py-4 Bank Transfer Status
+    //-   div.flex.flex-col.p-2.rounded-md.shadow-md.w-full.bg-gray-50
+    //-     div.flex.flex-row.justify-between(v-if="recentTransaction")
+    //-       div
+    //-         p.text-xs {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
+    //-         p.font-thin.text-lg &#8377; {{ parseFloat(recentTransaction.requested_amount).toFixed(2) }}
+    //-       div.self-center
+    //-         div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
+    //-     p(v-else) No cash request found. You can raise a cash request and get money in your account 
+    div.ps-17
+      p.text-xs.font-bold You are eligible for higher limits, Please continue Full KYC
+    div
+      p.ps-3.font-bold Activity
+    div.flex.flex-row.justify-evenly
+      div.ps-6.grid.text-center(@click="navToTransferScreen")
+        FaIcon.mx-auto.ps-9(icon='paper-plane')
+        p.text-sm Transfer
+      div.ps-7.grid.text-center(@click="navToCard")
+        FaIcon.mx-auto.ps-9(icon='credit-card')
+        p.text-sm My Card
+      div.ps-8.grid.text-center
+        FaIcon.mx-auto.ps-9(icon='chart-simple')
+        p.text-sm Insight
+    div.ps-10
+      div.flex.flex-row.justify-evenly(v-if="recentTransaction")
+        div.font-bold.text-xm.ps-12 Last Transaction 
+          div.text-xs.ps-13 Earned wages from salary
+          //- div.text-xs.ps-14 {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
+        div.text-xm.ps-15 &#8377; {{ parseFloat(recentTransaction.requested_amount).toLocaleString() }}
+          div(@click="navToTransaction")
+            p.text-xs.underline.ps-16 View All
+      
+      //- p.ps-3.font-bold Bank Transfer Status
+      //- div.flex.flex-col.ps-11.rounded-md.shadow-md
+      //-   div.flex.flex-row.justify-between(v-if="recentTransaction")
+      //-     div
+      //-       p.text-xs {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
+      //-       p.font-thin.text-lg &#8377; {{ parseFloat(recentTransaction.requested_amount).toFixed(2) }}
+      //-     div.self-center
+      //-       div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
+      //-   p(v-else) No cash request found. You can raise a cash request and get money in your account 
 </template>
 
 <script>
@@ -36,11 +78,13 @@ export default {
 
   data() {
     return {
+      user: this.$auth.user,
       accounts: [],
       requestedAmount: null,
       recentTransaction: null,
       inProgress: false,
       vkycMessage:null,
+      availableLimit:null,
     }
   },
 
@@ -51,7 +95,7 @@ export default {
   computed: {
     organization () {
       return this.$auth.user.organization
-    }
+    },
   },
 
   beforeMount() {
@@ -59,6 +103,18 @@ export default {
   },
 
   methods: {
+    navToTransferScreen() {
+      this.$router.push('/TransferScreen')
+    },
+    navToCard() {
+      this.$router.push('/cards')
+    },
+    navToTransaction() {
+      this.$router.push('/transactions')
+    },
+    navToProfile() {
+      this.$router.push('/profile')
+    },
     async getAccountDetails() {
       try {
         const promiseArray = [];
@@ -71,6 +127,9 @@ export default {
           const { data } = item;
           this.accounts.push(data);
         }
+        const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
+        const cardAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' );
+        this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString()
         await this.fetchRecentWithdrawal();
       } catch (err) {
         this.$toast.error('Failed to fetch accounts');
@@ -167,7 +226,117 @@ export default {
 </script>
 
 <style scoped>
-#dynamicheight {
-  margin-bottom: 96px;
+.ps-1{
+  height:13rem;
+  background-color: #7165E3;
+  padding-left: 2rem;
+  padding-top: 2rem;
+  color: white;
+
+}
+.ps-2{
+  margin-top: -6.5rem;
+  border-radius: 10px;
+  height: 10rem;
+  background-color: #FFFFFF;
+  color: #1C1939;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding-right: 2rem;
+  box-shadow: 0px 35px 65px rgba(0, 0, 0, 0.0790811);
+}
+.ps-3{
+  margin-top: 1rem;
+  margin-left: 2rem;
+}
+.ps-4{
+  margin-top: -3.25rem;
+  margin-left: 75%;
+  
+}
+.ps-5{
+  background-color: #F2F2F2;
+}
+.ps-6{
+  margin-top: 1rem;
+  height: 100px;
+  width:93px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
+  color: #1C1939;
+  margin-left: 2rem;
+  padding-top: 10px;
+}
+.ps-7{
+  margin-top: 1rem;
+  height: 100px;
+  width:93px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
+  color: #1C1939;
+  margin-left: 0.5rem;
+  padding-top: 10px;
+}
+.ps-8{
+  margin-top: 1rem;
+  height: 100px;
+  width:93px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
+  color: #1C1939;
+  margin-left: 0.5rem;
+  margin-right: 2rem;
+  padding-top: 10px;
+}
+.ps-9{
+  margin-top: 0.5rem;
+  background-color: #7165E3;
+  color: white;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 5px;
+  padding-top: 3px;
+  padding-left: 3px;
+  padding-bottom: 3px;
+  padding-right: 3px;
+}
+.ps-10{
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  border-radius: 10px;
+  height: 6rem;
+  width: 20rem;
+  background-color:#FFFFFF;
+  color: #1C1939;
+}
+.ps-12{
+  margin-left: -1.5rem;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.ps-13{
+  padding-top: 10px;
+  padding-bottom: 3px;
+}
+.ps-14{
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.ps-15{
+  margin-top: 35px;
+  margin-bottom: 10px;
+}
+.ps-16{
+  color: blue;
+  padding-left: 15px;
+}
+.ps-17{
+  margin-top: 1rem;
+  margin-left: 2rem;
+  color: #1C1939;
 }
 </style>

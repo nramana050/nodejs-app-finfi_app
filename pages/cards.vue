@@ -1,52 +1,107 @@
 <template lang="pug">
 div
-  div.flex.flex-col
-    div.flex-0
-      PageHeader(:title="'Cards'")
-  div(v-if="isLoading")
-    img#loader(src="~/assets/loader.gif")
-  div(v-else)
-    div.flex.flex-col(v-if="isCardAvailable")
-      div.flex(v-if="card.url")
+  div.ps-1
+    div(@click="navToDashboard")
+        FaIcon.mx-auto.ps-3(icon='angle-left')
+    div.text-center.font-bold Your Bankery Card
+  div.ps-2
+    div(v-if="isCardAvailable && cardFetch > 0")
+      div.ps-8(v-if="card.url")
         object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
-        //- iframe(:src="card.url" width="100%" height="320px")
-      div.flex(v-else)
-        div(width="100%" style="height:270px !important;")
+      //- iframe(:src="card.url" width="100%" height="320px")
+      div.ps-8(v-else)
+        div
           img#dummycard(src="https://static.thenounproject.com/png/2028787-200.png")
-      div.flex-flex-col.mt-5.bg-gray-100
-        div.flex.flex-row.justify-between.py-2.px-8
-          span Kit Number
-          span.font-bold.uppercase.tracking-wide {{ card.kitList }}
-        div.flex.flex-row.justify-between.pb-2.px-8
-          span Card Status
-          span.font-bold.uppercase.tracking-wide {{ isCardBlocked ? 'BLOCKED' : 'ACTIVE' }}
-        div.px-8.bg-white.pt-4
-          div.flex.justify-between.is-align-items-center.pb-2
-            div.miam.miam-active.pt-2 Block Card
-            //- div.relative.inline-block.w-10.mr-2.align-middle.select-none.transition.duration-200.ease-in
-            //-   input.toggle-checkbox.absolute.block.w-6.h-6.rounded-full.bg-white.border-4.appearance-none.cursor-pointer(type="checkbox" name="block" id="block" :value="isCardBlocked" @change="toggleCardStatus")
-            //-   label.toggle-label.block.overflow-hidden.h-6.rounded-full.bg-gray-300.cursor-pointer( for="block")
-            div.relative
-              img(src="~/assets/toggle_on.png" v-if="isCardBlocked" @click="openUnblockCard")
-              img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
-        div.px-8.bg-white.pt-4
-          div.grid.grid-cols-1.divide-y.border.rounded 
-            div.flex.justify-between.px-4.py-2(@click="openCardSetting")
-              span Card Preferences 
-              span &#8250;
-            div.flex.justify-between.px-4.py-2(@click="openCardPIN")
-              span Set PIN 
-              span &#8250;  
-    div.flex.flex-col.p-4(v-else)
-      div.p-2
-        p.p-2 Please go through the 
-          a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
-          //- p.text-xs
-          //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
-        input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
-        label  I accept the terms and condition 
-      button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(v-if="this.isTermsAccepted" @click="openRegistrationModal")
-        span Get Card
+    //- div.ps-8
+    //-   div.ps-11
+    //-     img.w-12.h-12(src="~/assets/cardChip.png")
+    //-   div.flex.flex-row.justify-between.ps-9
+    //-     div.text-xs {{ user.first_name }} {{ user.last_name }}
+    //-     img.w-14.h-10.ps-12(src="~/assets/masterCard.png")
+    div.ps-16.uppercase(v-if="isCardAvailable")
+      div.flex.flex-row.justify-between
+        span Kit Number
+        span.font-bold.uppercase {{ card.kitList }}
+      div.flex.flex-row.justify-between
+        span Card Status
+        span.font-bold.uppercase {{ isCardBlocked ? 'BLOCKED' : 'ACTIVE' }}
+    //- div.ps-4
+    //-   div.flex.flex-row.justify-between
+    //-     div.text-xs.ps-10
+    //-       p Card number
+    //-       p xxxx xxxx xxxx xxxx
+    //-     div.text-sm(@click="")
+    //-       p.ps-13 Copy
+    //-   div.text-xs.ps-10
+    //-     p Valid till
+    //-     p 10/26
+    //-   div.flex.flex-row.justify-between
+    //-     div.text-xs.ps-10
+    //-       p CVV
+    //-       p ***
+    //-     div.text-sm(@click="")
+    //-       p.ps-13 Copy
+    div.uppercase.ps-5
+      div.ps-14 Preferences
+        div.flex.flex-row.justify-between.ps-7
+          div.text-sm Ecom 
+          div.relative
+            img(src="~/assets/toggle_on.png" v-if="isEcom" @click="")
+            img(src="~/assets/toggle_off.png" v-else @click="")
+        div.flex.flex-row.justify-between.ps-15
+          div.text-sm POS
+          div.relative
+            img(src="~/assets/toggle_on.png" v-if="isPos" @click="")
+            img(src="~/assets/toggle_off.png" v-else @click="")
+        div.flex.flex-row.justify-between.ps-15
+          div.text-sm Contactless
+          div.relative
+            img(src="~/assets/toggle_on.png" v-if="isContactLess" @click="")
+            img(src="~/assets/toggle_off.png" v-else @click="")
+  //- div(v-if="isLoading")
+  //-   img#loader(src="~/assets/loader.gif")
+  //- div(v-else)
+  //-   div.flex.flex-col(v-if="isCardAvailable")
+  //-     div.flex(v-if="card.url")
+  //-       object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
+  //-       //- iframe(:src="card.url" width="100%" height="320px")
+  //-     div.flex(v-else)
+  //-       div(width="100%" style="height:270px !important;")
+  //-         img#dummycard(src="https://static.thenounproject.com/png/2028787-200.png")
+  //-     div.flex-flex-col.mt-5.bg-gray-100
+  //-       div.flex.flex-row.justify-between.py-2.px-8
+  //-         span Kit Number
+  //-         span.font-bold.uppercase.tracking-wide {{ card.kitList }}
+  //-       div.flex.flex-row.justify-between.pb-2.px-8
+  //-         span Card Status
+  //-         span.font-bold.uppercase.tracking-wide {{ isCardBlocked ? 'BLOCKED' : 'ACTIVE' }}
+  //-       div.px-8.bg-white.pt-4
+  //-         div.flex.justify-between.is-align-items-center.pb-2
+  //-           div.miam.miam-active.pt-2 Block Card
+  //-           //- div.relative.inline-block.w-10.mr-2.align-middle.select-none.transition.duration-200.ease-in
+  //-           //-   input.toggle-checkbox.absolute.block.w-6.h-6.rounded-full.bg-white.border-4.appearance-none.cursor-pointer(type="checkbox" name="block" id="block" :value="isCardBlocked" @change="toggleCardStatus")
+  //-           //-   label.toggle-label.block.overflow-hidden.h-6.rounded-full.bg-gray-300.cursor-pointer( for="block")
+  //-           div.relative
+  //-             img(src="~/assets/toggle_on.png" v-if="isCardBlocked" @click="openUnblockCard")
+  //-             img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
+  //-       div.px-8.bg-white.pt-4
+  //-         div.grid.grid-cols-1.divide-y.border.rounded 
+  //-           div.flex.justify-between.px-4.py-2(@click="openCardSetting")
+  //-             span Card Preferences 
+  //-             span &#8250;
+  //-           div.flex.justify-between.px-4.py-2(@click="openCardPIN")
+  //-             span Set PIN 
+  //-             span &#8250;  
+  //-   div.flex.flex-col.p-4(v-else)
+  //-     div.p-2
+  //-       p.p-2 Please go through the 
+  //-         a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
+  //-         //- p.text-xs
+  //-         //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
+  //-       input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
+  //-       label  I accept the terms and condition 
+  //-     button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(v-if="this.isTermsAccepted" @click="openRegistrationModal")
+  //-       span Get Card
 
 </template>
 
@@ -64,9 +119,13 @@ export default {
 
   data() {
     return {
+      user: this.$auth.user,
       isLoading: true,
       isCardAvailable: false,
-      isCardBlocked: false,
+      // isCardBlocked: false,
+      // isEcomBlocked: false,
+      // isPosBlocked: false,
+      isContactLessBlocked:false,
       card: null,
       isTermsAccepted:false,
       cardFetch: 0,
@@ -77,6 +136,9 @@ export default {
     this.fetchCards();
   },
   methods: {
+    navToDashboard() {
+          this.$router.push('/dashboard')
+        },
     openRegistrationModal() {
       this.$FModal.show({ component: M2PRegistration })
     },
@@ -89,6 +151,24 @@ export default {
     openBlockCard() {
       this.$FModal.show({ component: BlockCard }, { revert: this.revertLKUL })
     },
+    // openUnBlockEcom() {
+    //   this.$FModal.show({ component: UnblockEcom }, { revert: this.revertLKUL })
+    // },
+    // openBlockEcom() {
+    //   this.$FModal.show({ component: BlockEcom }, { revert: this.revertLKUL })
+    // },
+    // openUnblockPos() {
+    //   this.$FModal.show({ component: UnblockPos }, { revert: this.revertLKUL })
+    // },
+    // openBlockPos() {
+    //   this.$FModal.show({ component: BlockPos }, { revert: this.revertLKUL })
+    // },
+    // openUnblockContactLess() {
+    //   this.$FModal.show({ component: UnblockContactLess }, { revert: this.revertLKUL })
+    // },
+    // openBlockContactLess() {
+    //   this.$FModal.show({ component: BlockContactLess }, { revert: this.revertLKUL })
+    // },
     openCardPIN() {
       this.$FModal.show({ component: SetPIN })
     },
@@ -111,8 +191,10 @@ export default {
     async fetchCardDetail() {
       const result2 = await this.$axios.get(`/m2p/cards`);
       this.cardFetch += 1
-      this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
+      console.log('hello',this.card)
+      // this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
       this.card.url = result2.data && result2.data.result ? result2.data.result : '';
+      console.log(this.card.url);
       setTimeout(async () => await this.fetchCardDetail(), 118000);
     },
     revertLKUL() {
@@ -126,7 +208,7 @@ export default {
 </script>
 
 <style scoped>
-#dummycard {
+/* #dummycard {
   margin: auto !important;
   left: 50%;
   right: 50%;
@@ -140,8 +222,85 @@ export default {
 a:hover {
   color: blue;
   /* text-decoration: underline; */
-}
+/* }
 object:focus {
   outline: none;
+} */ 
+.ps-1{
+  height: 30vh;
+}
+.ps-2{
+  height: 70vh;
+  background-color: #7165E3;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  position: fixed;
+  width: 62vh;
+}
+.ps-3{
+  padding-top: 2rem;
+  margin-left: 2rem;
+}
+.ps-4{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: white;
+  color:#1C1939;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  
+}
+.ps-5{
+  color: white;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 1rem;
+}
+.ps-7{
+  margin-top: 2rem;
+}
+.ps-15{
+  margin-top: 0.5rem;
+}
+
+.ps-8{
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: -7rem;
+  height: 25vh;
+}
+.ps-9{
+  margin-top: 2.5rem;
+  color: grey;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.ps-12{
+  margin-top: -1rem;
+}
+.ps-10{
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-left: 1rem;
+}
+.ps-11{
+  margin-left: 1rem;
+  padding-top: 2rem;
+}
+.ps-13{
+  color: #7165E3;
+  margin-right: 2rem;
+}
+.ps-14{
+  margin-top: 3rem;
+}
+.ps-16{
+  color: white;
+  margin-top: 5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 </style>

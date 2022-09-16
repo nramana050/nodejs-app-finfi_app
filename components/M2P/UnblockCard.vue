@@ -6,7 +6,7 @@ div.flex.flex-col.p-8
     p Are you sure to unblock your card ?
   div.flex.flex-row.justify-between.pt-4
     button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="close") Cancel
-    button.h-8.px-4.text-white.rounded.bg-primary.font-bold(@click="confirm") Yes, Confirm
+    button.h-8.px-4.text-white.rounded.font-bold.ps-15(@click="confirm") Yes, Confirm
 </template>
 
 <script>
@@ -34,3 +34,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .ps-15{
+    background-color: #7165E3;
+  }
+</style>

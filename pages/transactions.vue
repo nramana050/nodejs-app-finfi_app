@@ -1,11 +1,11 @@
 <template lang="pug">
   div.flex.flex-col
     div.flex-0
-      PageHeader(:title="'Transactions'")
+    PageHeader(:title="'Transactions'")
     div.flex-0.p-4.bg-gray-100
       div.flex.flex-row.text-centerate.justify-between
         div.flex.flex-0
-          span.py-1.px-2.text-xs.text-white.bg-primary.uppercase.font-bold.self-center Date filter
+          span.py-1.px-2.text-xs.text-black.bg-primary.uppercase.font-bold.self-center Date filter
         div.flex.flex-1.w-64.relative
           DatePicker(range input-class="border w-full px-4" placeholder="Select Date Range" v-model="dates" range-separator=' ⟺ ' @change="fetchTransactions")
     div.p-4.text-center(v-if="transactions.length > 0")
@@ -51,3 +51,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .ps-3{
+  padding-top: 2rem;
+  margin-left: 2rem;
+}
+.ps-4{
+  margin-left: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.ps-5{
+  background-color: #7165E3;
+}
+</style>
