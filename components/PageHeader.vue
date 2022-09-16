@@ -1,6 +1,7 @@
 <template lang="pug">
-  div.flex.flex-row.bg-primary.text-white.border.p-4.items-center
-    outline-cash-icon.w-6.h-6.mr-4
+  div.flex.flex-row.text-white.border.p-4.items-center.ps-1
+    div(@click="navToDashboard")
+      FaIcon.mx-auto.ps-3(icon='angle-left')
     h3.text-sm.font-bold.tracking-widest.uppercase {{ title }}
 </template>
 
@@ -11,6 +12,22 @@ export default {
       type: String,
       required: true
     }
+  },
+  methods:{
+    navToDashboard(){
+      this.$router.push('/Dashboard')
+    }
   }
 }
 </script>
+<style scoped>
+  .ps-3{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    color: white;
+  }
+  .ps-1{
+    background-color: #7165E3;
+    
+  }
+</style>

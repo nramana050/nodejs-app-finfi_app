@@ -1,8 +1,8 @@
 <template lang="pug">
 div.container.w-96.min-h-screen.mx-auto.font-primary.bg-primary.shadow-2xl
-  div.flex.flex-col.min-h-screen.justify-between.px-10.py-12
+  div.flex.flex-col.min-h-screen.justify-between
     Nuxt.flex-1
-    div.flex-0.mx-auto
+    div.logo
       FooterLogo
   tooltip
 </template>
@@ -12,3 +12,13 @@ export default {
   name: 'DefaultLayout',
 }
 </script>
+<style scoped>
+  .logo{
+    background-color: #7165E3;
+    padding-left:31% ;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top-left-radius:15px;
+    border-top-right-radius:15px ;
+  }
+</style>
