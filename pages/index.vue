@@ -3,25 +3,32 @@ div
   div(v-if="isLoading")
     SplashScreen.ps-6(v-on:splash="fromSplashScreen")
   div(v-if="!isLoading")
-    div.ps-1
-      LeadHeader.font-bold.text-3xl(:title="`Let\'s get started!`" )
-    div.ps-2
-      LeadHeader(:lead="'Please enter your organization'")
-    div.ps-3
-      LeadHeader(:lead="'code sent to your registered email'")
-    div
-      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Organization code" v-model="organizationCode")
-    div.ps-5
-      button.font-bold.text-white(@click="validate")
-        span {{ $t('proceed') }}
+    div.ps-7
+      div.ps-1
+        LeadHeader.font-bold.text-3xl(:title="`Let\'s get started!`" )
+      div.ps-2
+        LeadHeader(:lead="'Please enter your organization'")
+      div.ps-3
+        LeadHeader(:lead="'code sent to your registered email'")
+      div
+        input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Organization code" v-model="organizationCode")
+      div.ps-5
+        button.font-bold.text-white(@click="validate")
+          span {{ $t('proceed') }}
+    div.ps-8
+      div.ps-9
+        FooterLogo
+      
 </template>
 
 <script>
 import SplashScreen from '~/components/SplashScreen.vue';
+import FooterLogo from '~/components/FooterLogo.vue';
 export default {
     name: "IndexPage",
+    layout:'session',
     auth: false,
-    components: { SplashScreen },
+    components: { SplashScreen, FooterLogo },
     data() {
         return {
             organizationCode: null,
@@ -73,14 +80,14 @@ export default {
 <style scoped>
   .ps-1{
     color: #37202B;
-    margin-top: 4rem;
+    margin-top: 3rem;
     margin-left:5.5rem;
     line-height: 52px;
     letter-spacing: -2px;
   }
   .ps-2{
    color: #1C1939CC;
-   margin-top: 3rem;
+   margin-top: 2.5rem;
    font-weight: 400;
    margin-left:3rem;
    margin-right:3rem;
@@ -118,4 +125,20 @@ export default {
     margin-left: 0;
     margin-top: 0;
 }
+.ps-7{
+    height: 75vh;
+}
+.ps-8{
+  height: 35vh;
+  background-color: #7165E3;
+  margin-top: -12vh;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.ps-9{
+    width: 9rem;
+    height: 9rem;
+    margin-left: 32%;
+    padding-top: 1rem ;
+  }
 </style>
