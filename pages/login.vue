@@ -1,30 +1,35 @@
 <template lang="pug">
-div.flex.flex-col
-  div.flex.mb-4
+div
+  div
     NuxtLink(to="/")
-      outline-arrow-circle-left-icon.w-8.h-8.mr-2.text-white
-  LeadHeader.flex(:title="organization ? organization.name : ''" :lead="'Please login with your registered mobile number'")
-  div.flex.flex-col.py-4
-    input.shadow.appearance-none.border.rounded.w-full.py-2.px-3(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
-  div.flex.flex-col.pb-4(v-if="isUserRegistered")
+      FaIcon.mx-auto.ps-7(icon='angle-left')
+      LeadHeader.font-bold.text-2xl.ps-1(:title="organization ? organization.name : ''" )
+      LeadHeader.ps-2(:lead="'Please login with your registered'")
+      LeadHeader.ps-3(:lead="'mobile number'")
+
+  div
+    input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
+  div(v-if="isUserRegistered")
     div(v-if="skipOTP")
-      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" type="password" placeholder="Passcode" v-model="passcode")
-      p.text-sm.text-white.pt-8.underline(@click="switchToOTPMode") Forgot passcode?
+      input.ps-4(class="focus:outline-none focus:shadow-outline" type="password" placeholder="Passcode" v-model="passcode")
+      div.flex.flex-row.justify-evenly
+        p.ps-8.text-sm.underline(@click="switchToOTPMode") Forgot passcode?
+        p.ps-10.text-sm.underline(@click="switchToOTPMode") Send OTP
     div(v-else)
-      input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.mt-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" type="password" v-model="otp")
-      p.text-sm.text-white.pt-8.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
-      p.text-sm.text-white.pt-8( id="waitTime" :hidden='!this.blockResend' )
-  div.flex.flex-1.justify-end.py-8(v-if="isUserRegistered")
-    button.text-white.inline-flex.items-start(@click="login" v-if="skipOTP")
-      span.text-xl.tracking-wide Login
-      outline-arrow-circle-right-icon.w-8.h-8.ml-2
-    button.text-white.inline-flex.items-start(@click="verifyOTP" v-else)
-      span.text-xl.tracking-wide Verify
-      outline-arrow-circle-right-icon.w-8.h-8.ml-2
-  div.flex.flex-1.justify-end.py-8(v-else)
-    button.text-white.inline-flex.items-start(@click="validate")
-      span.text-xl.tracking-wide Proceed
-      outline-arrow-circle-right-icon.w-8.h-8.ml-2
+      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" type="password" v-model="otp")
+      p.text-sm.ps-6.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
+      p.text-sm.ps-6( id="waitTime" :hidden='!this.blockResend' )
+  div(v-if="isUserRegistered")
+    button.font-bold.text-white.inline-flex(@click="login" v-if="skipOTP")
+      span.ps-5 Login
+      //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
+    button.font-bold.text-white.inline-flex(@click="verifyOTP" v-else)
+      span.ps-5 Verify
+      //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
+  div(v-else)
+    button.font-bold.text-white.inline-flex(@click="validate")
+      span.ps-5 Proceed
+      //-outline-arrow-circle-right-icon.w-8.h-8.ml-2
 </template>
 
 <script>
@@ -148,3 +153,64 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .ps-1{
+    color: #37202B;
+    margin-top: 1rem;
+    margin-left:3rem;
+    font-weight: 300;
+    letter-spacing: -2px;
+    font-style: normal;
+  }
+  .ps-2{
+   color: #1C1939CC;
+   margin-top: 1rem;
+   font-weight: 400;
+   margin-left:3rem;
+   margin-right:3rem;
+  }
+  .ps-3{
+    color: #1C1939CC;
+    font-weight: 400;
+    margin-left:3rem;
+    margin-right:3rem;
+  }
+  .ps-4{
+    margin-left: 3rem;
+    margin-top: 1rem;
+    padding-left: 10px;
+    padding-right: 4.75rem;
+    padding-top: 10px;
+    padding-bottom:10px;
+  }
+  .ps-5{
+    background-color: #7165E3;
+    width: 130px;
+    height: 35px;
+    font-weight: 500;
+    margin-top: 2.5rem;
+    margin-left:7.75rem;
+    text-align: center;
+    border-radius: 8px;
+    padding-top: 5px;
+  }
+  .ps-8{
+    margin-top: 1rem;
+    margin-left: -3rem;
+  }
+  .ps-6{
+    margin-top: 1rem;
+    margin-left: 3rem;
+  }
+  .ps-7{
+    color: #37202B;
+    margin-top: 0.5rem;
+    margin-left: 3rem;
+    width: 20px;
+    height: 20px;
+  }
+  .ps-10{
+    margin-top: 1rem;
+    margin-right: -3rem;
+  }
+</style>

@@ -68,7 +68,7 @@ export default {
   components: true,
 
   axios: {
-    baseURL: 'https://api.myfinfi.com',
+    baseURL: 'https://uatapi.myfinfi.com',
     // baseURL: 'http://localhost:3000'
   },
 
