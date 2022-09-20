@@ -38,7 +38,8 @@ div.ps-5
     //-         div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
     //-     p(v-else) No cash request found. You can raise a cash request and get money in your account 
     div.ps-17
-      p.text-xs.font-bold You are eligible for higher limits, Please continue Full KYC
+      p(v-if="this.kycStatus && this.kycStatus==='MIN_KYC'").text-xs.font-bold You are eligible for higher limits, Please complete 
+        a(v-if="this.vciplink" :href="this.vciplink" target="_blank") Full KYC
     div
       p.ps-3.font-bold Activity
     div.flex.flex-row.justify-evenly
@@ -85,7 +86,8 @@ export default {
       requestedAmount: null,
       recentTransaction: null,
       inProgress: false,
-      vkycMessage:null,
+      kycStatus:null,
+      vciplink:null,
       availableLimit:null,
     }
   },
@@ -100,8 +102,9 @@ export default {
     },
   },
 
-  beforeMount() {
-    this.fetchVkyc();
+  mounted() {
+    this.kycStatus = this.$auth.user.kyc_status.kyc_status;
+    this.fetchVkyc()
   },
 
   methods: {
@@ -197,47 +200,17 @@ export default {
         this.$toasted.error(err.response.data.message)
       }
     },
-    async vkyc(){
-      try{
-        const vkycResult = await this.$axios.post('/m2p/vkyc/vcipid');
-        if (vkycResult && vkycResult.data.data){
-          console.log('same link:',vkycResult.data.data.vcip_link)
-          window.open(vkycResult.data.data.vcip_link,'_blank');
-        }
-        if (vkycResult.data.data===undefined){
-          const response = await this.$axios.post('/m2p/vkyc')
-          if (response.data.message==='Success'){
-            console.log('new link:',response.data.data.vciplink)
-            window.open(response.data.data.vciplink,'_blank');
-          }else{
-            this.$toast.error('Failed to generate link')  
-          }
-        }
-      }catch(err){
-        console.log(err)
-        this.$toast.error('Failed')
-      }
-    },
     async fetchVkyc(){
       try{
-      const vkycResult = await this.$axios.post('/m2p/vkyc/vcipid');
-        if (vkycResult && vkycResult.data){
-          if(vkycResult.data.message==='Fail' && vkycResult.data.content==='Not registered with M2P'){
-            this.vkycMessage = "no message"
-          }
-          else if(vkycResult.data.data===undefined) this.vkycMessage = "complete"
-          
-          const status = vkycResult.data.data ? vkycResult.data.data.status:null
-          if (status==="COMPLETED"){
-           this.vkycMessage = "no message"
-          }
-          if (status === "PENDING"){
-           this.vkycMessage = "continue"
+        if (this.kycStatus === "MIN_KYC" ){
+          const vkycResult = await this.$axios.post('/m2p/vkyc/link');
+          if(vkycResult.data.message==='Success' && vkycResult.data.data){
+            this.vciplink = vkycResult.data.data.vcip_link
           }
         }
       }catch(err){
         console.log(err)
-        this.$toast.error('Failed to vkyc status')
+        this.$toast.error('Failed to gey kyc status')
       }
     }
   }

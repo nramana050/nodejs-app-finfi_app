@@ -11,7 +11,7 @@ div.flex.flex-col
       p Failed to register card
       p {{ errorMessage }}
       div.flex.flex-col
-        button.h-10.px-4.text-white.rounded.bg-primary.font-bold.my-5(@click="restart") Try Again
+        button.btn.h-10.px-4.text-white.rounded.font-bold.my-5(@click="restart") Try Again
         button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
 </template>
 
@@ -65,3 +65,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .btn{
+    background-color: #7165E3;
+  }
+</style>

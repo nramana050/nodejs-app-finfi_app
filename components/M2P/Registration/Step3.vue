@@ -5,7 +5,7 @@ div.flex.flex-col
     FormulateInput.pr-3(type="text" label="Document Number" name="document_number" validation="required" :input-class="['uppercase']")
     div.flex-1.pr-4
       div.flex.flex-row.py-4.justify-between
-        button.h-8.px-4.text-white.rounded.bg-primary.font-bold(type="submit") Next
+        button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Next
         button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
 </template>
 
@@ -57,3 +57,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .btn{
+    background-color: #7165E3;
+  }
+</style>
