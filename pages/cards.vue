@@ -1,23 +1,28 @@
 <template lang="pug">
 div
-  div.ps-1
+  div
     div(@click="navToDashboard")
         FaIcon.mx-auto.ps-3(icon='angle-left')
-    div.text-center.font-bold Your Bankery Card
-  div.ps-2
+    div.text-center.font-bold(v-if="isCardAvailable") Card Details 
+    div.text-center.font-bold(v-else) Card is not registered
+  div
     div(v-if="isCardAvailable && cardFetch > 0")
       div.ps-8(v-if="card.url")
         object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
-      //- iframe(:src="card.url" width="100%" height="320px")
       div.ps-8(v-else)
         div
           img#dummycard(src="https://static.thenounproject.com/png/2028787-200.png")
-    //- div.ps-8
-    //-   div.ps-11
-    //-     img.w-12.h-12(src="~/assets/cardChip.png")
-    //-   div.flex.flex-row.justify-between.ps-9
-    //-     div.text-xs {{ user.first_name }} {{ user.last_name }}
-    //-     img.w-14.h-10.ps-12(src="~/assets/masterCard.png")
+    div.ps-2(v-else)
+      div
+        p Please go through the 
+          a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
+          //- p.text-xs
+          //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
+        input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
+        label  I accept the terms and condition 
+      button.ps-6.h-12.w-full.text-black.rounded.uppercase.font-bold(v-if="this.isTermsAccepted" @click="openRegistrationModal")
+        span Get Card
+  div.ps-1
     div.ps-16.uppercase(v-if="isCardAvailable")
       div.flex.flex-row.justify-between
         span Kit Number
@@ -25,23 +30,7 @@ div
       div.flex.flex-row.justify-between
         span Card Status
         span.font-bold.uppercase {{ isCardBlocked ? 'BLOCKED' : 'ACTIVE' }}
-    //- div.ps-4
-    //-   div.flex.flex-row.justify-between
-    //-     div.text-xs.ps-10
-    //-       p Card number
-    //-       p xxxx xxxx xxxx xxxx
-    //-     div.text-sm(@click="")
-    //-       p.ps-13 Copy
-    //-   div.text-xs.ps-10
-    //-     p Valid till
-    //-     p 10/26
-    //-   div.flex.flex-row.justify-between
-    //-     div.text-xs.ps-10
-    //-       p CVV
-    //-       p ***
-    //-     div.text-sm(@click="")
-    //-       p.ps-13 Copy
-    div.uppercase.ps-5
+    div.uppercase.ps-5(v-if="isCardAvailable")
       div.ps-14 Preferences
         div.flex.flex-row.justify-between.ps-7
           div.text-sm Ecom 
@@ -227,15 +216,11 @@ object:focus {
   outline: none;
 } */ 
 .ps-1{
-  height: 30vh;
-}
-.ps-2{
-  height: 70vh;
+  height:70vh;
   background-color: #7165E3;
+  margin-top: -2rem;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
-  position: fixed;
-  width: 62vh;
 }
 .ps-3{
   padding-top: 2rem;
@@ -259,6 +244,11 @@ object:focus {
   margin-right: 2rem;
   margin-top: 1rem;
 }
+.ps-6{
+  
+  margin-top: 5rem;
+  background-color: white;
+}
 .ps-7{
   margin-top: 2rem;
 }
@@ -269,8 +259,13 @@ object:focus {
 .ps-8{
   margin-left: 1rem;
   margin-right: 1rem;
-  margin-top: -7rem;
   height: 25vh;
+}
+.ps-2{
+  margin-left: 1.5rem;
+  margin-top: 2rem;
+  margin-right: 1.5rem;
+  height: 20vh;
 }
 .ps-9{
   margin-top: 2.5rem;
@@ -299,7 +294,7 @@ object:focus {
 }
 .ps-16{
   color: white;
-  margin-top: 5rem;
+  padding-top: 7rem;
   margin-left: 2rem;
   margin-right: 2rem;
 }

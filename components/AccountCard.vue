@@ -12,20 +12,20 @@ div.ps-1
       div.tracking-wide.text-xs
         | Salary Used
         sup.pl-1 *
-      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(payableAmount).toLocaleString() }}
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(payableAmount).toLocaleString('en-IN') }}
   
     div.flex-0
       div.flex.tracking-wide.text-xs
         p.flex-1 Cash Limit
         div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
           solid-information-circle-icon.w-4.h-4
-      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toLocaleString() }}
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toLocaleString('en-IN') }}
     div.flex-0.text-right
       div.flex.tracking-wide.text-xs
         p.flex-1 Card Limit
         div.flex-0(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
           solid-information-circle-icon.w-4.h-4
-      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toLocaleString() }}
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toLocaleString('en-IN') }}
   div.ps-4      
   div
     p.text-xs.ps-5
