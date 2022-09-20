@@ -34,10 +34,6 @@
           div(@click="")
             FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
         div.flex.flex-row.justify-between.ps-10
-          p.text-sm Languages 
-          div(@click="")
-            FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
-        div.flex.flex-row.justify-between.ps-10
           p.text-sm Notification
           div(@click="")
             FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
