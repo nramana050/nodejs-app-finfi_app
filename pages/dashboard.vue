@@ -52,13 +52,15 @@ div.ps-5
         FaIcon.mx-auto.ps-9(icon='chart-simple')
         p.text-sm Insight
     div.ps-10
+      div.font-bold.text-xm.ps-12 Last Transaction 
       div.flex.flex-row.justify-evenly(v-if="recentTransaction")
-        div.font-bold.text-xm.ps-12 Last Transaction 
-          div.text-xs.ps-13 Earned wages from salary
+        div.text-xs.ps-13 Earned wages from salary
           //- div.text-xs.ps-14 {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
         div.text-xm.ps-15 &#8377; {{ parseFloat(recentTransaction.requested_amount).toLocaleString() }}
           div(@click="navToTransaction")
             p.text-xs.underline.ps-16 View All
+      div.ps-18(v-else)
+        p No Transaction found
       
       //- p.ps-3.font-bold Bank Transfer Status
       //- div.flex.flex-col.ps-11.rounded-md.shadow-md
@@ -87,10 +89,10 @@ export default {
       availableLimit:null,
     }
   },
-
   async fetch() {
-    await this.getAccountDetails()
+    await this.getAccountDetails();
   },
+
 
   computed: {
     organization () {
@@ -115,6 +117,23 @@ export default {
     navToProfile() {
       this.$router.push('/profile')
     },
+    navToSaveNow(){
+      this.$router.push('/saveNow')
+    },
+    async fetchTransactions() {
+      this.transactions = []
+      this.isLoading = true;
+      const startDate = this.$dayjs(this.dates[0]).format('YYYY-MM-DD')
+      const endDate = this.$dayjs(this.dates[1]).format('YYYY-MM-DD')
+      try {
+        const transactions = await this.$axios.get(`/accounts/transactions?start_date=${startDate}&end_date=${endDate}`);
+        this.transactions = transactions.data;
+        this.isLoading = false;
+      } catch (err) {
+        this.$toast.error('Failed to fetch accounts');
+        this.isLoading = false;
+      }
+    },
     async getAccountDetails() {
       try {
         const promiseArray = [];
@@ -129,7 +148,7 @@ export default {
         }
         const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
         const cardAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' );
-        this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString()
+        this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString('en-IN')
         await this.fetchRecentWithdrawal();
       } catch (err) {
         this.$toast.error('Failed to fetch accounts');
@@ -314,21 +333,23 @@ export default {
   color: #1C1939;
 }
 .ps-12{
-  margin-left: -1.5rem;
+  margin-left: 1rem;
   padding-top: 5px;
   padding-bottom: 5px;
 }
 .ps-13{
   padding-top: 10px;
   padding-bottom: 3px;
+  margin-left: -2rem;
 }
 .ps-14{
   padding-top: 3px;
   padding-bottom: 3px;
 }
 .ps-15{
-  margin-top: 35px;
+  margin-top: 5px;
   margin-bottom: 10px;
+  margin-right: -2rem;
 }
 .ps-16{
   color: blue;
@@ -338,5 +359,9 @@ export default {
   margin-top: 1rem;
   margin-left: 2rem;
   color: #1C1939;
+}
+.ps-18{
+  text-align: center;
+
 }
 </style>
