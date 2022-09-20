@@ -17,10 +17,10 @@ div.flex.flex-col
       FormulateInput.pb-2.pr-3.w-full(type="number" label="OTP" name="otp" validation="required")
     div.flex-1.pr-4
       div.flex.flex-row.py-4.justify-between
-        button.h-8.px-4.text-white.rounded.font-bold(@click="generateOTP" :disabled="isOTPSent" :class="[isOTPSent ? 'bg-gray-200': 'bg-primary']")
+        button.btn.h-8.px-4.text-white.rounded.font-bold(@click="generateOTP" :disabled="isOTPSent" :class="[isOTPSent ? 'bg-gray-200': 'bg-primary']")
           | Send OTP 
           span(v-if="isOTPSent") ({{timer}})
-        button.h-8.px-4.text-white.rounded.bg-primary.font-bold(type="submit") Next
+        button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Next
         button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
 </template>
 
@@ -86,3 +86,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .btn{
+    background-color: #7165E3;
+  }
+</style>
