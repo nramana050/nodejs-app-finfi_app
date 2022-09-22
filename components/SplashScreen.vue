@@ -1,6 +1,6 @@
 <template lang="pug">
     div
-      div.text-5xl.font-bold.ps-2 Finfi 
+      div.text-5xl.font-bold.ps-10 Finfi 
       div.text-sm.ps-3 Salary simplified
       nuxt-img.rounded-xl.ps-4(preload src="/finfi.png" width="140" height="140")
 </template>
@@ -22,9 +22,10 @@
 
 </script>
 <style scoped>
-.ps-2{
+.ps-10{
     color: white;
     padding-top: 8rem;
+    letter-spacing: 1px;
 }
 .ps-3{
     color: white;
