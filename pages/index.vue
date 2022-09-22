@@ -63,9 +63,11 @@ export default {
             const organization = await this.$axios.$post(`/ext/organization`, { code: this.organizationCode });
             const { status, code, name } = organization;
             if (!status) {
+              console.log('hi')
                 this.$toast.error("Organization not registered");
                 return;
             }
+            console.log('hello')
             this.$store.commit("set", { param: "organization", value: { code, name } });
             this.$router.push("/login");
         },

@@ -21,8 +21,8 @@ export default {
 
   plugins: [
     { src: '~/plugins/vue.modal' },
-    { src: '~/plugins/date.picker', ssr: false },
-    { src: '~/plugins/vuex.persist', ssr: false },
+    { src: '~/plugins/date.picker', ssr: false},
+    { src: '~/plugins/vuex.persist' },
     { src: '~/plugins/vue.modal.2', ssr: false },
     { src: '~/plugins/vue.iframe', ssr: false },
     { src: '~/plugins/vue.tooltip', ssr: false },

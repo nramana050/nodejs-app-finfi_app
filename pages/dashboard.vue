@@ -7,7 +7,7 @@ div.ps-5
       div
       p.font-bold.tracking-wider.text-2xl &#8377; {{this.availableLimit}}
       p.tracking-wide.text-xs Available Balance
-      button.rounded-full.mx-auto.ps-4(@click="navToProfile")
+      div.rounded-full.mx-auto.ps-4(@click="navToProfile")
         img.object-cover.h-12.w-12.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
       //- div.text-right
       //- p.font-bold.text-white {{ user.first_name }} {{ user.last_name }}
@@ -37,9 +37,10 @@ div.ps-5
     //-       div.self-center
     //-         div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
     //-     p(v-else) No cash request found. You can raise a cash request and get money in your account 
-    div.ps-17
-      p(v-if="this.vciplink").text-xs.font-bold You are eligible for higher limits, Please complete 
-        a(:href="this.vciplink" target="_blank") Full KYC
+    //-kyc 
+    //- div.ps-17
+    //-   p(v-if="this.vciplink").text-xs.font-bold You are eligible for higher limits, Please complete 
+    //-     a(:href="this.vciplink" target="_blank") Full KYC
     div
       p.ps-3.font-bold Activity
     div.flex.flex-row.justify-evenly
@@ -114,10 +115,10 @@ export default {
     },
   },
 
-  mounted() {
-    this.kycStatus = this.$auth.user.kyc_status.kyc_status;
-    this.fetchVkyc()
-  },
+  // mounted() {
+    // this.kycStatus = this.$auth.user.kyc_status.kyc_status;
+    // this.fetchVkyc()
+  // },
 
   methods: {
     navToTransferScreen() {
@@ -198,19 +199,19 @@ export default {
         this.$toasted.error(err.response.data.message)
       }
     },
-    async fetchVkyc(){
-      try{
-        if (this.kycStatus === "MIN_KYC" ){
-          const vkycResult = await this.$axios.post('/m2p/vkyc/link');
-          if(vkycResult.data.message==='Success' && vkycResult.data.data){
-            this.vciplink = vkycResult.data.data.vcip_link
-          }
-        }
-      }catch(err){
-        console.log(err)
-        this.$toast.error('Failed to gey kyc status')
-      }
-    }
+    // async fetchVkyc(){
+    //   try{
+    //     if (this.kycStatus === "MIN_KYC" ){
+    //       const vkycResult = await this.$axios.post('/m2p/vkyc/link');
+    //       if(vkycResult.data.message==='Success' && vkycResult.data.data){
+    //         this.vciplink = vkycResult.data.data.vcip_link
+    //       }
+    //     }
+    //   }catch(err){
+    //     console.log(err)
+    //     this.$toast.error('Failed to gey kyc status')
+    //   }
+    // }
   }
 }
 </script>
