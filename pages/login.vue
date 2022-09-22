@@ -19,16 +19,16 @@ div
       input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" type="password" v-model="otp")
       p.text-sm.ps-6.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
       p.text-sm.ps-6( id="waitTime" :hidden='!this.blockResend' )
-  div(v-if="isUserRegistered")
-    button.font-bold.text-white.inline-flex(@click="login" v-if="skipOTP")
-      span.ps-5 Login
+  div.ps-5(v-if="isUserRegistered")
+    button.font-bold.text-white(@click="login" v-if="skipOTP")
+      span Login
       //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
-    button.font-bold.text-white.inline-flex(@click="verifyOTP" v-else)
-      span.ps-5 Verify
+    button.font-bold.text-white(@click="verifyOTP" v-else)
+      span Verify
       //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
-  div(v-else)
-    button.font-bold.text-white.inline-flex(@click="validate")
-      span.ps-5 Proceed
+  div.ps-5(v-else)
+    button.font-bold.text-white(@click="validate")
+      span Proceed
       //-outline-arrow-circle-right-icon.w-8.h-8.ml-2
 </template>
 

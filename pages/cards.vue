@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   div
-    div(@click="navToDashboard")
+    button(@click="navToDashboard")
         FaIcon.mx-auto.ps-3(icon='angle-left')
     div.text-center.font-bold(v-if="isCardAvailable") Card Details 
     div.text-center.font-bold(v-else) Card is not registered

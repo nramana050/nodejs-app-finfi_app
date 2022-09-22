@@ -15,7 +15,8 @@ export default {
 
   css: [
     '~/assets/style.css',
-    '~/node_modules/vue2-datepicker/index.css'
+    '~/node_modules/vue2-datepicker/index.css',
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
   plugins: [
@@ -24,7 +25,8 @@ export default {
     { src: '~/plugins/vuex.persist', ssr: false },
     { src: '~/plugins/vue.modal.2', ssr: false },
     { src: '~/plugins/vue.iframe', ssr: false },
-    { src: '~/plugins/vue.tooltip', ssr: false }
+    { src: '~/plugins/vue.tooltip', ssr: false },
+    '~/plugins/fontawesome.js'
   ],
 
   buildModules: [
