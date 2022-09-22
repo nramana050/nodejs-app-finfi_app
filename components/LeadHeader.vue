@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+div
     p.tracking-(v-if="title") {{ title }}
     p.text-md {{ lead }}
 </template>
@@ -14,7 +14,7 @@ export default {
     },
     lead: {
       type: String,
-      required: true
+      // required: true
     },
   }
 }

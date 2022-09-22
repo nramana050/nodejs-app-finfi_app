@@ -101,7 +101,7 @@ export default {
 <style scoped>
 .ps-3{
   padding-top: 7px;
-  padding-right: 20px;
+  padding-right: 15px;
 }
 .ps-4{
   height: 1px;

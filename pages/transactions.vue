@@ -7,7 +7,7 @@
         div.flex.flex-0
           span.py-1.px-2.text-xs.text-black.bg-primary.uppercase.font-bold.self-center Date filter
         div.flex.flex-1.w-64.relative
-          DatePicker(range input-class="border w-full px-4" placeholder="Select Date Range" v-model="dates" range-separator=' ⟺ ' @change="fetchTransactions")
+          DatePicker(range input-class="border w-full px-4" placeholder="Select Date Range" :disabled-date="disableDate" v-model="dates" range-separator=' ⟺ ' @change="fetchTransactions")
     div.p-4.text-center(v-if="transactions.length > 0")
       TransactionLineItem.pr-4(:transaction="transaction" v-for="(transaction, index) in transactions" :key="index")
     div.p-4.text-center(v-else-if="isLoading")
@@ -34,6 +34,12 @@ export default {
   },
 
   methods: {
+    disableDate(date){
+       const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return  date >= new Date(today.getTime() + 24 * 3600 * 1000);
+
+    },
     async fetchTransactions() {
       this.transactions = []
       this.isLoading = true;

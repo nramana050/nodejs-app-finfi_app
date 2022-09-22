@@ -37,31 +37,44 @@ div.ps-5
     //-       div.self-center
     //-         div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
     //-     p(v-else) No cash request found. You can raise a cash request and get money in your account 
-    div.ps-17
-      p(v-if="this.kycStatus && this.kycStatus==='MIN_KYC'").text-xs.font-bold You are eligible for higher limits, Please complete 
-        a(v-if="this.vciplink" :href="this.vciplink" target="_blank") Full KYC
+    //-kyc 
+    //- div.ps-17
+    //-   p(v-if="this.vciplink").text-xs.font-bold You are eligible for higher limits, Please complete 
+    //-     a(:href="this.vciplink" target="_blank") Full KYC
     div
       p.ps-3.font-bold Activity
     div.flex.flex-row.justify-evenly
-      div.ps-6.grid.text-center(@click="navToTransferScreen")
+      button.ps-6.grid.text-center(@click="navToTransferScreen")
         FaIcon.mx-auto.ps-9(icon='paper-plane')
         p.text-sm Transfer
-      div.ps-7.grid.text-center(@click="navToCard")
+      button.ps-7.grid.text-center(@click="navToCard")
         FaIcon.mx-auto.ps-9(icon='credit-card')
         p.text-sm My Card
-      div.ps-8.grid.text-center
+      button.ps-8.grid.text-center
         FaIcon.mx-auto.ps-9(icon='chart-simple')
         p.text-sm Insight
     div.ps-10
-      div.font-bold.text-xm.ps-12 Last Transaction 
-      div.flex.flex-row.justify-evenly(v-if="recentTransaction")
-        div.text-xs.ps-13 Earned wages from salary
-          //- div.text-xs.ps-14 {{ this.$dayjs(recentTransaction.requested_on).format('YYYY-MM-DD HH:mm:ss') }}
-        div.text-xm.ps-15 &#8377; {{ parseFloat(recentTransaction.requested_amount).toLocaleString() }}
+      div(v-if="recentTransaction")
+        div.font-bold.text-xm.ps-12 Last Transaction 
+        div.flex.flex-row.justify-between
+          div.text-xs.ps-13 Cash Withdraw Status
+          div.self-center
+            div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.ps-19.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
+        div.flex.flex-row.justify-between
+          div.text-xm.ps-15 &#8377; {{ parseFloat(recentTransaction.requested_amount).toLocaleString() }}
           div(@click="navToTransaction")
-            p.text-xs.underline.ps-16 View All
-      div.ps-18(v-else)
-        p No Transaction found
+            button.text-xs.underline.ps-16 View All
+      div(v-else)
+        div.ps-18 No Cash Request found
+      //- div.flex.flex-row.justify-evenly(v-if="recentTransaction")
+      //-   div.text-xs.ps-13 Cash Withdraw Status
+      //-   div.self-center
+      //-     div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.ps-19.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }} 
+      //-     div.flex.flex-row.justify-between(@click="navToTransaction")
+      //-       div.text-xm.ps-15 &#8377; {{ parseFloat(recentTransaction.requested_amount).toLocaleString() }}
+      //-       p.text-xs.underline.ps-16 View All
+      //- div.ps-18(v-else)
+      //-   p No Cash Request found.
       
       //- p.ps-3.font-bold Bank Transfer Status
       //- div.flex.flex-col.ps-11.rounded-md.shadow-md
@@ -102,10 +115,10 @@ export default {
     },
   },
 
-  mounted() {
-    this.kycStatus = this.$auth.user.kyc_status.kyc_status;
-    this.fetchVkyc()
-  },
+  // mounted() {
+    // this.kycStatus = this.$auth.user.kyc_status.kyc_status;
+    // this.fetchVkyc()
+  // },
 
   methods: {
     navToTransferScreen() {
@@ -120,23 +133,9 @@ export default {
     navToProfile() {
       this.$router.push('/profile')
     },
-    navToSaveNow(){
-      this.$router.push('/saveNow')
-    },
-    async fetchTransactions() {
-      this.transactions = []
-      this.isLoading = true;
-      const startDate = this.$dayjs(this.dates[0]).format('YYYY-MM-DD')
-      const endDate = this.$dayjs(this.dates[1]).format('YYYY-MM-DD')
-      try {
-        const transactions = await this.$axios.get(`/accounts/transactions?start_date=${startDate}&end_date=${endDate}`);
-        this.transactions = transactions.data;
-        this.isLoading = false;
-      } catch (err) {
-        this.$toast.error('Failed to fetch accounts');
-        this.isLoading = false;
-      }
-    },
+    // navToSaveNow(){
+    //   this.$router.push('/saveNow')
+    // },
     async getAccountDetails() {
       try {
         const promiseArray = [];
@@ -200,19 +199,19 @@ export default {
         this.$toasted.error(err.response.data.message)
       }
     },
-    async fetchVkyc(){
-      try{
-        if (this.kycStatus === "MIN_KYC" ){
-          const vkycResult = await this.$axios.post('/m2p/vkyc/link');
-          if(vkycResult.data.message==='Success' && vkycResult.data.data){
-            this.vciplink = vkycResult.data.data.vcip_link
-          }
-        }
-      }catch(err){
-        console.log(err)
-        this.$toast.error('Failed to gey kyc status')
-      }
-    }
+    // async fetchVkyc(){
+    //   try{
+    //     if (this.kycStatus === "MIN_KYC" ){
+    //       const vkycResult = await this.$axios.post('/m2p/vkyc/link');
+    //       if(vkycResult.data.message==='Success' && vkycResult.data.data){
+    //         this.vciplink = vkycResult.data.data.vcip_link
+    //       }
+    //     }
+    //   }catch(err){
+    //     console.log(err)
+    //     this.$toast.error('Failed to gey kyc status')
+    //   }
+    // }
   }
 }
 </script>
@@ -300,7 +299,7 @@ export default {
   margin-left: 2rem;
   margin-right: 2rem;
   border-radius: 10px;
-  height: 6rem;
+  height: 7rem;
   width: 20rem;
   background-color:#FFFFFF;
   color: #1C1939;
@@ -311,22 +310,22 @@ export default {
   padding-bottom: 5px;
 }
 .ps-13{
+  margin-left: 1rem;
   padding-top: 10px;
-  padding-bottom: 3px;
-  margin-left: -2rem;
 }
 .ps-14{
   padding-top: 3px;
   padding-bottom: 3px;
 }
 .ps-15{
-  margin-top: 5px;
-  margin-bottom: 10px;
-  margin-right: -2rem;
+  margin-left: 1rem;
+  padding-top: 5px;
+
 }
 .ps-16{
-  color: blue;
-  padding-left: 15px;
+  margin-right: 3rem;
+  margin-top: 0.7rem;
+  color: #7165E3;
 }
 .ps-17{
   margin-top: 1rem;
@@ -337,4 +336,9 @@ export default {
   text-align: center;
 
 }
+.ps-19{
+  margin-right:1rem;
+  margin-top: 0.5rem;
+}
+
 </style>

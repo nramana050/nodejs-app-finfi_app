@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     div.ps-1
-      div(@click="navToDashboard")
+      button(@click="navToDashboard")
         FaIcon.mx-auto.ps-7(icon='angle-left')
       div.grid.text-center
       FaIcon.w-4.h-6.mx-auto.ps-10(icon='building-columns')

@@ -2,7 +2,7 @@
   div.flex.flex-col
     div(v-if="profile")
       div.flex-0.ps-1
-        div.ps-7.text-left(@click="navToDashBoard")
+        button.ps-7.text-left(@click="navToDashBoard")
           FaIcon.mx-auto(icon='angle-left')
         div.w-24.rounded-full.text-center.mx-auto.ps-2
           img.object-cover.h-24.w-24.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
@@ -31,15 +31,15 @@
         div.flex.flex-row.justify-between.ps-10
           div
             p.text-sm Change Passcode
-          div(@click="")
+          button(@click="")
             FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
         div.flex.flex-row.justify-between.ps-10
           p.text-sm Notification
-          div(@click="")
+          button(@click="")
             FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
         div.flex.flex-row.justify-between.ps-10
           p.text-sm Logout
-          div(@click="logout")
+          button(@click="logout")
             FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
         //- div.flex
         //-   FormulateForm(v-model="bank" @submit="saveBankDetail")
