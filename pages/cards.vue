@@ -9,10 +9,10 @@ div
     div(v-if="isCardAvailable && cardFetch > 0")
       div.ps-8(v-if="card.url")
         object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
-      div.ps-8(v-else)
-        div
+      div(v-else)
+        div.ps-17
           img#dummycard(src="https://static.thenounproject.com/png/2028787-200.png")
-    div.ps-2(v-else)
+    div.ps-2(v-if="!isCardAvailable && openUnblockCard")
       div
         p Please go through the 
           a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
@@ -25,28 +25,33 @@ div
   div.ps-1
     div.ps-16.uppercase(v-if="isCardAvailable")
       div.flex.flex-row.justify-between
-        span Kit Number
-        span.font-bold.uppercase {{ card.kitList }}
-      div.flex.flex-row.justify-between
         span Card Status
         span.font-bold.uppercase {{ isCardBlocked ? 'BLOCKED' : 'ACTIVE' }}
+      div.flex.flex-row.justify-between.ps-19
+        span Block card
+        div.relative.w-10.h-10
+          img(src="~/assets/toggle_on.png" v-if="isCardBlocked" @click="openUnblockCard")
+          img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
     div.uppercase.ps-5(v-if="isCardAvailable")
-      div.ps-14 Preferences
-        div.flex.flex-row.justify-between.ps-7
-          div.text-sm Ecom 
-          div.relative
-            img(src="~/assets/toggle_on.png" v-if="isEcom" @click="")
-            img(src="~/assets/toggle_off.png" v-else @click="")
-        div.flex.flex-row.justify-between.ps-15
-          div.text-sm POS
-          div.relative
-            img(src="~/assets/toggle_on.png" v-if="isPos" @click="")
-            img(src="~/assets/toggle_off.png" v-else @click="")
-        div.flex.flex-row.justify-between.ps-15
-          div.text-sm Contactless
-          div.relative
-            img(src="~/assets/toggle_on.png" v-if="isContactLess" @click="")
-            img(src="~/assets/toggle_off.png" v-else @click="")
+      SetPreference
+        
+    //- div.flex.flex-row.justify-between.ps-7
+    //-   div.text-sm Ecom 
+    //-   span.text-sm {{form.ecom? 'On': 'Off'}}
+    //-   div.relative
+    //-     img(src="~/assets/toggle_on.png" v-if="form.ecom=true" name="ecom" id="ecom" v-model="form.ecom" @click="toggleStatus('ecom')")
+    //-     img(src="~/assets/toggle_off.png" v-if="form.ecom=false" name="ecom" id="ecom" v-model="form.ecom" @click="toggleStatus('ecom')")
+        //- div.flex.flex-row.justify-between.ps-15
+        //-   div.text-sm POS
+        //-   div.relative
+        //-     img(src="~/assets/toggle_on.png" v-if="isPos" @click="")
+        //-     img(src="~/assets/toggle_off.png" v-else @click="")
+        //- div.flex.flex-row.justify-between.ps-15
+        //-   div.text-sm Contactless
+        //-   div.relative
+        //-     img(src="~/assets/toggle_on.png" v-if="isContactLess" @click="")
+        //-     img(src="~/assets/toggle_off.png" v-else @click="")
+        
   //- div(v-if="isLoading")
   //-   img#loader(src="~/assets/loader.gif")
   //- div(v-else)
@@ -102,97 +107,117 @@ import UnblockCard from '~/components/M2P/UnblockCard.vue';
 import SetPIN from '~/components/M2P/SetPIN.vue';
 
 export default {
-  name: 'DashboardPage',
-
-  layout: 'session',
-
-  data() {
-    return {
-      user: this.$auth.user,
-      isLoading: true,
-      isCardAvailable: false,
-      // isCardBlocked: false,
-      // isEcomBlocked: false,
-      // isPosBlocked: false,
-      isContactLessBlocked:false,
-      card: null,
-      isTermsAccepted:false,
-      cardFetch: 0,
-    }
-  },
-
-  mounted() {
-    this.fetchCards();
-  },
-  methods: {
-    navToDashboard() {
-          this.$router.push('/dashboard')
-        },
-    openRegistrationModal() {
-      this.$FModal.show({ component: M2PRegistration })
+    name: "DashboardPage",
+    components: { SetPreference },
+    layout: "session",
+    data() {
+        return {
+            user: this.$auth.user,
+            isLoading: true,
+            isCardAvailable: false,
+            // isCardBlocked: false,
+            // isEcomBlocked: false,
+            // isPosBlocked: false,
+            isContactLessBlocked: false,
+            isEcom: true,
+            card: null,
+            isTermsAccepted: false,
+            cardFetch: 0,
+            form: {
+                ecom: true,
+                pos: true,
+                contactless: true,
+            }
+        };
     },
-    openCardSetting() {
-      this.$FModal.show({ component: SetPreference })
+    mounted() {
+        this.fetchCards();
     },
-    openUnblockCard() {
-      this.$FModal.show({ component: UnblockCard }, { revert: this.revertLKUL })
-    },
-    openBlockCard() {
-      this.$FModal.show({ component: BlockCard }, { revert: this.revertLKUL })
-    },
-    // openUnBlockEcom() {
-    //   this.$FModal.show({ component: UnblockEcom }, { revert: this.revertLKUL })
-    // },
-    // openBlockEcom() {
-    //   this.$FModal.show({ component: BlockEcom }, { revert: this.revertLKUL })
-    // },
-    // openUnblockPos() {
-    //   this.$FModal.show({ component: UnblockPos }, { revert: this.revertLKUL })
-    // },
-    // openBlockPos() {
-    //   this.$FModal.show({ component: BlockPos }, { revert: this.revertLKUL })
-    // },
-    // openUnblockContactLess() {
-    //   this.$FModal.show({ component: UnblockContactLess }, { revert: this.revertLKUL })
-    // },
-    // openBlockContactLess() {
-    //   this.$FModal.show({ component: BlockContactLess }, { revert: this.revertLKUL })
-    // },
-    openCardPIN() {
-      this.$FModal.show({ component: SetPIN })
-    },
-    async fetchCards() {
-      this.isLoading = true;
-      try {
-        const cardList = await this.$axios.get(`/m2p/cards/list`);
-        if (cardList.data.result.length > 0) {
-          this.isCardAvailable = true;
-          this.card = cardList.data.result[0];
-          this.isCardBlocked = this.card.cardStatusList.toUpperCase() === 'LOCKED'
-          await this.fetchCardDetail();
+    async beforeMount() {
+        try {
+            const result = await this.$axios.$get("/m2p/cards/preferences", {
+                headers: {
+                    "Authorization": this.token
+                }
+            });
+            const data = result.result;
+            this.form.ecom = data.ecom;
+            this.form.pos = data.pos;
+            this.form.contactless = data.contactless;
+            this.isLoading = false;
         }
-        this.isLoading = false;
-      } catch (err) {
-        this.isLoading = false;
-        this.$toasted.error(err.response.data.message);
-      }
+        catch (err) {
+            // this.$toast.error('Failed')
+        }
     },
-    async fetchCardDetail() {
-      const result2 = await this.$axios.get(`/m2p/cards`);
-      this.cardFetch += 1
-      console.log('hello',this.card)
-      // this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
-      this.card.url = result2.data && result2.data.result ? result2.data.result : '';
-      console.log(this.card.url);
-      setTimeout(async () => await this.fetchCardDetail(), 118000);
+    methods: {
+        navToDashboard() {
+            this.$router.push("/dashboard");
+        },
+        openRegistrationModal() {
+            this.$FModal.show({ component: M2PRegistration });
+        },
+        openCardSetting() {
+            this.$FModal.show({ component: SetPreference });
+        },
+        openUnblockCard() {
+            this.$FModal.show({ component: UnblockCard }, { revert: this.revertLKUL });
+        },
+        openBlockCard() {
+            this.$FModal.show({ component: BlockCard }, { revert: this.revertLKUL });
+        },
+        close() {
+            this.$FModal.hide();
+        },
+        async toggleStatus(key) {
+            this.form[key] = !!this.form[key];
+            const payload = {};
+            payload[key.toUpperCase()] = this.form[key];
+            try {
+                await this.$axios.$post("/m2p/cards/preferences", payload, {
+                    headers: {
+                        "Authorization": this.token
+                    }
+                });
+                this.$toast.success("Preference updated");
+            }
+            catch (err) {
+                this.$toast.error("Failed");
+            }
+            // this.close();
+        },
+        openCardPIN() {
+            this.$FModal.show({ component: SetPIN });
+        },
+        async fetchCards() {
+            this.isLoading = true;
+            try {
+                const cardList = await this.$axios.get(`/m2p/cards/list`);
+                if (cardList.data.result.length > 0) {
+                    this.isCardAvailable = true;
+                    this.card = cardList.data.result[0];
+                    this.isCardBlocked = this.card.cardStatusList.toUpperCase() === "LOCKED";
+                    await this.fetchCardDetail();
+                }
+                this.isLoading = false;
+            }
+            catch (err) {
+                this.isLoading = false;
+                this.$toasted.error(err.response.data.message);
+            }
+        },
+        async fetchCardDetail() {
+            const result2 = await this.$axios.get(`/m2p/cards`);
+            this.cardFetch += 1;
+            // this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
+            this.card.url = result2.data && result2.data.result ? result2.data.result : "";
+            setTimeout(async () => await this.fetchCardDetail(), 118000);
+        },
+        revertLKUL() {
+            this.fetchCards();
+        },
     },
-    revertLKUL() {
-      this.fetchCards();
-    },
-    close() {
-      this.$FModal.hide();
-    }
-  }
+   
 }
 </script>
 
@@ -261,6 +286,10 @@ object:focus {
   margin-right: 1rem;
   height: 25vh;
 }
+.ps-17{
+  height: 25vh;
+  margin-left: 6rem;
+}
 .ps-2{
   margin-left: 1.5rem;
   margin-top: 2rem;
@@ -297,5 +326,8 @@ object:focus {
   padding-top: 7rem;
   margin-left: 2rem;
   margin-right: 2rem;
+}
+.ps-19{
+  margin-top: 1rem;
 }
 </style>

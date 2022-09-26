@@ -26,9 +26,9 @@ import SplashScreen from '~/components/SplashScreen.vue';
 import FooterLogo from '~/components/FooterLogo.vue';
 export default {
     name: "IndexPage",
+    components: { SplashScreen, FooterLogo },
     layout:'session',
     auth: false,
-    components: { SplashScreen, FooterLogo },
     data() {
         return {
             organizationCode: null,
@@ -41,8 +41,6 @@ export default {
         }
     },
     beforeMount() {
-        console.log(this.$auth.loggedIn);
-        console.log(this.$auth.strategy.token.status().valid());
         if (this.$auth.loggedIn && this.$auth.strategy.token.status().valid()) {
             this.$router.push("/dashboard");
         }
@@ -63,16 +61,13 @@ export default {
             const organization = await this.$axios.$post(`/ext/organization`, { code: this.organizationCode });
             const { status, code, name } = organization;
             if (!status) {
-              console.log('hi')
                 this.$toast.error("Organization not registered");
                 return;
             }
-            console.log('hello')
             this.$store.commit("set", { param: "organization", value: { code, name } });
             this.$router.push("/login");
         },
         fromSplashScreen(){
-          console.log('from splash screen')
           this.isLoading = false;
         }
     },

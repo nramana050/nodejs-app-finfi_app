@@ -6,7 +6,7 @@ div.flex.flex-col.p-8
     p Are you sure to block your card ?
   div.flex.flex-row.justify-between.pt-4
     button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="close") Cancel
-    button.h-8.px-4.text-white.rounded.bg-primary.font-bold(@click="confirm") Yes, Confirm
+    button.btn.h-8.px-4.text-white.rounded.font-bold(@click="confirm") Yes, Confirm
 </template>
 
 <script>
@@ -25,6 +25,7 @@ export default {
           }
         });
         this.$attrs.revert();
+        console.log('card status',this.$attrs.revert)
         this.$toast.success('Card Blocked Successfully');
       } catch (err) {
         this.$toast.error('Failed')
@@ -34,3 +35,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .btn{
+    background-color: #7165E3;
+  }
+</style>

@@ -20,27 +20,45 @@
       div.ps-5.uppercase
         div.flex.flex-row.justify-between.ps-6
           p.text-md.tracking-wide.font-bold.uppercase Bank Details
-          //- p.text-right(v-if="!isEditMode" @click="enableEditMode")
-          //-   outline-pencil-alt-icon.w-5.h-5
-        div.flex.flex-row.justify-between.ps-6
-          p.text-sm Account number
-          p.text-sm {{this.bank.account_number}}
-        div.flex.flex-row.justify-between.ps-8
-          p.text-sm IFSC code 
-          p.text-sm {{this.bank.ifsc_code}}
-        div.flex.flex-row.justify-between.ps-10
-          div
-            p.text-sm Change Passcode
-          button(@click="")
-            FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
-        div.flex.flex-row.justify-between.ps-10
-          p.text-sm Notification
-          button(@click="")
-            FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
-        div.flex.flex-row.justify-between.ps-10
-          p.text-sm Logout
-          button(@click="logout")
-            FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
+          p.text-right(v-if="!isEditMode" @click="enableEditMode")
+            outline-pencil-alt-icon.w-5.h-5
+        div.flex.ps-13
+          FormulateForm(v-model="bank" @submit="saveBankDetail")
+            div.flex.flex-row.justify-between
+              span.text-sm.ps-12 Account number
+              FormulateInput.ps-11(type="text" name="account_number" :disabled="!isEditMode" validation="required")
+            div.flex.flex-row.justify-between
+              span.text-sm.ps-12 IFSC code
+              FormulateInput.ps-11(type="text" name="ifsc_code" :disabled="!isEditMode" validation="required")
+            div.flex.flex-row.justify-between.pb-4.ps-13(v-if="isEditMode")
+              button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
+              button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit") Save     
+        //- div.flex.flex-row.justify-between.ps-6
+        //-   p.text-sm Account number
+        //-   FormulateInput(type="text" name="account_number" :disabled="!isEditMode" validation="required" )
+        //-   //- p.text-sm(v-if="!isEditMode") {{this.bank.account_number}}
+        //- div.flex.flex-row.justify-between.ps-8
+        //-   p.text-sm IFSC code 
+        //-   FormulateInput(type="text" name="ifsc_code" :disabled="!isEditMode" validation="required" v-model="this.bank.ifsc_code")
+        //-   //- p.text-sm(v-if="!isEditMode") {{this.bank.ifsc_code}}
+        //- div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
+        //-   button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
+        //-   button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit" @click="saveBankDetail") Save  
+        div.ps-14
+          div.flex.flex-row.justify-between.ps-13
+            div
+              p.text-sm Change Passcode
+            button(@click="")
+              FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
+          div.flex.flex-row.justify-between.ps-10
+            p.text-sm Notification
+            button(@click="")
+              FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
+          div.flex.flex-row.justify-between.ps-10
+            p.text-sm Logout
+            button(@click="logout")
+              FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
+        
         //- div.flex
         //-   FormulateForm(v-model="bank" @submit="saveBankDetail")
         //-     div.flex.flex-row.justify-between.pb-4
@@ -96,7 +114,6 @@ export default {
     async getBankAccount() {
       try {
         const bankResult = await this.$axios.get('/profile/banks');
-        console.log('balaaa',bankResult.data.ifsc_code,bankResult.data.account_number)
         if (bankResult.data) {
           this.bank = bankResult.data;
         }
@@ -155,7 +172,20 @@ export default {
     color: black;
   }
   .ps-10{
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .ps-11{
+    margin-left: 1rem;
+    margin-right: -1rem;
+  }
+  .ps-12{
+    padding-top: 15px;
+  }
+  .ps-13{
+    margin-top: 1rem;
+  }
+  .ps-14{
+    margin-top: 3rem;
   }
 </style>
