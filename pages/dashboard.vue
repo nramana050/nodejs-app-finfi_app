@@ -333,6 +333,7 @@ export default {
   color: #1C1939;
 }
 .ps-18{
+  padding-top: 2rem;
   text-align: center;
 
 }

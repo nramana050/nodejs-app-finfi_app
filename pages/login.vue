@@ -4,8 +4,8 @@ div
     NuxtLink(to="/")
       FaIcon.mx-auto.ps-7(icon='angle-left')
       LeadHeader.font-bold.text-2xl.ps-1(:title="organization ? organization.name : ''" )
-      LeadHeader.ps-2(:lead="'Please login with your registered'")
-      LeadHeader.ps-3(:lead="'mobile number'")
+      LeadHeader.ps-2(:lead="'Please enter the mobile number'")
+      LeadHeader.ps-3(:lead="'that is registered with your employer'")
 
   div
     input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
@@ -14,7 +14,7 @@ div
       input.ps-4(class="focus:outline-none focus:shadow-outline" type="password" placeholder="Passcode" v-model="passcode")
       div.flex.flex-row.justify-evenly
         p.ps-8.text-sm.underline(@click="switchToOTPMode") Forgot passcode?
-        p.ps-10.text-sm.underline(@click="switchToOTPMode") Send OTP
+        p.ps-10.text-sm.underline(@click="switchToOTPMode") Login with OTP
     div(v-else)
       input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" type="password" v-model="otp")
       p.text-sm.ps-6.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
@@ -24,7 +24,7 @@ div
       span Login
       //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
     button.font-bold.text-white(@click="verifyOTP" v-else)
-      span Verify
+      span Login
       //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
   div.ps-5(v-else)
     button.font-bold.text-white(@click="validate")
