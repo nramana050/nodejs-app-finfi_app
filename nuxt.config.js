@@ -15,16 +15,18 @@ export default {
 
   css: [
     '~/assets/style.css',
-    '~/node_modules/vue2-datepicker/index.css'
+    '~/node_modules/vue2-datepicker/index.css',
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
   plugins: [
     { src: '~/plugins/vue.modal' },
-    { src: '~/plugins/date.picker', ssr: false },
-    { src: '~/plugins/vuex.persist', ssr: false },
+    { src: '~/plugins/date.picker', ssr: false},
+    { src: '~/plugins/vuex.persist' },
     { src: '~/plugins/vue.modal.2', ssr: false },
     { src: '~/plugins/vue.iframe', ssr: false },
-    { src: '~/plugins/vue.tooltip', ssr: false }
+    { src: '~/plugins/vue.tooltip', ssr: false },
+    '~/plugins/fontawesome.js'
   ],
 
   buildModules: [
@@ -68,7 +70,7 @@ export default {
   components: true,
 
   axios: {
-    baseURL: 'https://api.myfinfi.com',
+    baseURL: 'https://uatapi.myfinfi.com',
     // baseURL: 'http://localhost:3000'
   },
 

@@ -1,33 +1,34 @@
 <template lang="pug">
-div.flex.flex-col.p-4.rounded-md.shadow-md.w-full.bg-gradient-to-tr.from-green-800.to-teal-500.text-white
-  div.uppercase.pb-5
-    p.tracking-wider.font-bold {{ user.first_name }} {{ user.last_name }}
-    p.tracking-wider.text-sm {{ provider.name }}
-  div.flex.justify-between.pb-5
-    div.flex-0
-      p.tracking-wide.text-xs Available Balance
-      p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(availableLimit).toFixed(2) }}
-    div.flex-0.text-right
-      p.tracking-wide.text-xs
+div.ps-1
+  //- div.uppercase.pb-5
+  //-   p.tracking-wider.font-bold {{ user.first_name }} {{ user.last_name }}
+  //-   p.tracking-wider.text-sm {{ provider.name }}
+  //- div.flex.justify-between.pb-5
+  //-   div.flex-0
+  //-     p.tracking-wide.text-xs Available Balance
+  //-     p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(availableLimit).toFixed(2) }}
+  div.flex.justify-between
+    div.flex-0.text-left
+      div.tracking-wide.text-xs
         | Salary Used
         sup.pl-1 *
-      p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(payableAmount).toFixed(2) }}
-  div.flex.justify-between
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(payableAmount).toLocaleString('en-IN') }}
+  
     div.flex-0
       div.flex.tracking-wide.text-xs
-        div.flex-1 Cash Limit
-        div.flex-0(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
+        p.flex-1 Cash Limit
+        div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
           solid-information-circle-icon.w-4.h-4
-      p.font-bold.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toFixed(2) }}
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toLocaleString('en-IN') }}
     div.flex-0.text-right
       div.flex.tracking-wide.text-xs
-        div.flex-1 Card Limit
-        div.flex-0.ml-2(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
+        p.flex-1 Card Limit
+        div.flex-0(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
           solid-information-circle-icon.w-4.h-4
-      p.font-bold.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toFixed(2) }}
-        
-  div.pt-2
-    p.text-xs
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toLocaleString('en-IN') }}
+  div.ps-4      
+  div
+    p.text-xs.ps-5
       sup.pr-1 *
       | Employer will deduct from the next salary
 </template>
@@ -97,3 +98,22 @@ export default {
   
 }
 </script>
+<style scoped>
+.ps-3{
+  padding-top: 7px;
+  padding-right: 15px;
+}
+.ps-4{
+  height: 1px;
+  background:#F2F2F2;
+  margin-top: 7px;
+  margin-left: -2rem;
+  margin-right: -2rem;
+}
+.ps-5{
+  margin-top: 2rem;
+}
+.ps-6{
+  color: #1C1939;
+}
+</style>
