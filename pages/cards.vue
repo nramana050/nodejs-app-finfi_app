@@ -207,12 +207,17 @@ export default {
             }
         },
         async fetchCardDetail() {
+          try{
             const result2 = await this.$axios.get(`/m2p/cards`);
             this.cardFetch += 1;
             // this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
             this.card.url = result2.data && result2.data.result ? result2.data.result : "";
             setTimeout(async () => await this.fetchCardDetail(), 118000);
-        },
+        }
+        catch(err){
+          this.cardFetch +=1;
+        }
+      },
         revertLKUL() {
             this.fetchCards();
         },
