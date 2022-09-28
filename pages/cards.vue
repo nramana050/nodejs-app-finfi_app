@@ -132,23 +132,7 @@ export default {
     },
     mounted() {
         this.fetchCards();
-    },
-    async beforeMount() {
-        try {
-            const result = await this.$axios.$get("/m2p/cards/preferences", {
-                headers: {
-                    "Authorization": this.token
-                }
-            });
-            const data = result.result;
-            this.form.ecom = data.ecom;
-            this.form.pos = data.pos;
-            this.form.contactless = data.contactless;
-            this.isLoading = false;
-        }
-        catch (err) {
-            // this.$toast.error('Failed')
-        }
+        this.fetchCardPreference();
     },
     methods: {
         navToDashboard() {
@@ -186,8 +170,26 @@ export default {
             }
             // this.close();
         },
+
         openCardPIN() {
             this.$FModal.show({ component: SetPIN });
+        },
+        async fetchCardPreference() {
+          try {
+            const result = await this.$axios.$get("/m2p/cards/preferences", {
+                headers: {
+                    "Authorization": this.token
+                }
+            });
+            const data = result.result;
+            this.form.ecom = data.ecom;
+            this.form.pos = data.pos;
+            this.form.contactless = data.contactless;
+            this.isLoading = false;
+        }
+        catch (err) {
+            // this.$toast.error('Failed')
+        }
         },
         async fetchCards() {
             this.isLoading = true;
