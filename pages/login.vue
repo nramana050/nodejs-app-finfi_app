@@ -127,7 +127,7 @@ export default {
         });
         await this.$auth.setUserToken(result.data.access_token);
         this.$auth.strategy.token.sync();
-        this.$router.push('/WelcomeScreen');
+        this.$router.push('/dashBoard');
         // if(this.isTermsAccepted && !this.skipOTP){
         //   this.$router.push('/WelcomeScreen');
         // }else
@@ -206,7 +206,7 @@ export default {
     width: 130px;
     height: 35px;
     font-weight: 500;
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
     margin-left:7.75rem;
     text-align: center;
     border-radius: 8px;
