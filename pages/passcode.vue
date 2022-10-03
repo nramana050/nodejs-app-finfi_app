@@ -40,7 +40,7 @@ export default {
           passcode: Number(this.passcode_1),
         });
         this.$toast.info('Passcode updated successfully');
-        this.navToDashboard();
+        this.$router.push('/WelcomeScreen');
       } catch (err) {
         this.$toast.error('failed to update passcode');
       }

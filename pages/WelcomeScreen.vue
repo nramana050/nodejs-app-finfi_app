@@ -42,7 +42,7 @@
         height: 100vh;
     }
     .ps-2{
-        margin: 2rem;
+        margin: 1rem;
     }
     .ps-3{
         text-align: center;
@@ -55,7 +55,7 @@
     }
    
     .ps-5{
-        margin-top: 2rem;
+        margin-top: 1rem;
         margin-left: 2rem;
         margin-right: 2rem;
     }
