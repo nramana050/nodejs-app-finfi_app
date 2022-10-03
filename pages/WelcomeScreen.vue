@@ -9,7 +9,7 @@
     div.text-left.ps-5
       span.text-ms Track your earned wages as available balance 
     div.flex.flex-row.mt-4.text-ms.items-left.shadow.ps-3
-      div.ps-4 1) Transfer the cash limit to your salary account at zero fee 
+      div.ps-4 1) Transfer the cash limit to your salary account
     div.flex.flex-row.mt-4.text-ms.items-left.shadow.ps-7
       div.ps-4 2) Use your card limit and get 2.5% as cashback
     div.text-center.ps-8
@@ -42,7 +42,7 @@
         height: 100vh;
     }
     .ps-2{
-        margin: 2rem;
+        margin: 1rem;
     }
     .ps-3{
         text-align: center;
@@ -55,7 +55,7 @@
     }
    
     .ps-5{
-        margin-top: 2rem;
+        margin-top: 1rem;
         margin-left: 2rem;
         margin-right: 2rem;
     }
