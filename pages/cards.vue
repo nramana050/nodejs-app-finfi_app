@@ -132,23 +132,7 @@ export default {
     },
     mounted() {
         this.fetchCards();
-    },
-    async beforeMount() {
-        try {
-            const result = await this.$axios.$get("/m2p/cards/preferences", {
-                headers: {
-                    "Authorization": this.token
-                }
-            });
-            const data = result.result;
-            this.form.ecom = data.ecom;
-            this.form.pos = data.pos;
-            this.form.contactless = data.contactless;
-            this.isLoading = false;
-        }
-        catch (err) {
-            // this.$toast.error('Failed')
-        }
+        this.fetchCardPreference();
     },
     methods: {
         navToDashboard() {
@@ -186,8 +170,26 @@ export default {
             }
             // this.close();
         },
+
         openCardPIN() {
             this.$FModal.show({ component: SetPIN });
+        },
+        async fetchCardPreference() {
+          try {
+            const result = await this.$axios.$get("/m2p/cards/preferences", {
+                headers: {
+                    "Authorization": this.token
+                }
+            });
+            const data = result.result;
+            this.form.ecom = data.ecom;
+            this.form.pos = data.pos;
+            this.form.contactless = data.contactless;
+            this.isLoading = false;
+        }
+        catch (err) {
+            // this.$toast.error('Failed')
+        }
         },
         async fetchCards() {
             this.isLoading = true;
@@ -207,12 +209,17 @@ export default {
             }
         },
         async fetchCardDetail() {
+          try{
             const result2 = await this.$axios.get(`/m2p/cards`);
             this.cardFetch += 1;
             // this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
             this.card.url = result2.data && result2.data.result ? result2.data.result : "";
             setTimeout(async () => await this.fetchCardDetail(), 118000);
-        },
+        }
+        catch(err){
+          this.cardFetch +=1;
+        }
+      },
         revertLKUL() {
             this.fetchCards();
         },
