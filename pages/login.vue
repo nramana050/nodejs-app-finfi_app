@@ -19,17 +19,27 @@ div
       input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" type="password" v-model="otp")
       p.text-sm.ps-6.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
       p.text-sm.ps-6( id="waitTime" :hidden='!this.blockResend' )
-  div.ps-5(v-if="isUserRegistered")
+      div.ps-11
+        input(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
+        label.text-sm  I accept the 
+        a.font-bold.text-blue-800.text-sm(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions 
+  //- div.ps-11(v-if="!isUserRegistered")
+  //-   input(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
+  //-   label.text-sm  I accept the 
+  //-   a.font-bold.text-blue-800.text-sm(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
+  div.ps-5(v-if="isUserRegistered && skipOTP")
     button.font-bold.text-white(@click="login" v-if="skipOTP")
       span Login
-      //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
-    button.font-bold.text-white(@click="verifyOTP" v-else)
+      //- outline-arrow-circle-right-icon.w-8.h-8.ml-2 
+  div.ps-5(v-if="isTermsAccepted")
+    button.font-bold.text-white(@click="verifyOTP" v-if="isTermsAccepted") 
       span Login
       //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
-  div.ps-5(v-else)
+  div.ps-5(v-if="!isUserRegistered")
     button.font-bold.text-white(@click="validate")
       span Proceed
       //-outline-arrow-circle-right-icon.w-8.h-8.ml-2
+
 </template>
 
 <script>
@@ -45,6 +55,7 @@ export default {
       skipOTP: false,
       initiateOTPCount:0,
       blockResend: false,
+      isTermsAccepted: false
     }
   },
   computed: { 
@@ -116,7 +127,12 @@ export default {
         });
         await this.$auth.setUserToken(result.data.access_token);
         this.$auth.strategy.token.sync();
-        this.$router.push('/dashboard');
+        this.$router.push('/WelcomeScreen');
+        // if(this.isTermsAccepted && !this.skipOTP){
+        //   this.$router.push('/WelcomeScreen');
+        // }else
+        //   this.$router.push('/dashBoard');
+        // }
       } catch (err) {
         this.$toast.error(err.response.data.message);
       }
@@ -133,7 +149,9 @@ export default {
       const user = await this.$axios.$post(`/ext/user`,{mobile : Number(this.mobile)});
       // eslint-disable-next-line camelcase
       const { status } = user;
+      console.log('user',user)
       if (!status) {
+        
         this.isUserRegistered = false;
         this.$toast.error('Mobile number not registered');
         return;
@@ -201,6 +219,7 @@ export default {
   .ps-6{
     margin-top: 1rem;
     margin-left: 3rem;
+    margin-right: 12rem;
   }
   .ps-7{
     color: #37202B;
@@ -212,5 +231,8 @@ export default {
   .ps-10{
     margin-top: 1rem;
     margin-right: -3rem;
+  }
+  .ps-11{
+    margin: 2.5rem;
   }
 </style>
