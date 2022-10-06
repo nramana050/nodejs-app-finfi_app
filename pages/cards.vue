@@ -205,7 +205,7 @@ export default {
             }
             catch (err) {
                 this.isLoading = false;
-                this.$toasted.error(err.response.data.message);
+                // this.$toasted.error(err.response.data.message);
             }
         },
         async fetchCardDetail() {
