@@ -47,7 +47,7 @@ div.ps-5
       button.ps-6.grid.text-center(@click="navToTransferScreen")
         FaIcon.mx-auto.ps-9(icon='paper-plane')
         p.text-sm Transfer
-      button.ps-7.grid.text-center(@click="navToCard")
+      button.ps-7.grid.text-center(@click="navToCard" v-if=" isCardEnabled")
         FaIcon.mx-auto.ps-9(icon='credit-card')
         p.text-sm My Card
       button.ps-8.grid.text-center
@@ -102,6 +102,7 @@ export default {
       kycStatus:null,
       vciplink:null,
       availableLimit:null,
+       isCardEnabled: false,
     }
   },
   async fetch() {
@@ -113,6 +114,14 @@ export default {
     organization () {
       return this.$auth.user.organization
     },
+  },
+   async beforeMount() {
+    const apiResult = await this.$axios.get('/organizations/config', {
+      headers: {
+        'Authorization': this.token
+      }
+    });
+    this.isCardEnabled = apiResult.data.is_card_enabled;
   },
 
   // mounted() {
