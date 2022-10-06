@@ -47,7 +47,7 @@ div.ps-5
       button.ps-6.grid.text-center(@click="navToTransferScreen")
         FaIcon.mx-auto.ps-9(icon='paper-plane')
         p.text-sm Transfer
-      button.ps-7.grid.text-center(@click="navToCard")
+      button.ps-7.grid.text-center(v-if="this.enableCard" @click="navToCard")
         FaIcon.mx-auto.ps-9(icon='credit-card')
         p.text-sm My Card
       button.ps-8.grid.text-center
@@ -102,6 +102,7 @@ export default {
       kycStatus:null,
       vciplink:null,
       availableLimit:null,
+      enableCard:true
     }
   },
   async fetch() {
@@ -138,21 +139,43 @@ export default {
     // },
     async getAccountDetails() {
       try {
+        const profileResult = await this.$axios.get('/profile')
+        const accountTypes = profileResult.data.account_types
         const promiseArray = [];
-        promiseArray.push(this.$axios.get('/accounts?type=CASH'));
-        promiseArray.push(this.$axios.get('/accounts?type=CARD'));
+        if(accountTypes.includes("EARNED_WAGES"))
+          promiseArray.push(this.$axios.get('/accounts?type=EARNED_WAGES'));
+        if(accountTypes.includes("CASH"))
+          promiseArray.push(this.$axios.get('/accounts?type=CASH'));
+        if(accountTypes.includes("CARD"))
+          promiseArray.push(this.$axios.get('/accounts?type=CARD'));
+
         promiseArray.push(this.$axios.get('/accounts?type=PAYABLE'));
+          
         const result = await Promise.all(promiseArray);
-        this.accounts = [];
-        for (const item of result) {
-          const { data } = item;
-          this.accounts.push(data);
+          this.accounts = [];
+          for (const item of result) {
+            const { data } = item;
+            this.accounts.push(data);
+          }
+        const cashAccount = accountTypes.includes('CASH') ? this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' ) : null;
+        const cardAccount = accountTypes.includes('CARD') ? this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' ): null;
+        const earnedAccount = accountTypes.includes('EARNED_WAGES') ? this.accounts.filter((item) => item.account_type.toUpperCase() === 'EARNED_WAGES' ) : null;
+
+        if(earnedAccount)
+          this.availableLimit = earnedAccount[0].account_balance.toLocaleString('en-IN')
+        if(cashAccount && cardAccount)
+          this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString('en-IN')
+        if( cashAccount && !cardAccount ){
+          this.enableCard = false
+          this.availableLimit = (cashAccount[0].account_balance).toLocaleString('en-IN')
         }
-        const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
-        const cardAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' );
-        this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString('en-IN')
-        await this.fetchRecentWithdrawal();
+        if(cardAccount && !cashAccount)
+          this.availableLimit = (cardAccount[0].account_balance).toLocaleString('en-IN')
+        if(accountTypes.includes('EARNED_WAGES') || accountTypes.includes('CASH')){
+          await this.fetchRecentWithdrawal();
+        }
       } catch (err) {
+        console.log(err)
         this.$toast.error('Failed to fetch accounts');
       }
     },
@@ -189,7 +212,7 @@ export default {
       }
     },
     async fetchRecentWithdrawal() {
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
+      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH'||'EARNED_WAGES' );
       try {
         const result = await this.$axios.get(`/accounts/${cashAccount[0].id}/withdrawals?limit=1`);
         if (result.data.length > 0) {
