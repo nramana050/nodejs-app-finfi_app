@@ -14,13 +14,19 @@ div.ps-1
         sup.pl-1 *
       p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(payableAmount).toLocaleString('en-IN') }}
   
-    div.flex-0
+    div.flex-0(v-if="earnedLimit!==null")
+      div.flex.tracking-wide.text-xs
+        p.flex-1 Limit
+        div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
+          solid-information-circle-icon.w-4.h-4 
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(earnedLimit).toLocaleString('en-IN') }}
+    div.flex-0(v-if="cashLimit!==null")
       div.flex.tracking-wide.text-xs
         p.flex-1 Cash Limit
         div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
           solid-information-circle-icon.w-4.h-4
       p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toLocaleString('en-IN') }}
-    div.flex-0.text-right
+    div.flex-0.text-right(v-if="cardLimit!==null")
       div.flex.tracking-wide.text-xs
         p.flex-1 Card Limit
         div.flex-0(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
@@ -59,15 +65,19 @@ export default {
     },
     cashLimit() {
       const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
-      return cashAccount[0].account_balance;
+      return cashAccount.length > 0 ? cashAccount[0].account_balance : null;
     },
     cardLimit() {
       const cardAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' );
-      return cardAccount[0].account_balance;
+      return cardAccount.length > 0 ? cardAccount[0].account_balance : null;
     },
-    availableLimit() {
-      return Number(this.cashLimit) + Number(this.cardLimit)
-    }
+    earnedLimit() {
+      const earnedAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === "EARNED_WAGES" );      
+      return earnedAccount.length > 0 ? earnedAccount[0].account_balance : null;
+    },
+    // availableLimit() {
+    //   return Number(0) + Number(0)
+    // }
   },
   mounted(){
     this.fetchFundCycle();
