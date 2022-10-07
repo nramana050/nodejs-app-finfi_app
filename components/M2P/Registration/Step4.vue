@@ -43,6 +43,7 @@ export default {
           }
         });
         this.isSuccess = true;
+        await this.$axios.$post('/m2p/vkyc')
       } catch (err) {
         this.isSuccess = false;
         this.errorMessage = err.response.data.message;
