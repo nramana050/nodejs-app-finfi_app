@@ -100,131 +100,128 @@ div
 </template>
 
 <script>
-import M2PRegistration from '~/components/M2P/Registration.vue';
-import SetPreference from '~/components/M2P/SetPreference.vue';
-import BlockCard from '~/components/M2P/BlockCard.vue';
-import UnblockCard from '~/components/M2P/UnblockCard.vue';
-import SetPIN from '~/components/M2P/SetPIN.vue';
+import M2PRegistration from '~/components/M2P/Registration.vue'
+import SetPreference from '~/components/M2P/SetPreference.vue'
+import BlockCard from '~/components/M2P/BlockCard.vue'
+import UnblockCard from '~/components/M2P/UnblockCard.vue'
+import SetPIN from '~/components/M2P/SetPIN.vue'
 
 export default {
-    name: "DashboardPage",
-    components: { SetPreference },
-    layout: "session",
-    data() {
-        return {
-            user: this.$auth.user,
-            isLoading: true,
-            isCardAvailable: false,
-            // isCardBlocked: false,
-            // isEcomBlocked: false,
-            // isPosBlocked: false,
-            isContactLessBlocked: false,
-            isEcom: true,
-            card: null,
-            isTermsAccepted: false,
-            cardFetch: 0,
-            form: {
-                ecom: true,
-                pos: true,
-                contactless: true,
-            }
-        };
-    },
-    mounted() {
-        this.fetchCards();
-        this.fetchCardPreference();
-    },
-    methods: {
-        navToDashboard() {
-            this.$router.push("/dashboard");
-        },
-        openRegistrationModal() {
-            this.$FModal.show({ component: M2PRegistration });
-        },
-        openCardSetting() {
-            this.$FModal.show({ component: SetPreference });
-        },
-        openUnblockCard() {
-            this.$FModal.show({ component: UnblockCard }, { revert: this.revertLKUL });
-        },
-        openBlockCard() {
-            this.$FModal.show({ component: BlockCard }, { revert: this.revertLKUL });
-        },
-        close() {
-            this.$FModal.hide();
-        },
-        async toggleStatus(key) {
-            this.form[key] = !!this.form[key];
-            const payload = {};
-            payload[key.toUpperCase()] = this.form[key];
-            try {
-                await this.$axios.$post("/m2p/cards/preferences", payload, {
-                    headers: {
-                        "Authorization": this.token
-                    }
-                });
-                this.$toast.success("Preference updated");
-            }
-            catch (err) {
-                this.$toast.error("Failed");
-            }
-            // this.close();
-        },
-
-        openCardPIN() {
-            this.$FModal.show({ component: SetPIN });
-        },
-        async fetchCardPreference() {
-          try {
-            const result = await this.$axios.$get("/m2p/cards/preferences", {
-                headers: {
-                    "Authorization": this.token
-                }
-            });
-            const data = result.result;
-            this.form.ecom = data.ecom;
-            this.form.pos = data.pos;
-            this.form.contactless = data.contactless;
-            this.isLoading = false;
-        }
-        catch (err) {
-            // this.$toast.error('Failed')
-        }
-        },
-        async fetchCards() {
-            this.isLoading = true;
-            try {
-                const cardList = await this.$axios.get(`/m2p/cards/list`);
-                if (cardList.data.result.length > 0) {
-                    this.isCardAvailable = true;
-                    this.card = cardList.data.result[0];
-                    this.isCardBlocked = this.card.cardStatusList.toUpperCase() === "LOCKED";
-                    await this.fetchCardDetail();
-                }
-                this.isLoading = false;
-            }
-            catch (err) {
-                this.isLoading = false;
-                // this.$toasted.error(err.response.data.message);
-            }
-        },
-        async fetchCardDetail() {
-          try{
-            const result2 = await this.$axios.get(`/m2p/cards`);
-            this.cardFetch += 1;
-            // this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
-            this.card.url = result2.data && result2.data.result ? result2.data.result : "";
-            setTimeout(async () => await this.fetchCardDetail(), 118000);
-        }
-        catch(err){
-          this.cardFetch +=1;
-        }
+  name: 'DashboardPage',
+  components: { SetPreference },
+  layout: 'session',
+  data() {
+    return {
+      user: this.$auth.user,
+      isLoading: true,
+      isCardAvailable: false,
+      // isCardBlocked: false,
+      // isEcomBlocked: false,
+      // isPosBlocked: false,
+      isContactLessBlocked: false,
+      isEcom: true,
+      card: null,
+      isTermsAccepted: false,
+      cardFetch: 0,
+      form: {
+        ecom: true,
+        pos: true,
+        contactless: true,
       },
-        revertLKUL() {
-            this.fetchCards();
-        },
+    }
+  },
+  mounted() {
+    this.fetchCards()
+    this.fetchCardPreference()
+  },
+  methods: {
+    navToDashboard() {
+      this.$router.push('/dashboard')
     },
-   
+    openRegistrationModal() {
+      this.$FModal.show({ component: M2PRegistration })
+    },
+    openCardSetting() {
+      this.$FModal.show({ component: SetPreference })
+    },
+    openUnblockCard() {
+      this.$FModal.show({ component: UnblockCard }, { revert: this.revertLKUL })
+    },
+    openBlockCard() {
+      this.$FModal.show({ component: BlockCard }, { revert: this.revertLKUL })
+    },
+    close() {
+      this.$FModal.hide()
+    },
+    async toggleStatus(key) {
+      this.form[key] = !!this.form[key]
+      const payload = {}
+      payload[key.toUpperCase()] = this.form[key]
+      try {
+        await this.$axios.$post('/m2p/cards/preferences', payload, {
+          headers: {
+            Authorization: this.token,
+          },
+        })
+        this.$toast.success('Preference updated')
+      } catch (err) {
+        this.$toast.error('Failed')
+      }
+      // this.close();
+    },
+
+    openCardPIN() {
+      this.$FModal.show({ component: SetPIN })
+    },
+    async fetchCardPreference() {
+      try {
+        const result = await this.$axios.$get('/m2p/cards/preferences', {
+          headers: {
+            Authorization: this.token,
+          },
+        })
+        const data = result.result
+        this.form.ecom = data.ecom
+        this.form.pos = data.pos
+        this.form.contactless = data.contactless
+        this.isLoading = false
+      } catch (err) {
+        // this.$toast.error('Failed')
+      }
+    },
+    async fetchCards() {
+      this.isLoading = true
+      try {
+        const cardList = await this.$axios.get(`/m2p/cards/list`)
+        if (cardList.data.result.length > 0) {
+          this.isCardAvailable = true
+          this.card = cardList.data.result[0]
+          this.isCardBlocked =
+            this.card.cardStatusList.toUpperCase() === 'LOCKED'
+          await this.fetchCardDetail()
+        }
+        this.isLoading = false
+      } catch (err) {
+        this.isLoading = false
+        // this.$toasted.error(err.response.data.message);
+      }
+    },
+    async fetchCardDetail() {
+      try {
+        const result2 = await this.$axios.get(`/m2p/cards`)
+        this.cardFetch += 1
+        // this.card.kit_number = result2.data && result2.data.result ? result2.data.result.kit_number : '';
+        this.card.url =
+          result2.data && result2.data.result ? result2.data.result : ''
+        setTimeout(async () => await this.fetchCardDetail(), 118000)
+      } catch (err) {
+        this.cardFetch += 1
+      }
+    },
+    revertLKUL() {
+      this.fetchCards()
+    },
+  },
 }
 </script>
 
@@ -246,95 +243,93 @@ a:hover {
 /* }
 object:focus {
   outline: none;
-} */ 
-.ps-1{
-  height:70vh;
-  background-color: #7165E3;
+} */
+.ps-1 {
+  height: 70vh;
+  background-color: #7165e3;
   margin-top: -2rem;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
-.ps-3{
+.ps-3 {
   padding-top: 2rem;
   margin-left: 2rem;
 }
-.ps-4{
+.ps-4 {
   padding-left: 1rem;
   padding-right: 1rem;
   background-color: white;
-  color:#1C1939;
+  color: #1c1939;
   margin-left: 2rem;
   margin-right: 2rem;
   margin-top: 2rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  
 }
-.ps-5{
+.ps-5 {
   color: white;
   margin-left: 2rem;
   margin-right: 2rem;
   margin-top: 1rem;
 }
-.ps-6{
-  
+.ps-6 {
   margin-top: 5rem;
   background-color: white;
 }
-.ps-7{
+.ps-7 {
   margin-top: 2rem;
 }
-.ps-15{
+.ps-15 {
   margin-top: 0.5rem;
 }
 
-.ps-8{
+.ps-8 {
   margin-left: 1rem;
   margin-right: 1rem;
   height: 25vh;
 }
-.ps-17{
+.ps-17 {
   height: 25vh;
   margin-left: 6rem;
 }
-.ps-2{
+.ps-2 {
   margin-left: 1.5rem;
   margin-top: 2rem;
   margin-right: 1.5rem;
   height: 20vh;
 }
-.ps-9{
+.ps-9 {
   margin-top: 2.5rem;
   color: grey;
   margin-left: 1rem;
   margin-right: 1rem;
 }
-.ps-12{
+.ps-12 {
   margin-top: -1rem;
 }
-.ps-10{
+.ps-10 {
   padding-top: 3px;
   padding-bottom: 3px;
   margin-left: 1rem;
 }
-.ps-11{
+.ps-11 {
   margin-left: 1rem;
   padding-top: 2rem;
 }
-.ps-13{
-  color: #7165E3;
+.ps-13 {
+  color: #7165e3;
   margin-right: 2rem;
 }
-.ps-14{
+.ps-14 {
   margin-top: 3rem;
 }
-.ps-16{
+.ps-16 {
   color: white;
   padding-top: 7rem;
   margin-left: 2rem;
   margin-right: 2rem;
 }
-.ps-19{
+.ps-19 {
   margin-top: 1rem;
 }
 </style>

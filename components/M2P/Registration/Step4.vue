@@ -30,43 +30,43 @@ export default {
   },
 
   async mounted() {
-    await this.registerAction();
+    await this.registerAction()
   },
 
   methods: {
     async registerAction() {
-      this.errorMessage = null;
+      this.errorMessage = null
       try {
         await this.$axios.$post('/m2p/register', this.form, {
           headers: {
-            'Authorization': this.token
-          }
-        });
-        this.isSuccess = true;
+            Authorization: this.token,
+          },
+        })
+        this.isSuccess = true
       } catch (err) {
-        this.isSuccess = false;
-        this.errorMessage = err.response.data.message;
+        this.isSuccess = false
+        this.errorMessage = err.response.data.message
       } finally {
-        this.isLoading = false;
+        this.isLoading = false
       }
     },
     reload(e) {
-      e.preventDefault();
-      this.$emit('reload');
+      e.preventDefault()
+      this.$emit('reload')
     },
     restart(e) {
-      e.preventDefault();
-      this.$emit('restart');
+      e.preventDefault()
+      this.$emit('restart')
     },
     cancel(e) {
-      e.preventDefault();
-      this.$emit('close');
-    }
-  }
+      e.preventDefault()
+      this.$emit('close')
+    },
+  },
 }
 </script>
 <style scoped>
-  .btn{
-    background-color: #7165E3;
-  }
+.btn {
+  background-color: #7165e3;
+}
 </style>

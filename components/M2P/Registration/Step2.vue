@@ -28,7 +28,7 @@ export default {
         address_line_3: '',
         city: '',
         state: '',
-        pincode: ''
+        pincode: '',
       },
       isSameAddress: true,
       states: {},
@@ -36,15 +36,15 @@ export default {
   },
 
   async beforeMount() {
-    const stateApiResult = await this.$axios.$get('/ext/states');
+    const stateApiResult = await this.$axios.$get('/ext/states')
     for (const item of stateApiResult) {
-      this.states[item] = item;
+      this.states[item] = item
     }
     const apiResult = await this.$axios.$get('/profile/address?type=BILLING', {
       headers: {
-        'Authorization': this.token
-      }
-    });
+        Authorization: this.token,
+      },
+    })
     if (apiResult.length > 0) {
       this.form = apiResult[0]
     }
@@ -53,26 +53,30 @@ export default {
   methods: {
     async next() {
       try {
-        await this.$axios.$post('/profile/address', {
-          address_type: 'BILLING',
-          ...this.form
-        }, {
-          headers: {
-            'Authorization': this.token
+        await this.$axios.$post(
+          '/profile/address',
+          {
+            address_type: 'BILLING',
+            ...this.form,
+          },
+          {
+            headers: {
+              Authorization: this.token,
+            },
           }
-        });
+        )
       } catch (err) {}
-      this.$emit('next', this.form);
+      this.$emit('next', this.form)
     },
     cancel(e) {
-      e.preventDefault();
-      this.$emit('close');
-    }
-  }
+      e.preventDefault()
+      this.$emit('close')
+    },
+  },
 }
 </script>
 <style scoped>
-  .btn{
-    background-color: #7165E3;
-  }
+.btn {
+  background-color: #7165e3;
+}
 </style>

@@ -15,28 +15,27 @@ export default {
 
   methods: {
     close() {
-      this.$FModal.hide();
+      this.$FModal.hide()
     },
     async confirm() {
       try {
         await this.$axios.$post('/m2p/cards/block', {
           headers: {
-            'Authorization': this.token
-          }
-        });
-        this.$attrs.revert();
-        console.log('card status',this.$attrs.revert)
-        this.$toast.success('Card Blocked Successfully');
+            Authorization: this.token,
+          },
+        })
+        this.$attrs.revert()
+        this.$toast.success('Card Blocked Successfully')
       } catch (err) {
         this.$toast.error('Failed')
       }
-      this.$FModal.hide();
+      this.$FModal.hide()
     },
-  }
+  },
 }
 </script>
 <style scoped>
-  .btn{
-    background-color: #7165E3;
-  }
+.btn {
+  background-color: #7165e3;
+}
 </style>

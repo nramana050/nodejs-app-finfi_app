@@ -4,10 +4,21 @@ export default {
     titleTemplate: '%s | Finfi',
     meta: [
       { charset: 'utf-8' },
-      { hid: 'description', name: 'description', content: 'Finfi: Financial Freedom for your Employees' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Finfi: Financial Freedom for your Employees',
+      },
       { hid: 'keywords', name: 'keywords', content: 'finfi' },
-      { hid: 'author', name: 'author', content: 'Arunraj Selvam <arunraj@nstore.in' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1, shrink-to-fit=no' },
+      {
+        hid: 'author',
+        name: 'author',
+        content: 'Arunraj Selvam <arunraj@nstore.in',
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+      },
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [{ rel: 'icon', type: 'image/png', href: '/finfi.png' }],
@@ -16,17 +27,17 @@ export default {
   css: [
     '~/assets/style.css',
     '~/node_modules/vue2-datepicker/index.css',
-    '@fortawesome/fontawesome-svg-core/styles.css'
+    '@fortawesome/fontawesome-svg-core/styles.css',
   ],
 
   plugins: [
     { src: '~/plugins/vue.modal' },
-    { src: '~/plugins/date.picker', ssr: false},
+    { src: '~/plugins/date.picker', ssr: false },
     { src: '~/plugins/vuex.persist' },
     { src: '~/plugins/vue.modal.2', ssr: false },
     { src: '~/plugins/vue.iframe', ssr: false },
     { src: '~/plugins/vue.tooltip', ssr: false },
-    '~/plugins/fontawesome.js'
+    '~/plugins/fontawesome.js',
   ],
 
   buildModules: [
@@ -36,17 +47,17 @@ export default {
     '@nuxtjs/device',
     '@braid/vue-formulate/nuxt',
     '@nuxt-hero-icons/outline/nuxt',
-    '@nuxt-hero-icons/solid/nuxt'
+    '@nuxt-hero-icons/solid/nuxt',
   ],
 
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/auth-next', 
+    '@nuxtjs/auth-next',
     '@nuxtjs/i18n',
     '@nuxt/image',
     '@nuxtjs/dayjs',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
   ],
 
   i18n: {
@@ -55,16 +66,16 @@ export default {
     locales: [
       { code: 'en', iso: 'en-US', name: 'English', file: 'en.js' },
       { code: 'ta', iso: 'en-TA', name: 'Tamil', file: 'ta.js' },
-      { code: 'hi', iso: 'en-HI', name: 'Hindi', file: 'hi.js' }
+      { code: 'hi', iso: 'en-HI', name: 'Hindi', file: 'hi.js' },
     ],
     defaultLocale: 'en',
     vueI18n: {
-      fallbackLocale: 'en'
+      fallbackLocale: 'en',
     },
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: 'i18n'
-    }
+      cookieKey: 'i18n',
+    },
   },
 
   components: true,
@@ -81,7 +92,7 @@ export default {
     author: 'Arunraj Selvam <arunraj@nstore.in>',
     viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
     icon: {
-      fileName: 'finfi.png'
+      fileName: 'finfi.png',
     },
     manifest: {
       lang: 'en',
@@ -89,18 +100,18 @@ export default {
   },
 
   build: {
-    transpile: ['vue-final-modal']
+    transpile: ['vue-final-modal'],
   },
 
   server: {
     host: '0.0.0.0',
-    port: 8002
+    port: 8002,
   },
 
   router: {
     mode: 'history',
     trailingSlash: false,
-    middleware: ['auth']
+    middleware: ['auth'],
   },
 
   auth: {
@@ -113,7 +124,7 @@ export default {
           login: { url: 'auth/login', method: 'post' },
           user: { url: 'profile', method: 'get' },
           logout: false,
-        }
+        },
       },
       otp: {
         scheme: 'local',
@@ -123,28 +134,28 @@ export default {
           login: { url: 'auth/otp/verify', method: 'post' },
           user: { url: 'profile', method: 'get' },
           logout: false,
-        }
-      }
+        },
+      },
     },
   },
 
   formulate: {
-    configPath: '~/formulate.config.js'
+    configPath: '~/formulate.config.js',
   },
 
   googleFonts: {
     families: {
-      Roboto: true
-    }
+      Roboto: true,
+    },
   },
 
   device: {
-    refreshOnResize: true
+    refreshOnResize: true,
   },
 
   toast: {
-    position: "bottom-center", 
-	  duration : 2500,
+    position: 'bottom-center',
+    duration: 2500,
     singleton: true,
-  }
+  },
 }

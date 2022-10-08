@@ -15,27 +15,27 @@ export default {
 
   methods: {
     close() {
-      this.$FModal.hide();
+      this.$FModal.hide()
     },
     async confirm() {
       try {
         await this.$axios.$post('/m2p/cards/unblock', {
           headers: {
-            'Authorization': this.token
-          }
-        });
-        this.$attrs.revert();
-        this.$toast.success('Card unblocked');
+            Authorization: this.token,
+          },
+        })
+        this.$attrs.revert()
+        this.$toast.success('Card unblocked')
       } catch (err) {
         this.$toast.error('Failed')
       }
-      this.$FModal.hide();
+      this.$FModal.hide()
     },
-  }
+  },
 }
 </script>
 <style scoped>
-  .ps-15{
-    background-color: #7165E3;
-  }
+.ps-15 {
+  background-color: #7165e3;
+}
 </style>

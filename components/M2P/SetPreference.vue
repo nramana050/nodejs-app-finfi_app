@@ -39,7 +39,7 @@ export default {
         ecom: true,
         pos: true,
         contactless: true,
-      }
+      },
     }
   },
 
@@ -47,16 +47,14 @@ export default {
     try {
       const result = await this.$axios.$get('/m2p/cards/preferences', {
         headers: {
-          'Authorization': this.token
-        }
-      });
-      console.log('hello',result.result)
-      const data = result.result;
-      this.form.ecom = data.ecom;
-      this.form.pos = data.pos;
-      this.form.contactless = data.contactless;
-      this.isLoading = false;
-      console.log('ecom',data)
+          Authorization: this.token,
+        },
+      })
+      const data = result.result
+      this.form.ecom = data.ecom
+      this.form.pos = data.pos
+      this.form.contactless = data.contactless
+      this.isLoading = false
     } catch (err) {
       // this.$toast.error('Failed')
     }
@@ -64,26 +62,25 @@ export default {
 
   methods: {
     close() {
-      this.$FModal.hide();
+      this.$FModal.hide()
     },
     async toggleStatus(key) {
-      this.form[key] = !!this.form[key];
-      console.log('find key',!!this.form[key])
-      const payload = {};
-      payload[key.toUpperCase()] = this.form[key];
+      this.form[key] = !!this.form[key]
+      const payload = {}
+      payload[key.toUpperCase()] = this.form[key]
       try {
         await this.$axios.$post('/m2p/cards/preferences', payload, {
           headers: {
-            'Authorization': this.token
-          }
-        });
-        this.$toast.success('Preference updated');
+            Authorization: this.token,
+          },
+        })
+        this.$toast.success('Preference updated')
       } catch (err) {
         this.$toast.error('Failed')
       }
       // this.close();
     },
-  }
+  },
 }
 </script>
 
@@ -91,20 +88,20 @@ export default {
 #window {
   z-index: 999;
 }
-.ps-18{
+.ps-18 {
   margin-top: 0.5rem;
   margin-left: -2rem;
 }
-.btn{
-  background-color: #7165E3;
+.btn {
+  background-color: #7165e3;
 }
-.ps-20{
+.ps-20 {
   margin-right: -5.8rem;
 }
-.ps-21{
+.ps-21 {
   margin-right: -10.5rem;
 }
-.ps-22{
+.ps-22 {
   margin-right: -9.8rem;
 }
 </style>
