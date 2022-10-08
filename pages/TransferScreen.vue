@@ -20,83 +20,95 @@
         FooterLogo
 </template>
 <script>
-
-  export default{
-    name:'TransferScreen',
-    layout:'session',
-    data() {
+export default {
+  name: 'TransferScreen',
+  layout: 'session',
+  data() {
     return {
       user: this.$auth.user,
       accounts: [],
       requestedAmount: null,
       recentTransaction: null,
       inProgress: false,
-      availableLimit:null,
+      availableLimit: null,
     }
   },
   async fetch() {
     await this.getAccountDetails()
   },
-    methods:{
-        navToDashboard() {
-          this.$router.push('/dashboard')
-        },
-        async getAccountDetails() {
+  methods: {
+    navToDashboard() {
+      this.$router.push('/dashboard')
+    },
+    async getAccountDetails() {
       try {
-        const promiseArray = [];
-        promiseArray.push(this.$axios.get('/accounts?type=CASH'));
-        promiseArray.push(this.$axios.get('/accounts?type=CARD'));
-        promiseArray.push(this.$axios.get('/accounts?type=PAYABLE'));
-        const result = await Promise.all(promiseArray);
-        this.accounts = [];
+        const promiseArray = []
+        promiseArray.push(this.$axios.get('/accounts?type=CASH'))
+        promiseArray.push(this.$axios.get('/accounts?type=CARD'))
+        promiseArray.push(this.$axios.get('/accounts?type=PAYABLE'))
+        const result = await Promise.all(promiseArray)
+        this.accounts = []
         for (const item of result) {
-          const { data } = item;
-          this.accounts.push(data);
+          const { data } = item
+          this.accounts.push(data)
         }
-        const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
-        const cardAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' );
-        this.availableLimit = cashAccount[0].account_balance + cardAccount[0].account_balance
-        await this.fetchRecentWithdrawal();
+        const cashAccount = this.accounts.filter(
+          (item) => item.account_type.toUpperCase() === 'CASH'
+        )
+        const cardAccount = this.accounts.filter(
+          (item) => item.account_type.toUpperCase() === 'CARD'
+        )
+        this.availableLimit =
+          cashAccount[0].account_balance + cardAccount[0].account_balance
+        await this.fetchRecentWithdrawal()
       } catch (err) {
-        this.$toast.error('Failed to fetch accounts');
+        this.$toast.error('Failed to fetch accounts')
       }
     },
-        async initCashRequest() {
-      this.inProgress = true;
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
-      const availableLimit = cashAccount[0].account_balance;
+    async initCashRequest() {
+      this.inProgress = true
+      const cashAccount = this.accounts.filter(
+        (item) => item.account_type.toUpperCase() === 'CASH'
+      )
+      const availableLimit = cashAccount[0].account_balance
       if (this.requestedAmount > availableLimit) {
-        this.$toast.error(`Cash limit available: ${availableLimit}`);
-        this.inProgress = false;
-        return;
+        this.$toast.error(`Cash limit available: ${availableLimit}`)
+        this.inProgress = false
+        return
       }
       try {
-        const bankResult = await this.$axios.get('/profile/banks');
+        const bankResult = await this.$axios.get('/profile/banks')
         // eslint-disable-next-line camelcase
-        const { ifsc_code, account_balance } = bankResult.data;
+        const { ifsc_code, account_balance } = bankResult.data
         // eslint-disable-next-line camelcase
         if (ifsc_code === '' || account_balance === '') {
-          this.inProgress = false;
-          this.$toasted.error('you have missing bank details. Pls update bank details in the profile menu')
-          return;
+          this.inProgress = false
+          this.$toasted.error(
+            'you have missing bank details. Pls update bank details in the profile menu'
+          )
+          return
         }
         await this.$axios.post(`/accounts/${cashAccount[0].id}/withdrawals`, {
-          amount: this.requestedAmount 
-          });
-        this.$toast.success('Cash request sent');
-        this.getAccountDetails();
-        this.fetchRecentWithdrawal();
-        this.requestedAmount=null;
-        this.inProgress = false;
+          amount: this.requestedAmount,
+        })
+        this.$toast.success('Cash request sent')
+        this.getAccountDetails()
+        this.fetchRecentWithdrawal()
+        this.requestedAmount = null
+        this.inProgress = false
       } catch (err) {
-        this.inProgress = false;
+        this.inProgress = false
         this.$toasted.error(err.response.data.message)
       }
     },
     async fetchRecentWithdrawal() {
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
+      const cashAccount = this.accounts.filter(
+        (item) => item.account_type.toUpperCase() === 'CASH'
+      )
       try {
-        const result = await this.$axios.get(`/accounts/${cashAccount[0].id}/withdrawals?limit=1`);
+        const result = await this.$axios.get(
+          `/accounts/${cashAccount[0].id}/withdrawals?limit=1`
+        )
         if (result.data.length > 0) {
           this.recentTransaction = result.data[0]
         }
@@ -104,74 +116,71 @@
         this.$toasted.error(err.response.data.message)
       }
     },
-        }
-    }
-   
-    
+  },
+}
 </script>
 <style scoped>
-    .ps-7{
-    color: #FFFFFF;
-    margin-left: 2rem;
-    width: 20px;
-    height: 20px;
-    padding-top: 1rem;
-  }
-  .ps-6{
-    margin-left: 30%;
-  }
-  .ps-4{
-    background-color: #FFFFFF;
-    height: 30vh;
-    margin-top: -5vh;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-top-left-radius:15px;
-    border-top-right-radius:15px ;
-  }
-  .ps-1{
-    height: 75vh;
-    background-color: #7165E3;
-    color: #FFFFFF;
-  }
-  .ps-2{
-    margin-top: 2rem;
-    
-  }
-  .ps-5{
-    background-color: #7165E3;
-    width: 20rem;
-    height: 45px;
-    font-weight: 500;
-    margin-top: 1rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    border-radius: 8px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-  .ps-8{
-    background: none;
-    border: none;
-    width: 50%;
-    margin-left: -2rem;
-  }
-  .ps-9{
-    width: 6rem;
-    height: 6rem;
-    margin-left: 38%;
-  }
-  .ps-10{
-    margin-left: 44%;
-    margin-top: 3rem;
-    width: 2rem;
-    height: 2rem;
-    background-color: #FFFFFF;
-    color: #1C1939;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 27px;
-  }
+.ps-7 {
+  color: #ffffff;
+  margin-left: 2rem;
+  width: 20px;
+  height: 20px;
+  padding-top: 1rem;
+}
+.ps-6 {
+  margin-left: 30%;
+}
+.ps-4 {
+  background-color: #ffffff;
+  height: 30vh;
+  margin-top: -5vh;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.ps-1 {
+  height: 75vh;
+  background-color: #7165e3;
+  color: #ffffff;
+}
+.ps-2 {
+  margin-top: 2rem;
+}
+.ps-5 {
+  background-color: #7165e3;
+  width: 20rem;
+  height: 45px;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  border-radius: 8px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.ps-8 {
+  background: none;
+  border: none;
+  width: 50%;
+  margin-left: -2rem;
+}
+.ps-9 {
+  width: 6rem;
+  height: 6rem;
+  margin-left: 38%;
+}
+.ps-10 {
+  margin-left: 44%;
+  margin-top: 3rem;
+  width: 2rem;
+  height: 2rem;
+  background-color: #ffffff;
+  color: #1c1939;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 27px;
+}
 </style>

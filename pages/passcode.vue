@@ -28,79 +28,79 @@ export default {
   methods: {
     async setPasscode() {
       if (this.passcode_1.length !== 6 || this.passcode_2.length !== 6) {
-        this.$toast.error('Enter 6 digit numeric passcode');
-        return;
+        this.$toast.error('Enter 6 digit numeric passcode')
+        return
       }
       if (this.passcode_1 !== this.passcode_2) {
-        this.$toast.error('passcode didnot match');
-        return;
+        this.$toast.error('passcode didnot match')
+        return
       }
       try {
         await this.$axios.post('/profile/passcode', {
           passcode: Number(this.passcode_1),
-        });
-        this.$toast.info('Passcode updated successfully');
-        this.navToDashboard();
+        })
+        this.$toast.info('Passcode updated successfully')
+        this.$router.push('/WelcomeScreen')
       } catch (err) {
-        this.$toast.error('failed to update passcode');
+        this.$toast.error('failed to update passcode')
       }
     },
     navToDashboard() {
       this.$router.push('/dashboard')
-    }
+    },
   },
 }
 </script>
 <style scoped>
-  .ps-1{
-    color: #37202B;
-    margin-top: 1rem;
-    margin-left:3rem;
-    font-weight: 300;
-    letter-spacing: -2px;
-    font-style: normal;
-  }
-  .ps-2{
-   color: #1C1939CC;
-   margin-top: 1rem;
-   font-weight: 400;
-   margin-left:3rem;
-   margin-right:3rem;
-  }
-  .ps-3{
-    color: #1C1939CC;
-    font-weight: 400;
-    margin-left:3rem;
-    margin-right:3rem;
-  }
-  .ps-4{
-    margin-left: 3rem;
-    margin-top: 1rem;
-    padding-left: 10px;
-    padding-right: 4.75rem;
-    padding-top: 10px;
-    padding-bottom:10px;
-  }
-  .ps-5{
-    background-color: #7165E3;
-    width: 130px;
-    height: 35px;
-    font-weight: 500;
-    margin-top: 2.5rem;
-    margin-left:7.75rem;
-    text-align: center;
-    border-radius: 8px;
-    padding-top: 5px;
-  }
-  .ps-6{
-    margin-top: 1rem;
-    margin-left: 3rem;
-  }
-  .ps-7{
-    color: #37202B;
-    margin-top: 0.5rem;
-    margin-left: 3rem;
-    width: 20px;
-    height: 30px;
-  }
+.ps-1 {
+  color: #37202b;
+  margin-top: 1rem;
+  margin-left: 3rem;
+  font-weight: 300;
+  letter-spacing: -2px;
+  font-style: normal;
+}
+.ps-2 {
+  color: #1c1939cc;
+  margin-top: 1rem;
+  font-weight: 400;
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+.ps-3 {
+  color: #1c1939cc;
+  font-weight: 400;
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+.ps-4 {
+  margin-left: 3rem;
+  margin-top: 1rem;
+  padding-left: 10px;
+  padding-right: 4.75rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.ps-5 {
+  background-color: #7165e3;
+  width: 130px;
+  height: 35px;
+  font-weight: 500;
+  margin-top: 2.5rem;
+  margin-left: 7.75rem;
+  text-align: center;
+  border-radius: 8px;
+  padding-top: 5px;
+}
+.ps-6 {
+  margin-top: 1rem;
+  margin-left: 3rem;
+}
+.ps-7 {
+  color: #37202b;
+  margin-top: 0.5rem;
+  margin-left: 3rem;
+  width: 20px;
+  height: 30px;
+}
 </style>

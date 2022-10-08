@@ -12,8 +12,8 @@ export default {
   props: {
     transaction: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -24,19 +24,21 @@ export default {
       return this.transaction.type.toLowerCase() === 'debit'
     },
     date() {
-      return this.$dayjs(this.transaction.transaction_time).format('YYYY-MM-DD HH:mm:ss')
+      return this.$dayjs(this.transaction.transaction_time).format(
+        'YYYY-MM-DD HH:mm:ss'
+      )
     },
-  }
+  },
 }
 </script>
 <style scoped>
-  .ps-1{
-    height: 13vh;
-    border-radius: 8px;
-    background-color: white;
-    padding-left: 1rem;
-  }
-  .ps-2{
-    color: #1C1939;
-  }
+.ps-1 {
+  height: 13vh;
+  border-radius: 8px;
+  background-color: white;
+  padding-left: 1rem;
+}
+.ps-2 {
+  color: #1c1939;
+}
 </style>

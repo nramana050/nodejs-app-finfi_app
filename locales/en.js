@@ -1,3 +1,3 @@
 module.exports = {
-  proceed: 'Proceed'
+  proceed: 'Proceed',
 }
