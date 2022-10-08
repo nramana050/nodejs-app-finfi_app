@@ -13,10 +13,10 @@ div.flex.flex-col.px-5.py-8#container
 </template>
 
 <script>
-import Step1Component from '~/components/M2P/Registration/Step1.vue';
-import Step2Component from '~/components/M2P/Registration/Step2.vue';
-import Step3Component from '~/components/M2P/Registration/Step3.vue';
-import Step4Component from '~/components/M2P/Registration/Step4.vue';
+import Step1Component from '~/components/M2P/Registration/Step1.vue'
+import Step2Component from '~/components/M2P/Registration/Step2.vue'
+import Step3Component from '~/components/M2P/Registration/Step3.vue'
+import Step4Component from '~/components/M2P/Registration/Step4.vue'
 
 export default {
   name: 'M2PRegistration',
@@ -24,7 +24,7 @@ export default {
     Step1Component,
     Step2Component,
     Step3Component,
-    Step4Component
+    Step4Component,
   },
 
   data() {
@@ -34,27 +34,32 @@ export default {
         address: {},
         kyc: {},
       },
-      steps: [{
-        id: 1,
-        title: 'User Verification'
-      },{
-        id: 2,
-        title: 'Address'
-      }, {
-        id: 3,
-        title: 'KYC Documents'
-      }, {
-        id: 4,
-        title: 'Status'
-      }],
-      currentStep: 1
+      steps: [
+        {
+          id: 1,
+          title: 'User Verification',
+        },
+        {
+          id: 2,
+          title: 'Address',
+        },
+        {
+          id: 3,
+          title: 'KYC Documents',
+        },
+        {
+          id: 4,
+          title: 'Status',
+        },
+      ],
+      currentStep: 1,
     }
   },
 
   computed: {
     step() {
-      return this.steps[this.currentStep - 1];
-    }
+      return this.steps[this.currentStep - 1]
+    },
   },
 
   methods: {
@@ -62,34 +67,34 @@ export default {
       this.currentStep += 1
     },
     step1next(data) {
-      this.form.user = data;
-      this.next();
+      this.form.user = data
+      this.next()
     },
     step2next(data) {
-      this.form.address = data;
-      this.next();
+      this.form.address = data
+      this.next()
     },
     step3next(data) {
-      this.form.kyc = data;
-      this.next();
+      this.form.kyc = data
+      this.next()
     },
     reload() {
-      window.location.reload();
+      window.location.reload()
     },
     restart() {
-      const _this = this;
+      const _this = this
       setTimeout(function () {
-        _this.currentStep = 1;
-      }, 500);
+        _this.currentStep = 1
+      }, 500)
     },
     close() {
-      this.$FModal.hide();
-      const _this = this;
+      this.$FModal.hide()
+      const _this = this
       setTimeout(function () {
-        _this.currentStep = 1;
-      }, 500);
-    }
-  }
+        _this.currentStep = 1
+      }, 500)
+    },
+  },
 }
 </script>
 

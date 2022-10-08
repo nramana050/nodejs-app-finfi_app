@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       account: null,
-      transactions: []
+      transactions: [],
     }
   },
   // async beforeMount() {

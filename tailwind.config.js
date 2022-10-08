@@ -1,11 +1,11 @@
 module.exports = {
-  theme: {  
+  theme: {
     extend: {
       fontFamily: {
-        primary: 'Roboto'
+        primary: 'Roboto',
       },
       colors: {
-        primary: '#F5F5F5'
+        primary: '#F5F5F5',
       },
     },
   },

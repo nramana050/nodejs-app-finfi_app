@@ -87,9 +87,9 @@ export default {
   },
 
   async fetch() {
-    const profileResult = await this.$axios.get('/profile');
-    this.profile = profileResult.data;
-    await this.getBankAccount();
+    const profileResult = await this.$axios.get('/profile')
+    this.profile = profileResult.data
+    await this.getBankAccount()
   },
 
   methods: {
@@ -99,93 +99,94 @@ export default {
     disableEditMode() {
       this.isEditMode = false
     },
-    navToDashBoard(){
+    navToDashBoard() {
       this.$router.push('/dashboard')
     },
     async saveBankDetail() {
       try {
-        await this.$axios.post('/profile/banks', this.bank);
-        this.$toast.info('Bank details updated successfully');
-        this.disableEditMode();
+        await this.$axios.post('/profile/banks', this.bank)
+        this.$toast.info('Bank details updated successfully')
+        this.disableEditMode()
       } catch (err) {
-        this.$toast.success('failed to update account details');
+        this.$toast.success('failed to update account details')
       }
     },
     async getBankAccount() {
       try {
-        const bankResult = await this.$axios.get('/profile/banks');
+        const bankResult = await this.$axios.get('/profile/banks')
         if (bankResult.data) {
-          this.bank = bankResult.data;
+          this.bank = bankResult.data
         }
       } catch (err) {
-        this.$toast.error('Failed to fetch profile');
+        this.$toast.error('Failed to fetch profile')
       }
     },
     async cancelEdit(e) {
-      e.preventDefault();
-      await this.getBankAccount();
-      this.disableEditMode();
+      e.preventDefault()
+      await this.getBankAccount()
+      this.disableEditMode()
     },
     logout() {
-      this.$auth.strategy.token.reset();
-      this.$auth.logout();
-    }
-  }
+      this.$auth.strategy.token.reset()
+      this.$auth.logout()
+    },
+  },
 }
 </script>
 <style scoped>
-  .ps-1{
-    background-color: #7165E3;
-    color: white;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-  }
-  .ps-7{
-    color: #FFFFFF;
-    margin-left: 2rem;
-    width: 20px;
-    height: 20px;
-    padding-top: 1rem;
-  }
-  .ps-2{
-    margin-top: 1rem;
-  }
-  .ps-3{
-    margin-top: 10px;
-  }
-  .ps-4{
-    padding-bottom: 15px;
-  }
-  .ps-5{
-    margin-left: 2rem;
-    margin-right: 2rem;
-    color: #1C1939;
-  }
-  .ps-6{
-    margin-top: 2rem;
-  }
-  .ps-8{
-    margin-top: 1rem;
-    margin-bottom: 3rem;
-  }
-  .ps-9{
-    color: black;
-  }
-  .ps-10{
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  .ps-11{
-    margin-left: 1rem;
-    margin-right: -1rem;
-  }
-  .ps-12{
-    padding-top: 15px;
-  }
-  .ps-13{
-    margin-top: 1rem;
-  }
-  .ps-14{
-    margin-top: 3rem;
-  }
+.ps-1 {
+  background-color: #7165e3;
+  color: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.ps-7 {
+  color: #ffffff;
+  margin-left: 2rem;
+  width: 20px;
+  height: 20px;
+  padding-top: 1rem;
+}
+.ps-2 {
+  margin-top: 1rem;
+}
+.ps-3 {
+  margin-top: 10px;
+}
+.ps-4 {
+  padding-bottom: 15px;
+}
+.ps-5 {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  color: #1c1939;
+}
+.ps-6 {
+  margin-top: 2rem;
+}
+.ps-8 {
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+.ps-9 {
+  color: black;
+}
+.ps-10 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+.ps-11 {
+  margin-left: 1rem;
+  margin-right: -1rem;
+  padding-top: 10px;
+}
+.ps-12 {
+  padding-top: 15px;
+}
+.ps-13 {
+  margin-top: 1rem;
+}
+.ps-14 {
+  margin-top: 3rem;
+}
 </style>
