@@ -13,12 +13,12 @@ export default {
 }
 </script>
 <style scoped>
-  .logo{
-    background-color: #7165E3;
-    padding-left:31% ;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-top-left-radius:15px;
-    border-top-right-radius:15px ;
-  }
+.logo {
+  background-color: #7165e3;
+  padding-left: 31%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
 </style>

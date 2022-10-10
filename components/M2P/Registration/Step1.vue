@@ -51,44 +51,44 @@ export default {
 
   methods: {
     async generateOTP(e) {
-      e.preventDefault();
+      e.preventDefault()
       await this.$axios.$post('/m2p/otp', {
         headers: {
-          'Authorization': this.token
-        }
-      });
-      this.$toast.success('OTP generated and sent to your mobile number');
+          Authorization: this.token,
+        },
+      })
+      this.$toast.success('OTP generated and sent to your mobile number')
       this.isOTPSent = true
       setTimeout(() => {
         this.isOTPSent = false
         this.timer = 5
-      }, 60000);
+      }, 60000)
       this.timerFunction = setInterval(() => {
         this.timer -= 1
         if (this.timer === 1) {
-          clearInterval(this.timerFunction);
+          clearInterval(this.timerFunction)
         }
-      }, 1000);
+      }, 1000)
     },
     next() {
       this.$emit('next', {
         otp: this.form.otp,
         gender: this.form.gender,
         dob: this.form.dob,
-      });
+      })
     },
     cancel(e) {
-      e.preventDefault();
-      this.$emit('close');
+      e.preventDefault()
+      this.$emit('close')
     },
     disabledRange(date) {
-      return date > new Date();
-    }
-  }
+      return date > new Date()
+    },
+  },
 }
 </script>
 <style scoped>
-  .btn{
-    background-color: #7165E3;
-  }
+.btn {
+  background-color: #7165e3;
+}
 </style>

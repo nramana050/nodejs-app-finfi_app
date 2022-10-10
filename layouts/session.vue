@@ -14,8 +14,8 @@ export default {
 
   beforeMount() {
     if (this.$auth.strategy.token.status().unknown()) {
-      this.$router.push('/');
+      this.$router.push('/')
     }
-  }
+  },
 }
 </script>
