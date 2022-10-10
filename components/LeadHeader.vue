@@ -10,12 +10,13 @@ export default {
     title: {
       type: String,
       default: '',
-      required: false
+      required: false,
     },
     lead: {
       type: String,
+      default: '',
       // required: true
     },
-  }
+  },
 }
 </script>

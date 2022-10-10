@@ -25,62 +25,60 @@
     
 </template>
 <script>
-    export default{
-        name:'WelcomeScreen',
-        layout: 'session',
-        methods:{
-           navToDashBoard(){
-            this.$router.push('/dashboard')
-           }
-        }
-    }
-
+export default {
+  name: 'WelcomeScreen',
+  layout: 'session',
+  methods: {
+    navToDashBoard() {
+      this.$router.push('/dashboard')
+    },
+  },
+}
 </script>
 <style scoped>
-    .ps-1{
-        color: #1C1939CC;
-        height: 100vh;
-    }
-    .ps-2{
-        margin: 1rem;
-    }
-    .ps-3{
-        text-align: center;
-        background-color: #2D4A94;
-        height: 15vh;
-        margin: 1.5rem;
-        border-radius: 15px;
-        padding: 10px;
-        color: white;
-    }
-   
-    .ps-5{
-        margin-top: 1rem;
-        margin-left: 2rem;
-        margin-right: 2rem;
-    }
-    .ps-6{
-        margin-left: 33%;
-    }
-    .ps-7{
-        text-align: center;
-        background-color: #7165E3;
-        height: 15vh;
-        margin: 1.5rem;                          
-        border-radius: 15px;
-        padding: 10px;
-        color: white;
-    }
-    .ps-8{
-        height: 5vh;
-        width: 80%;
-        margin-left: 2rem;
-        margin-right: 2rem;
-        color: white;
-        background-color: #1C1939;
-        text-align: center;
-        border-radius: 8px;
-        padding-top: 5px;
-    }
-    
+.ps-1 {
+  color: #1c1939cc;
+  height: 100vh;
+}
+.ps-2 {
+  margin: 1rem;
+}
+.ps-3 {
+  text-align: center;
+  background-color: #2d4a94;
+  height: 15vh;
+  margin: 1.5rem;
+  border-radius: 15px;
+  padding: 10px;
+  color: white;
+}
+
+.ps-5 {
+  margin-top: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+.ps-6 {
+  margin-left: 33%;
+}
+.ps-7 {
+  text-align: center;
+  background-color: #7165e3;
+  height: 15vh;
+  margin: 1.5rem;
+  border-radius: 15px;
+  padding: 10px;
+  color: white;
+}
+.ps-8 {
+  height: 5vh;
+  width: 80%;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  color: white;
+  background-color: #1c1939;
+  text-align: center;
+  border-radius: 8px;
+  padding-top: 5px;
+}
 </style>
