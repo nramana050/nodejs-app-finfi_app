@@ -19,26 +19,26 @@ export default {
 
   methods: {
     close() {
-      this.$FModal.hide();
+      this.$FModal.hide()
     },
     async confirm() {
       try {
         const apiResult = await this.$axios.$post('/m2p/cards/pin', {
           headers: {
-            'Authorization': this.token
-          }
-        });
-        const url = apiResult.result;
-        const a = document.createElement('a');
-        a.href = url;
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
+            Authorization: this.token,
+          },
+        })
+        const url = apiResult.result
+        const a = document.createElement('a')
+        a.href = url
+        a.target = '_blank'
+        document.body.appendChild(a)
+        a.click()
       } catch (err) {
         this.$toast.error('Failed')
       }
-      this.close();
+      this.close()
     },
-  }
+  },
 }
 </script>

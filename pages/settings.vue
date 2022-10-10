@@ -27,26 +27,26 @@ export default {
   methods: {
     async setPasscode() {
       if (this.passcode_1.length !== 6 || this.passcode_2.length !== 6) {
-        this.$toast.error('Enter 6 digit passcode');
-        return;
+        this.$toast.error('Enter 6 digit passcode')
+        return
       }
       if (this.passcode_1 !== this.passcode_2) {
-        this.$toast.error('passcode didnot match');
-        return;
+        this.$toast.error('passcode didnot match')
+        return
       }
       try {
         await this.$axios.post('/profile/passcode', {
           passcode: Number(this.passcode_1),
-        });
-        this.$toast.info('Passcode updated successfully');
+        })
+        this.$toast.info('Passcode updated successfully')
       } catch (err) {
-        this.$toast.error('failed to update passcode');
+        this.$toast.error('failed to update passcode')
       }
     },
     logout() {
-      this.$auth.strategy.token.reset();
-      this.$auth.logout();
-    }
-  }
+      this.$auth.strategy.token.reset()
+      this.$auth.logout()
+    },
+  },
 }
 </script>

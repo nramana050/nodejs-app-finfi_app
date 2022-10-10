@@ -30,44 +30,45 @@ export default {
   },
 
   async fetch() {
-    await this.fetchTransactions();
+    await this.fetchTransactions()
   },
 
   methods: {
-    disableDate(date){
-       const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return  date >= new Date(today.getTime() + 24 * 3600 * 1000);
-
+    disableDate(date) {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      return date >= new Date(today.getTime() + 24 * 3600 * 1000)
     },
     async fetchTransactions() {
       this.transactions = []
-      this.isLoading = true;
+      this.isLoading = true
       const startDate = this.$dayjs(this.dates[0]).format('YYYY-MM-DD')
       const endDate = this.$dayjs(this.dates[1]).format('YYYY-MM-DD')
       try {
-        const transactions = await this.$axios.get(`/accounts/transactions?start_date=${startDate}&end_date=${endDate}`);
-        this.transactions = transactions.data;
-        this.isLoading = false;
+        const transactions = await this.$axios.get(
+          `/accounts/transactions?start_date=${startDate}&end_date=${endDate}`
+        )
+        this.transactions = transactions.data
+        this.isLoading = false
       } catch (err) {
-        this.$toast.error('Failed to fetch accounts');
-        this.isLoading = false;
+        this.$toast.error('Failed to fetch accounts')
+        this.isLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>
-  .ps-3{
+.ps-3 {
   padding-top: 2rem;
   margin-left: 2rem;
 }
-.ps-4{
+.ps-4 {
   margin-left: 2rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
-.ps-5{
-  background-color: #7165E3;
+.ps-5 {
+  background-color: #7165e3;
 }
 </style>
