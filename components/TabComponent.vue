@@ -26,10 +26,10 @@ export default {
   async beforeMount() {
     const apiResult = await this.$axios.get('/organizations/config', {
       headers: {
-        'Authorization': this.token
-      }
-    });
-    this.isCardEnabled = apiResult.data.is_card_enabled;
+        Authorization: this.token,
+      },
+    })
+    this.isCardEnabled = apiResult.data.is_card_enabled
   },
   methods: {
     navToDashboard() {
@@ -47,7 +47,7 @@ export default {
     // navToSettings() {
     //   this.$router.push('/settings')
     // }
-  }
+  },
 }
 </script>
 

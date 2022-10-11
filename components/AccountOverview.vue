@@ -17,22 +17,22 @@ export default {
     return {
       token: this.$auth.strategy.token.get(),
       account: null,
-      transactions: []
+      transactions: [],
     }
   },
   async beforeMount() {
     const result = await this.$axios.$get('/accounts', {
       headers: {
-        'Authorization': this.token
-      }
-    });
-    this.account = result;
+        Authorization: this.token,
+      },
+    })
+    this.account = result
     const transactions = await this.$axios.$get('/accounts/transactions', {
       headers: {
-        'Authorization': this.token
-      }
-    });
-    this.transactions = transactions;
-  }
+        Authorization: this.token,
+      },
+    })
+    this.transactions = transactions
+  },
 }
 </script>

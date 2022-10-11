@@ -47,12 +47,12 @@ div.ps-5
       button.ps-6.grid.text-center(@click="navToTransferScreen")
         FaIcon.mx-auto.ps-9(icon='paper-plane')
         p.text-sm Transfer
-      button.ps-7.grid.text-center(v-if="this.enableCard" @click="navToCard")
+      button.ps-7.grid.text-center(v-if="isCardEnabled && this.enableCard" @click="navToCard")
         FaIcon.mx-auto.ps-9(icon='credit-card')
         p.text-sm My Card
-      button.ps-8.grid.text-center
-        FaIcon.mx-auto.ps-9(icon='chart-simple')
-        p.text-sm Insight
+      button.ps-8.grid.text-center(@click="navToSaveNow")
+        FaIcon.mx-auto.ps-9(icon='piggy-bank')
+        p.text-sm Save now
     div.ps-10
       div(v-if="recentTransaction")
         div.font-bold.text-xm.ps-12 Last Transaction 
@@ -99,26 +99,34 @@ export default {
       requestedAmount: null,
       recentTransaction: null,
       inProgress: false,
-      kycStatus:null,
-      vciplink:null,
-      availableLimit:null,
-      enableCard:true
+      kycStatus: null,
+      vciplink: null,
+      availableLimit: null,
+      enableCard: true,
+      isCardEnabled: false,
     }
   },
   async fetch() {
-    await this.getAccountDetails();
+    await this.getAccountDetails()
   },
 
-
   computed: {
-    organization () {
+    organization() {
       return this.$auth.user.organization
     },
   },
+  async beforeMount() {
+    const apiResult = await this.$axios.get('/organizations/config', {
+      headers: {
+        Authorization: this.token,
+      },
+    })
+    this.isCardEnabled = apiResult.data.is_card_enabled
+  },
 
   // mounted() {
-    // this.kycStatus = this.$auth.user.kyc_status.kyc_status;
-    // this.fetchVkyc()
+  // this.kycStatus = this.$auth.user.kyc_status.kyc_status;
+  // this.fetchVkyc()
   // },
 
   methods: {
@@ -134,87 +142,114 @@ export default {
     navToProfile() {
       this.$router.push('/profile')
     },
-    // navToSaveNow(){
-    //   this.$router.push('/saveNow')
-    // },
+    navToSaveNow() {
+      this.$router.push('/saveNow')
+    },
     async getAccountDetails() {
       try {
         const profileResult = await this.$axios.get('/profile')
         const accountTypes = profileResult.data.account_types
-        const promiseArray = [];
-        if(accountTypes.includes("EARNED_WAGES"))
-          promiseArray.push(this.$axios.get('/accounts?type=EARNED_WAGES'));
-        if(accountTypes.includes("CASH"))
-          promiseArray.push(this.$axios.get('/accounts?type=CASH'));
-        if(accountTypes.includes("CARD"))
-          promiseArray.push(this.$axios.get('/accounts?type=CARD'));
+        const promiseArray = []
+        if (accountTypes.includes('EARNED_WAGES'))
+          promiseArray.push(this.$axios.get('/accounts?type=EARNED_WAGES'))
+        if (accountTypes.includes('CASH'))
+          promiseArray.push(this.$axios.get('/accounts?type=CASH'))
+        if (accountTypes.includes('CARD'))
+          promiseArray.push(this.$axios.get('/accounts?type=CARD'))
 
-        promiseArray.push(this.$axios.get('/accounts?type=PAYABLE'));
-          
-        const result = await Promise.all(promiseArray);
-          this.accounts = [];
-          for (const item of result) {
-            const { data } = item;
-            this.accounts.push(data);
-          }
-        const cashAccount = accountTypes.includes('CASH') ? this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' ) : null;
-        const cardAccount = accountTypes.includes('CARD') ? this.accounts.filter((item) => item.account_type.toUpperCase() === 'CARD' ): null;
-        const earnedAccount = accountTypes.includes('EARNED_WAGES') ? this.accounts.filter((item) => item.account_type.toUpperCase() === 'EARNED_WAGES' ) : null;
+        promiseArray.push(this.$axios.get('/accounts?type=PAYABLE'))
 
-        if(earnedAccount)
-          this.availableLimit = earnedAccount[0].account_balance.toLocaleString('en-IN')
-        if(cashAccount && cardAccount)
-          this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString('en-IN')
-        if( cashAccount && !cardAccount ){
-          this.enableCard = false
-          this.availableLimit = (cashAccount[0].account_balance).toLocaleString('en-IN')
+        const result = await Promise.all(promiseArray)
+        this.accounts = []
+        for (const item of result) {
+          const { data } = item
+          this.accounts.push(data)
         }
-        if(cardAccount && !cashAccount)
-          this.availableLimit = (cardAccount[0].account_balance).toLocaleString('en-IN')
-        if(accountTypes.includes('EARNED_WAGES') || accountTypes.includes('CASH')){
-          await this.fetchRecentWithdrawal();
+        const cashAccount = accountTypes.includes('CASH')
+          ? this.accounts.filter(
+              (item) => item.account_type.toUpperCase() === 'CASH'
+            )
+          : null
+        const cardAccount = accountTypes.includes('CARD')
+          ? this.accounts.filter(
+              (item) => item.account_type.toUpperCase() === 'CARD'
+            )
+          : null
+        const earnedAccount = accountTypes.includes('EARNED_WAGES')
+          ? this.accounts.filter(
+              (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
+            )
+          : null
+
+        if (earnedAccount)
+          this.availableLimit =
+            earnedAccount[0].account_balance.toLocaleString('en-IN')
+        if (cashAccount && cardAccount)
+          this.availableLimit = (
+            cashAccount[0].account_balance + cardAccount[0].account_balance
+          ).toLocaleString('en-IN')
+        if (cashAccount && !cardAccount) {
+          this.enableCard = false
+          this.availableLimit =
+            cashAccount[0].account_balance.toLocaleString('en-IN')
+        }
+        if (cardAccount && !cashAccount)
+          this.availableLimit =
+            cardAccount[0].account_balance.toLocaleString('en-IN')
+        if (
+          accountTypes.includes('EARNED_WAGES') ||
+          accountTypes.includes('CASH')
+        ) {
+          await this.fetchRecentWithdrawal()
         }
       } catch (err) {
-        console.log(err)
-        this.$toast.error('Failed to fetch accounts');
+        this.$toast.error('Failed to fetch accounts')
       }
     },
     async initCashRequest() {
-      this.inProgress = true;
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
-      const availableLimit = cashAccount[0].account_balance;
+      this.inProgress = true
+      const cashAccount = this.accounts.filter(
+        (item) => item.account_type.toUpperCase() === 'CASH'
+      )
+      const availableLimit = cashAccount[0].account_balance
       if (this.requestedAmount > availableLimit) {
-        this.$toast.error(`Cash limit available: ${availableLimit}`);
-        this.inProgress = false;
-        return;
+        this.$toast.error(`Cash limit available: ${availableLimit}`)
+        this.inProgress = false
+        return
       }
       try {
-        const bankResult = await this.$axios.get('/profile/banks');
+        const bankResult = await this.$axios.get('/profile/banks')
         // eslint-disable-next-line camelcase
-        const { ifsc_code, account_balance } = bankResult.data;
+        const { ifsc_code, account_balance } = bankResult.data
         // eslint-disable-next-line camelcase
         if (ifsc_code === '' || account_balance === '') {
-          this.inProgress = false;
-          this.$toasted.error('you have missing bank details. Pls update bank details in the profile menu')
-          return;
+          this.inProgress = false
+          this.$toasted.error(
+            'you have missing bank details. Pls update bank details in the profile menu'
+          )
+          return
         }
         await this.$axios.post(`/accounts/${cashAccount[0].id}/withdrawals`, {
-          amount: this.requestedAmount 
-          });
-        this.$toast.success('Cash request sent');
-        this.getAccountDetails();
-        this.fetchRecentWithdrawal();
-        this.requestedAmount=null;
-        this.inProgress = false;
+          amount: this.requestedAmount,
+        })
+        this.$toast.success('Cash request sent')
+        this.getAccountDetails()
+        this.fetchRecentWithdrawal()
+        this.requestedAmount = null
+        this.inProgress = false
       } catch (err) {
-        this.inProgress = false;
+        this.inProgress = false
         this.$toasted.error(err.response.data.message)
       }
     },
     async fetchRecentWithdrawal() {
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH'||'EARNED_WAGES' );
+      const cashAccount = this.accounts.filter(
+        (item) => item.account_type.toUpperCase() === 'CASH' || 'EARNED_WAGES'
+      )
       try {
-        const result = await this.$axios.get(`/accounts/${cashAccount[0].id}/withdrawals?limit=1`);
+        const result = await this.$axios.get(
+          `/accounts/${cashAccount[0].id}/withdrawals?limit=1`
+        )
         if (result.data.length > 0) {
           this.recentTransaction = result.data[0]
         }
@@ -231,83 +266,80 @@ export default {
     //       }
     //     }
     //   }catch(err){
-    //     console.log(err)
     //     this.$toast.error('Failed to gey kyc status')
     //   }
     // }
-  }
+  },
 }
 </script>
 
 <style scoped>
-.ps-1{
-  height:13rem;
-  background-color: #7165E3;
+.ps-1 {
+  height: 13rem;
+  background-color: #7165e3;
   padding-left: 2rem;
   padding-top: 2rem;
   color: white;
-
 }
-.ps-2{
+.ps-2 {
   margin-top: -6.5rem;
   border-radius: 10px;
   height: 10rem;
-  background-color: #FFFFFF;
-  color: #1C1939;
+  background-color: #ffffff;
+  color: #1c1939;
   margin-left: 2rem;
   margin-right: 2rem;
   padding-right: 2rem;
   box-shadow: 0px 35px 65px rgba(0, 0, 0, 0.0790811);
 }
-.ps-3{
+.ps-3 {
   margin-top: 1rem;
   margin-left: 2rem;
 }
-.ps-4{
+.ps-4 {
   margin-top: -3.25rem;
   margin-left: 75%;
-  
 }
-.ps-5{
-  background-color: #F2F2F2;
+.ps-5 {
+  background-color: #f2f2f2;
 }
-.ps-6{
+.ps-6 {
   margin-top: 1rem;
   height: 100px;
-  width:93px;
-  background-color: #FFFFFF;
+  width: 93px;
+  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
-  color: #1C1939;
+  color: #1c1939;
   margin-left: 2rem;
   padding-top: 10px;
 }
-.ps-7{
+.ps-7 {
   margin-top: 1rem;
   height: 100px;
-  width:93px;
-  background-color: #FFFFFF;
+  width: 93px;
+  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
-  color: #1C1939;
+  color: #1c1939;
   margin-left: 0.5rem;
   padding-top: 10px;
 }
-.ps-8{
+.ps-8 {
   margin-top: 1rem;
   height: 100px;
-  width:93px;
-  background-color: #FFFFFF;
+  width: 93px;
+  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
-  color: #1C1939;
+  color: #1c1939;
   margin-left: 0.5rem;
   margin-right: 2rem;
   padding-top: 10px;
 }
-.ps-9{
+.ps-9 {
   margin-top: 0.5rem;
-  background-color: #7165E3;
+  background-color: #7165e3;
   color: white;
   height: 1.5rem;
   width: 1.5rem;
@@ -317,52 +349,49 @@ export default {
   padding-bottom: 3px;
   padding-right: 3px;
 }
-.ps-10{
+.ps-10 {
   margin-top: 2rem;
   margin-left: 2rem;
   margin-right: 2rem;
   border-radius: 10px;
   height: 7rem;
   width: 20rem;
-  background-color:#FFFFFF;
-  color: #1C1939;
+  background-color: #ffffff;
+  color: #1c1939;
 }
-.ps-12{
+.ps-12 {
   margin-left: 1rem;
   padding-top: 5px;
   padding-bottom: 5px;
 }
-.ps-13{
+.ps-13 {
   margin-left: 1rem;
   padding-top: 10px;
 }
-.ps-14{
+.ps-14 {
   padding-top: 3px;
   padding-bottom: 3px;
 }
-.ps-15{
+.ps-15 {
   margin-left: 1rem;
   padding-top: 5px;
-
 }
-.ps-16{
+.ps-16 {
   margin-right: 3rem;
   margin-top: 0.7rem;
-  color: #7165E3;
+  color: #7165e3;
 }
-.ps-17{
+.ps-17 {
   margin-top: 1rem;
   margin-left: 2rem;
-  color: #1C1939;
+  color: #1c1939;
 }
-.ps-18{
+.ps-18 {
   padding-top: 2rem;
   text-align: center;
-
 }
-.ps-19{
-  margin-right:1rem;
+.ps-19 {
+  margin-right: 1rem;
   margin-top: 0.5rem;
 }
-
 </style>
