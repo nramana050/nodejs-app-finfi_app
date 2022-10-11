@@ -6,8 +6,8 @@
       p.text-3xl.font-bold.ps-5 What are you <br> saving for ?
       div
         div.ps-9(v-for="category in categories" :key="category.id")
-          span.ps-6(@click="selectCategory(category.category_name)" :class="[selected ? 'bg-gray-200': 'bg-primary']")
-            span.ps-8 {{category.category_name}}
+          span.ps-6(@click="selectCategory(category.category_name)" :class="[selectedValue==category.category_name && selected ? 'bg-yellow-200': 'bg-primary']")
+            span.ps-8 {{category.category_name}}   
     div.ps-2(v-if="selected")
       button.ps-10.font-bold.text-xl(@click="navToMerchant") Next 
 
@@ -23,6 +23,7 @@ export default {
       selectedCategories: [],
       selected: false,
       user: this.$auth.user,
+      selectedValue:''
     }
   },
   mounted() {
@@ -40,6 +41,7 @@ export default {
       this.selectedCategories = []
       this.selectedCategories.push(category)
       this.selected = true
+      this.selectedValue=category
       this.$store.commit('setCategory', category)
     },
 
@@ -70,7 +72,6 @@ export default {
 }
 
 .ps-6 {
-  background-color: white;
   color: #1c1939;
   padding: 10px;
   padding-left: 10px;
