@@ -17,8 +17,8 @@ div.ps-1
     div.flex-0(v-if="earnedLimit!==null")
       div.flex.tracking-wide.text-xs
         p.flex-1 Limit
-        div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
-          solid-information-circle-icon.w-4.h-4 
+        //- div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
+        //-   solid-information-circle-icon.w-4.h-4 
       p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(earnedLimit).toLocaleString('en-IN') }}
     div.flex-0(v-if="cashLimit!==null")
       div.flex.tracking-wide.text-xs
