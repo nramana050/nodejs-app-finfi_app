@@ -10,8 +10,7 @@
             div.flex.flex-row.justify-between
               span.ps-7 Your Goal amount
               span.ps-15 &#8377;
-              input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-model="slidervalue1")
-            //- span.ps-9 &#8377; {{slidervalue1}}
+              input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" maxlength="6" max="100000" v-model="slidervalue1")
             input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' min="1000" max="100000" v-model="slidervalue1")
         div.ps-4.flex.flex-row.justify-between
           div.relative.pt-1
@@ -80,16 +79,6 @@ export default {
       this.$router.push('/MerchantScreen')
     },
     async createOrder() {
-      if(this.slidervalue1===0)
-      {
-        this.$toast.error('Set the Goal amount')
-        return
-      }
-      if(this.slidervalue2===0)
-      {
-        this.$toast.error('Set months for Goal amount')
-        return
-      }
       const payload = {
         product_id: this.selecteProduct.id,
         account_type: 'CARD',
@@ -100,12 +89,26 @@ export default {
         end_date: this.completeDate,
       }
       try{
-      await this.$axios.$post(`/snbl/order`, payload).then((result) => {
-        this.data = result.data
-      })
-      this.$toast.info('Your Plan started successfully')
-        this.$router.push('/ActivePlans')
-    }catch (err) {
+        if(this.slidervalue1>=1000)
+        {
+          if(this.slidervalue1<=100000){
+          await this.$axios.$post(`/snbl/order`, payload).then((result) => {
+          this.data = result.data
+           })
+          this.$toast.info('Your Plan started successfully')
+          this.$router.push('/ActivePlans')
+          console.log('above 1000')
+          }
+          else{
+            this.$toast.error('Maximum Goal amount is 100000')
+          }
+        }
+        else{
+          this.$toast.error('Minimum Goal amount is 1000')
+          console.log('below 1000')
+         }
+       }
+       catch (err) {
         this.$toast.error('Failed to start plan')
       }
     },
