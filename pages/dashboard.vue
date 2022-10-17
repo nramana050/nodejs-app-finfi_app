@@ -44,16 +44,16 @@ div.ps-5
     div
       p.ps-3.font-bold Activity
     div.flex.flex-row.justify-evenly
-      button.ps-6.grid.text-center(v-if="this.enableCash" @click="navToTransferScreen")
+      button.ps-6.grid.text-center(v-if="this.enableFinfi" @click="navToTransferScreen")
         FaIcon.mx-auto.ps-9(icon='paper-plane')
         p.text-sm Transfer
-      button.ps-7.grid.text-center(v-if="isCardEnabled && this.enableCard" @click="navToCard")
+      button.ps-7.grid.text-center(v-if="isCardEnabled && this.enableM2P" @click="navToCard")
         FaIcon.mx-auto.ps-9(icon='credit-card')
         p.text-sm My Card
       button.ps-8.grid.text-center(@click="navToSaveNow")
         FaIcon.mx-auto.ps-9(icon='piggy-bank')
         p.text-sm Save now
-    div.ps-10(v-if="this.enableCash")
+    div.ps-10(v-if="this.enableFinfi")
       div(v-if="recentTransaction")
         div.font-bold.text-xm.ps-12 Last Transaction 
         div.flex.flex-row.justify-between
@@ -102,9 +102,9 @@ export default {
       kycStatus: null,
       vciplink: null,
       availableLimit: null,
-      enableCard: true,
       isCardEnabled: false,
-      enableCash:true
+      enableFinfi : false,
+      enableM2P: false
     }
   },
   async fetch() {
@@ -146,30 +146,34 @@ export default {
     navToSaveNow() {
       this.$router.push('/saveNow')
     },
-    async getAccountDetails() {
+    async getAccountDetails(){
       try {
-        const accountresult= await this.$axios.get('/accounts')
+        const accountresult = await this.$axios.get('/accounts')
         this.accounts = [];
         for (const item of accountresult.data){
           this.accounts.push(item.account)
         }
-        const cashAccount = this.accounts.filter((item) => item.account_type?item.account_type.toUpperCase() === 'CASH':null ) ;
-        const cardAccount = this.accounts.filter((item) => item.account_type?item.account_type.toUpperCase() === 'CARD':null );
-        const earnedAccount = this.accounts.filter((item) => item.account_type?item.account_type.toUpperCase() === 'EARNED_WAGES':null ) ;
-        if(earnedAccount.length >0 )
-          this.availableLimit = earnedAccount[0].account_balance.toLocaleString('en-IN')
-        if(cashAccount.length>0 && cardAccount.length>0)
-          this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString('en-IN')
-        if( cashAccount.length>0 && !cardAccount.length>0 ){
-          this.enableCard = false
-          this.availableLimit = (cashAccount[0].account_balance).toLocaleString('en-IN')
+        const accountTypes = accountresult.data.map((x)=>x.account.account_type)
+        const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
+        const providerM2P = await this.$axios.post('/ext/service-provider',{ service_provider : 'M2P'})
+ 
+        const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>accountTypes.includes(x))[0])  ;
+        const m2pAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerM2P.data.filter(x=>accountTypes.includes(x))[0] ) ;
+
+        if(finfiAccount.length>0){
+          this.enableFinfi = true 
         }
-        if(cardAccount.length>0 && !cashAccount.length>0){
-          this.enableCash = false
-          this.availableLimit = (cardAccount[0].account_balance).toLocaleString('en-IN')
+        if(m2pAccount.length>0){
+          this.enableM2P = true
         }
-        if (cashAccount.length>0 || earnedAccount.length>0)
-          await this.fetchRecentWithdrawal(cashAccount.length>0 ? 'CASH':'EARNED_WAGES' );
+
+        this.availableLimit = 
+          ( finfiAccount.length>0 ? finfiAccount[0].account_balance : 0
+          + m2pAccount.length>0 ? m2pAccount[0].account_balance : 0 ).toLocaleString('en-IN')
+
+        if (finfiAccount.length>0)
+          await this.fetchRecentWithdrawal(finfiAccount[0].id);
+        
       } catch (err) {
         this.$toast.error('Failed to fetch accounts')
       }
@@ -206,11 +210,10 @@ export default {
     //     this.$toasted.error(err.response.data.message)
     //   }
     // },
-    async fetchRecentWithdrawal(accountType) {
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === accountType.toUpperCase() );
+    async fetchRecentWithdrawal(accountId) {
       try {
         const result = await this.$axios.get(
-          `/accounts/${cashAccount[0].id}/withdrawals?limit=1`
+          `/accounts/${accountId}/withdrawals?limit=1`
         )
         if (result.data.length > 0) {
           this.recentTransaction = result.data[0]
