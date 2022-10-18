@@ -20,7 +20,7 @@ div.flex.flex-col
         button.btn.h-8.px-4.text-white.rounded.font-bold(@click="generateOTP" :disabled="isOTPSent" :class="[isOTPSent ? 'bg-blue-200': 'bg-gray-200']")
           | Send OTP 
           span(v-if="isOTPSent") ({{timer}})
-        div(v-if="OTP")
+        div(v-if="otp")
           button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Next
         button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
 </template>
