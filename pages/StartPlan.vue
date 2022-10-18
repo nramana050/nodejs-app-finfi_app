@@ -10,7 +10,7 @@
             div.flex.flex-row.justify-between
               span.ps-7 Your Goal amount
               span.ps-15 &#8377;
-              input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" maxlength="6" max="100000" v-model="slidervalue1")
+              input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" maxlength="6" max="100000" v-model="slidervalue1" @keydown="nameKeydown($event)")
             input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' min="1000" max="100000" v-model="slidervalue1")
         div.ps-4.flex.flex-row.justify-between
           div.relative.pt-1
@@ -70,13 +70,18 @@ export default {
       const monthsLeft = today.add(_this.slidervalue2, 'months')
       _this.completeDate = monthsLeft.format('YYYY-MM-DD')
       _this.goal_amount = _this.slidervalue1
-      _this.monthlyDeposit = parseFloat(_this.slidervalue1 / _this.slidervalue2).toFixed(2)
+      _this.monthlyDeposit = parseFloat(_this.slidervalue1 / _this.slidervalue2).toFixed(0)
       _this.getAmount = parseFloat(_this.slidervalue1 * _this.discount/100).toFixed(0)
     }, 1000)
   },
   methods: {
     navToProductScreen() {
       this.$router.push('/MerchantScreen')
+    },
+     nameKeydown(e) {
+      if (/^\W$/.test(e.key)) {
+        e.preventDefault();
+      }
     },
     async createOrder() {
       const payload = {

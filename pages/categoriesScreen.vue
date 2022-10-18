@@ -4,10 +4,12 @@
       div.ps-3(@click="navToSaveNow")
         FaIcon.mx-auto.ps-m.ps-4(icon='angle-left')
       p.text-3xl.font-bold.ps-5 What are you <br> saving for ?
-      div
-        div.ps-9(v-for="category in categories" :key="category.id")
-          span.ps-6(@click="selectCategory(category.category_name)" :class="[selectedValue==category.category_name && selected ? 'bg-yellow-200': 'bg-primary']")
-            span.ps-8 {{category.category_name}}   
+      div.ps-11
+        button.ps-9.font-bold(v-for="category in categories" :key="category.id"   
+        @click="selectCategory(category.category_name)" 
+        :class="[selectedValue==category.category_name && selected ? 'bg-yellow-200': 'bg-primary']")
+          //- span.ps-6(@click="selectCategory(category.category_name)" :class="[selectedValue==category.category_name && selected ? 'bg-yellow-200': 'bg-primary']")
+          span.ps-6 {{category.category_name}}   
     div.ps-2(v-if="selected")
       button.ps-10.font-bold.text-xl(@click="navToMerchant") Next 
 
@@ -73,21 +75,22 @@ export default {
 
 .ps-6 {
   color: #1c1939;
-  padding: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  border-radius: 8px;
-  margin-left: 3rem;
-  align-items: center;
 }
 
 .ps-8 {
-  padding: 5px;
+  padding: 10px;
 }
 
 .ps-9 {
-  margin-top: 2rem;
+  margin:1rem;
+  border-radius: 8px;
   align-items: center;
+  height: 2.5rem;
+}
+.ps-11{
+ margin: 1rem;
 }
 
 .ps-10 {
