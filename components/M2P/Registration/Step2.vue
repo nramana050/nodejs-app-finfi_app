@@ -8,7 +8,7 @@ div.flex.flex-col
       FormulateInput.pr-3(type="text" label="City" name="city" validation="required")
       FormulateInput.pr-3(type="select" label="State" name="state" :options="states" placeholder="Select state" validation="required")
     div.flex.flex-col
-      FormulateInput.pr-3(type="text" label="Pincode" name="pincode" validation="required")
+      FormulateInput.pr-3(type="text" label="Pincode" name="pincode" validation="required" maxlength="6")
     div.flex-1.pr-4
       div.flex.flex-row.py-4.justify-between
         button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Next

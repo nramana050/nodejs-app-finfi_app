@@ -14,13 +14,13 @@ div.flex.flex-col
         p.p-1 Date Of Birth
         date-picker(v-model="form.dob" valueType="format" placeholder="DOB" :disabled-date="disabledRange") 
     div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="number" label="OTP" name="otp" validation="required" v-model="OTP")
+      FormulateInput.pb-2.pr-3.w-full(type="text" label="OTP" name="otp" maxlength="6" validation="required" v-model="otp" @keydown="nameKeydown($event)" )
     div.flex-1.pr-4
       div.flex.flex-row.py-4.justify-between
-        button.btn.h-8.px-4.text-white.rounded.font-bold(@click="generateOTP" :disabled="isOTPSent" :class="[isOTPSent ? 'bg-gray-200': 'bg-primary']")
+        button.btn.h-8.px-4.text-white.rounded.font-bold(@click="generateOTP" :disabled="isOTPSent" :class="[isOTPSent ? 'bg-blue-200': 'bg-gray-200']")
           | Send OTP 
           span(v-if="isOTPSent") ({{timer}})
-        div(v-if="OTP")
+        div(v-if="otp")
           button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Next
         button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
 </template>
@@ -50,6 +50,11 @@ export default {
   },
 
   methods: {
+    nameKeydown(e) {
+      if (/^\W$/.test(e.key)) {
+        e.preventDefault();
+      }
+    },
     async generateOTP(e) {
       e.preventDefault()
       await this.$axios.$post('/m2p/otp', {
@@ -61,7 +66,7 @@ export default {
       this.isOTPSent = true
       setTimeout(() => {
         this.isOTPSent = false
-        this.timer = 5
+        this.timer = 60
       }, 60000)
       this.timerFunction = setInterval(() => {
         this.timer -= 1

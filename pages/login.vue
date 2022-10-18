@@ -27,17 +27,14 @@ div
   //-   input(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
   //-   label.text-sm  I accept the 
   //-   a.font-bold.text-blue-800.text-sm(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
-  div.ps-5(v-if="isUserRegistered && skipOTP")
-    button.font-bold.text-white(@click="login" v-if="skipOTP")
-      span Login
+  div(v-if="isUserRegistered && skipOTP")
+    button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="login" v-if="skipOTP") Login
       //- outline-arrow-circle-right-icon.w-8.h-8.ml-2 
-  div.ps-5(v-if="isTermsAccepted")
-    button.font-bold.text-white(@click="verifyOTP" v-if="isTermsAccepted") 
-      span Login
+  div(v-if="isTermsAccepted")
+    button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="verifyOTP" v-if="isTermsAccepted") Login
       //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
-  div.ps-5(v-if="!isUserRegistered")
-    button.font-bold.text-white(@click="validate")
-      span Proceed
+  div(v-if="!isUserRegistered")
+    button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="validate") Proceed
       //-outline-arrow-circle-right-icon.w-8.h-8.ml-2
 
 </template>
@@ -206,15 +203,12 @@ export default {
   padding-bottom: 10px;
 }
 .ps-5 {
+  color: white;
   background-color: #7165e3;
-  width: 130px;
-  height: 35px;
-  font-weight: 500;
-  margin-top: 1.5rem;
-  margin-left: 7.75rem;
-  text-align: center;
-  border-radius: 8px;
-  padding-top: 5px;
+  margin-left: 9rem;
+  margin-right: 9rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .ps-8 {
   margin-top: 1rem;
