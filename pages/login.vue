@@ -3,9 +3,9 @@ div
   div
     NuxtLink(to="/")
       FaIcon.mx-auto.ps-7(icon='angle-left')
-      LeadHeader.font-bold.text-2xl.ps-1(:title="organization ? organization.name : ''" )
-      LeadHeader.ps-2(:lead="'Please enter the mobile number'")
-      LeadHeader.ps-3(:lead="'that is registered with your employer'")
+    LeadHeader.font-bold.text-2xl.ps-1(:title="organization ? organization.name : ''" )
+    LeadHeader.ps-2(:lead="'Please enter the mobile number'")
+    LeadHeader.ps-3(:lead="'that is registered with your employer'")
 
   div
     input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
