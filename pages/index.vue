@@ -12,8 +12,8 @@ div
         LeadHeader(:lead="'code sent to your registered email'")
       div
         input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Organization code" v-model="organizationCode")
-      div.ps-5
-        button.font-bold.text-white(@click="validate")
+      div
+        button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="validate")
           span {{ $t('proceed') }}
     div.ps-8
       div.ps-9
@@ -108,15 +108,12 @@ export default {
   padding-bottom: 10px;
 }
 .ps-5 {
+  color: white;
   background-color: #7165e3;
-  width: 130px;
-  height: 35px;
-  font-weight: 500;
-  margin-top: 3rem;
-  margin-left: 7.75rem;
-  text-align: center;
-  border-radius: 8px;
-  padding-top: 5px;
+  margin-left: 9rem;
+  margin-right: 9rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .ps-6 {
   height: 100vh;
