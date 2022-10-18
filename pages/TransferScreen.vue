@@ -11,7 +11,7 @@ div
       div.text-3xl.ps-6 &#8377;
       input.text-3xl.ps-8(class="focus:outline-none" type="numeric" v-model="requestedAmount")
   div.ps-4
-    div(v-if="requestedAmount")
+    div(v-if="requestedAmount>0")
       button.ps-5.font-bold.text-white(@click="initCashRequest")
         span(v-if="inProgress")
           LoadingIcon.w-6.h-6.text-black.mx-auto

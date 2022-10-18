@@ -12,7 +12,7 @@ div.flex.flex-col
         FormulateInput.pr-3(type="select" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")
       div.flex-1 
         p.p-1 Date Of Birth
-        date-picker(v-model="form.dob" valueType="format" placeholder="DOB" :disabled-date="disabledRange") 
+        date-picker(v-model="form.dob" valueType="format" placeholder="DOB" :disabled-date="disabledRange" :input-attr="{required: 'true'}") 
     div.flex.flex-cpl
       FormulateInput.pb-2.pr-3.w-full(type="text" label="OTP" name="otp" maxlength="6" validation="required" v-model="otp" @keydown="nameKeydown($event)" )
     div.flex-1.pr-4
