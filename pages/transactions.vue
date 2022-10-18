@@ -51,7 +51,6 @@ export default {
         this.transactions = transactions.data
         this.isLoading = false
       } catch (err) {
-        this.$toast.error('Failed to fetch accounts')
         this.isLoading = false
       }
     },
