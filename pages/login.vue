@@ -128,7 +128,7 @@ export default {
         })
         await this.$auth.setUserToken(result.data.access_token)
         this.$auth.strategy.token.sync()
-        this.$router.push('/WelcomePage1')
+        this.$router.push('/dashBoard')
         // if(this.isTermsAccepted && !this.skipOTP){
         //   this.$router.push('/WelcomeScreen');
         // }else
