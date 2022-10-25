@@ -5,20 +5,19 @@
       div.ps-2
         img.w-50.h-50(src="~/assets/image1.jpg")
       div.ps-3
-        div Thinking of buying something<br>expensive? Save with us and <br>get upto 25% discount.
-      div.flex.flex-row.justify-between(@click="navToDashboard")
-        button.ps-7.font-bold.text-black Get started 
-        FaIcon.mx-auto.ps-8(icon='angle-right')
+        div Thinking of buying an<br>expensive branded gadgets?<br>Save with us first, Get upto<br> 25% discount by the brands.
+      div
+        button.ps-4.font-bold(@click="navToDashBoard") Get Started
 
    </template>
    <script>
    export default{
-       name:'WelcomeScreen3',
+       name:'WelcomePage3',
        layout:'session',
 
        methods:{
-        navToDashboard(){
-          this.$router.push('/dashboard')
+        navToDashBoard(){
+            this.$router.push('/dashboard')
         }
        }
    }
@@ -35,31 +34,35 @@
     background-image: 'image1.jpg'
    }
    .ps-3{
-    height: 17vh;
+    height: 22vh;
     margin: 1rem;
     text-align: center;
     color: #1C1939;
    }
    .ps-4{
-    color: #7165E3;
+    color: white;
+    height: 2rem;
+    width: 30%;
+    background-color: #7165E3;
+    border-radius: 30px;
+    margin-left: 8.5rem;
    }
    .ps-5{
      background-color: white;
      height: 100vh;
    }
    .ps-7{
-    color: #7165E3;
-    margin-left: 2rem;
-    margin-top: -1rem;
+    height: 4.5rem;
+    width: 3rem;
+    background-color:#B4ADFA;
    }
    .ps-6{
-    
+    background-color: #B4ADFA;
+    color: white;
+    height: 4.5rem;
+    text-align: center;
+    border-top-left-radius: 80px;
+    border-top-right-radius: 80px;
    }
-   .ps-8{
-    color: #7165E3;
-    margin-left: 1rem;
-    margin-top: -0.8rem;
-    
-   }
-   
+
    </style>
