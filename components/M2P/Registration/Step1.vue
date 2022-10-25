@@ -1,15 +1,13 @@
 <template lang="pug">
 div.flex.flex-col
   FormulateForm(v-model="form" @submit="next")
-    div
+    div.flex.flex-row
       FormulateInput.pr-3(type="text" label="First Name" name="first_name" disabled validation="required")
-    div
       FormulateInput.pr-3(type="text" label="Last Name" name="last_name" disabled validation="required")
-    div
+    div.flex.flex-row
       FormulateInput.pb-2.pr-3(type="number" label="Mobile Number" name="mobile" disabled validation="required")
-    div
       FormulateInput.pb-2.pr-3(type="text" label="Email" name="email" disabled validation="required")
-    div
+    div.flex.flex-row
       div.flex-1
         FormulateInput.pr-3(type="select" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")
       div.flex-1 
