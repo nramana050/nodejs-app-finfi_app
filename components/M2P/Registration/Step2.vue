@@ -1,10 +1,11 @@
 <template lang="pug">
 div.flex.flex-col
   FormulateForm(v-model="form" @submit="next")
+    div.ps-1 Note: Please enter Address as in Aadhar.
     FormulateInput.pr-3(type="text" label="Address Line 1" name="address_line_1" validation="required")
     FormulateInput.pr-3(type="text" label="Address Line 2" name="address_line_2" validation="required")
     FormulateInput.pr-3(type="text" label="Address Line 3" name="address_line_3" validation="required")
-    div.flex.flex-row.justify-between
+    div
       FormulateInput.pr-3(type="text" label="City" name="city" validation="required")
       FormulateInput.pr-3(type="select" label="State" name="state" :options="states" placeholder="Select state" validation="required")
     div.flex.flex-col
@@ -78,5 +79,9 @@ export default {
 <style scoped>
 .btn {
   background-color: #7165e3;
+}
+.ps-1{
+  margin-bottom: 1rem;
+  text-align: center;
 }
 </style>

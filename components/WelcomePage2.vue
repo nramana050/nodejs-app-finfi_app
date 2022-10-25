@@ -5,18 +5,18 @@
       div.ps-2
         img.w-50.h-50(src="~/assets/image3.jpg") 
       div.ps-3
-        div Get 2.5% cashback on<br>every spend you do using<br> Finfi Rupay card.
-      div 
-        button.ps-4.font-bold(@click="navToPage3") Skip 
+        div Get unlimited 2.5% cashback on<br>your salary spent through<br>the Finfi Rupay card.
+      div.flex.flex-row.justify-between
+        button.ps-7.font-bold.text-black(@click="navToDashboard") Skip  
    </template>
    <script>
    export default{
-       name:'WelcomePage2',
+       name:'WelcomeScreen2',
        layout:'session',
 
        methods:{
-        navToPage3(){
-            this.$router.push('/WelcomePage3')
+        navToDashboard(){
+          this.$router.push('/dashboard')
         }
        }
    }
@@ -53,8 +53,15 @@
      
    }
    .ps-7{
-    height: 4.5rem;
-    width: 3rem;
-    background-color: #B4ADFA;
+    color: #7165E3;
+    margin-left: 2rem;
+    margin-top: -3rem;
    }
+   .ps-8{
+    height: 5.5rem;
+    width: 5rem;
+    background-color: #B4ADFA;
+    border-top-left-radius: 70px;
+   }
+   
    </style>
