@@ -65,7 +65,7 @@ export default {
           this.$toast.success('Physical Card Request is success')
         }
         if(response.message == 'False'){
-          this.$toast.error('Already Requested for Physical Card')
+          this.$toast.error(response.result)
         }
         if(response.result.result == false && response.result.exception.errorCode == 'Y3261'){
           this.$toast.success('Card is registered for physical card')
