@@ -76,10 +76,7 @@ export default {
 
     async pay() {
       const data = {
-        order: {
-          amount: 20000,
-          description: 'this is for payment',
-        },
+        product_id: 1
       }
       await this.$axios.post('/payment/gateway/order', data).then((res) => {
         const options = {
