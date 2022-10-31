@@ -11,7 +11,7 @@ div
       div.text-3xl.ps-6 &#8377;
       input.text-3xl.ps-8(class="focus:outline-none" type="numeric" v-model="requestedAmount")
   div.ps-4
-    div(v-if="requestedAmount")
+    div(v-if="requestedAmount>0")
       button.ps-5.font-bold.text-white(@click="initCashRequest")
         span(v-if="inProgress")
           LoadingIcon.w-6.h-6.text-black.mx-auto
@@ -22,7 +22,7 @@ div
 <script>
 export default {
   name: 'TransferScreen',
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       user: this.$auth.user,
@@ -40,41 +40,44 @@ export default {
       navToDashboard() {
         this.$router.push('/dashboard')
       },
-      async getAccountDetails() {
-      try {
-        const accountresult= await this.$axios.get('/accounts')
-        this.accounts = [];
-        for (const item of accountresult.data){
-          this.accounts.push(item.account)
-        }
-        const cashAccount = this.accounts.filter((item) => item.account_type?item.account_type.toUpperCase() === 'CASH':null ) ;
-        const cardAccount = this.accounts.filter((item) => item.account_type?item.account_type.toUpperCase() === 'CARD':null );
-        const earnedAccount = this.accounts.filter((item) => item.account_type?item.account_type.toUpperCase() === 'EARNED_WAGES':null ) ;
-        if(earnedAccount.length >0 )
-          this.availableLimit = earnedAccount[0].account_balance.toLocaleString('en-IN')
-        if(cashAccount.length>0 && cardAccount.length>0)
-          this.availableLimit = (cashAccount[0].account_balance + cardAccount[0].account_balance).toLocaleString('en-IN')
-        if( cashAccount.length>0 && !cardAccount.length>0 ){
-          this.enableCard = false
-          this.availableLimit = (cashAccount[0].account_balance).toLocaleString('en-IN')
-        }
-        if(cardAccount.length>0 && !cashAccount.length>0){
-          this.enableCash = false
-          this.availableLimit = (cardAccount[0].account_balance).toLocaleString('en-IN')
-        }
-        if (cashAccount.length>0 || earnedAccount.length>0)
-          await this.fetchRecentWithdrawal(cashAccount.length>0 ? 'CASH':'EARNED_WAGES' );
-      } catch (err) {
-        console.log(err)
-        this.$toast.error('Failed to fetch accounts');
-      }
-    },        
+    //   async getAccountDetails() {
+    //   try {
+    //     const accountresult = await this.$axios.get('/accounts')
+    //     this.accounts = [];
+    //     for (const item of accountresult.data){
+    //       this.accounts.push(item.account)
+    //     }
+    //     const accountTypes = accountresult.data.map((x)=>x.account.account_type)
+    //     const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
+    //     const providerM2P = await this.$axios.post('/ext/service-provider',{ service_provider : 'M2P'})
+ 
+    //     const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>accountTypes.includes(x))[0])  ;
+    //     const m2pAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerM2P.data.filter(x=>accountTypes.includes(x))[0] ) ;
+    //     console.log('f m accs',finfiAccount,m2pAccount)
+
+    //     this.availableLimit = 
+    //       ( finfiAccount.length>0 ? finfiAccount[0].account_balance : 0
+    //       + m2pAccount.length>0 ? m2pAccount[0].account_balance : 0 ).toLocaleString('en-IN')
+
+    //     if (finfiAccount.length>0)
+    //       await this.fetchRecentWithdrawal(finfiAccount[0].id);
+
+    //   } catch (err) {
+    //     console.log(err)
+    //     this.$toast.error('Failed to fetch accounts');
+    //   }
+    // },        
     async initCashRequest() {
       this.inProgress = true;
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
-      const earnedAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'EARNED_WAGES' );
-      const currAccount = cashAccount.length>0 ? cashAccount : earnedAccount
-      const availableLimit = currAccount[0].account_balance;
+      const accountresult = await this.$axios.get('/accounts')
+      this.accounts = [];
+      for (const item of accountresult.data){
+        this.accounts.push(item.account)
+      }
+      const accountTypes = accountresult.data.map((x)=>x.account.account_type)
+      const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
+      const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>accountTypes.includes(x))[0])  ;
+      const availableLimit = finfiAccount[0].account_balance;
       if (this.requestedAmount > availableLimit) {
         this.$toast.error(`Cash limit available: ${availableLimit}`)
         this.inProgress = false
@@ -92,7 +95,7 @@ export default {
           )
           return
         }
-        await this.$axios.post(`/accounts/${currAccount[0].id}/withdrawals`, {
+        await this.$axios.post(`/accounts/${finfiAccount[0].id}/withdrawals`, {
           amount: this.requestedAmount 
           });
         this.$toast.success('Cash request sent');
@@ -103,19 +106,18 @@ export default {
         this.$toasted.error(err.response.data.message)
       }
     },
-    async fetchRecentWithdrawal(accountType) {
-      const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === accountType.toUpperCase() );
-      try {
-        const result = await this.$axios.get(
-          `/accounts/${cashAccount[0].id}/withdrawals?limit=1`
-        )
-        if (result.data.length > 0) {
-          this.recentTransaction = result.data[0]
-        }
-      } catch (err) {
-        this.$toasted.error(err.response.data.message)
-      }
-    },
+    // async fetchRecentWithdrawal(accountId) {
+    //   try {
+    //     const result = await this.$axios.get(
+    //       `/accounts/${accountId}/withdrawals?limit=1`
+    //     )
+    //     if (result.data.length > 0) {
+    //       this.recentTransaction = result.data[0]
+    //     }
+    //   } catch (err) {
+    //     this.$toasted.error(err.response.data.message)
+    //   }
+    // },
   },
 }
 </script>

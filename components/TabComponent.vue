@@ -1,17 +1,17 @@
 <template lang="pug">
-  div.flex.flex-row.bg-primary.justify-evenly.text-white.shadow-2xl.text-xs.font-bold.tracking-wide.uppercase.py-3
+  div.flex.flex-row.ps-A.justify-evenly.text-white.shadow-2xl.text-xs.font-bold.tracking-wide.uppercase.py-3
     div.grid.text-center(@click="navToDashboard")
-      outline-collection-icon.w-6.h-8.mx-auto
-      p Dashboard
-    div.grid.text-center(@click="navToCard" v-if="isCardEnabled")
-      outline-credit-card-icon.w-6.h-8.mx-auto
-      p Cards
-    div.grid.text-center(@click="navToTransaction")
-      outline-cash-icon.w-6.h-8.mx-auto
-      p Transactions
-    div.grid.text-center(@click="navToProfile")
-      outline-user-circle-icon.w-6.h-8.mx-auto
-      p Profile
+      FaIcon.mx-auto.ps-A1(icon='house')
+      p Home
+    div.grid.text-center(@click="navToTransfer")
+      FaIcon.mx-auto.ps-A1(icon='paper-plane')
+      p Transfer
+    //- div.grid.text-center(@click="navToSaveNow")
+      FaIcon.mx-auto.ps-A1(icon='piggy-bank')
+      p Save
+    div.grid.text-center(@click="navToTranscation")
+      FaIcon.mx-auto.ps-A1(icon='scroll')
+      p History
 </template>
 
 <script>
@@ -35,14 +35,14 @@ export default {
     navToDashboard() {
       this.$router.push('/dashboard')
     },
-    navToCard() {
-      this.$router.push('/cards')
+    navToTransfer() {
+      this.$router.push('/TransferScreen')
     },
-    navToTransaction() {
+    navToSaveNow() {
+      this.$router.push('/saveNow')
+    },
+    navToTranscation() {
       this.$router.push('/transactions')
-    },
-    navToProfile() {
-      this.$router.push('/profile')
     },
     // navToSettings() {
     //   this.$router.push('/settings')
@@ -56,4 +56,13 @@ export default {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
+.ps-A{
+  background-color: white;
+  color: black;
+  height: 3.5rem;
+}
+.ps-A1{
+  height: 20px;
+}
+
 </style>

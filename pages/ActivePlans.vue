@@ -17,7 +17,7 @@ import moment from 'moment'
 
 export default {
   name: 'ActivePlans',
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       ActivePlans: [],

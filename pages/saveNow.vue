@@ -9,7 +9,7 @@
           FaIcon.mx-auto.ps-12(icon='plus')
           p.ps-13 New plan 
         button.ps-3(@click="navToActivePlans")
-          FaIcon.mx-auto.ps-12(icon='file-pen')
+          FaIcon.mx-auto.ps-12(icon='file-lines')
           p.ps-13 Active plans
         button.ps-3(@click="navToPastPlans")
           FaIcon.mx-auto.ps-12(icon='hourglass-half')

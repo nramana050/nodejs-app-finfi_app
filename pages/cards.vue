@@ -7,7 +7,7 @@ div
     div.text-center.font-bold(v-else) Card is not registered
   div
     div(v-if="isCardAvailable && cardFetch > 0")
-      div.ps-8(v-if="card.url")
+      div.ps-8(v-if="card.url && !isCardBlocked")
         object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
       div(v-else)
         div.ps-17
@@ -113,7 +113,7 @@ import SetPIN from '~/components/M2P/SetPIN.vue'
 export default {
   name: 'DashboardPage',
   components: { SetPreference },
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       user: this.$auth.user,
