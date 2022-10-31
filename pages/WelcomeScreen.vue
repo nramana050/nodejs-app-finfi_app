@@ -27,7 +27,7 @@
 <script>
 export default {
   name: 'WelcomeScreen',
-  layout: 'session',
+  layout: 'empty',
   methods: {
     navToDashBoard() {
       this.$router.push('/dashboard')

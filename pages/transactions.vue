@@ -19,7 +19,7 @@
 <script>
 export default {
   name: 'AccountPage',
-  layout: 'session',
+  layout: 'empty',
 
   data() {
     return {

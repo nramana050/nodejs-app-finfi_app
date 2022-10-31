@@ -22,7 +22,7 @@
 <script>
 export default {
   name: 'MerchantScreen',
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       productList: [],

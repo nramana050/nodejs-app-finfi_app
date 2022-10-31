@@ -23,6 +23,7 @@ export default {
       passcode_1: '',
       passcode_2: '',
       hasError: false,
+
     }
   },
   methods: {
@@ -36,11 +37,20 @@ export default {
         return
       }
       try {
+        const welcome = await this.$axios.post('/profile/welcome')
+        console.log(welcome)
         await this.$axios.post('/profile/passcode', {
           passcode: Number(this.passcode_1),
         })
         this.$toast.info('Passcode updated successfully')
+        if(welcome.data.message===true)
+        {
         this.$router.push('/WelcomePage')
+        }
+        else{
+        this.$router.push('/dashboard')
+
+        }
       } catch (err) {
         this.$toast.error('failed to update passcode')
       }
