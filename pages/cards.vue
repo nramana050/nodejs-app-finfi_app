@@ -109,7 +109,7 @@ import SetPIN from '~/components/M2P/SetPIN.vue'
 export default {
   name: 'DashboardPage',
   components: { SetPreference },
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       user: this.$auth.user,

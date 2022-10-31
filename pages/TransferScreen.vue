@@ -22,7 +22,7 @@ div
 <script>
 export default {
   name: 'TransferScreen',
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       user: this.$auth.user,

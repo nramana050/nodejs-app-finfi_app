@@ -16,7 +16,7 @@
 <script>
    export default{
        name:'WelcomePage',
-       layout:'session',
+       layout:'empty',
        data() {
        return {
         }

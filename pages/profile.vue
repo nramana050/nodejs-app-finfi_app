@@ -73,7 +73,7 @@
 <script>
 export default {
   name: 'ProfilePage',
-  layout: 'session',
+  layout: 'empty',
 
   data() {
     return {

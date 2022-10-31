@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'SettingsPage',
-  layout: 'session',
+  layout: 'empty',
 
   data() {
     return {
