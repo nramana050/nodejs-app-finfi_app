@@ -40,7 +40,7 @@ import moment from 'moment'
 
 export default {
   name: 'StartPlans',
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       Orders: [],

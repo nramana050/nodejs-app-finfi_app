@@ -14,7 +14,7 @@
    <script>
    export default{
        name:'WelcomeScreen1',
-       layout:'session',
+       layout:'empty',
 
     methods:{
       navToDashboard(){

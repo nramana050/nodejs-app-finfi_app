@@ -6,9 +6,8 @@
       p.text-3xl.font-bold.ps-5 What are you <br> saving for ?
       div.ps-11
         button.ps-9.font-bold(v-for="category in categories" :key="category.id"   
-        @click="selectCategory(category.category_name)" 
-        :class="[selectedValue==category.category_name && selected ? 'bg-yellow-200': 'bg-primary']")
-          //- span.ps-6(@click="selectCategory(category.category_name)" :class="[selectedValue==category.category_name && selected ? 'bg-yellow-200': 'bg-primary']")
+        @click="selectCategory(category.id)" 
+        :class="[selectedValue==category.id && selected ? 'bg-yellow-200': 'bg-primary']")
           span.ps-6 {{category.category_name}}   
     div.ps-2(v-if="selected")
       button.ps-10.font-bold.text-xl(@click="navToMerchant") Next 
@@ -17,7 +16,7 @@
 <script>
 export default {
   name: 'CategoriesScreen',
-  layout: 'session',
+  layout: 'empty',
   props: [],
   data() {
     return {
@@ -25,7 +24,7 @@ export default {
       selectedCategories: [],
       selected: false,
       user: this.$auth.user,
-      selectedValue:''
+      selectedValue:null
     }
   },
   mounted() {
@@ -50,6 +49,7 @@ export default {
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
       this.categories = categories.data
+      console.log('category',this.categories)
     },
   },
 }

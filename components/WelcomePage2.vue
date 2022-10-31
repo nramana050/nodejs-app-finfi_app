@@ -12,7 +12,7 @@
    <script>
    export default{
        name:'WelcomeScreen2',
-       layout:'session',
+       layout:'empty',
 
        methods:{
         navToDashboard(){

@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'SpalshScreen',
-  layout: 'session',
+  layout: 'empty',
   data() {
     return {
       isLoading: true,
