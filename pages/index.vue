@@ -27,7 +27,7 @@ import FooterLogo from '~/components/FooterLogo.vue'
 export default {
   name: 'IndexPage',
   components: { SplashScreen, FooterLogo },
-  layout: 'session',
+  layout: 'empty',
   auth: false,
   data() {
     return {
