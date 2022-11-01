@@ -283,7 +283,7 @@ object:focus {
   margin-top: 0.5rem;
 }
 
-.ps-8 {
+.ps-8{
   margin-left: 0.3rem;
   margin-right: 0.3rem;
   height: 25vh;
