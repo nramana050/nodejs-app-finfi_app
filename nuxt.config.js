@@ -84,8 +84,8 @@ export default {
   components: true,
 
   axios: {
-    // baseURL: 'https://devapi.myfinfi.com',
-    baseURL: 'http://localhost:3000'
+    baseURL: 'https://devapi.myfinfi.com',
+    // baseURL: 'http://localhost:3000'
   },
   
   pwa: {
