@@ -23,7 +23,7 @@ div.ps-1A
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
-    //- div
+    div
       div.font-bold.text-sm.ps-8 Savings Plan
       ssr-carousel
         div.slide 
@@ -124,7 +124,7 @@ export default {
     },
   },
   mounted(){
-    // this.getCategories()
+    this.getCategories()
     this.getProducts()
   },
   async beforeMount() {
