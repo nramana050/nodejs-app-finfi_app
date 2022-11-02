@@ -34,6 +34,10 @@ div
           img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
     div.uppercase.ps-5(v-if="isCardAvailable")
       SetPreference
+      button.flex.flex-row.justify-center.text-white.border.p-4.items-center.ps-44(@click="openPhysicalModel")
+       span Request Physical Card
+      //-   FaIcon.mx-auto.ps-3(icon='angle-left')
+      //- h3.text-sm.font-bold.tracking-widest.uppercase {{ title }}
         
     //- div.flex.flex-row.justify-between.ps-7
     //-   div.text-sm Ecom 
@@ -140,6 +144,9 @@ export default {
     },
     openRegistrationModal() {
       this.$FModal.show({ component: M2PRegistration })
+    },
+    openPhysicalModel() {
+      this.$router.push('/RequestPhysical')
     },
     openCardSetting() {
       this.$FModal.show({ component: SetPreference })
@@ -331,5 +338,10 @@ object:focus {
 }
 .ps-19 {
   margin-top: 1rem;
+}
+.ps-44{
+    background-color: #7165E3;
+    border-radius: 20px;
+    width: 88%;
 }
 </style>

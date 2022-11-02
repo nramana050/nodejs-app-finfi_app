@@ -84,10 +84,10 @@ export default {
   components: true,
 
   axios: {
-    baseURL: 'https://uatapi.myfinfi.com',
+    baseURL: 'https://devapi.myfinfi.com',
     // baseURL: 'http://localhost:3000'
   },
-
+  
   pwa: {
     charset: 'utf-8',
     name: 'Finfi',
