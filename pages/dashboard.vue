@@ -213,8 +213,9 @@ export default {
         }
 
         this.availableLimit = 
-          ( finfiAccount.length>0 ? finfiAccount[0].account_balance : 0
-          + m2pAccount.length>0 ? m2pAccount[0].account_balance : 0 ).toLocaleString('en-IN')
+          ( (finfiAccount.length>0 ? finfiAccount[0].account_balance : 0)
+          + (m2pAccount.length>0 ? m2pAccount[0].account_balance : 0) 
+          ).toLocaleString('en-IN')
 
         if (finfiAccount.length>0)
           await this.fetchRecentWithdrawal(finfiAccount[0].id);
