@@ -2,10 +2,10 @@
   div.flex.flex-col
     div.flex-0
     PageHeader(:title="'Transactions'")
-    div.flex-0.p-4.bg-gray-100
+    div.flex-0.p-4
       div.flex.flex-row.text-centerate.justify-between
         div.flex.flex-0
-          span.py-1.px-2.text-xs.text-black.bg-primary.uppercase.font-bold.self-center Date filter
+          span.py-1.px-2.text-xs.text-black.bg.uppercase.font-bold.self-center Date filter
         div.flex.flex-1.w-64.relative
           DatePicker(range input-class="border w-full px-4" placeholder="Select Date Range" :disabled-date="disableDate" v-model="dates" range-separator=' ⟺ ' @change="fetchTransactions")
     div.p-4.text-center(v-if="transactions.length > 0")

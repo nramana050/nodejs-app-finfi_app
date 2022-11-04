@@ -5,7 +5,7 @@ module.exports = {
         primary: 'Roboto',
       },
       colors: {
-        primary: '#F5F5F5',
+        primary: 'white',
       },
     },
   },
