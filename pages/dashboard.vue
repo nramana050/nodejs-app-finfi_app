@@ -197,30 +197,28 @@ export default {
     },
     async getAccountDetails(){
       try {
+        const UserProfile= await this.$axios.get('/profile')
+        const orgAccountTypes = UserProfile.data.account_types.split(',')
+
         const accountresult = await this.$axios.get('/accounts')
-        this.accounts = [];
-        for (const item of accountresult.data){
-          this.accounts.push(item.account)
-        }
-        const accountTypes = accountresult.data.map((x)=>x.account.account_type)
         const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
         const providerM2P = await this.$axios.post('/ext/service-provider',{ service_provider : 'M2P'})
- 
-        const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>accountTypes.includes(x))[0])  ;
-        const m2pAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerM2P.data.filter(x=>accountTypes.includes(x))[0] ) ;
 
-        if(finfiAccount.length>0){
-          this.enableFinfi = true 
+        for (const item of accountresult.data){
+          if(orgAccountTypes.includes(item.account.account_type)){
+            this.accounts.push(item.account);
+            if(item.account.account_type !== 'PAYABLE'){
+              this.availableLimit += item.account.account_balance 
+            }
+          }
         }
-        if(m2pAccount.length>0){
-          this.enableM2P = true
-        }
+        this.availableLimit = this.availableLimit.toLocaleString('en-IN')
 
-        this.availableLimit = 
-          ( (finfiAccount.length>0 ? finfiAccount[0].account_balance : 0)
-          + (m2pAccount.length>0 ? m2pAccount[0].account_balance : 0) 
-          ).toLocaleString('en-IN')
+        const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>orgAccountTypes.includes(x))[0])  ;
+        const m2pAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerM2P.data.filter(x=>orgAccountTypes.includes(x))[0] ) ;
 
+        this.enableFinfi = finfiAccount.length>0 ? true : null
+        this.enableM2P = m2pAccount.length>0 ? true : null
         if (finfiAccount.length>0)
           await this.fetchRecentWithdrawal(finfiAccount[0].id);
         
