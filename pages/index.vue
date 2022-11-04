@@ -4,20 +4,16 @@ div
     SplashScreen.ps-6(v-on:splash="fromSplashScreen")
   div(v-if="!isLoading")
     div.ps-7
+      div.flex.flex-row.text-white.border.p-4.items-center.ps-8
       div.ps-1
         LeadHeader.font-bold.text-3xl(:title="`Let\'s get started!`" )
       div.ps-2
-        LeadHeader(:lead="'Please enter your organization'")
-      div.ps-3
-        LeadHeader(:lead="'code sent to your registered email'")
+        LeadHeader(:lead="'Enter your organization code'")
       div
-        input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Organization code" v-model="organizationCode")
-      div
+        input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Code" v-model="organizationCode")
+      div.flex-0.fixed.bottom-0
         button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="validate")
           span {{ $t('proceed') }}
-    div.ps-8
-      div.ps-9
-        FooterLogo
       
 </template>
 
@@ -81,8 +77,8 @@ export default {
 <style scoped>
 .ps-1 {
   color: #37202b;
-  margin-top: 3rem;
   margin-left: 5.5rem;
+  margin-top: 3rem;
   line-height: 52px;
   letter-spacing: -2px;
 }
@@ -106,13 +102,16 @@ export default {
   padding-right: 4.75rem;
   padding-top: 10px;
   padding-bottom: 10px;
+  border: 1px solid #ccc;
+  
 }
 .ps-5 {
   color: white;
   background-color: #7165e3;
-  margin-left: 9rem;
-  margin-right: 9rem;
-  margin-top: 2rem;
+  height: 2.5rem;
+  width: 20rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
   margin-bottom: 2rem;
 }
 .ps-6 {
@@ -124,14 +123,12 @@ export default {
   margin-top: 0;
 }
 .ps-7 {
-  height: 75vh;
+  height: 100vh;
+  background-color: white;
 }
 .ps-8 {
-  height: 35vh;
   background-color: #7165e3;
-  margin-top: -12vh;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  height: 3rem;
 }
 .ps-9 {
   width: 9rem;
