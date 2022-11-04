@@ -1,30 +1,36 @@
 <template lang="pug">
-div.flex.flex-col.justify-center
-  div.text-center.font-bold Request physical card
-  FormulateForm(v-model="form") 
-    div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_1" validation="required" placeholder="Address Line 1")
-    div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_2" validation="required" placeholder="Address Line 2")
-    div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_3" validation="required" placeholder="Address Line 3")
-    div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="text" name="city" validation="required" placeholder="City")
-    div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="text" name="state" validation="required" placeholder="State")      
-    div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="text" name="pincode" validation="required" placeholder="Pincode")
-    div.text-center.font-bold Card cost is ₹200 including delivery charges     
-    div.flex-1.pr-4
-      div.flex.flex-row.py-4.justify-center
-        button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="pay()")
-          | Pay and Submit       
+div.ps-1
+  div.ps-4
+  div.flex.flex-col
+    div.text-center.font-bold.ps-2 Request physical card
+    FormulateForm.ps-6(v-model="form") 
+      div.flex.flex-cpl.ps-3
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_1" validation="required" placeholder="Address Line 1")
+      div.flex.flex-cpl.ps-3
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_2" validation="required" placeholder="Address Line 2")
+      div.flex.flex-cpl.ps-3
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_3" validation="required" placeholder="Address Line 3")
+      div.flex.flex-cpl.ps-3
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="city" validation="required" placeholder="City")
+      div.flex.flex-cpl.ps-3
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="state" validation="required" placeholder="State")      
+      div.flex.flex-cpl.ps-3
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="pincode" validation="required" placeholder="Pincode")
+      div.text-center.font-bold.ps-5 Card cost is ₹300 including delivery charges     
+      div.flex-1.pr-4
+        div.flex.flex-row.py-4.justify-center
+          button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="pay()")
+            | Pay and Submit 
+      //- buttonComponent(:buttonName="'Pay and Submit'" @click="pay()")
+        | Pay and Submit
 </template>
 
 <script type="application/javascript" src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
 export default {
+  name:'RequestPhysical',
+  layout:'empty',
   head: {
     script: [
       {
@@ -35,7 +41,6 @@ export default {
       }, 
     ],
   },
-  name: 'RequestPhysical',
   data() {
     return {
       token: this.$auth.strategy.token.get(),
@@ -129,6 +134,38 @@ export default {
 </script>
 <style scoped>
 .btn {
+    color: white;
+    background-color: #7165e3;
+    height: 2.5rem;
+    width: 20rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+}
+.ps-1{
+  background-color: white;
+}
+.ps-2{
+  margin: 1rem;
+}
+.ps-3{
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.ps-4{
+  height: 2.5rem;
   background-color: #7165e3;
+  width: full;
+}
+.ps-5{
+  height: 5rem;
+  margin: 2rem;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  
+}
+.ps-6{
+  margin-top: 1rem;
 }
 </style>

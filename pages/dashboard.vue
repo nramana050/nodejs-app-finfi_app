@@ -19,7 +19,7 @@ div.ps-1A
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
     div
-      div.ps-7
+      div.ps-7(@click="navToPhysicalCard")
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
@@ -159,6 +159,10 @@ export default {
     },
     navToFAQ(){
       this.$router.push('/AskedQuestions')
+    },
+    navToPhysicalCard()
+    {
+      this.$router.push('/welcomePage4')
     },
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
