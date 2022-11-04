@@ -1,22 +1,22 @@
 <template lang="pug">
   div
-    LeadHeader.font-bold.text-2xl.ps-1(:title="`Hello ${user.first_name},`")
-    LeadHeader.ps-2(:lead="'Set 6 digit login passcode. You can also set it later under profile menu.'")
-    
+    div.flex.flex-row.text-white.border.p-4.items-center.ps-9
+    //- LeadHeader.font-bold.text-2xl.ps-1(:title="`Hello ${user.first_name},`")
+    LeadHeader.font-bold.text-2xl.ps-1(:title="'Set Passcode'")    
     div
-      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Enter 6 digit passcode" type="numeric" v-model="passcode_1")
-      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Confirm passcode" type="numeric" v-model="passcode_2")
-    div
+      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="New passcode" type="password" v-model="passcode_1")
+      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Confirm passcode" type="password" v-model="passcode_2")
+    //- div
       p.ps-6.text-sm.text-black.underline(@click="navToDashboard") Skip to Dashboard
-      button.text-white.inline-flex.items-start(@click="setPasscode")
-        span.ps-5 Set
-        //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
+    div.flex-0.fixed.bottom-0
+      button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="setPasscode") Set Passcode
       
 </template>
 
 <script>
 export default {
   name: 'PasscodePage',
+  layout:'empty',
   data() {
     return {
       user: this.$auth.user,
@@ -65,7 +65,7 @@ export default {
 .ps-1 {
   color: #37202b;
   margin-top: 1rem;
-  margin-left: 3rem;
+  text-align: center;
   font-weight: 300;
   letter-spacing: -2px;
   font-style: normal;
@@ -90,17 +90,16 @@ export default {
   padding-right: 4.75rem;
   padding-top: 10px;
   padding-bottom: 10px;
+  border: 1px solid #ccc;
 }
 .ps-5 {
+  color: white;
   background-color: #7165e3;
-  width: 130px;
-  height: 35px;
-  font-weight: 500;
-  margin-top: 2.5rem;
-  margin-left: 7.75rem;
-  text-align: center;
-  border-radius: 8px;
-  padding-top: 5px;
+  height: 2.5rem;
+  width: 20rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
 }
 .ps-6 {
   margin-top: 1rem;
@@ -112,5 +111,10 @@ export default {
   margin-left: 3rem;
   width: 20px;
   height: 30px;
+}
+.ps-9
+{
+   background-color: #7165e3;
+  height: 3rem;
 }
 </style>
