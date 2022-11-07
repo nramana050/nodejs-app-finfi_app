@@ -57,9 +57,11 @@ export default {
   },
 
   methods: {
-    async requestPhysicalCard() {
+    async requestPhysicalCard(order_id) {
       try {
-        const response = await this.$axios.$post('/m2p/requestPhysicalCard',this.form,
+        const payload = this.form
+        payload.order_id = order_id
+        const response = await this.$axios.$post('/m2p/requestPhysicalCard',payload,
           {
             headers: {
               Authorization: this.token,
@@ -121,7 +123,7 @@ export default {
           console.log(response)
           console.log(response.data.status)
           if(response.data.status==true){
-            this.requestPhysicalCard()
+            this.requestPhysicalCard(response.data.order_id)
           }
         })
         .catch((err) => {
