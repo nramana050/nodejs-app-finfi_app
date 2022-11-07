@@ -119,7 +119,6 @@ export default {
         .post('/payment/gateway/verify', response)
         .then((response) => {
           console.log(response)
-          alert('payment received')
           console.log(response.data.status)
           if(response.data.status==true){
             this.requestPhysicalCard()

@@ -1,7 +1,7 @@
 <template lang="pug">
   div.flex.flex-col
     div.flex-0
-    PageHeader(:title="'Transactions'")
+    PageHeader.uppercase(:title="'Transactions'")
     div.flex-0.p-4
       div.flex.flex-row.text-centerate.justify-between
         div.flex.flex-0

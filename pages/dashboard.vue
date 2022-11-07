@@ -12,8 +12,8 @@ div.ps-1A
         img.object-cover.h-12.w-12.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
   div(v-if="accounts.length > 0 && organization")
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
-  div
-    div 
+  div(v-if="isCardEnabled && this.enableM2P")
+    div
       P.font-bold.text-sm.ps-5 MyVirtual Card
     div
       button.ps-6(@click="navToCard")
@@ -23,6 +23,7 @@ div.ps-1A
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
+  div
     div
       div.font-bold.text-sm.ps-8 Savings Plan
       ssr-carousel
