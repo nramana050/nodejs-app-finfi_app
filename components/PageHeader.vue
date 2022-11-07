@@ -2,7 +2,7 @@
   div.flex.flex-row.text-white.border.p-4.items-center.ps-1
     button(@click="navToDashboard")
       FaIcon.mx-auto.ps-3(icon='angle-left')
-    h3.text-sm.font-bold.tracking-widest.uppercase {{ title }}
+    h3.text-sm.font-bold.tracking-widest {{ title }}
 </template>
 
 <script>

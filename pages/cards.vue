@@ -34,7 +34,7 @@ div
           img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
     div.uppercase.ps-5(v-if="isCardAvailable")
       SetPreference
-      button.flex.flex-row.justify-center.text-white.border.p-4.items-center.ps-44(@click="openPhysicalModel")
+      //- button.flex.flex-row.justify-center.text-white.border.p-4.items-center.ps-44(@click="openPhysicalModel")
        span Request Physical Card
       //-   FaIcon.mx-auto.ps-3(icon='angle-left')
       //- h3.text-sm.font-bold.tracking-widest.uppercase {{ title }}
