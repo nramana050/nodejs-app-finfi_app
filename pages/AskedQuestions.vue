@@ -1,7 +1,7 @@
 <template lang="pug">
     div.flex.flex-col
       div.flex-0
-        PageHeader(:title="'FAQ'")
+        PageHeader(:title="'FAQs'")
       div.ps-2(v-for="question in questions" :key="question.question" @click="selectedQuestion(question.question)")
         div.ps-4.font-bold {{question.question}}
         //- span
