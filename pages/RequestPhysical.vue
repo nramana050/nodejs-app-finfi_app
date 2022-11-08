@@ -1,26 +1,29 @@
 <template lang="pug">
 div.ps-1
+  button(@click="navToDashboard")
+   FaIcon.mx-auto.ps-9(icon='angle-left')
   div.ps-4
   div.flex.flex-col
     div.text-center.font-bold.ps-2 Request physical card
     FormulateForm.ps-6(v-model="form") 
       div.flex.flex-cpl.ps-3
-        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_1" validation="required" placeholder="Address Line 1")
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_1" validation="required" placeholder="Address Line 1" v-model="inputValue1")
       div.flex.flex-cpl.ps-3
-        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_2" validation="required" placeholder="Address Line 2")
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_2" validation="required" placeholder="Address Line 2" v-model="inputValue2")
       div.flex.flex-cpl.ps-3
-        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_3" validation="required" placeholder="Address Line 3")
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="address_line_3" validation="required" placeholder="Address Line 3" v-model="inputValue3")
       div.flex.flex-cpl.ps-3
-        FormulateInput.pb-2.pr-3.w-full(type="text" name="city" validation="required" placeholder="City")
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="city" validation="required" placeholder="City" v-model="inputValue4")
       div.flex.flex-cpl.ps-3
-        FormulateInput.pb-2.pr-3.w-full(type="text" name="state" validation="required" placeholder="State")      
+        FormulateInput.pb-2.pr-3.w-full(type="select" name="state" :options="states" v-model="selectedState" placeholder="Select state" validation="required")
       div.flex.flex-cpl.ps-3
-        FormulateInput.pb-2.pr-3.w-full(type="text" name="pincode" validation="required" placeholder="Pincode")
+        FormulateInput.pb-2.pr-3.w-full(type="text" name="pincode" validation="required" placeholder="Pincode" v-model="inputValue" maxlength="6")
       div.text-center.font-bold.ps-5 Card cost is ₹300 including delivery charges     
       div.flex-1.pr-4
         div.flex.flex-row.py-4.justify-center
           button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="pay()")
             | Pay and Submit 
+  
       //- buttonComponent(:buttonName="'Pay and Submit'" @click="pay()")
         | Pay and Submit
 </template>
@@ -51,11 +54,56 @@ export default {
         city: '',
         state: '',
         pincode: '',
+
       },
+      states:[],
+      selectedState:"",
       isSameAddress: true,
+      inputValue: "",
+      inputValue1: "",
+      inputValue2: "",
+      inputValue3: "",
+      inputValue4: "",
+      inputValue5: "",
     }
   },
-
+  async beforeMount() {
+      const stateApiResult = await this.$axios.$get('/ext/states')
+    this.states = stateApiResult
+    console.log(stateApiResult)
+  },
+  watch: {
+    inputValue(newValue) {
+      if (this.checkForSpecialCharacters(newValue)) {
+        this.inputValue = this.removeSpecialCharacters(newValue);
+      }
+    },
+    inputValue1(newValue1) {
+      if (this.checkForSpecialCharacters(newValue1)) {
+        this.inputValue1 = this.removeSpecialCharacters(newValue1);
+      }
+    },
+    inputValue2(newValue2) {
+      if (this.checkForSpecialCharacters(newValue2)) {
+        this.inputValue2 = this.removeSpecialCharacters(newValue2);
+      }
+    },
+    inputValue3(newValue3) {
+      if (this.checkForSpecialCharacters(newValue3)) {
+        this.inputValue3 = this.removeSpecialCharacters(newValue3);
+      }
+    },
+    inputValue4(newValue4) {
+      if (this.checkForSpecialCharacters(newValue4)) {
+        this.inputValue4 = this.removeSpecialCharacters(newValue4);
+      }
+    },
+    inputValue5(newValue5) {
+      if (this.checkForSpecialCharacters(newValue5)) {
+        this.inputValue5 = this.removeSpecialCharacters(newValue5);
+      }
+    },
+  },
   methods: {
     async requestPhysicalCard(order_id) {
       try {
@@ -85,6 +133,37 @@ export default {
     //Razorpay payment window screen
 
     async pay() {
+      console.log('selected state',this.selectedState)
+      if(this.form.address_line_1 === "" )
+      {
+          this.$toast.error('Enter All Details Properly')
+          return;
+      }
+      if(this.form.address_line_2 === "" )
+      {
+          this.$toast.error('Enter Valid Address')
+          return;
+      }
+      if(this.form.address_line_3 === "" )
+      {
+          this.$toast.error('Enter Valid Address')
+          return;
+      }
+      if(this.form.city === "" )
+      {
+          this.$toast.error('Enter Valid City Name')
+          return;
+      }
+      if(this.selectedState === "" )
+      {
+          this.$toast.error('Enter Valid State')
+          return;
+      }
+      if(this.form.pincode === "" )
+      {
+          this.$toast.error('Enter Valid Pincode')
+          return;
+      }
       const data = {
         product_id: 1
       }
@@ -109,6 +188,7 @@ export default {
               this.verifySignature(response);
           }
         }
+
         const rzp1 = new Razorpay(options)
         rzp1.open()
       })
@@ -168,5 +248,10 @@ export default {
 }
 .ps-6{
   margin-top: 1rem;
+}
+.ps-9{
+  position: relative;
+  margin-left: 2rem;
+  top: 2rem;
 }
 </style>
