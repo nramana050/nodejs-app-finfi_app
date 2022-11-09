@@ -68,7 +68,7 @@ export default {
     }
   },
   async beforeMount() {
-      const stateApiResult = await this.$axios.$get('/ext/states')
+    const stateApiResult = await this.$axios.$get('/ext/states')
     this.states = stateApiResult
     console.log(stateApiResult)
   },
@@ -105,6 +105,16 @@ export default {
     },
   },
   methods: {
+    removeSpecialCharacters(charactersString) {
+      return charactersString.replace(/[^\w\s]/gi, "");
+    },
+    checkForSpecialCharacters(charactersString) {
+      const specialCharactersRegex = /[^\w\s]/;
+      return specialCharactersRegex.test(charactersString);
+    },
+    navToDashboard() {
+      this.$router.push('/Dashboard')
+    },
     async requestPhysicalCard(order_id) {
       try {
         const payload = this.form
@@ -253,5 +263,6 @@ export default {
   position: relative;
   margin-left: 2rem;
   top: 2rem;
+  color: white;
 }
 </style>
