@@ -1,5 +1,8 @@
 export const state = () => ({
   organization: null,
+  data:{
+    cashRequest:0
+  },
   snbl: {
     category: null,
     product: null,
@@ -26,6 +29,13 @@ export const mutations = {
   clearProduct(state) {
     state.snbl.product = null
   },
+  setrequestAmount(state,amount){
+    state.data.requestedAmount=amount
+  },
+  clearrequestAmount(state){
+    state.data.requestedAmount=null
+  }
+
 }
 
 export const getters = {

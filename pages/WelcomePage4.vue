@@ -8,7 +8,7 @@
       div.ps-4 1.Your EWA card is issued on the Rupay network & is accepted at millions of online & offline merchants across India.
       div.ps-4 2.You earn 2.5% cashback on every purchase for the first 3 months & 1% post 3 months.
       div.ps-4 3.You get instant discounts at over 50 leading brands. 
-    div.flex.flex-row.justify-between
+    div.flex.flex-row.justify-between.bottom-0
       span.ps-6
       span.ps-7(@click="navToRequestCard")
         span.font-bold Order now
