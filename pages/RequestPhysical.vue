@@ -1,8 +1,8 @@
 <template lang="pug">
 div.ps-1
-  button(@click="navToDashboard")
-   FaIcon.mx-auto.ps-9(icon='angle-left')
   div.ps-4
+   button(@click="navToDashboard")
+    FaIcon.mx-auto.ps-9(icon='angle-left')
   div.flex.flex-col
     div.text-center.font-bold.ps-2 Request physical card
     FormulateForm.ps-6(v-model="form") 
@@ -74,8 +74,8 @@ export default {
   },
   watch: {
     inputValue(newValue) {
-      if (this.checkForSpecialCharacters(newValue)) {
-        this.inputValue = this.removeSpecialCharacters(newValue);
+      if (this.checkAlphabets(newValue)) {
+        this.inputValue = this.removeAlphabets(newValue);
       }
     },
     inputValue1(newValue1) {
@@ -94,8 +94,8 @@ export default {
       }
     },
     inputValue4(newValue4) {
-      if (this.checkForSpecialCharacters(newValue4)) {
-        this.inputValue4 = this.removeSpecialCharacters(newValue4);
+      if (this.checkNumbers(newValue4)) {
+        this.inputValue4 = this.removeNumbers(newValue4);
       }
     },
     inputValue5(newValue5) {
@@ -108,9 +108,23 @@ export default {
     removeSpecialCharacters(charactersString) {
       return charactersString.replace(/[^\w\s]/gi, "");
     },
+    removeNumbers(charactersStrings) {
+      return charactersStrings.replace(/[^a-zA-Z0–9_]/g, "");
+    },
+    removeAlphabets(charactersStrings) {
+      return charactersStrings.replace(/[^0-9]/g, "");
+    },
     checkForSpecialCharacters(charactersString) {
       const specialCharactersRegex = /[^\w\s]/;
       return specialCharactersRegex.test(charactersString);
+    },
+    checkNumbers(charactersStrings) {
+      const specialCharactersRegex = /[^a-zA-Z0–9_]/;
+      return specialCharactersRegex.test(charactersStrings);
+    },
+    checkAlphabets(charactersStrings) {
+      const specialCharactersRegex = /[^0-9]/;
+      return specialCharactersRegex.test(charactersStrings);
     },
     navToDashboard() {
       this.$router.push('/Dashboard')
@@ -260,9 +274,9 @@ export default {
   margin-top: 1rem;
 }
 .ps-9{
-  position: relative;
-  margin-left: 2rem;
-  top: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 12px;
   color: white;
 }
 </style>
