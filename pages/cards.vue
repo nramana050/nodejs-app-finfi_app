@@ -32,7 +32,7 @@ div
         div.relative.w-10.h-10
           img(src="~/assets/toggle_on.png" v-if="isCardBlocked" @click="openUnblockCard")
           img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
-    div.uppercase.ps-5(v-if="isCardAvailable")
+    div.uppercase.ps-5(v-if="isCardAvailable && !isCardBlocked")
       SetPreference
       //- button.flex.flex-row.justify-center.text-white.border.p-4.items-center.ps-44(@click="openPhysicalModel")
        span Request Physical Card
