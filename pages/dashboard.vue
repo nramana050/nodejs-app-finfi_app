@@ -296,7 +296,6 @@ export default {
   color: white;
 }
 .ps-1A{
-  height: 100vh;
   background-color: #F2F2F2;
 }
 .ps-2 {

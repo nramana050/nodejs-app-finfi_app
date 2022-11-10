@@ -31,7 +31,7 @@
 <script>
 export default {
   name: 'SaveNow',
-  layout: 'session',
+  layout: 'empty',
 
   methods: {
     navToDashboard() {
