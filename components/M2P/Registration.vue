@@ -1,11 +1,11 @@
 <template lang="pug">
-div.flex.flex-col.px-5.py-8#container
-  div.flex.pb-2
-    div.flex-1
-      p.text-md.font-bold.tracking-wide.pb-4.underline.uppercase {{ step.title }}
-    div.flex-0
-      p.text-xs.font-light.font-mono.tracking-wide.text-red-500.uppercase.pb-2 Step {{ step.id }}/{{ steps.length }}
-  div.flex-1
+div
+  div.flex.flex-row.justify-between.ps-1
+    span.ps-2
+      p.text-md.font-bold.tracking-wide.uppercase {{ step.title }}
+    span.ps-3
+      p.text-xs.font-light.font-mono.tracking-wide.uppercase Step {{ step.id }}/{{ steps.length }}
+  div.ps-4
     Step1Component(v-if="step.id === 1" v-on:next="step1next" v-on:close="close")
     Step2Component(v-if="step.id === 2" v-on:next="step2next" v-on:close="close")
     Step3Component(v-if="step.id === 3" v-on:next="step3next" v-on:close="close")
@@ -26,6 +26,7 @@ export default {
     Step3Component,
     Step4Component,
   },
+  layout:'empty',
 
   data() {
     return {
@@ -101,5 +102,21 @@ export default {
 <style scoped>
 #container {
   min-height: 80vh;
+}
+.ps-1{
+  height: 2.5rem;
+  background-color: #7165e3;
+  color: white;
+}
+.ps-2{
+  padding: 8px;
+  margin-left:1rem;
+}
+.ps-3{
+  padding: 12px;
+  margin-right: 1rem;
+}
+.ps-4{
+  margin: 2rem;
 }
 </style>

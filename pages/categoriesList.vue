@@ -36,7 +36,7 @@ export default {
       this.$router.push('/saveNow')
     },
     navToMerchant() {
-      this.$router.push('/MerchantScreen')
+      this.$router.push('/ProductList')
     },
     selectCategory(category) {
       this.selectedCategories = []
@@ -49,7 +49,6 @@ export default {
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
       this.categories = categories.data
-      console.log('category',this.categories)
     },
   },
 }

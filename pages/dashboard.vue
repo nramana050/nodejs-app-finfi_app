@@ -6,10 +6,12 @@ div.ps-1A
         div.font-bold.text-2xl &#8377; {{this.availableLimit}}
         div.text-xs Available balance
       span
-        FaIcon.mx-auto.ps-4A(icon='comments')(@click="navToFAQ")
-        div.text-xs.ps-4A1 FAQ
-      span.ps-4(@click="navToProfile")
-        img.object-cover.h-12.w-12.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
+        button(@click="navToFAQ")
+          FaIcon.mx-auto.ps-4A(icon='comments')
+          div.text-xs.ps-4A1 FAQ
+      span.ps-4
+        button(@click="navToProfile")
+          img.object-cover.h-12.w-12.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
   div(v-if="accounts.length > 0 && organization")
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
   div(v-if="isCardEnabled && this.enableM2P")
@@ -19,7 +21,7 @@ div.ps-1A
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
     div
-      div.ps-7(@click="navToPhysicalCard")
+      button.ps-7(@click="navToPhysicalCard")
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
@@ -169,16 +171,12 @@ export default {
       const categories = await this.$axios.$get(`/snbl/category`)
       this.categories = categories.data.map(item=>
       item.category_name)
-      console.log('categories',this.categories)
     },
     async getProducts() {
       const payload = { category: this.categories }
       const res = await this.$axios.$post(`/snbl/products`,payload)
-      console.log('res',res)
       const productList = res.data
-      console.log('products',productList)
       this.filteredProducts = productList.filter(x=>this.toFilter.includes(x.id))
-      console.log(this.filteredProducts)
     },
     cardNumber(){
       if(this.isCardNumber===true){

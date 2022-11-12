@@ -1,5 +1,5 @@
 <template lang="pug">
-    div.flex.flex-col
+    div.flex.flex-col.ps1
       div.flex-0
         PageHeader(:title="'FAQs'")
       div.ps-2(v-for="question in questions" :key="question.question" @click="selectedQuestion(question.question)")
@@ -123,6 +123,11 @@ export default{
 }
 </script>
 <style scoped>
+.ps1{
+  background-color: #F2F2F2;
+}
+
+
 .ps-2{
     height: auto;
     width:90%;
