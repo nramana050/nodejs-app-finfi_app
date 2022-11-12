@@ -11,8 +11,9 @@
     div.flex.flex-row.justify-between.bottom-0
       span.ps-6
       span.ps-7(@click="navToRequestCard")
-        span.font-bold Order now
-        FaIcon.ps-8(icon='angle-right')
+        button
+          span.font-bold Order now
+          FaIcon.ps-8(icon='angle-right')
         
 </template>
 <script>
@@ -53,7 +54,7 @@
     padding:10px
    }
    .ps-6{
-     height: 6.2rem;
+     height: 5.7rem;
      width: 6rem;
      border-top-right-radius: 90px;
      background-color: #B4ADFA;
