@@ -85,8 +85,9 @@ export default {
       })
     },
     cancel(e) {
-      e.preventDefault()
-      this.$emit('close')
+      this.$router.push('/cards')
+      // e.preventDefault()
+      // this.$emit('close')
     },
     disabledRange(date) {
       return date > new Date()

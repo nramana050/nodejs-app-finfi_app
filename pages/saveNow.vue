@@ -44,7 +44,7 @@ export default {
       this.$router.push('/PastPlans')
     },
     navToCategories() {
-      this.$router.push('/categoriesScreen')
+      this.$router.push('/categoriesList')
     },
   },
 }

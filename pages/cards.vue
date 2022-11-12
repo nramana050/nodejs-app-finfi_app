@@ -104,7 +104,7 @@ div
 </template>
 
 <script>
-import M2PRegistration from '~/components/M2P/Registration.vue'
+// import M2PRegistration from '~/components/M2P/Registration.vue'
 import SetPreference from '~/components/M2P/SetPreference.vue'
 import BlockCard from '~/components/M2P/BlockCard.vue'
 import UnblockCard from '~/components/M2P/UnblockCard.vue'
@@ -143,7 +143,8 @@ export default {
       this.$router.push('/dashboard')
     },
     openRegistrationModal() {
-      this.$FModal.show({ component: M2PRegistration })
+       this.$router.push('/CardRegistration')
+      //  this.$FModal.show({ component: M2PRegistration })
     },
     openPhysicalModel() {
       this.$router.push('/RequestPhysical')
