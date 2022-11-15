@@ -17,8 +17,8 @@ div.ps-1
     div.flex-0(v-if="earnedLimit!==null")
       div.flex.tracking-wide.text-xs
         p.flex-1 Limit
-        //- div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
-        //-   solid-information-circle-icon.w-4.h-4 
+        div.text-xs.ps-6(v-if="earnedCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.earnedCycle[0].credit_value} per day between ${this.earnedCycle[0].credit_start_day} and ${this.earnedCycle[0].credit_end_day} of the month`")
+          solid-information-circle-icon.w-4.h-4 
       p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(earnedLimit).toLocaleString('en-IN') }}
     div.flex-0(v-if="cashLimit!==null")
       div.flex.tracking-wide.text-xs
@@ -56,6 +56,7 @@ export default {
       user: this.$auth.user,
       cardFundCycle: [],
       cashFundCycle: [],
+      earnedCycle: [],
     }
   },
   computed: {
@@ -91,34 +92,38 @@ export default {
     this.fetchFundCycle()
   },
   methods: {
+    calculateCreditValue(num,percentage){
+      return ((num / 100) * percentage)
+    },
     async fetchFundCycle() {
       const response = await this.$axios.get(`/fundConfig/message`)
-      const fundCycle =
-        response.data.message.toUpperCase() === 'SUCCESS' ? true : null
+      if (response.data.message.toLowerCase() !== 'success') return;
+
+      const fundCycle = response.data.result
       if (fundCycle) {
-        this.cardFundCycle = response.data.data.filter(
-          (x) => x.account_type.toUpperCase() === 'CARD'
-        )
-        if (this.cardFundCycle.length > 0) {
-          if (
-            this.cardFundCycle[0].credit_method.toUpperCase() === 'PERCENTAGE'
-          ) {
-            this.cardFundCycle[0].credit_value =
-              parseFloat(this.cardFundCycle[0].salary).toFixed(2) *
-              (parseFloat(this.cardFundCycle[0].credit_value).toFixed(2) / 100)
-          }
+        if(fundCycle.CARD){
+          fundCycle.CARD[0].credit_value=
+            fundCycle.CARD[0].credit_method === 'PERCENTAGE' ? 
+              fundCycle.CARD[0].credit_value = this.calculateCreditValue(fundCycle.salary,fundCycle.CARD[0].credit_value) :
+              fundCycle.CARD[0].credit_value 
+          
+          this.cardFundCycle = fundCycle.CARD
         }
-        this.cashFundCycle = response.data.data.filter(
-          (x) => x.account_type.toUpperCase() === 'CASH'
-        )
-        if (this.cashFundCycle.length > 0) {
-          if (
-            this.cashFundCycle[0].credit_method.toUpperCase() === 'PERCENTAGE'
-          ) {
-            this.cashFundCycle[0].credit_value =
-              parseFloat(this.cashFundCycle[0].salary).toFixed(2) *
-              (parseFloat(this.cashFundCycle[0].credit_value).toFixed(2) / 100)
-          }
+        if(fundCycle.CASH){
+          fundCycle.CASH[0].credit_value=
+            fundCycle.CASH[0].credit_method === 'PERCENTAGE' ? 
+              fundCycle.CASH[0].credit_value = this.calculateCreditValue(fundCycle.salary,fundCycle.CASH[0].credit_value) :
+              fundCycle.CASH[0].credit_value 
+
+          this.cashFundCycle = fundCycle.CASH
+        }
+        if(fundCycle.EARNED_WAGES){
+          fundCycle.EARNED_WAGES[0].credit_value=
+            fundCycle.EARNED_WAGES[0].credit_method === 'PERCENTAGE' ? 
+              fundCycle.EARNED_WAGES[0].credit_value = this.calculateCreditValue(fundCycle.salary,fundCycle.EARNED_WAGES[0].credit_value) :
+              fundCycle.EARNED_WAGES[0].credit_value 
+
+          this.earnedCycle = fundCycle.EARNED_WAGES
         }
       }
     },
