@@ -63,7 +63,6 @@ export default {
   mounted() {
     const _this = this
     this.discount=this.selecteProduct.merchant_discount
-    console.log('productDetails',this.discount)
     setInterval(function () {
       const today = moment()
       _this.currentDate = today.format('YYYY-MM-DD')
@@ -102,7 +101,6 @@ export default {
            })
           this.$toast.info('Your Plan started successfully')
           this.$router.push('/ActivePlans')
-          console.log('above 1000')
           }
           else{
             this.$toast.error('Maximum Goal amount is 100000')
@@ -110,7 +108,6 @@ export default {
         }
         else{
           this.$toast.error('Minimum Goal amount is 1000')
-          console.log('below 1000')
          }
        }
        catch (err) {
