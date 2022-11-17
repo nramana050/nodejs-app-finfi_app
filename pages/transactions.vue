@@ -1,19 +1,20 @@
 <template lang="pug">
   div.flex.flex-col
     div.flex-0
-    PageHeader.uppercase(:title="'Transactions'")
+    PageHeader.uppercase(:title="'History'")
     div.flex-0.p-4
       div.flex.flex-row.text-centerate.justify-between
         div.flex.flex-0
           span.py-1.px-2.text-xs.text-black.bg.uppercase.font-bold.self-center Date filter
         div.flex.flex-1.w-64.relative
           DatePicker(range input-class="border w-full px-4" placeholder="Select Date Range" :disabled-date="disableDate" v-model="dates" range-separator=' ⟺ ' @change="fetchTransactions")
-    div.p-4.text-center(v-if="transactions.length > 0")
-      TransactionLineItem.pr-4(:transaction="transaction" v-for="(transaction, index) in transactions" :key="index")
-    div.p-4.text-center(v-else-if="isLoading")
-      p.text-sm Loading ...
-    div.p-4.text-center(v-else)
-      p.text-sm No transactions found
+      
+    div
+      TransactionLineItem.ps1(:transactions="transactions" )
+    //- div.p-4.text-center(v-else-if="isLoading")
+    //-   p.text-sm Loading ...
+    //- div.p-4.text-center(v-else)
+    //-   p.text-sm No transactions found
 </template>
 
 <script>
@@ -26,6 +27,7 @@ export default {
       dates: [new Date(), new Date()],
       transactions: [],
       isLoading: false,
+      
     }
   },
 
@@ -58,16 +60,7 @@ export default {
 }
 </script>
 <style scoped>
-.ps-3 {
-  padding-top: 2rem;
-  margin-left: 2rem;
+.ps-1{
 }
-.ps-4 {
-  margin-left: 2rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-.ps-5 {
-  background-color: #7165e3;
-}
+
 </style>

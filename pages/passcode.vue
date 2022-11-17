@@ -38,7 +38,6 @@ export default {
       }
       try {
         const welcome = await this.$axios.post('/profile/welcome')
-        console.log(welcome)
         await this.$axios.post('/profile/passcode', {
           passcode: Number(this.passcode_1),
         })

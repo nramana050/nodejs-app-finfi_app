@@ -101,7 +101,6 @@
     async passwordVerification(){
       try{
       const regPasscode=await this.$axios.post('/auth/transfer',{passcode:this.passcode})
-      console.log('hello',regPasscode)
       return regPasscode.data
       }catch(err)
       {
@@ -109,7 +108,6 @@
       }
     },
     async initCashRequest() {
-      console.log('passcode',this.addNumbers)
       try{
       if(this.addNumbers===null){
         this.$toasted.error('Please enter passcode')
@@ -117,7 +115,6 @@
       const regPasscode=await this.$axios.post('/auth/transfer',{passcode:this.addNumbers})
       console.log('passcode ',regPasscode)
       }catch(err){
-      console.log('err', err.response.data.message)
       this.$toasted.error('Incorrect Passcode')
       return;
     }
@@ -165,7 +162,6 @@
         this.inProgress = false;
       } catch (err) {
         this.inProgress = false
-        console.log(err.response.data)
         this.errorMessage= err.response.data.message
         this.cashRequestFailed=true
         // this.$toasted.error(err.response.data.message)
