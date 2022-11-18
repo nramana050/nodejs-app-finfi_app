@@ -15,7 +15,7 @@
 </template>
 <script>
 export default {
-  name: 'CategoriesScreen',
+  name: 'CategoriesList',
   layout: 'empty',
   props: [],
   data() {

@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     navToProductScreen() {
-      this.$router.push('/MerchantScreen')
+      this.$router.push('/ProductList')
     },
      nameKeydown(e) {
       if (/^\W$/.test(e.key)) {

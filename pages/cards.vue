@@ -281,7 +281,7 @@ object:focus {
   margin-top: 1rem;
 }
 .ps-6 {
-  margin-top: 5rem;
+  margin-top: 7rem;
   background-color: white;
 }
 .ps-7 {

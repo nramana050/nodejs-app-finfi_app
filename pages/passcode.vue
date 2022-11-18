@@ -4,8 +4,8 @@
     //- LeadHeader.font-bold.text-2xl.ps-1(:title="`Hello ${user.first_name},`")
     LeadHeader.font-bold.text-2xl.ps-1(:title="'Set Passcode'")    
     div
-      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="New passcode" type="password" v-model="passcode_1")
-      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Confirm passcode" type="password" v-model="passcode_2")
+      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="New passcode" type="password" maxlength="6" v-model="passcode_1")
+      input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Confirm passcode" type="password" maxlength="6" v-model="passcode_2")
     //- div
       p.ps-6.text-sm.text-black.underline(@click="navToDashboard") Skip to Dashboard
     div.flex-0.fixed.bottom-0
