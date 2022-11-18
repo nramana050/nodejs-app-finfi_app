@@ -5,19 +5,21 @@ div
       FaIcon.mx-auto.ps-7(icon='angle-left')
     div.grid.text-center
     FaIcon.w-4.h-6.mx-auto.ps-10(icon='building-columns')
-    div.ps-2.text-xm.text-center Transfer to your Bank account
-    div.ps-3.text-xl.text-center Enter custom amount
+    div.ps-2.text-xm.text-center Transfer to your Bank account 
+    div.ps-3.text-sm.text-center A/C number-{{bank.account_number}}
     div.flex.flex-row.justify-evenly
       div.text-3xl.ps-6 &#8377;
       input.text-3xl.ps-8(class="focus:outline-none" type="numeric" v-model="requestedAmount")
-  div.ps-4
+    //- div
+    //-   div(v-if="requestedAmount>0")
+    //-     button.ps-5.font-bold.text-white(@click="initCashRequest")
+    //-       span(v-if="inProgress")
+    //-         LoadingIcon.w-6.h-6.text-black.mx-auto
+    //-       span(v-else) Transfer
     div(v-if="requestedAmount>0")
-      button.ps-5.font-bold.text-white(@click="initCashRequest")
-        span(v-if="inProgress")
-          LoadingIcon.w-6.h-6.text-black.mx-auto
-        span(v-else) Transfer
-    div.ps-9
-      FooterLogo
+      div.flex-0.fixed.bottom-0
+        button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="requestAmount")
+          span Transfer &#8377; {{transferAmount}}
 </template>
 <script>
 export default {
@@ -31,14 +33,49 @@ export default {
       recentTransaction: null,
       inProgress: false,
       availableLimit: null,
+      transferAmount:0,
+      amount:[],
+      bank: {
+        ifsc_code: null,
+        account_number: null,
+      },
     }
   },
+  // async fetch() {
+  //   await this.getAccountDetails()
+  // },
   async fetch() {
-    await this.getAccountDetails()
+    const profileResult = await this.$axios.get('/profile')
+    this.profile = profileResult.data
+    await this.getBankAccount()
+  },
+   mounted(){
+    this.$emit('requestAmount', this.amount)  
+    const _this = this
+    setInterval(function (){
+      _this.transferAmount=_this.requestedAmount
+      // console.log('hi',_this.transferAmount)
+    },1000)  
   },
     methods:{
       navToDashboard() {
         this.$router.push('/dashboard')
+      },
+      async getBankAccount() {
+      try {
+        const bankResult = await this.$axios.get('/profile/banks')
+        if (bankResult.data) {
+          this.bank = bankResult.data
+        }
+      } catch (err) {
+        this.$toast.error('Failed to fetch profile')
+      }
+    },
+      requestAmount(){
+        this.amount=[]
+        this.amount.push(this.transferAmount)
+        this.$store.commit('setrequestAmount', this.transferAmount)
+        this.$router.push('/confirmTransfer')
       },
     //   async getAccountDetails() {
     //   try {
@@ -130,19 +167,12 @@ export default {
   padding-top: 1rem;
 }
 .ps-6 {
+  margin-top: 2rem;
   margin-left: 30%;
 }
-.ps-4 {
-  background-color: #ffffff;
-  height: 30vh;
-  margin-top: -5vh;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-}
+
 .ps-1 {
-  height: 75vh;
+  height: 100vh;
   background-color: #7165e3;
   color: #ffffff;
 }
@@ -150,22 +180,23 @@ export default {
   margin-top: 2rem;
 }
 .ps-5 {
-  background-color: #7165e3;
+  color: #1C1939;
+  background-color: white;
+  height: 2.5rem;
   width: 20rem;
-  height: 45px;
-  font-weight: 500;
-  margin-top: 1rem;
   margin-left: 2rem;
   margin-right: 2rem;
-  border-radius: 8px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  margin-bottom: 3rem;
 }
 .ps-8 {
   background: none;
   border: none;
   width: 50%;
   margin-left: -2rem;
+  margin-top: 2rem;
+}
+.ps-4{
+ color: #7165e3;
 }
 .ps-9 {
   width: 6rem;

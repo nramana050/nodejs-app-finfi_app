@@ -1,47 +1,43 @@
 <template lang="pug">
-div
+div.ps-c
   div
-    NuxtLink(to="/")
-      FaIcon.mx-auto.ps-7(icon='angle-left')
-    LeadHeader.font-bold.text-2xl.ps-1(:title="organization ? organization.name : ''" )
-    LeadHeader.ps-2(:lead="'Please enter the mobile number'")
-    LeadHeader.ps-3(:lead="'that is registered with your employer'")
-
-  div
+    div.flex.flex-row.text-white.border.p-4.items-center.ps-9
+      NuxtLink(to="/")
+        FaIcon.mx-auto.ps-7(icon='angle-left')
+    div(v-if="!this.otpSent")
+      LeadHeader.font-bold.text-2xl.ps-1(:title="organization ? organization.name : ''" )
+      LeadHeader.ps-2(:lead="'Please enter the mobile number'")
+      LeadHeader.ps-3(:lead="'that is registered with your employer'")
+    div(v-else)
+      LeadHeader.ps-2(:lead="`Enter OTP sent to ${mobile}`")
+  div(v-if="!this.otpSent")
     input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="Mobile number" v-model="mobile")
   div(v-if="isUserRegistered")
     div(v-if="skipOTP")
       input.ps-4(class="focus:outline-none focus:shadow-outline" type="password" placeholder="Passcode" v-model="passcode")
-      div.flex.flex-row.justify-evenly
-        p.ps-8.text-sm.underline(@click="switchToOTPMode") Forgot passcode?
-        p.ps-10.text-sm.underline(@click="switchToOTPMode") Login with OTP
+      div.ps-8
+        button.text-sm.underline(@click="switchToOTPMode") Forgot passcode?
     div(v-else)
       input.ps-4(class="focus:outline-none focus:shadow-outline" placeholder="OTP" type="password" v-model="otp")
-      p.text-sm.ps-6.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
-      p.text-sm.ps-6( id="waitTime" :hidden='!this.blockResend' )
+      button.text-sm.ps-6.underline(@click="initiateOTP" :hidden='this.blockResend' ) Resend OTP
+      button.text-sm.ps-6( id="waitTime" :hidden='!this.blockResend' )
       div.ps-11
         input(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
         label.text-sm  I accept the 
         a.font-bold.text-blue-800.text-sm(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions 
-  //- div.ps-11(v-if="!isUserRegistered")
-  //-   input(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
-  //-   label.text-sm  I accept the 
-  //-   a.font-bold.text-blue-800.text-sm(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
-  div(v-if="isUserRegistered && skipOTP")
+  div.flex-0.fixed.bottom-0(v-if="isUserRegistered && skipOTP")
     button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="login" v-if="skipOTP") Login
-      //- outline-arrow-circle-right-icon.w-8.h-8.ml-2 
-  div(v-if="isTermsAccepted")
-    button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="verifyOTP" v-if="isTermsAccepted") Login
-      //- outline-arrow-circle-right-icon.w-8.h-8.ml-2
-  div(v-if="!isUserRegistered")
+  div.flex-0.fixed.bottom-0(v-if="isTermsAccepted")
+    button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="verifyOTP" v-if="isTermsAccepted") Confirm OTP
+  div.flex-0.fixed.bottom-0(v-if="!isUserRegistered")
     button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="validate") Proceed
-      //-outline-arrow-circle-right-icon.w-8.h-8.ml-2
 
 </template>
 
 <script>
 export default {
   name: 'LoginPage',
+  layout:'empty',
   auth: false,
   data() {
     return {
@@ -53,6 +49,7 @@ export default {
       initiateOTPCount: 0,
       blockResend: false,
       isTermsAccepted: false,
+      otpSent:false,
     }
   },
   computed: {
@@ -72,6 +69,7 @@ export default {
     async initiateOTP() {
       this.otp = null
       try {
+        this.otpSent=true
         this.initiateOTPCount += 1
         await this.$axios.$post('/auth/otp', {
           mobile: Number(this.mobile),
@@ -173,9 +171,14 @@ export default {
 }
 </script>
 <style scoped>
+.ps-c{
+  background-color: white;
+  height: 100vh;
+}
 .ps-1 {
   color: #37202b;
   margin-top: 1rem;
+  text-align: left;
   margin-left: 3rem;
   font-weight: 300;
   letter-spacing: -2px;
@@ -197,32 +200,34 @@ export default {
 .ps-4 {
   margin-left: 3rem;
   margin-top: 1rem;
+  margin-right: 3rem;
   padding-left: 10px;
   padding-right: 4.75rem;
   padding-top: 10px;
   padding-bottom: 10px;
+  border: 1px solid #ccc;
+
 }
 .ps-5 {
   color: white;
   background-color: #7165e3;
-  margin-left: 9rem;
-  margin-right: 9rem;
-  margin-top: 2rem;
+  height: 2.5rem;
+  width: 20rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
   margin-bottom: 2rem;
 }
 .ps-8 {
+  margin-left: 3rem;
   margin-top: 1rem;
-  margin-left: -3rem;
 }
 .ps-6 {
   margin-top: 1rem;
   margin-left: 3rem;
-  margin-right: 12rem;
 }
 .ps-7 {
-  color: #37202b;
+  color: white;
   margin-top: 0.5rem;
-  margin-left: 3rem;
   width: 20px;
   height: 20px;
 }
@@ -231,6 +236,12 @@ export default {
   margin-right: -3rem;
 }
 .ps-11 {
-  margin: 2.5rem;
+  margin: 3rem;
+
+}
+.ps-9
+{
+   background-color: #7165e3;
+  height: 3rem;
 }
 </style>

@@ -32,8 +32,12 @@ div
         div.relative.w-10.h-10
           img(src="~/assets/toggle_on.png" v-if="isCardBlocked" @click="openUnblockCard")
           img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
-    div.uppercase.ps-5(v-if="isCardAvailable")
+    div.uppercase.ps-5(v-if="isCardAvailable && !isCardBlocked")
       SetPreference
+      //- button.flex.flex-row.justify-center.text-white.border.p-4.items-center.ps-44(@click="openPhysicalModel")
+       span Request Physical Card
+      //-   FaIcon.mx-auto.ps-3(icon='angle-left')
+      //- h3.text-sm.font-bold.tracking-widest.uppercase {{ title }}
         
     //- div.flex.flex-row.justify-between.ps-7
     //-   div.text-sm Ecom 
@@ -100,7 +104,7 @@ div
 </template>
 
 <script>
-import M2PRegistration from '~/components/M2P/Registration.vue'
+// import M2PRegistration from '~/components/M2P/Registration.vue'
 import SetPreference from '~/components/M2P/SetPreference.vue'
 import BlockCard from '~/components/M2P/BlockCard.vue'
 import UnblockCard from '~/components/M2P/UnblockCard.vue'
@@ -139,7 +143,11 @@ export default {
       this.$router.push('/dashboard')
     },
     openRegistrationModal() {
-      this.$FModal.show({ component: M2PRegistration })
+       this.$router.push('/CardRegistration')
+      //  this.$FModal.show({ component: M2PRegistration })
+    },
+    openPhysicalModel() {
+      this.$router.push('/RequestPhysical')
     },
     openCardSetting() {
       this.$FModal.show({ component: SetPreference })
@@ -273,7 +281,7 @@ object:focus {
   margin-top: 1rem;
 }
 .ps-6 {
-  margin-top: 5rem;
+  margin-top: 7rem;
   background-color: white;
 }
 .ps-7 {
@@ -331,5 +339,10 @@ object:focus {
 }
 .ps-19 {
   margin-top: 1rem;
+}
+.ps-44{
+    background-color: #7165E3;
+    border-radius: 20px;
+    width: 88%;
 }
 </style>

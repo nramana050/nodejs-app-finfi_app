@@ -2,13 +2,13 @@
 div.flex.flex-col
   FormulateForm(v-model="form" @submit="next")
     div
-      FormulateInput.pr-3(type="text" label="First Name" name="first_name" disabled validation="required")
+      FormulateInput.pr-3(type="text" label="First Name" name="first_name" validation="required")
     div
-      FormulateInput.pr-3(type="text" label="Last Name" name="last_name" disabled validation="required")
+      FormulateInput.pr-3(type="text" label="Last Name" name="last_name"  validation="required")
     div
-      FormulateInput.pb-2.pr-3(type="number" label="Mobile Number" name="mobile" disabled validation="required")
+      FormulateInput.pb-2.pr-3(type="number" label="Mobile Number" name="mobile"  validation="required")
     div
-      FormulateInput.pb-2.pr-3(type="text" label="Email" name="email" disabled validation="required")
+      FormulateInput.pb-2.pr-3(type="text" label="Email" name="email"  validation="required")
     div
       div.flex-1
         FormulateInput.pr-3(type="select" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")
@@ -85,8 +85,9 @@ export default {
       })
     },
     cancel(e) {
-      e.preventDefault()
-      this.$emit('close')
+      this.$router.push('/cards')
+      // e.preventDefault()
+      // this.$emit('close')
     },
     disabledRange(date) {
       return date > new Date()

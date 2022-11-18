@@ -87,7 +87,7 @@ export default {
     baseURL: 'https://uatapi.myfinfi.com',
     // baseURL: 'http://localhost:3000'
   },
-
+  
   pwa: {
     charset: 'utf-8',
     name: 'Finfi',

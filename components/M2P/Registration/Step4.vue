@@ -60,10 +60,12 @@ export default {
       this.$emit('restart')
     },
     cancel(e) {
-      e.preventDefault()
-      this.$emit('close')
-    },
+      this.$router.push('/cards')
+    //   e.preventDefault()
+    //   this.$emit('close')
+    // },
   },
+}
 }
 </script>
 <style scoped>

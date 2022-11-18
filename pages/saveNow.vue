@@ -31,7 +31,7 @@
 <script>
 export default {
   name: 'SaveNow',
-  layout: 'session',
+  layout: 'empty',
 
   methods: {
     navToDashboard() {
@@ -44,7 +44,7 @@ export default {
       this.$router.push('/PastPlans')
     },
     navToCategories() {
-      this.$router.push('/categoriesScreen')
+      this.$router.push('/categoriesList')
     },
   },
 }
