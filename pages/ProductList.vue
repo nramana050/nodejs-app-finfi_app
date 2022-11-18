@@ -21,7 +21,7 @@
 </template>
 <script>
 export default {
-  name: 'MerchantScreen',
+  name: 'ProductList',
   layout: 'empty',
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
       this.$router.push('/StartPlan')
     },
     navToCategory() {
-      this.$router.push('/CategoriesScreen')
+      this.$router.push('/CategoriesList')
     },
 
     selectProduct(Product) {

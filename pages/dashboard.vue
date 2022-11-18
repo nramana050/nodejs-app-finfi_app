@@ -20,12 +20,12 @@ div.ps-1A
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    div
+    //- div
       button.ps-7(@click="navToPhysicalCard")
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
-  div
+  //- div
     div
       div.font-bold.text-sm.ps-8 Savings Plan
       ssr-carousel
@@ -295,6 +295,7 @@ export default {
 }
 .ps-1A{
   background-color: #F2F2F2;
+  min-height: 100vh;
 }
 .ps-2 {
   margin-top: -6.5rem;
