@@ -20,7 +20,7 @@ div.ps-1A
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    //- div
+    div
       button.ps-7(@click="navToPhysicalCard")
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
