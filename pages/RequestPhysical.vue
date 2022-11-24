@@ -142,6 +142,7 @@ export default {
         )
         if(response.result == true){
           this.$toast.success('Physical Card Request is success')
+          this.$router.push('/ThankYou')
         }
         if(response.message == 'False'){
           this.$toast.error(response.result)
