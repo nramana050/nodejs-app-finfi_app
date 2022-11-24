@@ -140,23 +140,20 @@ export default {
             },
           }
         )
-        console.log('res ',response)
-        if(response.message && response.message === "Success" && response.result == true){
+        if(response.result == true){
           this.$toast.success('Physical Card Request is success')
+          this.$router.push('/ThankYou')
         }
-
-        if(response.message == 'Fail' && response.result.result == false && response.result.exception.errorCode == 'Y3261'){
-          this.$toast.success('Card is already registered for physical card')
-        }
-        else if(response.message == 'Fail'){
+        if(response.message == 'False'){
           this.$toast.error(response.result)
         }
+        if(response.result.result == false && response.result.exception.errorCode == 'Y3261'){
+          this.$toast.success('Card already registered for physical card')
+        }
       } catch (err) {
-        console.log('err ',err)
         this.$toast.error('Failed')
       }
     },
-
     //Razorpay payment window screen
 
     async pay() {
