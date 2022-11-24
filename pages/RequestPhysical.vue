@@ -140,16 +140,19 @@ export default {
             },
           }
         )
-        if(response.result.result == true){
+        console.log('res ',response)
+        if(response.message && response.message === "Success" && response.result == true){
           this.$toast.success('Physical Card Request is success')
         }
-        if(response.message == 'False'){
+
+        if(response.message == 'Fail' && response.result.result == false && response.result.exception.errorCode == 'Y3261'){
+          this.$toast.success('Card is already registered for physical card')
+        }
+        else if(response.message == 'Fail'){
           this.$toast.error(response.result)
         }
-        if(response.result.result == false && response.result.exception.errorCode == 'Y3261'){
-          this.$toast.success('Card is registered for physical card')
-        }
       } catch (err) {
+        console.log('err ',err)
         this.$toast.error('Failed')
       }
     },
