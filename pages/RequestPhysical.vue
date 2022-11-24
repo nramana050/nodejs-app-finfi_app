@@ -144,13 +144,15 @@ export default {
           this.$toast.success('Physical Card Request is success')
           this.$router.push('/ThankYou')
         }
-        if(response.message == 'False'){
+
+        if(response.message == 'Fail' && response.result.result == false && response.result.exception.errorCode == 'Y3261'){
+          this.$toast.success('Card is already registered for physical card')
+        }
+        else if(response.message == 'Fail'){
           this.$toast.error(response.result)
         }
-        if(response.result.result == false && response.result.exception.errorCode == 'Y3261'){
-          this.$toast.success('Card already registered for physical card')
-        }
       } catch (err) {
+        console.log('err ',err)
         this.$toast.error('Failed')
       }
     },
