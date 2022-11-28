@@ -20,7 +20,7 @@ div.ps-1A
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    div
+    div(v-if="this.card_type != 'PHYSICAL'")
       button.ps-7(@click="navToPhysicalCard")
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
@@ -114,7 +114,8 @@ export default {
       category_name:[],
       lock:true,
       filteredProducts:[],
-      toFilter:[1,3,7,14]
+      toFilter:[1,3,7,14],
+      card_type: null
     }
   },
   async fetch() {
@@ -198,7 +199,9 @@ export default {
       try {
         const UserProfile= await this.$axios.get('/profile')
         const orgAccountTypes = UserProfile.data.account_types.split(',')
-
+        if(UserProfile.data.card_type){
+          this.card_type = UserProfile.data.card_type
+        }
         const accountresult = await this.$axios.get('/accounts')
         const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
         const providerM2P = await this.$axios.post('/ext/service-provider',{ service_provider : 'M2P'})
