@@ -53,7 +53,8 @@ export default {
     },
     reload(e) {
       e.preventDefault()
-      this.$emit('reload')
+      // this.$emit('reload')
+      this.$router.push('card')
     },
     restart(e) {
       e.preventDefault()
