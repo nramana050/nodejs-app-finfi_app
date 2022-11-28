@@ -21,7 +21,7 @@ div.ps-1
       div.text-center.font-bold.ps-5 Card cost is ₹300 including delivery charges     
       div.flex-1.pr-4
         div.flex.flex-row.py-4.justify-center
-          button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="pay()")
+          button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="requestPhysicalCardd()")
             | Pay and Submit 
   
       //- buttonComponent(:buttonName="'Pay and Submit'" @click="pay()")
@@ -140,7 +140,8 @@ export default {
             },
           }
         )
-        if(response.result == true){
+        console.log('res ',response)
+        if(response.message && response.message === "Success" && response.result == true){
           this.$toast.success('Physical Card Request is success')
           this.$router.push('/ThankYou')
         }
@@ -156,6 +157,59 @@ export default {
         this.$toast.error('Failed')
       }
     },
+    async requestPhysicalCardd() {
+      if(this.form.address_line_1 === "" )
+      {
+          this.$toast.error('Enter All Details Properly')
+          return;
+      }
+      if(this.form.address_line_2 === "" )
+      {
+          this.$toast.error('Enter Valid Address')
+          return;
+      }
+      if(this.form.address_line_3 === "" )
+      {
+          this.$toast.error('Enter Valid Address')
+          return;
+      }
+      if(this.form.city === "" )
+      {
+          this.$toast.error('Enter Valid City Name')
+          return;
+      }
+      if(this.selectedState === "" )
+      {
+          this.$toast.error('Enter Valid State')
+          return;
+      }
+      if(this.form.pincode === "" )
+      {
+          this.$toast.error('Enter Valid Pincode')
+          return;
+      }
+      try {
+        const response = await this.$axios.$get('/m2p/requestPhysicalCard',
+          {
+            headers: {
+              Authorization: this.token,
+            },
+          }
+        )
+        console.log('res ',response)
+        // if(response.messag)
+        if(response.message === "True"){
+          this.pay(response)
+        }
+        else if(response.message === "False"){
+          this.$toast.error('No Virtual Card')
+        }
+      } catch (err) {
+        console.log('err ',err)
+        this.$toast.error('Failed')
+      }
+    },
+
     //Razorpay payment window screen
 
     async pay() {
