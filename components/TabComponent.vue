@@ -1,15 +1,15 @@
 <template lang="pug">
   div.flex.flex-row.ps-A.justify-evenly.text-white.shadow-2xl.text-xs.font-bold.tracking-wide.uppercase.py-3
-    div.grid.text-center(@click="navToDashboard")
+    button.grid.text-center(@click="navToDashboard")
       FaIcon.mx-auto.ps-A1(icon='house')
       p Home
-    div.grid.text-center(@click="navToTransfer")
+    button.grid.text-center(@click="navToTransfer")
       FaIcon.mx-auto.ps-A1(icon='paper-plane')
       p Transfer
-    //- div.grid.text-center(@click="navToSaveNow")
+    button.grid.text-center(@click="navToSaveNow")
       FaIcon.mx-auto.ps-A1(icon='piggy-bank')
       p Save
-    div.grid.text-center(@click="navToTranscation")
+    button.grid.text-center(@click="navToTranscation")
       FaIcon.mx-auto.ps-A1(icon='scroll')
       p History
 </template>

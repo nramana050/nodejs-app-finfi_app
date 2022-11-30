@@ -9,28 +9,22 @@
         p.font-bold.text-xl.text-center {{ profile.first_name }} {{ profile.last_name }}
         p.text-center.text-sm.ps-3 {{ profile.email }}
         p.text-center.text-sm.ps-4 {{ profile.mobile }}
-      //- button.h-10.bg-gray-700.text-white.uppercase.text-lg.rounded-md.font-bold.my-4.tracking-wider.px-8(@click="logout") logout
-      //- div.flex-0.p-4.leading-7.px-8
-      //-   div.flex.flex-row.justify-between.pb-2
-      //-     p Date of Birth
-      //-     p.text-gray-500 {{ dob }}
-      //-   div.flex.flex-row.justify-between.pb-2
-      //-     p Gender
-      //-     p.text-gray-500 {{ profile.gender === 'M' ? 'Male' : 'Female' }}
-      div.ps-5.uppercase
-        div.flex.flex-row.justify-between.ps-6
+      div.uppercase
+        div.flex.flex-row.justify-between.ps-5
           p.text-md.tracking-wide.font-bold.uppercase Bank Details
           p.text-right(v-if="!isEditMode" @click="enableEditMode")
             outline-pencil-alt-icon.w-5.h-5
-        div.flex.ps-13
+        div.flex.ps-5
           FormulateForm(v-model="bank" @submit="saveBankDetail")
             div.flex.flex-row.justify-between
-              span.text-sm.ps-12 Account number
-              FormulateInput.ps-11(type="text" name="account_number" :disabled="!isEditMode" validation="required")
+              span.text-sm Account number
+              span
+                FormulateInput.ps-6(type="text" name="account_number" :disabled="!isEditMode" minlength="11" maxlength="16" validation="required")
             div.flex.flex-row.justify-between
-              span.text-sm.ps-12 IFSC code
-              FormulateInput.ps-11(type="text" name="ifsc_code" :disabled="!isEditMode" validation="required")
-            div.flex.flex-row.justify-between.pb-4.ps-13(v-if="isEditMode")
+              span.text-sm IFSC code
+              span
+                FormulateInput.ps-6(type="text" name="ifsc_code" :disabled="!isEditMode" minlength="11" maxlength="11" validation="required")
+            div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
               button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
               button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit") Save     
         //- div.flex.flex-row.justify-between.ps-6
@@ -44,17 +38,17 @@
         //- div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
         //-   button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
         //-   button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit" @click="saveBankDetail") Save  
-        div.ps-14
-          div.flex.flex-row.justify-between.ps-13
+        div
+          div.flex.flex-row.justify-between.ps-9
             div
               p.text-sm Change Passcode
             button(@click="")
               FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
-          div.flex.flex-row.justify-between.ps-10
+          div.flex.flex-row.justify-between.ps-9
             p.text-sm Notification
             button(@click="")
               FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
-          div.flex.flex-row.justify-between.ps-10
+          div.flex.flex-row.justify-between.ps-9
             p.text-sm Logout
             button(@click="logout")
               FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
@@ -157,36 +151,18 @@ export default {
   padding-bottom: 15px;
 }
 .ps-5 {
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin: 1.5rem;
   color: #1c1939;
 }
-.ps-6 {
-  margin-top: 2rem;
-}
-.ps-8 {
-  margin-top: 1rem;
-  margin-bottom: 3rem;
-}
-.ps-9 {
-  color: black;
-}
-.ps-10 {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-.ps-11 {
+.ps-6{
+  max-width: 12rem;
+  margin-top: -15px;
+  padding: 5px;
   margin-left: 1rem;
-  margin-right: -1rem;
-  padding-top: 10px;
 }
-.ps-12 {
-  padding-top: 15px;
+.ps-9{
+  margin: 1.5rem;
 }
-.ps-13 {
-  margin-top: 1rem;
-}
-.ps-14 {
-  margin-top: 3rem;
-}
+
+
 </style>

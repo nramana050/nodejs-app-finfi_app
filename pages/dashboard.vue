@@ -20,7 +20,7 @@ div.ps-1A
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    div
+    div(v-if="this.card_type != 'PHYSICAL'")
       button.ps-7(@click="navToPhysicalCard")
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
@@ -58,36 +58,6 @@ div.ps-1A
             span.col-2
               div.font-bold.ps-9B BlueStone
               div.ps-9B save now for BlueStone products
-           
-    //- div.ps-17
-    //-   p(v-if="this.vciplink").text-xs.font-bold You are eligible for higher limits, Please complete 
-    //-     a(:href="this.vciplink" target="_blank") Full KYC
-    //- div
-    //-   p.ps-3.font-bold Activity
-    //- div.flex.flex-row.justify-evenly
-    //-   button.ps-6.grid.text-center(v-if="this.enableFinfi" @click="navToTransferScreen")
-    //-     FaIcon.mx-auto.ps-9(icon='paper-plane')
-    //-     p.text-sm Transfer
-    //-   button.ps-7.grid.text-center(v-if="isCardEnabled && this.enableM2P" @click="navToCard")
-    //-     FaIcon.mx-auto.ps-9(icon='credit-card')
-    //-     p.text-sm My Card
-    //-   button.ps-8.grid.text-center(@click="navToSaveNow")
-    //-     FaIcon.mx-auto.ps-9(icon='piggy-bank')
-    //-     p.text-sm Save now
-    //- div.ps-10(v-if="this.enableFinfi")
-    //-   div(v-if="recentTransaction")
-    //-     div.font-bold.text-xm.ps-12 Last Transaction 
-    //-     div.flex.flex-row.justify-between
-    //-       div.text-xs.ps-13 Cash Withdraw Status
-    //-       div.self-center
-    //-         div.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.ps-19.px-3.py-1.bg-green-200.text-green-700.rounded-full {{ recentTransaction.status }}
-    //-     div.flex.flex-row.justify-between
-    //-       div.text-xm.ps-15 &#8377; {{ parseFloat(recentTransaction.requested_amount).toLocaleString() }}
-    //-       div(@click="navToTransaction")
-    //-         button.text-xs.underline.ps-16 View All
-    //-   div(v-else)
-    //-     div.ps-18 No Cash Request found
-      
 </template>
 
 <script>
@@ -114,7 +84,8 @@ export default {
       category_name:[],
       lock:true,
       filteredProducts:[],
-      toFilter:[1,3,7,14]
+      toFilter:[1,3,7,14],
+      card_type: null
     }
   },
   async fetch() {
@@ -198,7 +169,9 @@ export default {
       try {
         const UserProfile= await this.$axios.get('/profile')
         const orgAccountTypes = UserProfile.data.account_types.split(',')
-
+        if(UserProfile.data.card_type){
+          this.card_type = UserProfile.data.card_type
+        }
         const accountresult = await this.$axios.get('/accounts')
         const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
         const providerM2P = await this.$axios.post('/ext/service-provider',{ service_provider : 'M2P'})

@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     navToProductScreen() {
-      this.$router.push('/ProductList')
+      this.$router.push('/SaveNow')
     },
      nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
@@ -100,7 +100,7 @@ export default {
           this.data = result.data
            })
           this.$toast.info('Your Plan started successfully')
-          this.$router.push('/ActivePlans')
+          this.$router.push('/SaveNow')
           }
           else{
             this.$toast.error('Maximum Goal amount is 100000')
