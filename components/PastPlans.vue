@@ -1,5 +1,5 @@
 <template lang="pug">
-    div 
+    div.ps-1A 
       div.flex.text-sm.items-center.ps-3(v-for="item in this.PastPlans" :key="item.id")
         span.col-1
           img(:src='item.product_image')
@@ -30,12 +30,14 @@ export default{
           element.end_date = moment(element.end_date).format('DD/MM/YYYY')
         })
       })
-      console.log('length',this.PastPlans)
     },
   }
 }
 </script>
 <style scoped>
+  .ps-1A{
+    margin-bottom: 4rem;
+  }
    .ps-3 {
   text-align: center;
   background-color: white;
