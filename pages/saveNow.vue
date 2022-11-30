@@ -1,5 +1,5 @@
 <template lang="pug">
-  div 
+  div.ps-3
     div.flex-0 
       PageHeader.font-bold(:title="'Save Now Buy Later'")
     div.flex.flex-row.justify-between
@@ -68,14 +68,12 @@ export default {
     },
     selectedCategory(category){
       this.category=category
-      console.log(category)
       this.getProducts()
     },
     async getProducts() {
       const payload = { category: [this.category] }
       await this.$axios.$post(`/snbl/products`, payload).then((result) => {
         this.productList = [];
-        console.log(result.data)
         this.productList = result.data
       })
     },
@@ -92,6 +90,9 @@ export default {
   color: #D8D8D8;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+  }
+  .ps-3{
+    min-height: 100vh;
   }
  
 </style>

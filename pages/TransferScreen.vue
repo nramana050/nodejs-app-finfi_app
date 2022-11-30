@@ -54,7 +54,6 @@ export default {
     const _this = this
     setInterval(function (){
       _this.transferAmount=_this.requestedAmount
-      // console.log('hi',_this.transferAmount)
     },1000)  
   },
     methods:{

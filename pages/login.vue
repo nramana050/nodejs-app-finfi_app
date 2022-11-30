@@ -133,7 +133,13 @@ export default {
         //   this.$router.push('/dashBoard');
         // }
       } catch (err) {
+        if(this.passcode==null)
+      {
+        this.$toast.error('Please enter passcode')
+      }
+      else{
         this.$toast.error(err.response.data.message)
+      }
       }
     },
     async validate() {

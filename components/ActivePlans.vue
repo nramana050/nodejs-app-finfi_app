@@ -1,5 +1,5 @@
 <template lang="pug">
-   div
+   div.ps-1A
       div.flex.text-sm.ps-3(v-for="item in ActivePlans" :key="item.id")
         span.col-1
           img(:src='item.product_image')
@@ -45,7 +45,9 @@ export default {
 }
 </script>
 <style scoped>
-  
+  .ps-1A{
+    margin-bottom: 4rem;
+  }
 .ps-3 {
   text-align: center;
   background-color: white;
