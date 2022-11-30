@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    div
+    div.ps-5
       div.ps-2(v-for="item in this.productList" :key="item.id" @click="navToStartPlan(); selectProduct(item)")
         div.ps-3.justify-center
           img.ps-5.h-20.w-50(:src='item.product_image')
@@ -77,5 +77,8 @@ export default{
     }
     .ps-4B{
       padding: 5px;
+    }
+    .ps-5{
+      margin-bottom: 4rem;
     }
 </style>

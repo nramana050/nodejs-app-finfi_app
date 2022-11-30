@@ -55,9 +55,9 @@ export default {
       this.$emit('next', this.form)
     },
     cancel(e) {
-      this.$router.push('/cards')
-      // e.preventDefault()
-      // this.$emit('close')
+      // this.$router.push('/cards')
+      e.preventDefault()
+      this.$emit('close')
     },
   },
 }
