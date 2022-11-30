@@ -86,7 +86,7 @@ export default {
     },
     cancel(e) {
       this.$router.push('/cards')
-      // e.preventDefault()
+      e.preventDefault()
       // this.$emit('close')
     },
     disabledRange(date) {
