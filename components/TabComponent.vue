@@ -6,7 +6,7 @@
     button.grid.text-center(@click="navToTransfer")
       FaIcon.mx-auto.ps-A1(icon='paper-plane')
       p Transfer
-    button.grid.text-center(@click="navToSaveNow")
+    //- button.grid.text-center(@click="navToSaveNow")
       FaIcon.mx-auto.ps-A1(icon='piggy-bank')
       p Save
     button.grid.text-center(@click="navToTranscation")
