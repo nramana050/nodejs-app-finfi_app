@@ -112,20 +112,26 @@ export default {
       if(ifscIsValid & accountNumberIsValid){
         return true
       }
-      return false
-    },
+      else if(!accountNumberIsValid){
+        return "Please Enter Valid Account Number"
+      }
+      
+      else if(!ifscIsValid){
+        return "Please Enter Valid IFSC code."
+      }
 
+    },
     async saveBankDetail() {
 
       try {
-        if(this.validator(this.bank)){
+        const validatorMessage=this.validator(this.bank);
+        if(validatorMessage===true){
         await this.$axios.post('/profile/banks', this.bank)
-        // await alert(this.validator(this.bank))
         this.$toast.info('Bank details updated successfully')
         this.disableEditMode()
         }
         else{
-          this.$toast.error('Please enter correct Account Number and IFSC code.')
+          this.$toast.error(validatorMessage)
         }
         
       } catch (err) {
