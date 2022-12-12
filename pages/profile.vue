@@ -19,11 +19,12 @@
             div.flex.flex-row.justify-between
               span.text-sm Account number
               span
-                FormulateInput.ps-6(type="text" name="account_number" :disabled="!isEditMode" minlength="11" maxlength="16" validation="required")
+                FormulateInput.ps-6(type="text" name="account_number" :disabled="!isEditMode" validation="required" maxlength="40")
+                
             div.flex.flex-row.justify-between
-              span.text-sm IFSC code
+              span.text-sm IFSC code 
               span
-                FormulateInput.ps-6(type="text" name="ifsc_code" :disabled="!isEditMode" minlength="11" maxlength="11" validation="required")
+                FormulateInput.ps-6(type="text" name="ifsc_code" :disabled="!isEditMode" validation="required" minlength="11" maxlength="11")
             div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
               button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
               button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit") Save     
@@ -52,7 +53,7 @@
             p.text-sm Logout
             button(@click="logout")
               FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
-        
+
         //- div.flex
         //-   FormulateForm(v-model="bank" @submit="saveBankDetail")
         //-     div.flex.flex-row.justify-between.pb-4
@@ -72,6 +73,7 @@ export default {
   data() {
     return {
       profile: null,
+
       bank: {
         ifsc_code: null,
         account_number: null,
@@ -90,20 +92,53 @@ export default {
     enableEditMode() {
       this.isEditMode = true
     },
+
+
     disableEditMode() {
       this.isEditMode = false
     },
     navToDashBoard() {
       this.$router.push('/dashboard')
     },
+
+    validator(data){
+
+      const ifscPattern = /([A-Z]{4})+(\d{7}$)/;
+      const accountNumberPattern=/^\d{1,40}$/;
+
+      const ifscIsValid = ifscPattern.test(data.ifsc_code);
+      const accountNumberIsValid=accountNumberPattern.test(data.account_number)
+
+      if(ifscIsValid & accountNumberIsValid){
+        return true
+      }
+      else if(!accountNumberIsValid){
+        return "Please Enter Valid Account Number"
+      }
+      
+      else if(!ifscIsValid){
+        return "Please Enter Valid IFSC code."
+      }
+
+    },
     async saveBankDetail() {
+
       try {
+        const validatorMessage=this.validator(this.bank);
+        if(validatorMessage===true){
         await this.$axios.post('/profile/banks', this.bank)
         this.$toast.info('Bank details updated successfully')
         this.disableEditMode()
+        }
+        else{
+          this.$toast.error(validatorMessage)
+        }
+        
       } catch (err) {
-        this.$toast.success('failed to update account details')
+        this.$toast.error('failed to update account details')
       }
+
+
     },
     async getBankAccount() {
       try {
@@ -134,6 +169,7 @@ export default {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
+
 .ps-7 {
   color: #ffffff;
   margin-left: 2rem;
@@ -141,28 +177,32 @@ export default {
   height: 20px;
   padding-top: 1rem;
 }
+
 .ps-2 {
   margin-top: 1rem;
 }
+
 .ps-3 {
   margin-top: 10px;
 }
+
 .ps-4 {
   padding-bottom: 15px;
 }
+
 .ps-5 {
   margin: 1.5rem;
   color: #1c1939;
 }
-.ps-6{
+
+.ps-6 {
   max-width: 12rem;
   margin-top: -15px;
   padding: 5px;
   margin-left: 1rem;
 }
-.ps-9{
+
+.ps-9 {
   margin: 1.5rem;
 }
-
-
 </style>

@@ -28,7 +28,10 @@ export default {
   },
   methods: {
     async setPasscode() {
-      if (this.passcode_1.length !== 6 || this.passcode_2.length !== 6) {
+      const passwordPattern=/^\d{6}$/;
+      const validatePassword = passwordPattern.test(this.passcode_2);
+      
+      if (this.passcode_1.length !== 6 || this.passcode_2.length !== 6 || !validatePassword) {
         this.$toast.error('Enter 6 digit numeric passcode')
         return
       }
