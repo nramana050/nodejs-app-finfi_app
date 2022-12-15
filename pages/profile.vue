@@ -24,7 +24,7 @@
             div.flex.flex-row.justify-between
               span.text-sm IFSC code 
               span
-                FormulateInput.ps-6(type="text" name="ifsc_code" :disabled="!isEditMode" validation="required" minlength="11" maxlength="11")
+                FormulateInput.ps-6(type="text" name="ifsc_code" :disabled="!isEditMode" validation="required" minlength="11" )
             div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
               button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
               button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit") Save     
@@ -93,7 +93,6 @@ export default {
       this.isEditMode = true
     },
 
-
     disableEditMode() {
       this.isEditMode = false
     },
@@ -101,44 +100,43 @@ export default {
       this.$router.push('/dashboard')
     },
 
-    validator(data){
+    validator(data) {
+      const ifscPattern = /([A-Z]{4})+(\d{7}$)/
+      const accountNumberPattern = /^\d{1,40}$/
 
-      const ifscPattern = /([A-Z]{4})+(\d{7}$)/;
-      const accountNumberPattern=/^\d{1,40}$/;
+      const ifscIsValid = ifscPattern.test(data.ifsc_code)
+      const accountNumberIsValid = accountNumberPattern.test(
+        data.account_number
+      )
 
-      const ifscIsValid = ifscPattern.test(data.ifsc_code);
-      const accountNumberIsValid=accountNumberPattern.test(data.account_number)
-
-      if(ifscIsValid & accountNumberIsValid){
+      if (ifscIsValid & accountNumberIsValid) {
         return true
+      } else if (!accountNumberIsValid) {
+        return 'Please Enter Valid Account Number'
+      } else if (!ifscIsValid) {
+        return 'Please Enter Valid IFSC code.'
       }
-      else if(!accountNumberIsValid){
-        return "Please Enter Valid Account Number"
-      }
-      
-      else if(!ifscIsValid){
-        return "Please Enter Valid IFSC code."
-      }
-
     },
     async saveBankDetail() {
-
       try {
-        const validatorMessage=this.validator(this.bank);
-        if(validatorMessage===true){
-        await this.$axios.post('/profile/banks', this.bank)
-        this.$toast.info('Bank details updated successfully')
-        this.disableEditMode()
-        }
-        else{
+        const validatorMessage = this.validator(this.bank)
+        if (validatorMessage === true) {
+          const bankDetailUpdate = await this.$axios.post(
+            '/profile/banks',
+            this.bank
+          )
+          if (bankDetailUpdate?.data?.message === 'Success') {
+            this.$toast.info('Bank details updated successfully')
+            this.disableEditMode()
+          } else {
+            this.$toast.error(bankDetailUpdate?.data?.message)
+          }
+        } else {
           this.$toast.error(validatorMessage)
         }
-        
       } catch (err) {
-        this.$toast.error('failed to update account details')
+        this.$toast.error('Failed to update account details')
       }
-
-
     },
     async getBankAccount() {
       try {
