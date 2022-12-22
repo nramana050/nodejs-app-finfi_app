@@ -20,11 +20,11 @@ div.ps-1A
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    //- div(v-if="this.card_type != 'PHYSICAL'")
-    //-   button.ps-7(@click="navToPhysicalCard")
-    //-     div.flex.flex-row.justify-between
-    //-       span.ps-7A Order a Physical card
-    //-       FaIcon.mx-auto.ps-7B(icon='angle-right')
+    div(v-if="this.card_type != 'PHYSICAL'")
+      button.ps-7(@click="navToPhysicalCard")
+        div.flex.flex-row.justify-between
+          span.ps-7A Order a Physical card
+          FaIcon.mx-auto.ps-7B(icon='angle-right')
   //- div
     div
       div.font-bold.text-sm.ps-8 Savings Plan
