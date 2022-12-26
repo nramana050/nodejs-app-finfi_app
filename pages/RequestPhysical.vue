@@ -1,8 +1,8 @@
 <template lang="pug">
 div.ps-1
   div.ps-4
-   button(@click="navToDashboard")
-    FaIcon.mx-auto.ps-9(icon='angle-left')
+    button(@click="navToDashboard")
+      FaIcon.mx-auto.ps-9(icon='angle-left')
   div.flex.flex-col
     div.text-center.font-bold.ps-2 Request physical card
     FormulateForm.ps-6(v-model="form") 
@@ -18,12 +18,23 @@ div.ps-1
         FormulateInput.pb-2.pr-3.w-full(type="select" name="state" :options="states" v-model="selectedState" placeholder="Select state" validation="required")
       div.flex.flex-cpl.ps-3
         FormulateInput.pb-2.pr-3.w-full(type="text" name="pincode" validation="required" placeholder="Pincode" v-model="inputValue" maxlength="6")
-      div.text-center.font-bold.ps-5 Card cost is ₹300 including delivery charges     
+
+      div(v-if="is_paid==false")  
+        div.text-center.font-bold.ps-5 Card cost is ₹300 including delivery charges.
+
+      div(v-else="is_paid==Paid")
+        div.text-center.font-bold.ps-5 You have already made payment for the physical card.  
       div.flex-1.pr-4
+
+      div(v-if="is_paid==false")
         div.flex.flex-row.py-4.justify-center
           button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="requestPhysicalCardd()")
             | Pay and Submit 
-  
+      div(v-else="is_paid==Paid")
+        div.flex.flex-row.py-4.justify-center
+          button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="requestPhysicalCard(order_id)")
+            | Submit 
+
       //- buttonComponent(:buttonName="'Pay and Submit'" @click="pay()")
         | Pay and Submit
 </template>
@@ -47,6 +58,8 @@ export default {
   data() {
     return {
       token: this.$auth.strategy.token.get(),
+      is_paid:false,
+      order_id:false,
       form: {
         address_line_1: '',
         address_line_2: '',
@@ -69,8 +82,26 @@ export default {
   },
   async beforeMount() {
     const stateApiResult = await this.$axios.$get('/ext/states')
+
+    const cardPaymentStatus = await this.$axios.get("/m2p/requestPhysicalCard",{
+      headers:{
+        Authorization:this.token
+      },
+    });
+
+    if(cardPaymentStatus.data.message==="Paid")
+    {
+      this.is_paid=cardPaymentStatus.data.message
+      this.order_id=cardPaymentStatus.data.result
+      this.form.address_line_1=cardPaymentStatus.data.data.address_line_1
+      this.form.address_line_2=cardPaymentStatus.data.data.address_line_2
+      this.form.address_line_3=cardPaymentStatus.data.data.address_line_3
+      this.form.city=cardPaymentStatus.data.data.city
+      this.form.state=cardPaymentStatus.data.data.state
+      this.form.pincode=cardPaymentStatus.data.data.pincode
+    }
     this.states = stateApiResult
-    console.log(stateApiResult)
+    // console.log(stateApiResult)
   },
   watch: {
     inputValue(newValue) {
@@ -148,6 +179,7 @@ export default {
 
         if(response.message == 'Fail' && response.result.result == false && response.result.exception.errorCode == 'Y3261'){
           this.$toast.success('Card is already registered for physical card')
+          this.$router.push('/ThankYou')
         }
         else if(response.message == 'Fail'){
           this.$toast.error(response.result)
@@ -295,41 +327,48 @@ export default {
 </script>
 <style scoped>
 .btn {
-    color: white;
-    background-color: #7165e3;
-    height: 2.5rem;
-    width: 20rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    margin-bottom: 2rem;
+  color: white;
+  background-color: #7165e3;
+  height: 2.5rem;
+  width: 20rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
 }
-.ps-1{
+
+.ps-1 {
   background-color: white;
 }
-.ps-2{
+
+.ps-2 {
   margin: 1rem;
 }
-.ps-3{
+
+.ps-3 {
   padding-left: 2rem;
   padding-right: 2rem;
 }
-.ps-4{
+
+.ps-4 {
   height: 2.5rem;
   background-color: #7165e3;
   width: full;
 }
-.ps-5{
+
+.ps-5 {
   height: 5rem;
   margin: 2rem;
   border: 1px solid black;
   border-radius: 10px;
   padding: 10px;
-  
+
 }
-.ps-6{
+
+.ps-6 {
   margin-top: 1rem;
 }
-.ps-9{
+
+.ps-9 {
   margin-left: 1rem;
   margin-right: 1rem;
   margin-top: 12px;

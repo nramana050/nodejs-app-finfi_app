@@ -27,7 +27,7 @@ export default {
   css: [
     '~/assets/style.css',
     '~/node_modules/vue2-datepicker/index.css',
-    '@fortawesome/fontawesome-svg-core/styles.css'
+    '@fortawesome/fontawesome-svg-core/styles.css',
   ],
 
   plugins: [
@@ -50,7 +50,7 @@ export default {
     '@braid/vue-formulate/nuxt',
     '@nuxt-hero-icons/outline/nuxt',
     '@nuxt-hero-icons/solid/nuxt',
-    'vue-ssr-carousel/nuxt'
+    'vue-ssr-carousel/nuxt',
   ],
 
   modules: [
@@ -85,9 +85,9 @@ export default {
 
   axios: {
     baseURL: 'https://uatapi.myfinfi.com',
-    // baseURL: 'http://localhost:3000'
+    //baseURL: 'http://localhost:8000'
   },
-  
+
   pwa: {
     charset: 'utf-8',
     name: 'Finfi',
