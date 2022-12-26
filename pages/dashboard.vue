@@ -20,11 +20,11 @@ div.ps-1A
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    div(v-if="this.card_type != 'PHYSICAL'")
-      button.ps-7(@click="navToPhysicalCard")
-        div.flex.flex-row.justify-between
-          span.ps-7A Order a Physical card
-          FaIcon.mx-auto.ps-7B(icon='angle-right')
+    //- div(v-if="this.card_type != 'PHYSICAL'")
+    //-   button.ps-7(@click="navToPhysicalCard")
+    //-     div.flex.flex-row.justify-between
+    //-       span.ps-7A Order a Physical card
+    //-       FaIcon.mx-auto.ps-7B(icon='angle-right')
   //- div
     div
       div.font-bold.text-sm.ps-8 Savings Plan
@@ -76,16 +76,16 @@ export default {
       vciplink: null,
       availableLimit: null,
       isCardEnabled: false,
-      isCardNumber:false,
-      isCardLock:false,
-      enableFinfi : false,
+      isCardNumber: false,
+      isCardLock: false,
+      enableFinfi: false,
       enableM2P: false,
       categories: [],
-      category_name:[],
-      lock:true,
-      filteredProducts:[],
-      toFilter:[1,3,7,14],
-      card_type: null
+      category_name: [],
+      lock: true,
+      filteredProducts: [],
+      toFilter: [1, 3, 7, 14],
+      card_type: null,
     }
   },
   async fetch() {
@@ -97,7 +97,7 @@ export default {
       return this.$auth.user.organization
     },
   },
-  mounted(){
+  mounted() {
     this.getCategories()
     this.getProducts()
   },
@@ -131,69 +131,78 @@ export default {
     navToSaveNow() {
       this.$router.push('/saveNow')
     },
-    navToFAQ(){
+    navToFAQ() {
       this.$router.push('/AskedQuestions')
     },
-    navToPhysicalCard()
-    {
+    navToPhysicalCard() {
       this.$router.push('/welcomePage4')
     },
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
-      this.categories = categories.data.map(item=>
-      item.category_name)
+      this.categories = categories.data.map((item) => item.category_name)
     },
     async getProducts() {
       const payload = { category: this.categories }
-      const res = await this.$axios.$post(`/snbl/products`,payload)
+      const res = await this.$axios.$post(`/snbl/products`, payload)
       const productList = res.data
-      this.filteredProducts = productList.filter(x=>this.toFilter.includes(x.id))
+      this.filteredProducts = productList.filter((x) =>
+        this.toFilter.includes(x.id)
+      )
     },
-    cardNumber(){
-      if(this.isCardNumber===true){
-        this.isCardNumber=false
-      }
-      else{
-        this.isCardNumber=true
-      }
-    },
-    lockOpen(){
-      if(this.lock===true){
-         this.lock=false
-      }
-      else{
-        this.lock=true
+    cardNumber() {
+      if (this.isCardNumber === true) {
+        this.isCardNumber = false
+      } else {
+        this.isCardNumber = true
       }
     },
-    async getAccountDetails(){
+    lockOpen() {
+      if (this.lock === true) {
+        this.lock = false
+      } else {
+        this.lock = true
+      }
+    },
+    async getAccountDetails() {
       try {
-        const UserProfile= await this.$axios.get('/profile')
+        const UserProfile = await this.$axios.get('/profile')
         const orgAccountTypes = UserProfile.data.account_types.split(',')
-        if(UserProfile.data.card_type){
+        if (UserProfile.data.card_type) {
           this.card_type = UserProfile.data.card_type
         }
         const accountresult = await this.$axios.get('/accounts')
-        const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
-        const providerM2P = await this.$axios.post('/ext/service-provider',{ service_provider : 'M2P'})
+        const providerFinfi = await this.$axios.post('/ext/service-provider', {
+          service_provider: 'FINFI',
+        })
+        const providerM2P = await this.$axios.post('/ext/service-provider', {
+          service_provider: 'M2P',
+        })
 
-        for (const item of accountresult.data){
-          if(orgAccountTypes.includes(item.account.account_type)){
-            this.accounts.push(item.account);
-            if(item.account.account_type !== 'PAYABLE'){
-              this.availableLimit += item.account.account_balance 
+        for (const item of accountresult.data) {
+          if (orgAccountTypes.includes(item.account.account_type)) {
+            this.accounts.push(item.account)
+            if (item.account.account_type !== 'PAYABLE') {
+              this.availableLimit += item.account.account_balance
             }
           }
         }
         this.availableLimit = this.availableLimit.toLocaleString('en-IN')
 
-        const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>orgAccountTypes.includes(x))[0])  ;
-        const m2pAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerM2P.data.filter(x=>orgAccountTypes.includes(x))[0] ) ;
+        const finfiAccount = this.accounts.filter(
+          (item) =>
+            item.account_type.toUpperCase() ===
+            providerFinfi.data.filter((x) => orgAccountTypes.includes(x))[0]
+        )
+        const m2pAccount = this.accounts.filter(
+          (item) =>
+            item.account_type.toUpperCase() ===
+            providerM2P.data.filter((x) => orgAccountTypes.includes(x))[0]
+        )
 
-        this.enableFinfi = finfiAccount.length>0 ? true : null
-        this.enableM2P = m2pAccount.length>0 ? true : null
-        if (finfiAccount.length>0)
-          await this.fetchRecentWithdrawal(finfiAccount[0].id);
-        
+        this.enableFinfi = finfiAccount.length > 0 ? true : null
+        this.enableM2P = m2pAccount.length > 0 ? true : null
+        if (finfiAccount.length > 0)
+          await this.fetchRecentWithdrawal(finfiAccount[0].id)
       } catch (err) {
         this.$toast.error('Failed to fetch accounts')
       }
@@ -218,7 +227,7 @@ export default {
     //       return;
     //     }
     //     await this.$axios.post(`/accounts/${cashAccount[0].id}/withdrawals`, {
-    //       amount: this.requestedAmount 
+    //       amount: this.requestedAmount
     //       });
     //     this.$toast.success('Cash request sent');
     //     this.getAccountDetails();
@@ -266,8 +275,8 @@ export default {
   padding-top: 2rem;
   color: white;
 }
-.ps-1A{
-  background-color: #F2F2F2;
+.ps-1A {
+  background-color: #f2f2f2;
   min-height: 100vh;
 }
 .ps-2 {
@@ -288,20 +297,20 @@ export default {
 .ps-4 {
   margin-right: 2rem;
 }
-.ps-4A{
+.ps-4A {
   margin-left: 5rem;
   height: 30px;
 }
-.ps-4A1{
+.ps-4A1 {
   margin-left: 5.5rem;
 }
-.ps-5{
+.ps-5 {
   margin-top: 1rem;
   margin-bottom: 1rem;
   margin-left: 2rem;
   margin-right: 2rem;
 }
-.ps-6{
+.ps-6 {
   width: 75%;
   height: 9rem;
   background-color: #ffffff;
@@ -325,12 +334,12 @@ export default {
   border-bottom-right-radius: 15px;
 }
 
-.ps-6A{
+.ps-6A {
   height: 9rem;
   width: 100%;
 }
 
-.ps-7{
+.ps-7 {
   width: 75%;
   height: 2rem;
   background-color: #ffffff;
@@ -338,19 +347,19 @@ export default {
   margin-right: 3rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-.ps-7A{
+.ps-7A {
   padding: 5px;
 }
-.ps-7B{
+.ps-7B {
   padding: 7px;
   margin-right: 1rem;
 }
-.ps-8{
+.ps-8 {
   margin-left: 2rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
-.ps-9{
+.ps-9 {
   height: 9rem;
   width: 85%;
   background-color: #ffffff;
@@ -360,13 +369,12 @@ export default {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
 }
-.ps-9A{
+.ps-9A {
   height: 9rem;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
-.ps-9B{
+.ps-9B {
   padding: 10px;
 }
-
 </style>
