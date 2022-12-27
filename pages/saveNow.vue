@@ -9,41 +9,42 @@
         button {{name.name}}    
     div(v-if="itemSelected=='Explore'")
       CategoriesList.px-5(:categories="categories" v-on:select-category="selectedCategory")
-      ProductList(:productList="productList")
+      ProductList(:productList="productList" v-if='Boolean(category)')
+    div.flex.ps-4.items-center.justify-center(v-if="!productList.length && categories.length && !category ") Please Select Category to View Products.  
     div(v-if="itemSelected=='Active plan'")
       ActivePlans
     div(v-if="itemSelected=='Past plan'")
       PastPlans
-
 </template>
+
 <script>
 export default {
   name: 'SaveNow',
   layout: 'session',
-  data(){
-    return{
-       items:[
-            {
-            id:'01',
-            name:'Explore'
-             },
-            {
-            id:'02',
-            name:'Active plan'
-            },
-            {
-            id:'03',
-            name:'Past plan'
-            },],
-       itemSelected:'Explore',
-       categories:[],
-       productList:[],
-       category:'',
-      }
+  data() {
+    return {
+      items: [
+        {
+          id: '01',
+          name: 'Explore',
+        },
+        {
+          id: '02',
+          name: 'Active plan',
+        },
+        {
+          id: '03',
+          name: 'Past plan',
+        },
+      ],
+      itemSelected: 'Explore',
+      categories: [],
+      productList: [],
+      category: '',
+    }
   },
   mounted() {
     this.getCategories()
-    this.getProducts()
   },
   methods: {
     navToDashboard() {
@@ -58,41 +59,42 @@ export default {
     navToCategories() {
       this.$router.push('/categoriesList')
     },
-    selectedItem(name){
-      this.itemSelected=[]
+    selectedItem(name) {
+      this.itemSelected = []
       this.itemSelected.push(name)
     },
+
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
       this.categories = categories.data
     },
-    selectedCategory(category){
-      this.category=category
+    selectedCategory(category) {
+      this.category = category
       this.getProducts()
     },
+
     async getProducts() {
-      const payload = (this.category === '') ? {category: []} : {category: [this.category]}
+      const payload = !this.category
+        ? { category: [] }
+        : { category: [this.category] }
       await this.$axios.$post(`/snbl/products`, payload).then((result) => {
-        this.productList = [];
-        this.productList = result.data
+        this.productList = result?.data
       })
     },
-    
   },
 }
 </script>
 <style scoped>
-  .ps-2{
-    width: 33.3%;
+.ps-2 {
+  width: 33.3%;
   text-align: center;
   margin-top: 2rem;
-  border-bottom: 1px solid #D8D8D8;
-  color: #D8D8D8;
+  border-bottom: 1px solid #d8d8d8;
+  color: #d8d8d8;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  }
-  .ps-3{
-    min-height: 100vh;
-  }
- 
+}
+.ps-3 {
+  min-height: 100vh;
+}
 </style>
