@@ -71,7 +71,7 @@ export default {
       this.getProducts()
     },
     async getProducts() {
-      const payload = { category: [this.category] }
+      const payload = (this.category === '') ? {category: []} : {category: [this.category]}
       await this.$axios.$post(`/snbl/products`, payload).then((result) => {
         this.productList = [];
         this.productList = result.data
