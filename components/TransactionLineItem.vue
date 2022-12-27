@@ -40,83 +40,82 @@
 </template>
 
 <script>
-
 export default {
-  props:['transactions'],
-  data(){
-    return{
-      History:[
+  props: ['transactions'],
+  data() {
+    return {
+      History: [
         {
-          name:'All',
-          id:'01',
-          condition:'none'
+          name: 'All',
+          id: '01',
+          condition: 'none',
         },
         {
-          name:'Credit',
-          id:'02',
-          condition:'isCredit'
+          name: 'Credit',
+          id: '02',
+          condition: 'isCredit',
         },
         {
-          name:'Debit',
-          id:'03',
-          condition:'isDebit'
-        }
+          name: 'Debit',
+          id: '03',
+          condition: 'isDebit',
+        },
       ],
-      selectHistory:[],
-      selectedValue:'All',
-      selected:false,
-      selectedCondition:'none',
-      none:true,
-      creditList:[],
-      debitList:[],
-      selectedOption:'',
-      show:false
+      selectHistory: [],
+      selectedValue: 'All',
+      selected: false,
+      selectedCondition: 'none',
+      none: true,
+      creditList: [],
+      debitList: [],
+      selectedOption: '',
+      show: false,
     }
   },
 
   computed: {
     creditListx() {
-      return this.transactions.filter(x=> x.type === 'CREDIT')
+      return this.transactions.filter((x) => x.type === 'CREDIT')
     },
     debitListx() {
-      return this.transactions.filter(x=> x.type === 'DEBIT')
+      return this.transactions.filter((x) => x.type === 'DEBIT')
     },
     date() {
-      return this.$dayjs(this.transactions.transaction_time).format(
+      return this.$dayjs(this.transactions[0]?.transaction_time).format(
         'YYYY-MM-DD HH:mm:ss'
       )
     },
   },
-  methods:{
-    selectedHistory(name,condition){
-         this.selectHistory = []
-         this.selectedCondition=condition
-         this.selectHistory.push(name)
-         this.selected = true
-         this.selectedValue=name
-      },
-      selectedTransaction(transaction){
-        this.selectedOption=transaction
-        this.show=true
-      }
-  }
+  methods: {
+    selectedHistory(name, condition) {
+      this.selectHistory = []
+      this.selectedCondition = condition
+      this.selectHistory.push(name)
+      this.selected = true
+      this.selectedValue = name
+    },
+    selectedTransaction(transaction) {
+      this.selectedOption = transaction
+      this.show = true
+    },
+  },
 }
 </script>
 <style scoped>
 .ps-2 {
   height: auto;
-    width:90%;
-    background-color: #F2F2F2;
-    border-radius: 10px;
-    color: #1C1939;
-    margin: 1rem;  
+  width: 90%;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  color: #1c1939;
+  margin: 1rem;
 }
-.ps-1{
-  background-color: #F5F5F5;
+.ps-1 {
+  background-color: #f5f5f5;
 }
-.ps-3{
-  color: #1C1939;
-  background-color: #FFFFFF;
+.ps-3 {
+  color: #1c1939;
+  background-color: #ffffff;
   padding: 15px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -124,15 +123,15 @@ export default {
   /* box-shadow: 0px 35px 65px rgba(0, 0, 0, 0.0790811); */
   border: 1px solid #ccc;
 }
-.ps-4{
+.ps-4 {
   padding: 20px;
 }
-.ps-6{
+.ps-6 {
   width: 33.3%;
   text-align: center;
   margin-top: 1rem;
-  border-bottom: 1px solid #D8D8D8;
-  color: #D8D8D8;
+  border-bottom: 1px solid #d8d8d8;
+  color: #d8d8d8;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
