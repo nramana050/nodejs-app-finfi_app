@@ -81,9 +81,10 @@ export default {
       return this.transactions.filter((x) => x.type === 'DEBIT')
     },
     date() {
-      return this.$dayjs(this.transactions[0]?.transaction_time).format(
-        'YYYY-MM-DD HH:mm:ss'
-      )
+      return this.$dayjs(
+        this.transactions.filter((t) => t.id === this.selectedOption)[0]
+          .transaction_time
+      ).format('YYYY-MM-DD HH:mm:ss')
     },
   },
   methods: {
