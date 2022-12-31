@@ -10,7 +10,7 @@
     div(v-if="itemSelected=='Explore'")
       CategoriesList.px-5(:categories="categories" v-on:select-category="selectedCategory")
       ProductList(:productList="productList" v-if='Boolean(category)')
-    div.flex.ps-4.items-center.justify-center(v-if="!productList.length && categories.length && !category ") Please Select Category to View Products.  
+      div.flex.ps-4.items-center.justify-center(v-if="!productList.length && categories.length && !category ") Please Select Category to View Products.  
     div(v-if="itemSelected=='Active plan'")
       ActivePlans
     div(v-if="itemSelected=='Past plan'")
