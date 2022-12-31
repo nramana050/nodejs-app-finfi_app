@@ -1,9 +1,12 @@
 <template lang="pug">
+
 ssr-carousel( :slides-per-page="4" v-if="categories.length > 0")
   div.slide(v-for="category in categories" :key="category.id" 
   @click="selectCategory(category.id)")
-    div.ps-3(:class="[selectedValue==category.id && selected ? 'bg-yellow-200': 'bg-primary']" ) Icon
+    div.ps-3(:class="[selectedValue==category.id && selected ? 'bg-yellow-200': 'bg-primary']" )
+      img(:src="baseUrl+category.category_image" crossorigin="anonymous")
     div.ps-4.text-sm {{category.category_name}}
+
 </template>
 <script>
 export default {
@@ -20,9 +23,11 @@ export default {
       selected: false,
       user: this.$auth.user,
       selectedValue: null,
+      baseUrl:this.$axios.defaults.baseURL,
     }
   },
   mounted() {
+    this.baseUrl=this.$axios.defaults.baseURL
     this.$emit('Categories', this.selectedCategories)
   },
   methods: {
