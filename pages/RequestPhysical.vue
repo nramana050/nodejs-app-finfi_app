@@ -20,7 +20,7 @@ div.ps-1
         FormulateInput.pb-2.pr-3.w-full(type="text" name="pincode" validation="required" placeholder="Pincode" v-model="inputValue" maxlength="6")
 
       div(v-if="is_paid==false")  
-        div.text-center.font-bold.ps-5 Card cost is ₹300 including delivery charges.
+        div.text-center.font-bold.ps-5 Card cost is ₹ {{physicalCardFee}} including delivery charges.
 
       div(v-else="is_paid==Paid")
         div.text-center.font-bold.ps-5 You have already made payment for the physical card.  
@@ -60,6 +60,7 @@ export default {
       token: this.$auth.strategy.token.get(),
       is_paid:false,
       order_id:false,
+      physicalCardFee:0,
       form: {
         address_line_1: '',
         address_line_2: '',
@@ -81,8 +82,13 @@ export default {
     }
   },
   async beforeMount() {
-    const stateApiResult = await this.$axios.$get('/ext/states')
-
+    const stateApiResult = await this.$axios.$get('/ext/states');
+    const physicalCardFee= await this.$axios.get("/organizations/config",{
+      header:{
+        Authorization:this.token
+      }
+    });
+    this.physicalCardFee=physicalCardFee.data.physical_card_fee
     const cardPaymentStatus = await this.$axios.get("/m2p/requestPhysicalCard",{
       headers:{
         Authorization:this.token
