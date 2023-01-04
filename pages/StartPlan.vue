@@ -170,10 +170,7 @@ export default {
         amount: parseInt(this.instantPayment),
       }
       try {
-        const res = await this.$axios.$post(
-          `https://b2c8-2401-4900-1c3b-e998-b836-6b12-8923-9616.in.ngrok.io/snbl/instant-voucher`,
-          payload
-        )
+        const res = await this.$axios.$post(`/snbl/instant-voucher`, payload)
         console.log(res)
         if (res?.status.toLowerCase() === 'failed') {
           this.$toast.error(res.message)
