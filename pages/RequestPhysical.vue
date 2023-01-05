@@ -20,16 +20,19 @@ div.ps-1
         FormulateInput.pb-2.pr-3.w-full(type="text" name="pincode" validation="required" placeholder="Pincode" v-model="inputValue" maxlength="6")
 
       div(v-if="is_paid==false")  
-        div.text-center.font-bold.ps-5 Card cost is ₹300 including delivery charges.
+        div.text-center.font-bold.ps-5 Card cost is ₹ {{physicalCardFee}} including delivery charges.
 
       div(v-else="is_paid==Paid")
         div.text-center.font-bold.ps-5 You have already made payment for the physical card.  
       div.flex-1.pr-4
 
+      p.text-center.font-bold select your payment method.
       div(v-if="is_paid==false")
         div.flex.flex-row.py-4.justify-center
           button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="requestPhysicalCardd()")
-            | Pay and Submit 
+            | Razorpay
+          button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="requestWithEWA()")
+            | EWA 
       div(v-else="is_paid==Paid")
         div.flex.flex-row.py-4.justify-center
           button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="requestPhysicalCard(order_id)")
@@ -60,6 +63,7 @@ export default {
       token: this.$auth.strategy.token.get(),
       is_paid:false,
       order_id:false,
+      physicalCardFee:0,
       form: {
         address_line_1: '',
         address_line_2: '',
@@ -81,8 +85,13 @@ export default {
     }
   },
   async beforeMount() {
-    const stateApiResult = await this.$axios.$get('/ext/states')
-
+    const stateApiResult = await this.$axios.$get('/ext/states');
+    const physicalCardFee= await this.$axios.get("/organizations/config",{
+      header:{
+        Authorization:this.token
+      }
+    });
+    this.physicalCardFee=physicalCardFee.data.physical_card_fee
     const cardPaymentStatus = await this.$axios.get("/m2p/requestPhysicalCard",{
       headers:{
         Authorization:this.token
@@ -189,7 +198,69 @@ export default {
         this.$toast.error('Failed')
       }
     },
+
+    checkFields(){
+      if(this.form.address_line_1 === "" )
+      {
+          this.$toast.error('Enter All Details Properly')
+          return;
+      }
+      if(this.form.address_line_2 === "" )
+      {
+          this.$toast.error('Enter Valid Address')
+          return;
+      }
+      if(this.form.address_line_3 === "" )
+      {
+          this.$toast.error('Enter Valid Address')
+          return;
+      }
+      if(this.form.city === "" )
+      {
+          this.$toast.error('Enter Valid City Name')
+          return;
+      }
+      if(this.selectedState === "" )
+      {
+          this.$toast.error('Enter Valid State')
+          return;
+      }
+      if(this.form.pincode === "" )
+      {
+          this.$toast.error('Enter Valid Pincode')
+          return;
+      }
+      return true;
+    },
+
+    async requestWithEWA(){
+      try{
+        const fieldCheck=this.checkFields()
+
+        if(fieldCheck===true){
+        const payload = this.form
+        const response =await this.$axios.$post("/m2p/requestWithEWA",payload,{
+          headers:{
+            Authorization:this.token,
+          },
+        })
+        if(response.result===true){
+          this.$toast.success(response.message);
+          this.requestPhysicalCard(response.order_id)
+
+        }
+        else{
+          this.$toast.error(response.message);
+        }
+      }
+      }
+      catch(err){
+        this.$toast.error(err)
+      }
+    },
+
     async requestPhysicalCardd() {
+
       if(this.form.address_line_1 === "" )
       {
           this.$toast.error('Enter All Details Properly')
@@ -228,7 +299,7 @@ export default {
             },
           }
         )
-        console.log('res ',response)
+        // console.log('res ',response)
         // if(response.messag)
         if(response.message === "True"){
           this.pay(response)
