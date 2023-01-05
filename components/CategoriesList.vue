@@ -54,6 +54,9 @@ export default {
   padding: 7px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
+.ps-3 img{
+  border-radius: 50px;
+}
 .ps-4 {
   height: 4rem;
   width: 5rem;
