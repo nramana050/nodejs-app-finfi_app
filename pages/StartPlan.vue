@@ -42,11 +42,12 @@
           div.ps-4.flex.flex-row.justify-between
             div.relative.pt-1
               div.flex.flex-row.justify-between
-                span.ps-7 Your Goal amount
+                span.ps-7 Voucher Amount
                 span.ps-15 &#8377;
                 input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" maxlength="6" max="100000" v-model="slidervalue3" @keydown="nameKeydown($event)")
               input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' min="1000" max="100000" v-model="slidervalue3")
-              div.ps-5 Your Deposit &#8377; {{instantPayment}} <br> will be deducted from your Salary
+              div.ps-5 &#8377; {{instantPayment}} will be deducted from your Salary.
+              div.ps-5 Voucher Purchase T&Cs
                 div.ps-3
                   div.ps-4.flex.flex-row.justify-between
                     span.font-bold You deposit
@@ -55,9 +56,9 @@
                     span.ps-12 &#8377; {{slidervalue3}}
                     span.ps-12 &#8377; {{getMerchDis}}
         div.ps-6
-          div.font-bold.text-xl.text-center How the plan works
-            div.ps-7 1. On completing your goal, You will get a voucher worth &#8377; {{getMerchDis}} 
-            div.ps-7 2. The voucher is applicable on all online stores
+          div.font-bold.text-xl.text-center How to use the vouchers
+          div.ps-7 1.Vouchers will be delivered to your registered mobile number & registered email address. 
+          div.ps-7 2.Discount amount will be transferred to your bank account within 3 working days.
           div.ps-7(@click="buyNow" v-if="!slidervalue3==0")
             button.ps-8.font-bold Buy Now          
 
