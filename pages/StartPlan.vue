@@ -3,7 +3,7 @@
       div.flex.flex-row.text-white.border.p-4.items-center.ps-13
         button(@click="navToProductScreen")
           FaIcon.mx-auto.ps-12(icon='angle-left')
-        h3.text-sm.font-bold.tracking-widest.uppercase {{this.selecteProduct.product_name}}'s saving plan
+        h3.text-sm.font-bold.tracking-widest.uppercase {{this.selecteProduct.product.product_name}}'s saving plan
       div.flex.flex-row
         span.ps-2-tab(v-for="name in items" :key="items.id"
         @click="selectedItem(name.name)"
@@ -105,7 +105,7 @@ export default {
   },
   mounted() {
     const _this = this
-    this.discount = this.selecteProduct.merchant_discount
+    this.discount = this.selecteProduct.product.merchant_discount
     setInterval(function () {
       const today = moment()
       _this.currentDate = today.format('YYYY-MM-DD')
@@ -139,7 +139,7 @@ export default {
     },
     async createOrder() {
       const payload = {
-        product_id: this.selecteProduct.id,
+        product_id: this.selecteProduct.product.id,
         account_type: 'CARD',
         goal_amount: this.slidervalue1,
         frequency: 'monthly',
@@ -167,12 +167,11 @@ export default {
     },
     async buyNow() {
       const payload = {
-        product_id: this.selecteProduct.id,
+        product_id: this.selecteProduct.product.id,
         amount: parseInt(this.instantPayment),
       }
       try {
         const res = await this.$axios.$post(`/snbl/instant-voucher`, payload)
-        console.log(res)
         if (res?.status.toLowerCase() === 'failed') {
           this.$toast.error(res.message)
           return
