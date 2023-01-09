@@ -9,15 +9,15 @@
         @click="selectedItem(name.name)"
         :class="[itemSelected==name.name ? 'bg-blue-600' : 'bg-white']")
           button {{name.name}}   
-      div(v-if="itemSelected=='Buy Later'")  
+      div(v-if="itemSelected=='Buy Later' && product")  
         div.ps-2
           div.ps-4.flex.flex-row.justify-between
             div.relative.pt-1
               div.flex.flex-row.justify-between
                 span.ps-7 Your Goal amount
                 span.ps-15 &#8377;
-                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" maxlength="6" max="100000" v-model="slidervalue1" @keydown="nameKeydown($event)")
-              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' min="1000" max="100000" v-model="slidervalue1")
+                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue1" @keydown="nameKeydown($event)")
+              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-bind:min="min" v-bind:max="max" v-bind:step="step" v-model="slidervalue1")
           div.ps-4.flex.flex-row.justify-between
             div.relative.pt-1
               span.ps-7 Duration
@@ -44,8 +44,8 @@
               div.flex.flex-row.justify-between
                 span.ps-7 Voucher Amount
                 span.ps-15 &#8377;
-                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" maxlength="6" max="100000" v-model="slidervalue3" @keydown="nameKeydown($event)")
-              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' min="1000" max="100000" v-model="slidervalue3")
+                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue3" @keydown="nameKeydown($event)")
+              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-bind:min="min" v-bind:max="max" v-bind:step="step"  v-model="slidervalue3")
               div.ps-5 &#8377; {{instantPayment}} will be deducted from your Salary.
               div.ps-5 Voucher Purchase T&Cs
                 div.ps-3
@@ -60,15 +60,32 @@
           div.ps-7 1.Vouchers will be delivered to your registered mobile number & registered email address. 
           div.ps-7 2.Discount amount will be transferred to your bank account within 3 working days.
           div.ps-7(@click="buyNow" v-if="!slidervalue3==0")
-            button.ps-8.font-bold Buy Now          
+            button.ps-8.font-bold Buy Now     
+          div.ps-7(@click="payViaRazor" v-if="!slidervalue3==0")
+            button.ps-8.font-bold Pay Via RazorPay             
 
 </template>
+
+<script
+  type="application/javascript"
+  src="https://checkout.razorpay.com/v1/checkout.js"
+></script>
 <script>
 import moment from 'moment'
 
 export default {
   name: 'StartPlans',
   layout: 'empty',
+  head: {
+    script: [
+      {
+        type: 'text/javascript',
+        src: 'https://checkout.razorpay.com/v1/checkout.js',
+        async: true,
+        body: true,
+      },
+    ],
+  },
   data() {
     return {
       Orders: [],
@@ -85,6 +102,7 @@ export default {
       data: '',
       buyData: '',
       discount: 0,
+      product: '',
       items: [
         {
           id: '01',
@@ -102,10 +120,23 @@ export default {
     selecteProduct() {
       return this.$store.state.snbl.product
     },
+    min() {
+      return this.$store.state.snbl.product.product.min
+    },
+    max() {
+      return this.$store.state.snbl.product.product.max
+    },
+    step() {
+      return this.$store.state.snbl.product.product.step
+    },
   },
   mounted() {
     const _this = this
-    this.discount = this.selecteProduct.product.merchant_discount
+    this.product = this.selecteProduct.product
+    const merchantDis = this.selecteProduct.product.merchant_discount || 0
+    this.slidervalue1 = this.selecteProduct.product.min
+    this.slidervalue3 = this.selecteProduct.product.min
+
     setInterval(function () {
       const today = moment()
       _this.currentDate = today.format('YYYY-MM-DD')
@@ -115,12 +146,18 @@ export default {
       _this.monthlyDeposit = parseFloat(
         _this.slidervalue1 / _this.slidervalue2
       ).toFixed(0)
+
+      let finfiDis = 0
+      if (_this.slidervalue2) {
+        finfiDis = (_this.slidervalue2 - 1) / 2
+      }
+      const combineDiscount = parseFloat(merchantDis) + parseFloat(finfiDis)
       _this.getAmount = parseFloat(
-        (_this.slidervalue1 * _this.discount) / 100
+        (_this.slidervalue1 * combineDiscount) / 100
       ).toFixed(0)
       _this.instantPayment = parseFloat(_this.slidervalue3).toFixed(0)
       _this.getMerchDis = parseFloat(
-        (_this.slidervalue3 * _this.discount) / 100
+        (_this.slidervalue3 * merchantDis) / 100
       ).toFixed(0)
     }, 1000)
   },
@@ -148,21 +185,13 @@ export default {
         end_date: this.completeDate,
       }
       try {
-        if (this.slidervalue1 >= 1000) {
-          if (this.slidervalue1 <= 100000) {
-            await this.$axios.$post(`/snbl/order`, payload).then((result) => {
-              this.data = result.data
-            })
-            this.$toast.info('Your Plan started successfully')
-            this.$router.push('/SaveNow')
-          } else {
-            this.$toast.error('Maximum Goal amount is 100000')
-          }
-        } else {
-          this.$toast.error('Minimum Goal amount is 1000')
-        }
+        await this.$axios.$post(`/snbl/order`, payload).then((result) => {
+          this.data = result.data
+        })
+        this.$toast.info('Your Plan started successfully')
+        this.$router.push('/SaveNow')
       } catch (err) {
-        this.$toast.error('Failed to start plan')
+        this.$toast.error(err.message)
       }
     },
     async buyNow() {
@@ -178,6 +207,15 @@ export default {
         }
         this.$toast.info(res?.message)
         this.$router.push('/SaveNow')
+      } catch (err) {
+        this.$toast.error('Failed to start plan')
+      }
+    },
+    payViaRazor() {
+      try {
+        console.log('INTEGRATE RAZOR PAY:')
+        const rzp1 = new Razorpay()
+        rzp1.open()
       } catch (err) {
         this.$toast.error('Failed to start plan')
       }
