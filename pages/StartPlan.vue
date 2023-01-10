@@ -211,15 +211,58 @@ export default {
         this.$toast.error('Failed to start plan')
       }
     },
-    payViaRazor() {
+    async payViaRazor() {
       try {
-        console.log('INTEGRATE RAZOR PAY:')
-        const rzp1 = new Razorpay()
-        rzp1.open()
+        console.log('RAZOR PAY:')
+        const data = {
+          "amount": parseInt(this.instantPayment),
+        }
+        await this.$axios.post('/payment/gateway/instant-voucher', data).then((res) => {
+          console.log(res);
+          const options = {
+            order_id: res.data.order_id,
+            currency: res.data.currency,
+            amount: res.data.amount,
+            key: res.data.key,
+            name: res.data.name,
+            description: res.data.description,
+            image: res.data.image,
+            prefill: {
+              name: res.data.prefill.name,
+              email: res.data.prefill.email,
+              contact: res.data.prefill.contact,
+            },
+            theme: {
+              color: res.data.theme.color,
+            },
+            handler: response => {
+                this.verifySignature(response);
+            }
+          }
+
+          const rzp1 = new Razorpay(options)
+          rzp1.open()
+        });
       } catch (err) {
+        console.log(err);
         this.$toast.error('Failed to start plan')
       }
     },
+
+    async verifySignature(response) {
+      await this.$axios
+        .post('/payment/gateway/verify', response)
+        .then((response) => {
+          console.log(response)
+          console.log(response.data.status)
+          // if(response.data.status==true){
+          //   this.requestPhysicalCard(response.data.order_id)
+          // }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }, 
   },
 }
 </script>
