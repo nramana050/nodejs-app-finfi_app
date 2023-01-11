@@ -213,9 +213,11 @@ export default {
     },
     async payViaRazor() {
       try {
-        console.log('RAZOR PAY:')
+        console.log('RAZOR PAY:');
+        console.log(this.product);
         const data = {
           "amount": parseInt(this.instantPayment),
+          "product": this.product,
         }
         await this.$axios.post('/payment/gateway/instant-voucher', data).then((res) => {
           console.log(res);
@@ -237,6 +239,7 @@ export default {
             },
             handler: response => {
                 this.verifySignature(response);
+                this.$toast.success('Successfully bought the voucher.')
             }
           }
 
@@ -245,11 +248,12 @@ export default {
         });
       } catch (err) {
         console.log(err);
-        this.$toast.error('Failed to start plan')
+        this.$toast.error('Failed to buy the voucher')
       }
     },
 
     async verifySignature(response) {
+      response.instant_voucher = "InstantVoucher"
       await this.$axios
         .post('/payment/gateway/verify', response)
         .then((response) => {
