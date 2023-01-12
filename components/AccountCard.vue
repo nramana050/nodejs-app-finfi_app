@@ -12,8 +12,8 @@ div.ps-1
       div.tracking-wide.text-xs
         | Salary Used
         sup.pl-1 *
-      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(payableAmount).toLocaleString('en-IN') }}
-  
+      p.ps-3.tracking-wider.text-sm &#8377; {{ payableAmount }} 
+
     div.flex-0(v-if="earnedLimit!==null")
       div.flex.tracking-wide.text-xs
         p.flex-1 Limit
@@ -92,7 +92,7 @@ export default {
     this.fetchFundCycle()
   },
   methods: {
-    calculateCreditValue(num,percentage){
+    calculateCreditValue(num, percentage) {
       return ((num / 100) * percentage)
     },
     async fetchFundCycle() {
@@ -101,27 +101,27 @@ export default {
 
       const fundCycle = response.data.result
       if (fundCycle) {
-        if(fundCycle.CARD){
-          fundCycle.CARD[0].credit_value=
-            fundCycle.CARD[0].credit_method === 'PERCENTAGE' ? 
-              fundCycle.CARD[0].credit_value = this.calculateCreditValue(fundCycle.salary,fundCycle.CARD[0].credit_value) :
-              fundCycle.CARD[0].credit_value 
-          
+        if (fundCycle.CARD) {
+          fundCycle.CARD[0].credit_value =
+            fundCycle.CARD[0].credit_method === 'PERCENTAGE' ?
+              fundCycle.CARD[0].credit_value = this.calculateCreditValue(fundCycle.salary, fundCycle.CARD[0].credit_value) :
+              fundCycle.CARD[0].credit_value
+
           this.cardFundCycle = fundCycle.CARD
         }
-        if(fundCycle.CASH){
-          fundCycle.CASH[0].credit_value=
-            fundCycle.CASH[0].credit_method === 'PERCENTAGE' ? 
-              fundCycle.CASH[0].credit_value = this.calculateCreditValue(fundCycle.salary,fundCycle.CASH[0].credit_value) :
-              fundCycle.CASH[0].credit_value 
+        if (fundCycle.CASH) {
+          fundCycle.CASH[0].credit_value =
+            fundCycle.CASH[0].credit_method === 'PERCENTAGE' ?
+              fundCycle.CASH[0].credit_value = this.calculateCreditValue(fundCycle.salary, fundCycle.CASH[0].credit_value) :
+              fundCycle.CASH[0].credit_value
 
           this.cashFundCycle = fundCycle.CASH
         }
-        if(fundCycle.EARNED_WAGES){
-          fundCycle.EARNED_WAGES[0].credit_value=
-            fundCycle.EARNED_WAGES[0].credit_method === 'PERCENTAGE' ? 
-              fundCycle.EARNED_WAGES[0].credit_value = this.calculateCreditValue(fundCycle.salary,fundCycle.EARNED_WAGES[0].credit_value) :
-              fundCycle.EARNED_WAGES[0].credit_value 
+        if (fundCycle.EARNED_WAGES) {
+          fundCycle.EARNED_WAGES[0].credit_value =
+            fundCycle.EARNED_WAGES[0].credit_method === 'PERCENTAGE' ?
+              fundCycle.EARNED_WAGES[0].credit_value = this.calculateCreditValue(fundCycle.salary, fundCycle.EARNED_WAGES[0].credit_value) :
+              fundCycle.EARNED_WAGES[0].credit_value
 
           this.earnedCycle = fundCycle.EARNED_WAGES
         }
@@ -135,6 +135,7 @@ export default {
   padding-top: 7px;
   padding-right: 15px;
 }
+
 .ps-4 {
   height: 1px;
   background: #f2f2f2;
@@ -142,9 +143,11 @@ export default {
   margin-left: -2rem;
   margin-right: -2rem;
 }
+
 .ps-5 {
   margin-top: 2rem;
 }
+
 .ps-6 {
   color: #1c1939;
 }
