@@ -61,8 +61,8 @@
           div.ps-7 2.Discount amount will be transferred to your bank account within 3 working days.
           div.ps-7(@click="buyNow" v-if="!slidervalue3==0")
             button.ps-8.font-bold Buy Now     
-          div.ps-7(@click="payViaRazor" v-if="!slidervalue3==0")
-            button.ps-8.font-bold Pay Via RazorPay             
+          //- div.ps-7(@click="payViaRazor" v-if="!slidervalue3==0")
+          //-   button.ps-8.font-bold Pay Via RazorPay             
 
 </template>
 
@@ -213,47 +213,49 @@ export default {
     },
     async payViaRazor() {
       try {
-        console.log('RAZOR PAY:');
-        console.log(this.product);
+        console.log('RAZOR PAY:')
+        console.log(this.product)
         const data = {
-          "amount": parseInt(this.instantPayment),
-          "product": this.product,
+          amount: parseInt(this.instantPayment),
+          product: this.product,
         }
-        await this.$axios.post('/payment/gateway/instant-voucher', data).then((res) => {
-          console.log(res);
-          const options = {
-            order_id: res.data.order_id,
-            currency: res.data.currency,
-            amount: res.data.amount,
-            key: res.data.key,
-            name: res.data.name,
-            description: res.data.description,
-            image: res.data.image,
-            prefill: {
-              name: res.data.prefill.name,
-              email: res.data.prefill.email,
-              contact: res.data.prefill.contact,
-            },
-            theme: {
-              color: res.data.theme.color,
-            },
-            handler: response => {
-                this.verifySignature(response);
+        await this.$axios
+          .post('/payment/gateway/instant-voucher', data)
+          .then((res) => {
+            console.log(res)
+            const options = {
+              order_id: res.data.order_id,
+              currency: res.data.currency,
+              amount: res.data.amount,
+              key: res.data.key,
+              name: res.data.name,
+              description: res.data.description,
+              image: res.data.image,
+              prefill: {
+                name: res.data.prefill.name,
+                email: res.data.prefill.email,
+                contact: res.data.prefill.contact,
+              },
+              theme: {
+                color: res.data.theme.color,
+              },
+              handler: (response) => {
+                this.verifySignature(response)
                 this.$toast.success('Successfully bought the voucher.')
+              },
             }
-          }
 
-          const rzp1 = new Razorpay(options)
-          rzp1.open()
-        });
+            const rzp1 = new Razorpay(options)
+            rzp1.open()
+          })
       } catch (err) {
-        console.log(err);
+        console.log(err)
         this.$toast.error('Failed to buy the voucher')
       }
     },
 
     async verifySignature(response) {
-      response.instant_voucher = "InstantVoucher"
+      response.instant_voucher = 'InstantVoucher'
       await this.$axios
         .post('/payment/gateway/verify', response)
         .then((response) => {
@@ -266,7 +268,7 @@ export default {
         .catch((err) => {
           console.log(err)
         })
-    }, 
+    },
   },
 }
 </script>
