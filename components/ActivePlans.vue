@@ -8,11 +8,11 @@
           div.ps-5
             span.font-bold.ps-5 Start Date:  {{item.start_date}}
             //- span.text-xs.tracking-wide.inline-flex.items-center.leading-sm.font-bold.uppercase.ps-19.px-3.py-1.bg-green-200.text-green-700.rounded-full {{item.status}}
-      div.flex.flex-row.mt-4.text-sm.items-center.shadow.ps-3(v-if="ActivePlans.length==0")
+      div.flex.flex-row.mt-4.text-sm.items-center.shadow.ps-3(v-if="ActivePlans?.length==0")
         div.ps-4 No Plans found
 </template>
 <script>
-  import moment from 'moment'
+import moment from 'moment'
 
 export default {
   data() {
@@ -45,9 +45,9 @@ export default {
 }
 </script>
 <style scoped>
-  .ps-1A{
-    margin-bottom: 4rem;
-  }
+.ps-1A {
+  margin-bottom: 4rem;
+}
 .ps-3 {
   text-align: center;
   background-color: white;
