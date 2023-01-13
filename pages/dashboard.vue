@@ -20,11 +20,11 @@ div.ps-1A
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    //- div(v-if="this.card_type != 'PHYSICAL'")
-    //-   button.ps-7(@click="navToPhysicalCard")
-    //-     div.flex.flex-row.justify-between
-    //-       span.ps-7A Order a Physical card
-    //-       FaIcon.mx-auto.ps-7B(icon='angle-right')
+    div(v-if="this.card_type != 'PHYSICAL'")
+      button.ps-7(@click="navToPhysicalCard")
+        div.flex.flex-row.justify-between
+          span.ps-7A Order a Physical card
+          FaIcon.mx-auto.ps-7B(icon='angle-right')
   //- div
     div
       div.font-bold.text-sm.ps-8 Savings Plan
@@ -134,9 +134,29 @@ export default {
     navToFAQ() {
       this.$router.push('/AskedQuestions')
     },
-    navToPhysicalCard() {
-      this.$router.push('/welcomePage4')
+
+    async navToPhysicalCard() {
+      const isVartualCard = await this.$axios.get('m2p/requestPhysicalCard', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+
+      if (isVartualCard.data.message === "True") {
+        this.$router.push('/welcomePage4')
+      }
+      else if (isVartualCard.data.message === "Fail") {
+        this.$toast.error(isVartualCard.data.result)
+      }
+      else if (isVartualCard.data.message === "Paid") {
+        this.$router.push("/RequestPhysical")
+        this.$toast.success("Already Paid For Physical Card.")
+      }
+      else {
+        this.$toast.error(isVartualCard.data.result)
+      }
     },
+
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
       this.categories = categories.data.map((item) => item.category_name)
@@ -275,10 +295,12 @@ export default {
   padding-top: 2rem;
   color: white;
 }
+
 .ps-1A {
   background-color: #f2f2f2;
   min-height: 100vh;
 }
+
 .ps-2 {
   margin-top: -6.5rem;
   border-radius: 10px;
@@ -290,26 +312,32 @@ export default {
   padding-right: 2rem;
   box-shadow: 0px 35px 65px rgba(0, 0, 0, 0.0790811);
 }
+
 .ps-3 {
   margin-top: 1rem;
   margin-left: 2rem;
 }
+
 .ps-4 {
   margin-right: 2rem;
 }
+
 .ps-4A {
   margin-left: 5rem;
   height: 30px;
 }
+
 .ps-4A1 {
   margin-left: 5.5rem;
 }
+
 .ps-5 {
   margin-top: 1rem;
   margin-bottom: 1rem;
   margin-left: 2rem;
   margin-right: 2rem;
 }
+
 .ps-6 {
   width: 75%;
   height: 9rem;
@@ -319,6 +347,7 @@ export default {
   margin-bottom: 1rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
+
 .col-1 {
   width: 50%;
   background-color: white;
@@ -347,18 +376,22 @@ export default {
   margin-right: 3rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
+
 .ps-7A {
   padding: 5px;
 }
+
 .ps-7B {
   padding: 7px;
   margin-right: 1rem;
 }
+
 .ps-8 {
   margin-left: 2rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
 .ps-9 {
   height: 9rem;
   width: 85%;
@@ -369,11 +402,13 @@ export default {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
 }
+
 .ps-9A {
   height: 9rem;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
+
 .ps-9B {
   padding: 10px;
 }

@@ -6,7 +6,7 @@
     button.grid.text-center(@click="navToTransfer")
       FaIcon.mx-auto.ps-A1(icon='paper-plane')
       p Transfer
-    //- button.grid.text-center(@click="navToSaveNow")
+    button.grid.text-center(@click="navToSaveNow")
       FaIcon.mx-auto.ps-A1(icon='piggy-bank')
       p Save
     button.grid.text-center(@click="navToTranscation")
@@ -56,13 +56,12 @@ export default {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
-.ps-A{
+.ps-A {
   background-color: white;
   color: black;
   height: 3.5rem;
 }
-.ps-A1{
+.ps-A1 {
   height: 20px;
 }
-
 </style>
