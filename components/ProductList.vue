@@ -63,6 +63,11 @@ export default {
   align-items: center;
   border: 1px solid #979797;
 }
+.ps-3 img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .ps-4 {
   height: 5rem;
