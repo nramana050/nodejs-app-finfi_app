@@ -191,7 +191,8 @@ export default {
           this.$router.push('/ThankYou')
         }
         else if(response.message == 'Fail'){
-          this.$toast.error(response.result)
+          // this.$toast.error(response.result)
+          this.$toast.error("something went wrong,please try again after sometime")
         }
       } catch (err) {
         console.log('err ',err)
