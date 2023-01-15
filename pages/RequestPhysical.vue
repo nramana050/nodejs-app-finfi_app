@@ -25,8 +25,8 @@ div.ps-1
       div(v-else="is_paid==Paid")
         div.text-center.font-bold.ps-5 You have already made payment for the physical card.  
       div.flex-1.pr-4
-
-      p.text-center.font-bold select your payment method.
+      div(v-if="is_paid==false")
+        p.text-center.font-bold select your payment method.
       div(v-if="is_paid==false")
         div.flex.flex-row.py-4.justify-center
           button.btn.h-8.px-4.text-white.justify-center.rounded.font-bold(@click="requestPhysicalCardd()")
@@ -180,7 +180,7 @@ export default {
             },
           }
         )
-        console.log('res ',response)
+        // console.log('res ',response)
         if(response.message && response.message === "Success" && response.result == true){
           this.$toast.success('Physical Card Request is success')
           this.$router.push('/ThankYou')
