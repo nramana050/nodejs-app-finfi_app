@@ -60,9 +60,9 @@
           div.ps-7 1.Vouchers will be delivered to your registered mobile number & registered email address. 
           div.ps-7 2.Discount amount will be transferred to your bank account within 3 working days.
           div.ps-7(@click="buyNow(false)" v-if="!slidervalue3==0")
-            button.ps-8.font-bold Buy Now     
+            button.ps-8.font-bold Pay from your cash limit    
           div.ps-7(@click="payViaRazor" v-if="!slidervalue3==0")
-            button.ps-8.font-bold Pay Via RazorPay             
+            button.ps-8.font-bold Pay directly from RazorPay             
 
 </template>
 
