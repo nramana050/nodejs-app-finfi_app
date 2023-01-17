@@ -198,7 +198,7 @@ export default {
       const payload = {
         product: this.selecteProduct.product,
         amount: parseInt(this.instantPayment),
-        razorpay_paid : razorpay_paid,
+        razorpay_paid: razorpay_paid,
       }
       try {
         const res = await this.$axios.$post(`/snbl/instant-voucher`, payload)
@@ -215,52 +215,54 @@ export default {
     async payViaRazor() {
       try {
         const data = {
-          "amount": parseInt(this.instantPayment),
-          "product": this.product,
+          amount: parseInt(this.instantPayment),
+          product: this.product,
         }
-        await this.$axios.post('/payment/gateway/instant-voucher', data).then((res) => {
-          this.voucher_data = res.data.voucher_data;
-          const options = {
-            order_id: res.data.order_id,
-            currency: res.data.currency,
-            amount: res.data.amount,
-            key: res.data.key,
-            name: res.data.name,
-            description: res.data.description,
-            image: res.data.image,
-            prefill: {
-              name: res.data.prefill.name,
-              email: res.data.prefill.email,
-              contact: res.data.prefill.contact,
-            },
-            theme: {
-              color: res.data.theme.color,
-            },
-            handler: async response => {
-                const verify_payment_response = await this.verifySignature(response);
-                if(verify_payment_response.data.status){
-                  this.buyNow(true);
+        await this.$axios
+          .post('/payment/gateway/instant-voucher', data)
+          .then((res) => {
+            this.voucher_data = res.data.voucher_data
+            const options = {
+              order_id: res.data.order_id,
+              currency: res.data.currency,
+              amount: res.data.amount,
+              key: res.data.key,
+              name: res.data.name,
+              description: res.data.description,
+              image: res.data.image,
+              prefill: {
+                name: res.data.prefill.name,
+                email: res.data.prefill.email,
+                contact: res.data.prefill.contact,
+              },
+              theme: {
+                color: res.data.theme.color,
+              },
+              handler: async (response) => {
+                const verify_payment_response = await this.verifySignature(
+                  response
+                )
+                if (verify_payment_response.data.status) {
+                  this.buyNow(true)
                   this.$toast.success('Successfully bought the voucher.')
-                }
-                else{
+                } else {
                   this.$toast.error('Failed to make the payment.')
                 }
-                
+              },
             }
-          }
 
-          const rzp1 = new Razorpay(options)
-          rzp1.open()
-        });
+            const rzp1 = new Razorpay(options)
+            rzp1.open()
+          })
       } catch (err) {
-        console.log(err);
+        console.log(err)
         this.$toast.error('Failed to buy the voucher')
       }
     },
 
     async verifySignature(response) {
-      return await this.$axios.post('/payment/gateway/verify', response); 
-    }, 
+      return await this.$axios.post('/payment/gateway/verify', response)
+    },
   },
 }
 </script>
@@ -269,7 +271,6 @@ export default {
   margin: 1.5rem;
   background-color: white;
   color: #1c1939;
-  height: 48vh;
   box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
 }
 .ps-3 {
@@ -289,7 +290,6 @@ export default {
   margin: 1.5rem;
   background-color: white;
   color: #1c1939;
-  height: 25vh;
   box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
 }
 .ps-7 {
