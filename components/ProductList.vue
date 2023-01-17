@@ -71,6 +71,11 @@ export default {
   border: 1px solid #979797;
   display: flex;
 }
+.ps-3 img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .ps-4 {
   text-align: left;
