@@ -1,11 +1,11 @@
 <template lang="pug">
 
 ssr-carousel( :slides-per-page="4" v-if="categories.length > 0")
-  div.slide(v-for="category in categories" :key="category.id" 
-  @click="selectCategory(category.id)")
-    div.ps-3(:class="[selectedValue==category.id && selected ? 'bg-yellow-200': 'bg-primary']" )
-      img(:src="baseUrl+category.category_image" crossorigin="anonymous")
-    div.ps-4.text-sm {{category.category_name}}
+  div.slide(v-for="category in categories" :key="category.category.id" 
+  @click="selectCategory(category.category)")
+    div.ps-3(:class="[selectedValue==category.category.id && selected ? 'bg-yellow-200': 'bg-primary']")
+      img(:src="baseUrl+category.category.category_image" crossorigin="anonymous")
+    div.ps-4.text-sm {{category.category.category_name}}
 
 </template>
 <script>
@@ -23,20 +23,20 @@ export default {
       selected: false,
       user: this.$auth.user,
       selectedValue: null,
-      baseUrl:this.$axios.defaults.baseURL,
+      baseUrl: this.$axios.defaults.baseURL,
     }
   },
   mounted() {
-    this.baseUrl=this.$axios.defaults.baseURL
+    this.baseUrl = this.$axios.defaults.baseURL
     this.$emit('Categories', this.selectedCategories)
   },
   methods: {
     selectCategory(category) {
       this.selectedCategories = []
-      this.selectedCategories.push(category)
+      this.selectedCategories.push(category.id)
       this.selected = true
-      this.selectedValue = category
-      this.$store.commit('setCategory', category)
+      this.selectedValue = category.id
+      this.$store.commit('setCategory', category.id)
       this.$emit('select-category', category)
     },
   },
@@ -54,7 +54,7 @@ export default {
   padding: 7px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-.ps-3 img{
+.ps-3 img {
   border-radius: 50px;
 }
 .ps-4 {

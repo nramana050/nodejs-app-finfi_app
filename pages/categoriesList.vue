@@ -5,10 +5,10 @@
         FaIcon.mx-auto.ps-m.ps-4(icon='angle-left')
       p.text-3xl.font-bold.ps-5 What are you <br> saving for ?
       div.ps-11
-        button.ps-9.font-bold(v-for="category in categories" :key="category.id"   
-        @click="selectCategory(category.id)" 
-        :class="[selectedValue==category.id && selected ? 'bg-yellow-200': 'bg-primary']")
-          span.ps-6 {{category.category_name}}   
+        button.ps-9.font-bold(v-for="category in categories" :key="category.category.id"   
+        @click="selectCategory(category.category.id)" 
+        :class="[selectedValue==category.category.id && selected ? 'bg-yellow-200': 'bg-primary']")
+          span.ps-6 {{category.category.category_name}}   
     div.ps-2(v-if="selected")
       button.ps-10.font-bold.text-xl(@click="navToMerchant") Next 
 
