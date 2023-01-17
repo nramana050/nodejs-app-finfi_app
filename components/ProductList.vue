@@ -2,8 +2,9 @@
   div
     div.ps-5
       div.ps-2(v-for="item in this.productList" :key="item.product.id" @click="navToStartPlan(); selectProduct(item)")
-        div.ps-3.justify-center
-          img.ps-5.h-20.w-50(:src='baseUrl+item.product.product_image' crossorigin="anonymous")
+        div.ps-3.d-flex.justify-center
+          img(v-if="item.product.product_image" :src='baseUrl+item.product.product_image' crossorigin="anonymous")
+          img.custom-img(v-else :src='baseUrl+selectedCategory.category_image' crossorigin="anonymous")
         div.ps-4
           div.text-xs.ps-4A.font-bold {{item.product.product_name}}
           div.font-bold.text-sm.ps-4B Save for {{item.product.product_name}} products
@@ -14,6 +15,9 @@
 <script>
 export default {
   props: {
+    selectedCategory: {
+      required: true,
+    },
     productList: {
       type: [],
       required: true,
@@ -23,7 +27,6 @@ export default {
     return {
       selectedProduct: [],
       selected: false,
-      selectedCategory: null,
       baseUrl: this.$axios.defaults.baseURL,
     }
   },
@@ -33,6 +36,7 @@ export default {
     // },
   },
   mounted() {
+    console.log('SELECTED CATEGORY::', this.selectedCategory)
     this.$emit('product', this.selectProduct)
   },
   methods: {
@@ -49,8 +53,10 @@ export default {
 }
 </script>
 <style scoped>
+.custom-img {
+  height: 120px;
+}
 .ps-2 {
-  height: 15rem;
   margin: 2rem;
   border-radius: 15px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -63,15 +69,10 @@ export default {
   border-radius: 15px;
   align-items: center;
   border: 1px solid #979797;
-}
-.ps-3 img{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
 }
 
 .ps-4 {
-  height: 5rem;
   text-align: left;
   padding: 5px;
   margin-left: 1rem;

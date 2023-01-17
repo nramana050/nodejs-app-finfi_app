@@ -9,7 +9,7 @@
         button {{name.name}}    
     div(v-if="itemSelected=='Explore'")
       CategoriesList.px-5(:categories="categories" v-on:select-category="selectedCategory")
-      ProductList(:productList="productList" v-if='Boolean(category)')
+      ProductList(:productList="productList" :selectedCategory="category" v-if='Boolean(category)')
       div.flex.ps-4.items-center.justify-center(v-if="!productList.length && categories.length && !category ") Please Select Category to View Products.  
     div(v-if="itemSelected=='Active plan'")
       ActivePlans
@@ -76,7 +76,7 @@ export default {
     async getProducts() {
       const payload = !this.category
         ? { category: [] }
-        : { category: [this.category] }
+        : { category: [this.category.id] }
       await this.$axios.$post(`/snbl/products`, payload).then((result) => {
         this.productList = result?.data
       })
