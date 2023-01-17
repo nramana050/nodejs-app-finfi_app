@@ -3,7 +3,7 @@
     div.ps-5
       div.ps-2(v-for="item in this.productList" :key="item.product.id" @click="navToStartPlan(); selectProduct(item)")
         div.ps-3.justify-center
-          img.ps-5.h-20.w-50(:src='item.product.product_image')
+          img.ps-5.h-20.w-50(:src='item.product.product_image' crossorigin="anonymous")
         div.ps-4
           div.text-xs.ps-4A.font-bold {{item.product.product_name}}
           div.font-bold.text-sm.ps-4B Save for {{item.product.product_name}} products
