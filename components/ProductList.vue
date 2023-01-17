@@ -7,7 +7,7 @@
         div.ps-4
           div.text-xs.ps-4A.font-bold {{item.product.product_name}}
           div.font-bold.text-sm.ps-4B Save for {{item.product.product_name}} products
-          div.text-sm Bonus reward Upto {{item.product.merchant_discount}}%
+          div.text-sm Discount of {{item.product.merchant_discount}}%
       div.flex.ps-4.items-center.justify-center(v-if="!productList.length") No Products Found for Selected Category      
 
 </template>
