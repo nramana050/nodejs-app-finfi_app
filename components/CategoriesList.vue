@@ -1,11 +1,11 @@
 <template lang="pug">
-
-ssr-carousel( :slides-per-page="4" v-if="categories.length > 0")
-  div.slide(v-for="category in categories" :key="category.category.id" 
-  @click="selectCategory(category.category)")
-    div.ps-3(:class="[selectedValue==category.category.id && selected ? 'bg-yellow-200': 'bg-primary']")
-      img(:src="baseUrl+category.category.category_image" crossorigin="anonymous")
-    div.ps-4.text-sm {{category.category.category_name}}
+div.custom-carousel
+  ssr-carousel( :slides-per-page="4" v-if="categories.length > 0" overflow-visible=true)
+    div.slide(v-for="category in categories" :key="category.category.id" 
+    @click="selectCategory(category.category)")
+      div.ps-3(:class="[selectedValue==category.category.id && selected ? 'bg-yellow-200': 'bg-primary']")
+        img(:src="baseUrl+category.category.category_image" crossorigin="anonymous")
+      div.ps-4.text-sm {{category.category.category_name}}
 
 </template>
 <script>
@@ -43,6 +43,12 @@ export default {
 }
 </script>
 <style scoped>
+.custom-carousel {
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
 .ps-3 {
   height: 4rem;
   width: 4rem;
