@@ -1,7 +1,7 @@
 <template lang="pug">
   div.ps-3
     div.flex-0 
-      PageHeader.font-bold(:title="'Save Now Buy Later'")
+      PageHeader.font-bold(:title="'Buy Now'")
     div.flex.flex-row.justify-between
       span.ps-2(v-for="name in items" :key="items.id"
        @click="selectedItem(name.name)"

@@ -6,8 +6,7 @@
           img(v-if="item.product.product_image" :src='baseUrl+item.product.product_image' crossorigin="anonymous")
           img.custom-img(v-else :src='baseUrl+selectedCategory.category_image' crossorigin="anonymous")
         div.ps-4
-          div.text-xs.ps-4A.font-bold {{item.product.product_name}}
-          div.font-bold.text-sm.ps-4B Save for {{item.product.product_name}} products
+          div.font-bold.text-sm.ps-4B {{item.product.product_name}}
           div.text-sm Discount of {{item.product.merchant_discount}}%
       div.flex.ps-4.items-center.justify-center(v-if="!productList.length") No Products Found for Selected Category      
 
@@ -71,7 +70,7 @@ export default {
   border: 1px solid #979797;
   display: flex;
 }
-.ps-3 img{
+.ps-3 img {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -88,7 +87,7 @@ export default {
 }
 
 .ps-4B {
-  padding: 5px;
+  padding-bottom: 5px;
 }
 
 .ps-5 {
