@@ -59,7 +59,7 @@
           div.font-bold.text-xl.text-center How to use the vouchers
           div.ps-7 1.Vouchers will be delivered to your registered mobile number & registered email address. 
           div.ps-7 2.Discount amount will be transferred to your bank account within 3 working days.
-          div.ps-7(@click="buyNow(false)" v-if="!slidervalue3==0")
+          div.ps-7(@click="openBlockCard" v-if="!slidervalue3==0")
             button.ps-8.font-bold Buy Now     
           div.ps-7(@click="payViaRazor" v-if="!slidervalue3==0")
             button.ps-8.font-bold Pay Via RazorPay             
@@ -72,6 +72,7 @@
 ></script>
 <script>
 import moment from 'moment'
+import BuyNowConfim from '~/components/M2P/BuyNowConfim.vue'
 
 export default {
   name: 'StartPlans',
@@ -173,6 +174,15 @@ export default {
       if (/^\W$/.test(e.key)) {
         e.preventDefault()
       }
+    },
+    openBlockCard() {
+      this.$FModal.show(
+        { component: BuyNowConfim },
+        { amt: parseInt(this.instantPayment), buyNow: this.buyNow }
+      )
+    },
+    close() {
+      this.$FModal.hide()
     },
     async createOrder() {
       const payload = {
