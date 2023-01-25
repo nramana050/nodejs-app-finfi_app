@@ -44,8 +44,10 @@
               div.flex.flex-row.justify-between
                 span.ps-7 Voucher Amount
                 span.ps-15 &#8377;
-                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue3" @keydown="nameKeydown($event)")
-              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-bind:min="min" v-bind:max="max" v-bind:step="step"  v-model="slidervalue3")
+                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue3" @keydown="nameKeydown($event)" v-if="!fixedSteps?.length")
+                select.custom-select(v-if="fixedSteps?.length" v-on:change="selectVal")
+                  option(value=amt v-for="amt in this.fixedSteps") {{ amt }}
+              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-if="!fixedSteps?.length" v-bind:min="min" v-bind:max="max" v-bind:step="step"  v-model="slidervalue3")
               div.ps-5 &#8377; {{instantPayment}} will be deducted from your Salary.
               div.ps-5 Voucher Purchase T&Cs
                 div.ps-3
@@ -104,6 +106,7 @@ export default {
       buyData: '',
       discount: 0,
       product: '',
+      fixedSteps: [],
       items: [
         // {
         //   id: '01',
@@ -134,9 +137,14 @@ export default {
   mounted() {
     const _this = this
     this.product = this.selecteProduct.product
+    if (this.product?.fixed_steps) {
+      this.fixedSteps = this.product?.fixed_steps.split(',')
+    }
     const merchantDis = this.selecteProduct.product.merchant_discount || 0
     this.slidervalue1 = this.selecteProduct.product.min
-    this.slidervalue3 = this.selecteProduct.product.min
+    this.slidervalue3 = this.fixedSteps?.length
+      ? this.fixedSteps[0]
+      : this.selecteProduct.product.min
 
     setInterval(function () {
       const today = moment()
@@ -163,6 +171,9 @@ export default {
     }, 1000)
   },
   methods: {
+    selectVal(e) {
+      this.slidervalue3 = e.target.value
+    },
     selectedItem(name) {
       this.itemSelected = []
       this.itemSelected.push(name)
