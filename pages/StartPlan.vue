@@ -3,7 +3,7 @@
       div.flex.flex-row.text-white.border.p-4.items-center.ps-13
         button(@click="navToProductScreen")
           FaIcon.mx-auto.ps-12(icon='angle-left')
-        h3.text-sm.font-bold.tracking-widest.uppercase {{this.selecteProduct.product.product_name}}'s saving plan
+        h3.text-sm.font-bold.tracking-widest.uppercase {{this.selecteProduct.product.product_name}}
       div.flex.flex-row
         span.ps-2-tab(v-for="name in items" :key="items.id"
         @click="selectedItem(name.name)"
@@ -24,9 +24,9 @@
               span.ps-10 {{slidervalue2}} Months
               input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' min="1" max="12" v-model="slidervalue2")
           div.ps-5 Your Deposit &#8377; {{monthlyDeposit}} monthly <br> will be deducted from your Salary
-          div.ps-3
+          div.ps-3.custom-trans
             div.ps-4.flex.flex-row.justify-between
-              span.font-bold You deposit
+              span.font-bold You pay
               span.font-bold You get
             div.ps-4.flex.flex-row.justify-between
               span.ps-12 &#8377; {{slidervalue1}}
@@ -44,24 +44,26 @@
               div.flex.flex-row.justify-between
                 span.ps-7 Voucher Amount
                 span.ps-15 &#8377;
-                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue3" @keydown="nameKeydown($event)")
-              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-bind:min="min" v-bind:max="max" v-bind:step="step"  v-model="slidervalue3")
+                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue3" @keydown="nameKeydown($event)" v-if="!fixedSteps?.length")
+                select.custom-select(v-if="fixedSteps?.length" v-on:change="selectVal")
+                  option(value=amt v-for="amt in this.fixedSteps") {{ amt }}
+              input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-if="!fixedSteps?.length" v-bind:min="min" v-bind:max="max" v-bind:step="step"  v-model="slidervalue3")
               div.ps-5 &#8377; {{instantPayment}} will be deducted from your Salary.
               div.ps-5 Voucher Purchase T&Cs
-                div.ps-3
+                div.ps-3.custom-trans
                   div.ps-4.flex.flex-row.justify-between
-                    span.font-bold You deposit
+                    span.font-bold You pay
                     span.font-bold You get
                   div.ps-4.flex.flex-row.justify-between
                     span.ps-12 &#8377; {{slidervalue3}}
                     span.ps-12 &#8377; {{getMerchDis}}
         div.ps-6
-          div.font-bold.text-xl.text-center How to use the vouchers
+          div.pt-5.font-bold.text-xl.text-center How to use the vouchers
           div.ps-7 1.Vouchers will be delivered to your registered mobile number & registered email address. 
           div.ps-7 2.Discount amount will be transferred to your bank account within 3 working days.
-          div.ps-7(@click="openBlockCard" v-if="!slidervalue3==0")
+          div.ps-7.pt-5(@click="openBlockCard" v-if="!slidervalue3==0")
             button.ps-8.font-bold Buy Now     
-          div.ps-7(@click="payViaRazor" v-if="!slidervalue3==0")
+          div.ps-7.pt-2(@click="payViaRazor" v-if="!slidervalue3==0")
             button.ps-8.font-bold Pay Via RazorPay             
 
 </template>
@@ -104,6 +106,7 @@ export default {
       buyData: '',
       discount: 0,
       product: '',
+      fixedSteps: [],
       items: [
         // {
         //   id: '01',
@@ -134,9 +137,14 @@ export default {
   mounted() {
     const _this = this
     this.product = this.selecteProduct.product
+    if (this.product?.fixed_steps) {
+      this.fixedSteps = this.product?.fixed_steps.split(',')
+    }
     const merchantDis = this.selecteProduct.product.merchant_discount || 0
     this.slidervalue1 = this.selecteProduct.product.min
-    this.slidervalue3 = this.selecteProduct.product.min
+    this.slidervalue3 = this.fixedSteps?.length
+      ? this.fixedSteps[0]
+      : this.selecteProduct.product.min
 
     setInterval(function () {
       const today = moment()
@@ -163,6 +171,9 @@ export default {
     }, 1000)
   },
   methods: {
+    selectVal(e) {
+      this.slidervalue3 = e.target.value
+    },
     selectedItem(name) {
       this.itemSelected = []
       this.itemSelected.push(name)
@@ -347,5 +358,8 @@ export default {
   color: #d8d8d8;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+}
+.custom-trans {
+  width: 100%;
 }
 </style>
