@@ -28,14 +28,14 @@ export default {
           id: '01',
           name: 'Explore',
         },
-        {
-          id: '02',
-          name: 'Active plan',
-        },
-        {
-          id: '03',
-          name: 'Past plan',
-        },
+        // {
+        //   id: '02',
+        //   name: 'Active plan',
+        // },
+        // {
+        //   id: '03',
+        //   name: 'Past plan',
+        // },
       ],
       itemSelected: 'Explore',
       categories: [],

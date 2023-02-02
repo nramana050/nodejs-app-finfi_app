@@ -8,7 +8,7 @@
       p Transfer
     button.grid.text-center(@click="navToSaveNow")
       FaIcon.mx-auto.ps-A1(icon='piggy-bank')
-      p Save
+      p Shop
     button.grid.text-center(@click="navToTranscation")
       FaIcon.mx-auto.ps-A1(icon='scroll')
       p History
