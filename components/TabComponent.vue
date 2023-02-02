@@ -7,7 +7,7 @@
       FaIcon.mx-auto.ps-A1(icon='paper-plane')
       p Transfer
     button.grid.text-center(@click="navToSaveNow")
-      FaIcon.mx-auto.ps-A1(icon='piggy-bank')
+      FaIcon.mx-auto.ps-A1(icon='tags')
       p Shop
     button.grid.text-center(@click="navToTranscation")
       FaIcon.mx-auto.ps-A1(icon='scroll')
