@@ -25,39 +25,22 @@ div.ps-1A
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
-  //- div
-    div
-      div.font-bold.text-sm.ps-8 Savings Plan
-      ssr-carousel
-        div.slide 
-          div.ps-9.flex.flex-row
-            div.col-1
-              span
-                img.ps-9A(src="~/assets/apple.jpeg")
-            div.col-2
-              div.font-bold.ps-9B Apple
-              div.ps-9B save now for apple products
-        div.slide 
-          div.ps-9.flex.flex-row
-            span.col-1
-              img.ps-9A(src="~/assets/croma.jpg")
-            span.col-2
-              div.font-bold.ps-9B Croma
-              div.ps-9B save now for Croma products      
-        div.slide 
-          div.ps-9.flex.flex-row
-            span.col-1
-              img.ps-9A(src="~/assets/makemytrip.png")
-            span.col-2
-              div.font-bold.ps-9B MakeMyTrip
-              div.ps-9B save now for MakeMyTrip 
-        div.slide 
-          div.ps-9.flex.flex-row
-            span.col-1
-              img.ps-9A(src="~/assets/bluestone.png")
-            span.col-2
-              div.font-bold.ps-9B BlueStone
-              div.ps-9B save now for BlueStone products
+      div.pt-10
+      ssr-carousel(:slides-per-page=3 loop=true show-arrows=true feather=true autoplay-delay=5)
+        div.slide.custom-pro-slide 
+             img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/myntra.png" crossorigin="anonymous")
+        div.slide.custom-pro-slide
+              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/nykaa.webp" crossorigin="anonymous")
+        div.slide.custom-pro-slide 
+              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/urban_ladder.jpg" crossorigin="anonymous")
+        div.slide.custom-pro-slide 
+              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/amazon.png" crossorigin="anonymous")
+        div.slide.custom-pro-slide 
+              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/bookmyshow.jpg" crossorigin="anonymous")
+        div.slide.custom-pro-slide 
+              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/flipkart.jpg" crossorigin="anonymous")
+        div.slide.custom-pro-slide 
+              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/make_my_trip.png" crossorigin="anonymous")
 </template>
 
 <script>
@@ -142,17 +125,14 @@ export default {
         },
       })
 
-      if (isVartualCard.data.message === "True") {
+      if (isVartualCard.data.message === 'True') {
         this.$router.push('/welcomePage4')
-      }
-      else if (isVartualCard.data.message === "Fail") {
+      } else if (isVartualCard.data.message === 'Fail') {
         this.$toast.error(isVartualCard.data.result)
-      }
-      else if (isVartualCard.data.message === "Paid") {
-        this.$router.push("/RequestPhysical")
-        this.$toast.success("Already Paid For Physical Card.")
-      }
-      else {
+      } else if (isVartualCard.data.message === 'Paid') {
+        this.$router.push('/RequestPhysical')
+        this.$toast.success('Already Paid For Physical Card.')
+      } else {
         this.$toast.error(isVartualCard.data.result)
       }
     },
@@ -288,6 +268,20 @@ export default {
 </script>
 
 <style scoped>
+.custom-pro-slide {
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  height: 120px;
+  width: 12px;
+}
+.custom-pro-slide > img {
+  height: 75px;
+  width: 75px;
+}
 .ps-1 {
   height: 30vh;
   background-color: #7165e3;
