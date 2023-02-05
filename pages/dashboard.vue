@@ -26,21 +26,9 @@ div.ps-1A
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
       div.pt-10
-      ssr-carousel(:slides-per-page=3 loop=true show-arrows=true feather=true autoplay-delay=5)
-        div.slide.custom-pro-slide 
-             img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/myntra.png" crossorigin="anonymous")
-        div.slide.custom-pro-slide
-              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/nykaa.webp" crossorigin="anonymous")
-        div.slide.custom-pro-slide 
-              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/urban_ladder.jpg" crossorigin="anonymous")
-        div.slide.custom-pro-slide 
-              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/amazon.png" crossorigin="anonymous")
-        div.slide.custom-pro-slide 
-              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/bookmyshow.jpg" crossorigin="anonymous")
-        div.slide.custom-pro-slide 
-              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/flipkart.jpg" crossorigin="anonymous")
-        div.slide.custom-pro-slide 
-              img(src="https://uatapi.myfinfi.com/static/assets/homescreenimages/make_my_trip.png" crossorigin="anonymous")
+      ssr-carousel(:slides-per-page=3 loop=true show-arrows=true feather=true autoplay-delay=5 v-if="homeProducts?.length")
+        div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
+             img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
 </template>
 
 <script>
@@ -69,6 +57,10 @@ export default {
       filteredProducts: [],
       toFilter: [1, 3, 7, 14],
       card_type: null,
+      homeProducts: [],
+      selectedProduct: [],
+      selected: false,
+      baseUrl: this.$axios.defaults.baseURL,
     }
   },
   async fetch() {
@@ -81,8 +73,9 @@ export default {
     },
   },
   mounted() {
-    this.getCategories()
-    this.getProducts()
+    // this.getCategories()
+    // this.getProducts()
+    this.getHomeProducts()
   },
   async beforeMount() {
     const apiResult = await this.$axios.get('/organizations/config', {
@@ -117,7 +110,6 @@ export default {
     navToFAQ() {
       this.$router.push('/AskedQuestions')
     },
-
     async navToPhysicalCard() {
       const isVartualCard = await this.$axios.get('m2p/requestPhysicalCard', {
         headers: {
@@ -148,6 +140,23 @@ export default {
       this.filteredProducts = productList.filter((x) =>
         this.toFilter.includes(x.id)
       )
+    },
+    async getHomeProducts() {
+      const res = await this.$axios.$get(`/snbl/home-products`)
+      if (res.message === 'Success') {
+        this.homeProducts = res.data
+      }
+    },
+    selectProduct(Product) {
+      const productObj = {
+        organization_id: Product.organization_id,
+        product: Product,
+      }
+      this.selectedProduct = []
+      this.selectedProduct.push(productObj)
+      this.selected = true
+      this.$store.commit('setProduct', productObj)
+      this.$router.push('/StartPlan')
     },
     cardNumber() {
       if (this.isCardNumber === true) {
