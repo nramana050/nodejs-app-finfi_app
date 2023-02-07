@@ -25,39 +25,10 @@ div.ps-1A
         div.flex.flex-row.justify-between
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
-  //- div
-    div
-      div.font-bold.text-sm.ps-8 Savings Plan
-      ssr-carousel
-        div.slide 
-          div.ps-9.flex.flex-row
-            div.col-1
-              span
-                img.ps-9A(src="~/assets/apple.jpeg")
-            div.col-2
-              div.font-bold.ps-9B Apple
-              div.ps-9B save now for apple products
-        div.slide 
-          div.ps-9.flex.flex-row
-            span.col-1
-              img.ps-9A(src="~/assets/croma.jpg")
-            span.col-2
-              div.font-bold.ps-9B Croma
-              div.ps-9B save now for Croma products      
-        div.slide 
-          div.ps-9.flex.flex-row
-            span.col-1
-              img.ps-9A(src="~/assets/makemytrip.png")
-            span.col-2
-              div.font-bold.ps-9B MakeMyTrip
-              div.ps-9B save now for MakeMyTrip 
-        div.slide 
-          div.ps-9.flex.flex-row
-            span.col-1
-              img.ps-9A(src="~/assets/bluestone.png")
-            span.col-2
-              div.font-bold.ps-9B BlueStone
-              div.ps-9B save now for BlueStone products
+      div.pt-10
+      ssr-carousel(:slides-per-page=3 loop=true show-arrows=true feather=true autoplay-delay=5 v-if="homeProducts?.length")
+        div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
+             img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
 </template>
 
 <script>
@@ -86,6 +57,10 @@ export default {
       filteredProducts: [],
       toFilter: [1, 3, 7, 14],
       card_type: null,
+      homeProducts: [],
+      selectedProduct: [],
+      selected: false,
+      baseUrl: this.$axios.defaults.baseURL,
     }
   },
   async fetch() {
@@ -98,8 +73,9 @@ export default {
     },
   },
   mounted() {
-    this.getCategories()
-    this.getProducts()
+    // this.getCategories()
+    // this.getProducts()
+    this.getHomeProducts()
   },
   async beforeMount() {
     const apiResult = await this.$axios.get('/organizations/config', {
@@ -134,7 +110,6 @@ export default {
     navToFAQ() {
       this.$router.push('/AskedQuestions')
     },
-
     async navToPhysicalCard() {
       const isVartualCard = await this.$axios.get('m2p/requestPhysicalCard', {
         headers: {
@@ -142,17 +117,14 @@ export default {
         },
       })
 
-      if (isVartualCard.data.message === "True") {
+      if (isVartualCard.data.message === 'True') {
         this.$router.push('/welcomePage4')
-      }
-      else if (isVartualCard.data.message === "Fail") {
+      } else if (isVartualCard.data.message === 'Fail') {
         this.$toast.error(isVartualCard.data.result)
-      }
-      else if (isVartualCard.data.message === "Paid") {
-        this.$router.push("/RequestPhysical")
-        this.$toast.success("Already Paid For Physical Card.")
-      }
-      else {
+      } else if (isVartualCard.data.message === 'Paid') {
+        this.$router.push('/RequestPhysical')
+        this.$toast.success('Already Paid For Physical Card.')
+      } else {
         this.$toast.error(isVartualCard.data.result)
       }
     },
@@ -168,6 +140,23 @@ export default {
       this.filteredProducts = productList.filter((x) =>
         this.toFilter.includes(x.id)
       )
+    },
+    async getHomeProducts() {
+      const res = await this.$axios.$get(`/snbl/home-products`)
+      if (res.message === 'Success') {
+        this.homeProducts = res.data
+      }
+    },
+    selectProduct(Product) {
+      const productObj = {
+        organization_id: Product.organization_id,
+        product: Product,
+      }
+      this.selectedProduct = []
+      this.selectedProduct.push(productObj)
+      this.selected = true
+      this.$store.commit('setProduct', productObj)
+      this.$router.push('/StartPlan')
     },
     cardNumber() {
       if (this.isCardNumber === true) {
@@ -288,6 +277,20 @@ export default {
 </script>
 
 <style scoped>
+.custom-pro-slide {
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  height: 120px;
+  width: 12px;
+}
+.custom-pro-slide > img {
+  height: 75px;
+  width: 75px;
+}
 .ps-1 {
   height: 30vh;
   background-color: #7165e3;
