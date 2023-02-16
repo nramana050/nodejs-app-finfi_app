@@ -7,7 +7,10 @@
           img.custom-img(v-else :src='baseUrl+selectedCategory.category_image' crossorigin="anonymous")
         div.ps-4
           div.font-bold.text-sm.ps-4B {{item.product.product_name}}
-          div.text-sm Discount of {{item.product.merchant_discount}}%
+          div.text-sm.ps-4B Discount of {{item.product.merchant_discount}}%
+          div.text-sm.ps-4B.custom-product-info
+           span.font-bold *{{item.product.acceptance_mode === "BOTH"? 'ONLINE & OFFLINE' : item.product.acceptance_mode }} 
+           span *Valid till {{item.product.validity}}
       div.flex.ps-4.items-center.justify-center(v-if="!productList.length") No Products Found for Selected Category      
 
 </template>
@@ -35,7 +38,6 @@ export default {
     // },
   },
   mounted() {
-    console.log('SELECTED CATEGORY::', this.selectedCategory)
     this.$emit('product', this.selectProduct)
   },
   methods: {
@@ -52,6 +54,11 @@ export default {
 }
 </script>
 <style scoped>
+.custom-product-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
 .custom-img {
   height: 120px;
 }
