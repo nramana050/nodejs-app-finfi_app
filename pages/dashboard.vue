@@ -26,8 +26,9 @@ div.ps-1A
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
       div.pt-10
-      ssr-carousel(:slides-per-page=3 loop=true show-arrows=true feather=true autoplay-delay=5 v-if="homeProducts?.length")
-        div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
+        P.font-bold.text-sm.ps-5 Discount On Top Brands
+        ssr-carousel(:slides-per-page=3 loop=true show-arrows=true feather=true autoplay-delay=5 v-if="homeProducts?.length")
+          div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
              img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
 </template>
 
