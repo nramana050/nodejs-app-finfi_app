@@ -98,10 +98,12 @@ export default {
   border: 1px solid #dbd8d8;
   display: flex;
 }
-.ps-3 img {
+.ps-3 > img {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  max-width: 200px;
+  height: 100px;
 }
 
 .ps-4 {
