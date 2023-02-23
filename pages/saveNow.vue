@@ -2,6 +2,7 @@
   div.ps-3
     div.flex-0 
       PageHeader.font-bold(:title="'Buy Now'")
+      input(type='text' id="search-product" placeholder="Search" @focus="navToSearch")  
     div.flex.flex-row.justify-between
       span.ps-2(v-for="name in items" :key="items.id"
        @click="selectedItem(name.name)"
@@ -47,6 +48,9 @@ export default {
     this.getCategories()
   },
   methods: {
+    navToSearch() {
+      this.$router.push('/search')
+    },
     navToDashboard() {
       this.$router.push('/dashboard')
     },
@@ -85,6 +89,13 @@ export default {
 }
 </script>
 <style scoped>
+#search-product {
+  border-bottom: 1px solid #989595;
+  height: 42px;
+  width: 100%;
+  font-size: 18px;
+  padding: 10px;
+}
 .ps-2 {
   width: 33.3%;
   text-align: center;
