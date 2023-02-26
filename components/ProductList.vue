@@ -4,7 +4,7 @@
       div.ps-2(v-for="item in this.productList" :key="item.product.id" @click="navToStartPlan(); selectProduct(item)")
         div.ps-3.d-flex.justify-center
           img(v-if="item.product.product_image" :src='baseUrl+item.product.product_image' crossorigin="anonymous")
-          img.custom-img(v-else :src='baseUrl+selectedCategory.category_image' crossorigin="anonymous")
+          img.custom-img(v-else :src='baseUrl+selectedCategory?.category_image' crossorigin="anonymous")
         div.ps-4
           div.font-bold.text-sm.ps-4B {{item.product.product_name}}
           div.text-sm.ps-4B.custom-info-container 
@@ -17,16 +17,13 @@
           div.custom-info-container.custom-f-r 
            img.custom-icon(src='~/assets/validity.svg')
            span Valid till {{item.product.validity}}
-
-      div.flex.ps-4.items-center.justify-center(v-if="!productList.length") No Products Found for Selected Category      
-
+      div.flex.ps-4.items-center.justify-center(v-if="!productList.length && selectedCategory") No Products Found for Selected Category      
+      div.flex.ps-4.items-center.justify-center(v-if="!productList.length && !selectedCategory") No Products Found  
 </template>
 <script>
 export default {
   props: {
-    selectedCategory: {
-      required: true,
-    },
+    selectedCategory: {},
     productList: {
       type: [],
       required: true,
