@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     navToTransferScreen() {
-      this.$router.push('/TransferScreen')
+      this.$router.push('/transferscreen')
     },
     navToCard() {
       this.$router.push('/cards')
@@ -102,10 +102,10 @@ export default {
       this.$router.push('/profile')
     },
     navToSaveNow() {
-      this.$router.push('/saveNow')
+      this.$router.push('/shopnow')
     },
     navToFAQ() {
-      this.$router.push('/AskedQuestions')
+      this.$router.push('/askedquestions')
     },
     async navToPhysicalCard() {
       const isVartualCard = await this.$axios.get('m2p/requestPhysicalCard', {
@@ -153,7 +153,7 @@ export default {
       this.selectedProduct.push(productObj)
       this.selected = true
       this.$store.commit('setProduct', productObj)
-      this.$router.push('/StartPlan')
+      this.$router.push('/startplan')
     },
     cardNumber() {
       if (this.isCardNumber === true) {

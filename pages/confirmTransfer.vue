@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     navToTransfer() {
-      this.$router.push('/TransferScreen')
+      this.$router.push('/transferscreen')
     },
     changeRange(index, value, event) {
       if (event.data != null) {

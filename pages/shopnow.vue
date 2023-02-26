@@ -57,10 +57,10 @@ export default {
       this.$router.push('/dashboard')
     },
     navToActivePlans() {
-      this.$router.push('/ActivePlans')
+      this.$router.push('/activeplans')
     },
     navToPastPlans() {
-      this.$router.push('/PastPlans')
+      this.$router.push('/pastplans')
     },
     navToCategories() {
       this.$router.push('/categoriesList')

@@ -174,7 +174,7 @@ export default {
       return specialCharactersRegex.test(charactersStrings)
     },
     navToDashboard() {
-      this.$router.push('/Dashboard')
+      this.$router.push('/dashboard')
     },
     async requestPhysicalCard(order_id) {
       try {
@@ -196,7 +196,7 @@ export default {
           response.result == true
         ) {
           this.$toast.success('Physical Card Request is success')
-          this.$router.push('/ThankYou')
+          this.$router.push('/thankyou')
         }
 
         if (
@@ -205,7 +205,7 @@ export default {
           response.result.exception.errorCode == 'Y3261'
         ) {
           this.$toast.success('Card is already registered for physical card')
-          this.$router.push('/ThankYou')
+          this.$router.push('/thankyou')
         } else if (response.message == 'Fail') {
           // this.$toast.error(response.result)
           this.$toast.error(

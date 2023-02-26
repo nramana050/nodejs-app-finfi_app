@@ -179,7 +179,7 @@ export default {
       this.itemSelected.push(name)
     },
     navToProductScreen() {
-      this.$router.push('/SaveNow')
+      this.$router.push('/shopnow')
     },
     nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
@@ -210,7 +210,7 @@ export default {
           this.data = result.data
         })
         this.$toast.info('Your Plan started successfully')
-        this.$router.push('/SaveNow')
+        this.$router.push('/shopnow')
       } catch (err) {
         this.$toast.error(err.message)
       }
@@ -228,7 +228,7 @@ export default {
           return
         }
         this.$toast.info(res?.message)
-        this.$router.push('/SaveNow')
+        this.$router.push('/shopnow')
       } catch (err) {
         this.$toast.error('Failed to start plan')
       }

@@ -38,10 +38,10 @@ export default {
       this.$router.push('/dashboard')
     },
     navToTransfer() {
-      this.$router.push('/TransferScreen')
+      this.$router.push('/transferscreen')
     },
     navToSaveNow() {
-      this.$router.push('/saveNow')
+      this.$router.push('/shopnow')
     },
     navToTranscation() {
       this.$router.push('/transactions')

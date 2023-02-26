@@ -16,22 +16,25 @@
 <script>
 export default {
   name: 'PasscodePage',
-  layout:'empty',
+  layout: 'empty',
   data() {
     return {
       user: this.$auth.user,
       passcode_1: '',
       passcode_2: '',
       hasError: false,
-
     }
   },
   methods: {
     async setPasscode() {
-      const passwordPattern=/^\d{6}$/;
-      const validatePassword = passwordPattern.test(this.passcode_2);
-      
-      if (this.passcode_1.length !== 6 || this.passcode_2.length !== 6 || !validatePassword) {
+      const passwordPattern = /^\d{6}$/
+      const validatePassword = passwordPattern.test(this.passcode_2)
+
+      if (
+        this.passcode_1.length !== 6 ||
+        this.passcode_2.length !== 6 ||
+        !validatePassword
+      ) {
         this.$toast.error('Enter 6 digit numeric passcode')
         return
       }
@@ -45,13 +48,10 @@ export default {
           passcode: Number(this.passcode_1),
         })
         this.$toast.info('Passcode updated successfully')
-        if(welcome.data.message===true)
-        {
-        this.$router.push('/WelcomePage')
-        }
-        else{
-        this.$router.push('/dashboard')
-
+        if (welcome.data.message === true) {
+          this.$router.push('/welcomepage')
+        } else {
+          this.$router.push('/dashboard')
         }
       } catch (err) {
         this.$toast.error('failed to update passcode')
@@ -114,9 +114,8 @@ export default {
   width: 20px;
   height: 30px;
 }
-.ps-9
-{
-   background-color: #7165e3;
+.ps-9 {
+  background-color: #7165e3;
   height: 3rem;
 }
 </style>

@@ -24,7 +24,7 @@ export default {
       selectedCategories: [],
       selected: false,
       user: this.$auth.user,
-      selectedValue:null
+      selectedValue: null,
     }
   },
   mounted() {
@@ -33,16 +33,16 @@ export default {
   },
   methods: {
     navToSaveNow() {
-      this.$router.push('/saveNow')
+      this.$router.push('/shopnow')
     },
     navToMerchant() {
-      this.$router.push('/ProductList')
+      this.$router.push('/productList')
     },
     selectCategory(category) {
       this.selectedCategories = []
       this.selectedCategories.push(category)
       this.selected = true
-      this.selectedValue=category
+      this.selectedValue = category
       this.$store.commit('setCategory', category)
     },
 
@@ -83,13 +83,13 @@ export default {
 }
 
 .ps-9 {
-  margin:1rem;
+  margin: 1rem;
   border-radius: 8px;
   align-items: center;
   height: 2.5rem;
 }
-.ps-11{
- margin: 1rem;
+.ps-11 {
+  margin: 1rem;
 }
 
 .ps-10 {

@@ -43,10 +43,10 @@ export default {
 
   methods: {
     navToStartPlan() {
-      this.$router.push('/StartPlan')
+      this.$router.push('/startplan')
     },
     navToCategory() {
-      this.$router.push('/CategoriesList')
+      this.$router.push('/categorieslist')
     },
 
     selectProduct(Product) {

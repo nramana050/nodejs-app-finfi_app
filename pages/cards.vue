@@ -72,11 +72,11 @@ export default {
       this.$router.push('/dashboard')
     },
     openRegistrationModal() {
-      this.$router.push('/CardRegistration')
+      this.$router.push('/cardregistration')
       //  this.$FModal.show({ component: M2PRegistration })
     },
     openPhysicalModel() {
-      this.$router.push('/RequestPhysical')
+      this.$router.push('/requestphysical')
     },
     openCardSetting() {
       this.$FModal.show({ component: SetPreference })
