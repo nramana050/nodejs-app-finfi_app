@@ -9,7 +9,7 @@ div
     div.ps-3.text-sm.text-center A/C number-{{bank.account_number}}
     div.flex.flex-row.justify-evenly
       div.text-3xl.ps-6 &#8377;
-      input.text-3xl.ps-8(class="focus:outline-none" type="numeric" v-model="requestedAmount")
+      input.text-3xl.ps-8(class="focus:outline-none" ref="amountfeild" type="numeric" v-model="requestedAmount")
     //- div
     //-   div(v-if="requestedAmount>0")
     //-     button.ps-5.font-bold.text-white(@click="initCashRequest")
@@ -25,6 +25,7 @@ div
 export default {
   name: 'TransferScreen',
   layout: 'empty',
+
   data() {
     return {
       user: this.$auth.user,
@@ -33,12 +34,13 @@ export default {
       recentTransaction: null,
       inProgress: false,
       availableLimit: null,
-      transferAmount:0,
-      amount:[],
+      transferAmount: 0,
+      amount: [],
       bank: {
         ifsc_code: null,
         account_number: null,
       },
+      interval: null,
     }
   },
   // async fetch() {
@@ -49,18 +51,22 @@ export default {
     this.profile = profileResult.data
     await this.getBankAccount()
   },
-   mounted(){
-    this.$emit('requestAmount', this.amount)  
+  mounted() {
     const _this = this
-    setInterval(function (){
-      _this.transferAmount=_this.requestedAmount
-    },1000)  
+    this.$refs.amountfeild.focus()
+    this.$emit('requestAmount', this.amount)
+    this.interval = setInterval(function () {
+      _this.transferAmount = _this.requestedAmount
+    }, 1000)
   },
-    methods:{
-      navToDashboard() {
-        this.$router.push('/dashboard')
-      },
-      async getBankAccount() {
+  destroyed() {
+    clearInterval(this.interval)
+  },
+  methods: {
+    navToDashboard() {
+      this.$router.push('/dashboard')
+    },
+    async getBankAccount() {
       try {
         const bankResult = await this.$axios.get('/profile/banks')
         if (bankResult.data) {
@@ -70,12 +76,12 @@ export default {
         this.$toast.error('Failed to fetch profile')
       }
     },
-      requestAmount(){
-        this.amount=[]
-        this.amount.push(this.transferAmount)
-        this.$store.commit('setrequestAmount', this.transferAmount)
-        this.$router.push('/confirmTransfer')
-      },
+    requestAmount() {
+      this.amount = []
+      this.amount.push(this.transferAmount)
+      this.$store.commit('setrequestAmount', this.transferAmount)
+      this.$router.push('/confirmTransfer')
+    },
     //   async getAccountDetails() {
     //   try {
     //     const accountresult = await this.$axios.get('/accounts')
@@ -86,12 +92,12 @@ export default {
     //     const accountTypes = accountresult.data.map((x)=>x.account.account_type)
     //     const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
     //     const providerM2P = await this.$axios.post('/ext/service-provider',{ service_provider : 'M2P'})
- 
+
     //     const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>accountTypes.includes(x))[0])  ;
     //     const m2pAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerM2P.data.filter(x=>accountTypes.includes(x))[0] ) ;
     //     console.log('f m accs',finfiAccount,m2pAccount)
 
-    //     this.availableLimit = 
+    //     this.availableLimit =
     //       ( finfiAccount.length>0 ? finfiAccount[0].account_balance : 0
     //       + m2pAccount.length>0 ? m2pAccount[0].account_balance : 0 ).toLocaleString('en-IN')
 
@@ -102,18 +108,24 @@ export default {
     //     console.log(err)
     //     this.$toast.error('Failed to fetch accounts');
     //   }
-    // },        
+    // },
     async initCashRequest() {
-      this.inProgress = true;
+      this.inProgress = true
       const accountresult = await this.$axios.get('/accounts')
-      this.accounts = [];
-      for (const item of accountresult.data){
+      this.accounts = []
+      for (const item of accountresult.data) {
         this.accounts.push(item.account)
       }
-      const accountTypes = accountresult.data.map((x)=>x.account.account_type)
-      const providerFinfi = await this.$axios.post('/ext/service-provider',{ service_provider : 'FINFI'})
-      const finfiAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === providerFinfi.data.filter(x=>accountTypes.includes(x))[0])  ;
-      const availableLimit = finfiAccount[0].account_balance;
+      const accountTypes = accountresult.data.map((x) => x.account.account_type)
+      const providerFinfi = await this.$axios.post('/ext/service-provider', {
+        service_provider: 'FINFI',
+      })
+      const finfiAccount = this.accounts.filter(
+        (item) =>
+          item.account_type.toUpperCase() ===
+          providerFinfi.data.filter((x) => accountTypes.includes(x))[0]
+      )
+      const availableLimit = finfiAccount[0].account_balance
       if (this.requestedAmount > availableLimit) {
         this.$toast.error(`Cash limit available: ${availableLimit}`)
         this.inProgress = false
@@ -132,11 +144,11 @@ export default {
           return
         }
         await this.$axios.post(`/accounts/${finfiAccount[0].id}/withdrawals`, {
-          amount: this.requestedAmount 
-          });
-        this.$toast.success('Cash request sent');
-        this.requestedAmount=null;
-        this.inProgress = false;
+          amount: this.requestedAmount,
+        })
+        this.$toast.success('Cash request sent')
+        this.requestedAmount = null
+        this.inProgress = false
       } catch (err) {
         this.inProgress = false
         this.$toasted.error(err.response.data.message)
@@ -179,7 +191,7 @@ export default {
   margin-top: 2rem;
 }
 .ps-5 {
-  color: #1C1939;
+  color: #1c1939;
   background-color: white;
   height: 2.5rem;
   width: 20rem;
@@ -194,8 +206,8 @@ export default {
   margin-left: -2rem;
   margin-top: 2rem;
 }
-.ps-4{
- color: #7165e3;
+.ps-4 {
+  color: #7165e3;
 }
 .ps-9 {
   width: 6rem;
