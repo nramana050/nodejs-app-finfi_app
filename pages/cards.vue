@@ -34,77 +34,9 @@ div
           img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
     div.uppercase.ps-5(v-if="isCardAvailable && !isCardBlocked")
       SetPreference
-      //- button.flex.flex-row.justify-center.text-white.border.p-4.items-center.ps-44(@click="openPhysicalModel")
-       span Request Physical Card
-      //-   FaIcon.mx-auto.ps-3(icon='angle-left')
-      //- h3.text-sm.font-bold.tracking-widest.uppercase {{ title }}
-        
-    //- div.flex.flex-row.justify-between.ps-7
-    //-   div.text-sm Ecom 
-    //-   span.text-sm {{form.ecom? 'On': 'Off'}}
-    //-   div.relative
-    //-     img(src="~/assets/toggle_on.png" v-if="form.ecom=true" name="ecom" id="ecom" v-model="form.ecom" @click="toggleStatus('ecom')")
-    //-     img(src="~/assets/toggle_off.png" v-if="form.ecom=false" name="ecom" id="ecom" v-model="form.ecom" @click="toggleStatus('ecom')")
-        //- div.flex.flex-row.justify-between.ps-15
-        //-   div.text-sm POS
-        //-   div.relative
-        //-     img(src="~/assets/toggle_on.png" v-if="isPos" @click="")
-        //-     img(src="~/assets/toggle_off.png" v-else @click="")
-        //- div.flex.flex-row.justify-between.ps-15
-        //-   div.text-sm Contactless
-        //-   div.relative
-        //-     img(src="~/assets/toggle_on.png" v-if="isContactLess" @click="")
-        //-     img(src="~/assets/toggle_off.png" v-else @click="")
-        
-  //- div(v-if="isLoading")
-  //-   img#loader(src="~/assets/loader.gif")
-  //- div(v-else)
-  //-   div.flex.flex-col(v-if="isCardAvailable")
-  //-     div.flex(v-if="card.url")
-  //-       object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
-  //-       //- iframe(:src="card.url" width="100%" height="320px")
-  //-     div.flex(v-else)
-  //-       div(width="100%" style="height:270px !important;")
-  //-         img#dummycard(src="https://static.thenounproject.com/png/2028787-200.png")
-  //-     div.flex-flex-col.mt-5.bg-gray-100
-  //-       div.flex.flex-row.justify-between.py-2.px-8
-  //-         span Kit Number
-  //-         span.font-bold.uppercase.tracking-wide {{ card.kitList }}
-  //-       div.flex.flex-row.justify-between.pb-2.px-8
-  //-         span Card Status
-  //-         span.font-bold.uppercase.tracking-wide {{ isCardBlocked ? 'BLOCKED' : 'ACTIVE' }}
-  //-       div.px-8.bg-white.pt-4
-  //-         div.flex.justify-between.is-align-items-center.pb-2
-  //-           div.miam.miam-active.pt-2 Block Card
-  //-           //- div.relative.inline-block.w-10.mr-2.align-middle.select-none.transition.duration-200.ease-in
-  //-           //-   input.toggle-checkbox.absolute.block.w-6.h-6.rounded-full.bg-white.border-4.appearance-none.cursor-pointer(type="checkbox" name="block" id="block" :value="isCardBlocked" @change="toggleCardStatus")
-  //-           //-   label.toggle-label.block.overflow-hidden.h-6.rounded-full.bg-gray-300.cursor-pointer( for="block")
-  //-           div.relative
-  //-             img(src="~/assets/toggle_on.png" v-if="isCardBlocked" @click="openUnblockCard")
-  //-             img(src="~/assets/toggle_off.png" v-else @click="openBlockCard")
-  //-       div.px-8.bg-white.pt-4
-  //-         div.grid.grid-cols-1.divide-y.border.rounded 
-  //-           div.flex.justify-between.px-4.py-2(@click="openCardSetting")
-  //-             span Card Preferences 
-  //-             span &#8250;
-  //-           div.flex.justify-between.px-4.py-2(@click="openCardPIN")
-  //-             span Set PIN 
-  //-             span &#8250;  
-  //-   div.flex.flex-col.p-4(v-else)
-  //-     div.p-2
-  //-       p.p-2 Please go through the 
-  //-         a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
-  //-         //- p.text-xs
-  //-         //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
-  //-       input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
-  //-       label  I accept the terms and condition 
-  //-     button.h-12.w-full.text-white.rounded.bg-primary.uppercase.font-bold(v-if="this.isTermsAccepted" @click="openRegistrationModal")
-  //-       span Get Card
-
 </template>
 
 <script>
-// import M2PRegistration from '~/components/M2P/Registration.vue'
 import SetPreference from '~/components/M2P/SetPreference.vue'
 import BlockCard from '~/components/M2P/BlockCard.vue'
 import UnblockCard from '~/components/M2P/UnblockCard.vue'
@@ -119,9 +51,6 @@ export default {
       user: this.$auth.user,
       isLoading: true,
       isCardAvailable: false,
-      // isCardBlocked: false,
-      // isEcomBlocked: false,
-      // isPosBlocked: false,
       isContactLessBlocked: false,
       isEcom: true,
       card: null,
@@ -143,7 +72,7 @@ export default {
       this.$router.push('/dashboard')
     },
     openRegistrationModal() {
-       this.$router.push('/CardRegistration')
+      this.$router.push('/CardRegistration')
       //  this.$FModal.show({ component: M2PRegistration })
     },
     openPhysicalModel() {
@@ -234,24 +163,6 @@ export default {
 </script>
 
 <style scoped>
-/* #dummycard {
-  margin: auto !important;
-  left: 50%;
-  right: 50%;
-  position: relative;
-  top: 20%;
-}
-#loader {
-  position: absolute;
-  top: 25%;
-}
-a:hover {
-  color: blue;
-  /* text-decoration: underline; */
-/* }
-object:focus {
-  outline: none;
-} */
 .ps-1 {
   height: 70vh;
   background-color: #7165e3;
@@ -291,7 +202,7 @@ object:focus {
   margin-top: 0.5rem;
 }
 
-.ps-8{
+.ps-8 {
   margin-left: 0.3rem;
   margin-right: 0.3rem;
   height: 25vh;
@@ -340,9 +251,9 @@ object:focus {
 .ps-19 {
   margin-top: 1rem;
 }
-.ps-44{
-    background-color: #7165E3;
-    border-radius: 20px;
-    width: 88%;
+.ps-44 {
+  background-color: #7165e3;
+  border-radius: 20px;
+  width: 88%;
 }
 </style>

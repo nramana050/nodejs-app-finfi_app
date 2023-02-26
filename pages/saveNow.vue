@@ -45,7 +45,9 @@ export default {
     }
   },
   mounted() {
-    this.getCategories()
+    if (this.$auth.strategy.token.status().valid()) {
+      this.getCategories()
+    }
   },
   methods: {
     navToSearch() {

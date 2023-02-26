@@ -13,11 +13,13 @@ export default {
   name: 'DefaultLayout',
 
   beforeMount() {
-    if (this.$auth.strategy.token.status().unknown()) {
+    if (
+      this.$auth.strategy.token.status().unknown() ||
+      !this.$auth.strategy.token.status().valid()
+    ) {
       this.$router.push('/')
     }
   },
 }
 </script>
-<style>
-</style>
+<style></style>

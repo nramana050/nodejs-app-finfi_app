@@ -74,24 +74,20 @@ export default {
     },
   },
   mounted() {
-    // this.getCategories()
-    // this.getProducts()
-    this.getHomeProducts()
+    if (this.$auth.strategy.token.status().valid()) {
+      this.getHomeProducts()
+    }
   },
   async beforeMount() {
-    const apiResult = await this.$axios.get('/organizations/config', {
-      headers: {
-        Authorization: this.token,
-      },
-    })
-    this.isCardEnabled = apiResult.data.is_card_enabled
+    if (this.$auth.strategy.token.status().valid()) {
+      const apiResult = await this.$axios.get('/organizations/config', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      this.isCardEnabled = apiResult.data.is_card_enabled
+    }
   },
-
-  // mounted() {
-  // this.kycStatus = this.$auth.user.kyc_status.kyc_status;
-  // this.fetchVkyc()
-  // },
-
   methods: {
     navToTransferScreen() {
       this.$router.push('/TransferScreen')
