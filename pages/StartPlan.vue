@@ -40,12 +40,12 @@
       div(v-if="itemSelected=='Buy Now'") 
         div.ps-2
           div.ps-4.flex.flex-row.justify-between
-            div.relative.pt-1
+            div.relative.pt-1.custom-container
               div.flex.flex-row.justify-between
                 span.ps-7 Voucher Amount
                 span.ps-15 &#8377;
                 input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue3" @keydown="nameKeydown($event)" v-if="!fixedSteps?.length")
-                select.custom-select(v-if="fixedSteps?.length" v-on:change="selectVal")
+                select.ps-14.custom-select(v-if="fixedSteps?.length" v-on:change="selectVal")
                   option(value=amt v-for="amt in this.fixedSteps") {{ amt }}
               input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-if="!fixedSteps?.length" v-bind:min="min" v-bind:max="max" v-bind:step="step"  v-model="slidervalue3")
               div.ps-5 &#8377; {{instantPayment}} will be deducted from your Salary.
@@ -118,6 +118,7 @@ export default {
         },
       ],
       itemSelected: 'Buy Now',
+      interval: null,
     }
   },
   computed: {
@@ -146,7 +147,7 @@ export default {
       ? this.fixedSteps[0]
       : this.selecteProduct.product.min
 
-    setInterval(function () {
+    this.interval = setInterval(function () {
       const today = moment()
       _this.currentDate = today.format('YYYY-MM-DD')
       const monthsLeft = today.add(_this.slidervalue2, 'months')
@@ -170,6 +171,10 @@ export default {
       ).toFixed(0)
     }, 1000)
   },
+  destroyed() {
+    clearInterval(this.interval)
+  },
+
   methods: {
     selectVal(e) {
       this.slidervalue3 = e.target.value
@@ -359,7 +364,7 @@ export default {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
-.custom-trans {
+.custom-container {
   width: 100%;
 }
 </style>
