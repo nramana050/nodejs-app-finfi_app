@@ -29,7 +29,19 @@ div.ps-1A
     P.font-bold.text-sm.ps-5 Discount On Top Brands
       ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5' v-if="homeProducts?.length")
         div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
-          img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")    
+          img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
+  div.container.corp-exp.p-10
+    h2 corp exp    
+    button.claim-btn(@click="naToClaimSettelment") Claim Your Expense 
+  //- div.flex-row
+  //-   div.col-auto.offset-md-2.block.border
+  //-     div.wrapper-progressBar
+  //-       ul.progressBar
+  //-         li.active Request Raised
+  //-         li.active Review
+  //-         li Approve
+  //- div.container
+  //-   span recent 5 tansactions        
 </template>
 
 <script>
@@ -87,8 +99,22 @@ export default {
       })
       this.isCardEnabled = apiResult.data.is_card_enabled
     }
+
+    const employeeCorpexStatus = await this.$axios.get('/corporate/enabled', {
+      headers: {
+        Authorization: this.token,
+      },
+    })
+
+    this.$store.commit('set', {
+      param: 'is_corporate_expense_enabled',
+      value: employeeCorpexStatus.data.status,
+    })
   },
   methods: {
+    naToClaimSettelment() {
+      this.$router.push('/claim')
+    },
     navToTransferScreen() {
       this.$router.push('/transferscreen')
     },
@@ -274,6 +300,73 @@ export default {
 </script>
 
 <style scoped>
+.claim-btn {
+  background-color: #7165e3;
+  color: #fff;
+  padding: 5px;
+  width: 100%;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.wrapper-progressBar {
+  width: 100%;
+  position: relative;
+  z-index: 100;
+}
+
+.progressBar {
+}
+
+.progressBar li {
+  list-style-type: none;
+  float: left;
+  width: 33%;
+  position: relative;
+  text-align: center;
+}
+
+.progressBar li:before {
+  content: ' ';
+  line-height: 30px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px;
+  background-color: white;
+}
+
+.progressBar li:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background-color: #ddd;
+  top: 15px;
+  left: -50%;
+  z-index: -1;
+}
+
+.progressBar li:first-child:after {
+  content: none;
+}
+
+.progressBar li.active {
+  color: dodgerblue;
+}
+
+.progressBar li.active:before {
+  border-color: dodgerblue;
+  background-color: dodgerblue;
+}
+
+.progressBar .active:after {
+  background-color: dodgerblue;
+}
+
 .custom-pro-slide {
   border-radius: 50%;
   text-align: center;

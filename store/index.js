@@ -1,5 +1,7 @@
 export const state = () => ({
   organization: null,
+  is_corporate_expense_enabled:false,
+  new_transaction:[],
   data:{
     cashRequest:0
   },
@@ -41,5 +43,11 @@ export const mutations = {
 export const getters = {
   organization(state) {
     return state.organization
+  },
+  is_corporate_expense_enabled(state){
+    return state.is_corporate_expense_enabled
+  },
+  new_transaction(state){
+    return state.new_transaction
   },
 }
