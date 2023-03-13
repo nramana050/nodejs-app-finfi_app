@@ -23,11 +23,11 @@ div.flex.flex-col
     div.p-2.trans-container.prefmode(v-if="userAccounts?.length>1")
       h2 Prefere Mode
       div.onoffswitch
-        input( type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked)
+        input( type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" :checked="isPreferModeSelected" @click="onModeChange")
         label.onoffswitch-label(for="myonoffswitch")
           span.onoffswitch-inner
           span.onoffswitch-switch
-    ClaimForm(:totalAmount="totalTransactionSelectedAmt" :selectedTransactionIds="selectedTransactions" :reset="this.reset")
+    ClaimForm(:totalAmount="totalTransactionSelectedAmt" :selectedTransactionIds="selectedTransactions" :reset="this.reset" :accountId="accountId" :accountType="accountType")
     div.p-2.trans-container.disclaimer
      h2 * Disclaimer
      span.content Your fund will be transfered to your preferd mode till settelment limit. If exeeds remaing will go to another mode.
@@ -64,22 +64,15 @@ export default {
       tabSelected: 'new_claim',
       claims: [],
       isClaimsFetched: false,
-      selectedFiles: ['File 1', 'File 2', 'File 3'],
       userAccounts: [],
-      preferMode: null,
+      accountType: null,
+      accountId: null,
+      isPreferModeSelected: false,
       transactions: [],
       selectedTransactions: [],
       totalTransactionSelectedAmt: 0,
-      transaction: this.$store.getters.new_transaction,
       currentAmount: null,
       comment: null,
-      is_corporate_expense_enabled:
-        this.$store.getters.is_corporate_expense_enabled,
-      documents: 0,
-      formData: null,
-      details: [],
-      limit: -2,
-      event: null,
     }
   },
   mounted() {
@@ -97,15 +90,27 @@ export default {
       this.claims = []
       this.isClaimsFetched = false
     }
+    console.lo
   },
   watch: {},
   methods: {
+    onModeChange(e) {
+      const isChecked = e.target.checked
+      const ACCOUNT_TYPE = isChecked ? 'CASH' : 'CARD'
+      const accounts = this.userAccounts.filter(
+        (acc) => acc.account_type === ACCOUNT_TYPE
+      )
+      this.accountType = accounts[0].account_type
+      this.accountId = accounts[0].account_id
+      this.isPreferModeSelected = isChecked
+    },
     isTransChecked(id) {
       return this.selectedTransactions.includes(id)
     },
     onTabClick(tabName) {
       this.tabSelected = tabName
     },
+
     onTransactionClick(isChecked, amt, id) {
       if (!isChecked) {
         this.totalTransactionSelectedAmt += amt
@@ -115,119 +120,6 @@ export default {
         this.selectedTransactions = [
           ...this.selectedTransactions.filter((i) => i !== id),
         ]
-      }
-    },
-    cleanFile() {
-      if (this.event != null) {
-        this.event.target.value = ''
-        this.documents = 0
-        this.event = null
-      }
-    },
-
-    async getDetails() {
-      const payload = {
-        transaction_id: this.transaction.id,
-      }
-
-      const response = await this.$axios.$post('/corporate/details', payload, {
-        headers: {
-          Authorization: this.token,
-        },
-      })
-
-      this.details = response.details
-    },
-
-    async applyCORPEX() {
-      const NumberRegex = /^(1|[1-9][0-9]{0,9})$/.test(this.currentAmount)
-      let document
-
-      if (this.documents === 0) {
-        return this.$toast.error('Please attached your receipt.')
-      }
-
-      if (!NumberRegex) {
-        return this.$toast.error('Please enter valid amount.')
-      }
-
-      if (this.currentAmount > this.transaction.transaction_amount) {
-        return this.$toast.error(
-          'Request amount is greater than Debited amount.'
-        )
-      }
-
-      if (this.comment === null || this.comment.length < 10) {
-        return this.$toast.error('Please attached your comment.')
-      }
-
-      if (this.formData === null) {
-        return this.$toast.error('Please upload your document.')
-      }
-
-      const files = await this.$axios.post('/corporate/upload', this.formData, {
-        headers: {
-          'Content-Type': `multipart/form-data`,
-          Authorization: this.token,
-        },
-        maxBodyLength: Infinity,
-        maxContentLength: Infinity,
-      })
-
-      if (files.data.status === false) {
-        return this.$toast.error(`${files.data.message}`)
-      } else {
-        document = files.data.filenames.toString()
-      }
-
-      const payload = {
-        amount: this.currentAmount,
-        transaction: this.transaction.id,
-        comment: this.comment,
-        documents: document,
-      }
-
-      const response = await this.$axios.$post('/corporate/request', payload, {
-        headers: {
-          Authorization: this.token,
-        },
-      })
-
-      if (response.status === true) {
-        this.currentAmount = null
-        this.formData = null
-        this.documents = 0
-        this.comment = null
-        this.getDetails()
-        this.cleanFile()
-        return this.$toast.success(response.message)
-      } else {
-        return this.$toast.error(response.message)
-      }
-    },
-
-    previewFiles(event) {
-      this.formData = new FormData()
-      this.event = event
-      if (this.event.length === 0) {
-        return this.$toast.info(`${this.documents} file removed.`)
-      } else {
-        this.documents = this.event.target.files.length
-        this.$toast.info(`${this.documents} file Selected.`)
-      }
-      const imagefiles = this.event.target.files
-      if (imagefiles.length > 5) {
-        this.cleanFile()
-        return this.$toast.info('Upload less then 5 files.')
-      }
-
-      for (const file of imagefiles) {
-        this.selectedFiles = this.selectedFiles.push(file?.name)
-        if (file.size > 1887436.8) {
-          this.cleanFile()
-          return this.$toast.error('File should be less than 2 mb.')
-        }
-        this.formData.append(file.name, file)
       }
     },
 
@@ -253,6 +145,7 @@ export default {
       console.log('USER Config', res)
       if (res?.status) {
         this.userAccounts = res?.account
+        this.setDefautltAccount(res?.account)
       }
     },
 
@@ -261,7 +154,22 @@ export default {
       this.transactions = []
       this.selectedTransactions = []
       this.tabSelected = 'claim_history'
+      this.isPreferModeSelected = false
+      this.setDefautltAccount(this.userAccounts)
       await this.fetchTransactions()
+    },
+    setDefautltAccount(accounts) {
+      const ACCOUNT_TYPE = 'CASH'
+      if (accounts.length > 1) {
+        const selectedAccounts = accounts.filter(
+          (acc) => acc.account_type === ACCOUNT_TYPE
+        )
+        this.accountType = selectedAccounts[0]?.account_type
+        this.accountId = selectedAccounts[0]?.account_id
+      } else {
+        this.accountType = accounts[0]?.account_type
+        this.accountId = accounts[0]?.account_id
+      }
     },
 
     async fetchTransactions() {

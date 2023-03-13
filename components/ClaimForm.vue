@@ -43,6 +43,14 @@ export default {
     claimAmt: {
       type: Number,
     },
+    accountId: {
+      type: Number,
+      required: true,
+    },
+    accountType: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -78,8 +86,8 @@ export default {
         'selected_transaction_ids',
         JSON.stringify(this.selectedTransactionIds)
       )
-      formData.append('prefered_account_type', 'EARNED_WAGES')
-      formData.append('prefered_account_id', 2019)
+      formData.append('prefered_account_type', this.accountType)
+      formData.append('prefered_account_id', this.accountId)
       formData.append('total_transaction_amount', +this.totalAmount)
       formData.append('claim_amount', +this.claimAmount)
       formData.append('user_comment', this.user_comment.trim())
