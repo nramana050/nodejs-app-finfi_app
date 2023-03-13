@@ -73,7 +73,7 @@ export default {
       if (this.user_comment.trim()?.length > 100) {
         return this.$toast.error('Comment cannot be more than 100 charactes')
       }
-      if (!this.attachments?.length) {
+      if (!this.attachments?.length && !this.claimDetails?.id) {
         return this.$toast.error('Please attach a supportive document(s).')
       }
       if (+this.totalAmount < +this.claimAmount) {
