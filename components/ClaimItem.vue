@@ -76,6 +76,10 @@ export default {
         },
         {
           claimDetails: this.claimData,
+          accountId:
+            this.claimDetails?.summary?.preferred_reimbursement_account_id,
+          accountType:
+            this.claimDetails?.summary?.preferred_reimbursement_accounty_type,
           claimAmt: this.claimDetails?.summary?.total_claim_amount,
           totalTransactionAmount: this.claimData?.total_transaction_amount,
           selectedTransactions:
