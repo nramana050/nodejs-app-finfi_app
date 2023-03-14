@@ -67,7 +67,7 @@ export default {
   },
   data() {
     return {
-      claimAmount: this.claimAmt || 0,
+      claimAmount: this.claimAmt,
       user_comment: '',
       attachments: [],
     }
