@@ -1,28 +1,33 @@
 <template lang="pug">
 div.claim-item(@click="()=>onClaimSelect(claimData?.id)")
     div.header
+        div.sub-header  
+            span
+            span.status.approved  {{claimData?.status}}
         div.sub-header
-            span Ref Id:
+            span Ref Id
             span {{ claimData?.claim_ref_id }}
         div.sub-header
             span Amount &#8377;  {{claimData?.total_claim_amount}} 
-            span.status.approved  {{claimData?.status}}
-        div.header-content
-            span Claimed On 
-            span {{ formatDate(this.claimData?.created_at) }} 
-    div.content.p-3(v-if="selectedClaim")
+            span
+              span Claimed On 
+              span {{ formatDate(this.claimData?.created_at) }} 
+        //- div.header-content
+        //-     span Claimed On 
+        //-     span {{ formatDate(this.claimData?.created_at) }} 
+    div.content.p-3(v-if="selectedClaim && !disableActions")
         div.amt-status
             //- span Approved Amount &#8377;  6000
         div.amt-mode 
             div.settle-container(v-if="claimDetails?.reimbursement?.length>1" v-for="reimb in claimDetails?.reimbursement") 
              span &#8377; {{ reimb?.amount }} setteled in {{reimb?.account_type}} Account
              span {{formatDate(reimb?.date)}} 
-            div.settle-container(v-else) 
-                span Setteled Amount &#8377; {{claimDetails?.reimbursement?.[0].amount}}
-                span {{formatDate(claimDetails?.reimbursement?.[0].date)}}
+            //- div.settle-container(v-else) 
+            //-     span Setteled Amount &#8377; {{claimDetails?.reimbursement?.[0].amount}}
+            //-     span {{formatDate(claimDetails?.reimbursement?.[0].date)}}
         div.comments 
             span.edit-claim(@click.stop="openBlockCard") Edit Claim
-            span.view-conv(@click.stop.prevent="onToggleConversation") coversation {{ isConversationEnabled ? '(-)' : '(+)' }} 
+            span.view-conv(@click.stop.prevent="onToggleConversation") Conversation {{ isConversationEnabled ? '(-)' : '(+)' }} 
         div.msg-container(v-if="isConversationEnabled")    
             section.msger
                 main.msger-chat
@@ -56,6 +61,13 @@ export default {
       type: Object,
       required: true,
     },
+    refetch: {
+      type: Function,
+      required: true,
+    },
+    disableActions: {
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -86,6 +98,7 @@ export default {
             this.claimDetails?.transactions?.map(
               (trans) => trans.transaction_id
             ) || [],
+          editReset: this.editReset,
         }
       )
     },
@@ -121,11 +134,16 @@ export default {
           },
         }
       )
-      console.log('CLAIM DETAILS', res)
+      // console.log('CLAIM DETAILS', res)
       if (res?.status) {
         this.claimDetails = res?.claimDetails
         this.isClaimDetailFetched = true
       }
+    },
+    async editReset() {
+      await this.refetch()
+      // console.log('THIS SELECTED CLAIM::', this.claimDetails)
+      await this.fetchClaimDetails(this.claimDetails?.summary?.id)
     },
   },
 }
@@ -192,7 +210,7 @@ export default {
   text-decoration: underline;
   color: #579ffb;
   cursor: pointer;
-  width: 100px;
+  width: 110px;
 }
 .msg-container {
   display: flex;

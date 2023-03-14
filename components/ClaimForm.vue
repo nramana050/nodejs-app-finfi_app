@@ -1,16 +1,25 @@
 <template lang="pug">
 div.p-2.trans-container
   form(@submit.prevent="createClaim")
+        div.form-item(v-if="isDiplayTotalAmount")
+          label.block.text-sm.font-medium.leading-6.text-gray-900(for="amount")
+            span Total Transaction Amount
+             sup.required *
+          input(class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" id="amount" name="amount" placeholder="Enter your claim amount" :value="totalAmount" disabled)
         div.form-item
-          label.block.text-sm.font-medium.leading-6.text-gray-900(for="amount") Claim Amount
-          input(class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" id="amount" name="amount" placeholder="2000" v-model="claimAmount")
+          label.block.text-sm.font-medium.leading-6.text-gray-900(for="amount")
+            span Claim Amount
+             sup.required *
+          input(min="1" :max="totalAmount" class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" id="amount" name="amount" placeholder="Enter your claim amount" v-model="claimAmount")
         div.form-item
-          label.block.text-sm.font-medium.leading-6.text-gray-900(for="comment") Comment
+          label.block.text-sm.font-medium.leading-6.text-gray-900(for="comment") 
+           span Comment
+            sup.required *
           div.mt-2
-          textarea(class="p-2 mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6" placeholder="Put your comment" id="comment" name="comment" v-model="user_comment" rows="3" cols="30")
+          textarea(maxlength="100" class="p-2 mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6" placeholder="Put your comment" id="comment" name="comment" v-model="user_comment" rows="3" cols="30")
         div.form-item.flex.text-sm.text-gray-600
           label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500" for="addproofs")
-            span(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500") Upload a file
+            span(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500") Upload File(s)
             input(type="file" class="file sr-only" id="addproofs" accept="image/jpeg, image/png" @change="selectLocalFiles($event)" multiple) 
         div(v-if="attachments?.length" v-for="(file, idx) in attachments" :key="idx")
           div.file-item 
@@ -19,13 +28,17 @@ div.p-2.trans-container
               FaIcon(icon='trash')
         div(class="form-item bg-gray-50 px-4 py-3 text-right sm:px-6")   
           //- button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="close" v-if="this.claimDetails?.id") Cancel
-          button(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" type='Submit') {{this.claimDetails?.id ? 'EDIT' : 'SUBMIT'}}  
+          button(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" type='Submit') {{this.claimDetails?.id ? 'Edit Your Claim' : 'Submit Your Claim'}}  
 </template>
 
 <script>
 export default {
   name: 'ClaimForm',
   props: {
+    isDiplayTotalAmount: {
+      type: Boolean,
+      required: true,
+    },
     totalAmount: {
       type: Number,
       required: true,
@@ -68,7 +81,17 @@ export default {
         return this.$toast.error('Please select transactions to proceed')
       }
       if (!this.claimAmount || this.claimAmount <= 0) {
-        return this.$toast.error('Claim Amount cannot be 0 or -ive value.')
+        return this.$toast.error(
+          'Invalid Claim Amount. Claim Amount cannot be 0 or negative.'
+        )
+      }
+      if (+this.totalAmount < +this.claimAmount) {
+        return this.$toast.error(
+          'Your claim amount cannot be more than total transaction amount.'
+        )
+      }
+      if (!this.user_comment.trim()?.length) {
+        return this.$toast.error('Comment cannot empty.')
       }
       if (this.user_comment.trim()?.length > 100) {
         return this.$toast.error('Comment cannot be more than 100 charactes')
@@ -76,11 +99,7 @@ export default {
       if (!this.attachments?.length && !this.claimDetails?.id) {
         return this.$toast.error('Please attach a supportive document(s).')
       }
-      if (+this.totalAmount < +this.claimAmount) {
-        return this.$toast.error(
-          'Your claim amount cannot be more than total transaction amount.'
-        )
-      }
+
       const formData = new FormData()
       formData.append(
         'selected_transaction_ids',
@@ -111,6 +130,7 @@ export default {
           if (res.status) {
             this.$toast.success(res?.message)
             this.onFormclose()
+            this.reset()
           }
         } else {
           const res = await this.$axios.$post('/api/coprx/claim', formData, {
@@ -170,5 +190,9 @@ export default {
 .addproofs,
 .addproofs > span {
   width: 100%;
+}
+.required {
+  color: red;
+  margin-left: 2px;
 }
 </style>

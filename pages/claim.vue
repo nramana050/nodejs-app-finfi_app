@@ -1,5 +1,5 @@
 <template lang="pug">
-div.flex.flex-col
+div.claim-container-layout.flex.flex-col
   div.flex-0
     PageHeader.uppercase(:title="'Claim your Expenses'")
   div.flex.flex-row
@@ -18,7 +18,7 @@ div.flex.flex-col
             span.header {{transaction?.transaction_comments}}
             span.content &#8377; {{ transaction?.transaction_amount }}  
       div.p-2.total-trans-amt 
-        span Total 
+        span Total Transaction Amount 
         span &#8377; {{ totalTransactionSelectedAmt }}
     div.p-2.trans-container.prefmode(v-if="userAccounts?.length>1")
       h2 Prefere Mode
@@ -27,20 +27,22 @@ div.flex.flex-col
         label.onoffswitch-label(for="myonoffswitch")
           span.onoffswitch-inner
           span.onoffswitch-switch
-    ClaimForm(:totalAmount="totalTransactionSelectedAmt" :selectedTransactionIds="selectedTransactions" :reset="this.reset" :accountId="accountId" :accountType="accountType")
+    ClaimForm(:totalAmount="totalTransactionSelectedAmt" :isDiplayTotalAmount="false" :selectedTransactionIds="selectedTransactions" :reset="this.reset" :accountId="accountId" :accountType="accountType")
     div.p-2.trans-container.disclaimer
      h2 * Disclaimer
      span.content Your fund will be transfered to your preferd mode till settelment limit. If exeeds remaing will go to another mode.
 
   div(v-if="tabSelected=='claim_history'") 
     div.claim-history-filters.p-2
-      span Filter By: 
-      select(class="mt-2 block w-full rounded-md border-0 bg-white py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6")
-        option Approved  
-        option Rejected 
-        option Pending  
-    div.claim-transactions.p-3(v-if="claims?.length" )
-      ClaimItem(v-for="claim in claims" :claimData="claim")
+      span Filter By Status: 
+      select(@change="filterClaims($event)" class="mt-2 block w-full rounded-md border-0 bg-white py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6")
+        option(value="all") All  
+        option(value="approved") Approved  
+        option(value="rejected") Rejected 
+        option(value="pending") Pending
+        option(value="others") Others  
+    div.claim-transactions.p-3(v-if="filteredClaims?.length" )
+      ClaimItem(v-for="claim in filteredClaims" :claimData="claim" :refetch="editRefetch")
     div.no-data.p-3(v-else) No Claims
 
 </template>
@@ -62,11 +64,13 @@ export default {
         },
       ],
       tabSelected: 'new_claim',
+      filteredClaims: [],
       claims: [],
+      displayClaims: [],
       isClaimsFetched: false,
       userAccounts: [],
-      accountType: null,
-      accountId: null,
+      accountType: '',
+      accountId: 0,
       isPreferModeSelected: false,
       transactions: [],
       selectedTransactions: [],
@@ -104,9 +108,11 @@ export default {
       this.accountId = accounts[0].account_id
       this.isPreferModeSelected = isChecked
     },
+
     isTransChecked(id) {
       return this.selectedTransactions.includes(id)
     },
+
     onTabClick(tabName) {
       this.tabSelected = tabName
     },
@@ -132,6 +138,7 @@ export default {
       console.log('CLAIMS', res)
       if (res?.status) {
         this.claims = res?.claims
+        this.filteredClaims = res?.claims
         this.isClaimsFetched = true
       }
     },
@@ -149,6 +156,11 @@ export default {
       }
     },
 
+    async editRefetch() {
+      await this.fetchClaims()
+      // this.filterClaims({ target: { value: 'all' } })
+    },
+
     async reset() {
       this.totalTransactionSelectedAmt = 0
       this.transactions = []
@@ -158,6 +170,20 @@ export default {
       this.setDefautltAccount(this.userAccounts)
       await this.fetchTransactions()
     },
+    setDefautltAccount(accounts) {
+      const ACCOUNT_TYPE = 'CASH'
+      if (accounts.length > 1) {
+        const selectedAccounts = accounts.filter(
+          (acc) => acc.account_type === ACCOUNT_TYPE
+        )
+        this.accountType = selectedAccounts[0]?.account_type
+        this.accountId = selectedAccounts[0]?.account_id
+      } else {
+        this.accountType = accounts[0]?.account_type
+        this.accountId = accounts[0]?.account_id
+      }
+    },
+
     setDefautltAccount(accounts) {
       const ACCOUNT_TYPE = 'CASH'
       if (accounts.length > 1) {
@@ -186,10 +212,48 @@ export default {
         this.transactions = res?.transaction_log
       }
     },
+
+    filterClaims(event) {
+      const selectedFilter = event.target.value
+      this.filteredClaims = this.claims?.filter((claim) => {
+        if (selectedFilter === 'pending') {
+          if (
+            claim.status === 'NEW' ||
+            claim.status === 'RESUBMITTED' ||
+            claim.status === 'RETURNED' ||
+            claim.status === 'ON_HOLD'
+          ) {
+            return claim
+          }
+        }
+        if (selectedFilter === 'approved') {
+          if (claim.status === 'APPROVED') {
+            return claim
+          }
+        }
+        if (selectedFilter === 'rejected') {
+          if (claim.status === 'REJECTED') {
+            return claim
+          }
+        }
+        if (selectedFilter === 'others') {
+          if (claim.status === 'REOPENED' || claim.status === 'CLOSED') {
+            return claim
+          }
+        }
+        if (selectedFilter === 'all') {
+          return claim
+        }
+        return false
+      })
+    },
   },
 }
 </script>
 <style scoped>
+.claim-container-layout {
+  padding-bottom: 50px;
+}
 .disclaimer > .content {
   font-size: 14px;
   color: #9c9c9c;

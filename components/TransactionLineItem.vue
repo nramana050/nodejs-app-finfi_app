@@ -51,7 +51,6 @@
 </template>
 
 <script>
-
 export default {
   props: ['transactions'],
   data() {
@@ -82,7 +81,8 @@ export default {
       debitList: [],
       selectedOption: '',
       show: false,
-      is_corporate_expense_enabled: this.$store.getters.is_corporate_expense_enabled,
+      is_corporate_expense_enabled:
+        this.$store.getters.is_corporate_expense_enabled,
     }
   },
 
@@ -113,14 +113,13 @@ export default {
       this.show = true
     },
 
-    details(transaction){
+    details(transaction) {
       this.$store.commit('set', {
         param: 'new_transaction',
         value: transaction,
       })
       this.$router.push('/corporate')
     },
-
   },
 }
 </script>
@@ -134,7 +133,7 @@ export default {
   margin: 1rem;
 }
 
-input[type=file]::file-selector-button {
+input[type='file']::file-selector-button {
   margin-right: 20px;
   border: none;
   background: #2563eb;
@@ -142,10 +141,10 @@ input[type=file]::file-selector-button {
   border-radius: 10px;
   color: #fff;
   cursor: pointer;
-  transition: background .2s ease-in-out;
+  transition: background 0.2s ease-in-out;
 }
 
-input[type=file]::file-selector-button:hover {
+input[type='file']::file-selector-button:hover {
   background: #084cdf;
 }
 
@@ -177,5 +176,4 @@ input[type=file]::file-selector-button:hover {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
-
 </style>

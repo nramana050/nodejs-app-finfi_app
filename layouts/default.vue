@@ -10,5 +10,4 @@ export default {
   name: 'DefaultLayout',
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>

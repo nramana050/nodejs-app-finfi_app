@@ -26,7 +26,7 @@ export default {
     Step3Component,
     Step4Component,
   },
-  layout:'empty',
+  layout: 'empty',
 
   data() {
     return {
@@ -103,20 +103,20 @@ export default {
 #container {
   min-height: 80vh;
 }
-.ps-1{
+.ps-1 {
   height: 2.5rem;
   background-color: #7165e3;
   color: white;
 }
-.ps-2{
+.ps-2 {
   padding: 8px;
-  margin-left:1rem;
+  margin-left: 1rem;
 }
-.ps-3{
+.ps-3 {
   padding: 12px;
   margin-right: 1rem;
 }
-.ps-4{
+.ps-4 {
   margin: 2rem;
 }
 </style>

@@ -93,35 +93,45 @@ export default {
   },
   methods: {
     calculateCreditValue(num, percentage) {
-      return ((num / 100) * percentage)
+      return (num / 100) * percentage
     },
     async fetchFundCycle() {
       const response = await this.$axios.get(`/fundConfig/message`)
-      if (response.data.message.toLowerCase() !== 'success') return;
+      if (response.data.message.toLowerCase() !== 'success') return
 
       const fundCycle = response.data.result
       if (fundCycle) {
         if (fundCycle.CARD) {
           fundCycle.CARD[0].credit_value =
-            fundCycle.CARD[0].credit_method === 'PERCENTAGE' ?
-              fundCycle.CARD[0].credit_value = this.calculateCreditValue(fundCycle.salary, fundCycle.CARD[0].credit_value) :
-              fundCycle.CARD[0].credit_value
+            fundCycle.CARD[0].credit_method === 'PERCENTAGE'
+              ? (fundCycle.CARD[0].credit_value = this.calculateCreditValue(
+                  fundCycle.salary,
+                  fundCycle.CARD[0].credit_value
+                ))
+              : fundCycle.CARD[0].credit_value
 
           this.cardFundCycle = fundCycle.CARD
         }
         if (fundCycle.CASH) {
           fundCycle.CASH[0].credit_value =
-            fundCycle.CASH[0].credit_method === 'PERCENTAGE' ?
-              fundCycle.CASH[0].credit_value = this.calculateCreditValue(fundCycle.salary, fundCycle.CASH[0].credit_value) :
-              fundCycle.CASH[0].credit_value
+            fundCycle.CASH[0].credit_method === 'PERCENTAGE'
+              ? (fundCycle.CASH[0].credit_value = this.calculateCreditValue(
+                  fundCycle.salary,
+                  fundCycle.CASH[0].credit_value
+                ))
+              : fundCycle.CASH[0].credit_value
 
           this.cashFundCycle = fundCycle.CASH
         }
         if (fundCycle.EARNED_WAGES) {
           fundCycle.EARNED_WAGES[0].credit_value =
-            fundCycle.EARNED_WAGES[0].credit_method === 'PERCENTAGE' ?
-              fundCycle.EARNED_WAGES[0].credit_value = this.calculateCreditValue(fundCycle.salary, fundCycle.EARNED_WAGES[0].credit_value) :
-              fundCycle.EARNED_WAGES[0].credit_value
+            fundCycle.EARNED_WAGES[0].credit_method === 'PERCENTAGE'
+              ? (fundCycle.EARNED_WAGES[0].credit_value =
+                  this.calculateCreditValue(
+                    fundCycle.salary,
+                    fundCycle.EARNED_WAGES[0].credit_value
+                  ))
+              : fundCycle.EARNED_WAGES[0].credit_value
 
           this.earnedCycle = fundCycle.EARNED_WAGES
         }
