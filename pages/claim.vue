@@ -94,7 +94,6 @@ export default {
       this.claims = []
       this.isClaimsFetched = false
     }
-    console.lo
   },
   watch: {},
   methods: {
@@ -315,6 +314,7 @@ export default {
 }
 .transaction-item > input {
   margin-right: 5px;
+  pointer-events: none;
 }
 .transaction-item > .detail {
   display: flex;
