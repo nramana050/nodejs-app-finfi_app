@@ -37,7 +37,7 @@ div.ps-c
 <script>
 export default {
   name: 'LoginPage',
-  layout:'empty',
+  layout: 'empty',
   auth: false,
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
       initiateOTPCount: 0,
       blockResend: false,
       isTermsAccepted: false,
-      otpSent:false,
+      otpSent: false,
     }
   },
   computed: {
@@ -69,7 +69,7 @@ export default {
     async initiateOTP() {
       this.otp = null
       try {
-        this.otpSent=true
+        this.otpSent = true
         this.initiateOTPCount += 1
         await this.$axios.$post('/auth/otp', {
           mobile: Number(this.mobile),
@@ -133,13 +133,11 @@ export default {
         //   this.$router.push('/dashBoard');
         // }
       } catch (err) {
-        if(this.passcode==null)
-      {
-        this.$toast.error('Please enter passcode')
-      }
-      else{
-        this.$toast.error(err.response.data.message)
-      }
+        if (this.passcode == null) {
+          this.$toast.error('Please enter passcode')
+        } else {
+          this.$toast.error(err.response.data.message)
+        }
       }
     },
     async validate() {
@@ -177,7 +175,7 @@ export default {
 }
 </script>
 <style scoped>
-.ps-c{
+.ps-c {
   background-color: white;
   height: 100vh;
 }
@@ -212,7 +210,6 @@ export default {
   padding-top: 10px;
   padding-bottom: 10px;
   border: 1px solid #ccc;
-
 }
 .ps-5 {
   color: white;
@@ -243,11 +240,9 @@ export default {
 }
 .ps-11 {
   margin: 3rem;
-
 }
-.ps-9
-{
-   background-color: #7165e3;
+.ps-9 {
+  background-color: #7165e3;
   height: 3rem;
 }
 </style>

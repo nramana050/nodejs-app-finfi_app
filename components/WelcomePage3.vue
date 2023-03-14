@@ -11,56 +11,52 @@
         FaIcon.mx-auto.ps-8(icon='angle-right')
 
    </template>
-   <script>
-   export default{
-       name:'WelcomeScreen3',
-       layout:'empty',
+<script>
+export default {
+  name: 'WelcomeScreen3',
+  layout: 'empty',
 
-       methods:{
-        navToDashboard(){
-          this.$router.push('/dashboard')
-        }
-       }
-   }
-   </script>
-   <style scoped>
-   .ps-1{
-     color: #7165E3;
-     text-align: center;
-     height: 15vh;
-     padding-top: 4rem;
-   }
-   .ps-2{
-    margin: 2rem;
-    background-image: 'image1.jpg'
-   }
-   .ps-3{
-    height: 17vh;
-    margin: 1rem;
-    text-align: center;
-    color: #1C1939;
-   }
-   .ps-4{
-    color: #7165E3;
-   }
-   .ps-5{
-     background-color: white;
-     height: 100vh;
-   }
-   .ps-7{
-    color: #7165E3;
-    margin-left: 2rem;
-    margin-top: -1rem;
-
-   }
-   .ps-6{
-    
-   }
-   .ps-8{
-    color: #7165E3;
-    margin-left: 1rem;
-    margin-top: -0.8rem;
-
-   }
-
-   </style>
+  methods: {
+    navToDashboard() {
+      this.$router.push('/dashboard')
+    },
+  },
+}
+</script>
+<style scoped>
+.ps-1 {
+  color: #7165e3;
+  text-align: center;
+  height: 15vh;
+  padding-top: 4rem;
+}
+.ps-2 {
+  margin: 2rem;
+  background-image: 'image1.jpg';
+}
+.ps-3 {
+  height: 17vh;
+  margin: 1rem;
+  text-align: center;
+  color: #1c1939;
+}
+.ps-4 {
+  color: #7165e3;
+}
+.ps-5 {
+  background-color: white;
+  height: 100vh;
+}
+.ps-7 {
+  color: #7165e3;
+  margin-left: 2rem;
+  margin-top: -1rem;
+}
+.ps-6 {
+}
+.ps-8 {
+  color: #7165e3;
+  margin-left: 1rem;
+  margin-top: -0.8rem;
+}
+</style>

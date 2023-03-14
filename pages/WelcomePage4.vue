@@ -17,54 +17,54 @@
         
 </template>
 <script>
-   export default{
-    name:'WelcomePage4',
-    layout:'empty',
+export default {
+  name: 'WelcomePage4',
+  layout: 'empty',
 
-    methods:{
-        navToRequestCard(){
-            this.$router.push('/RequestPhysical')
-        }
-    }
-   }
+  methods: {
+    navToRequestCard() {
+      this.$router.push('/RequestPhysical')
+    },
+  },
+}
 </script>
 <style scoped>
-  .ps-5{
-     background-color: white;
-     height: 100vh;
-   }
-   .ps-1{
-     color: #7165E3;
-     text-align: center;
-   }
-   .ps-2{
-     height: 40vh;
-     width: 80%;
-     margin-left: 2rem;
-     margin-right: 2rem;
-     padding-top: 1rem;
-   }
-   .ps-3{
-    height: auto;
-    padding-left:2rem;
-    padding-right: 2rem;
-    padding-top: 1rem;
-   }
-   .ps-4{
-    padding:10px
-   }
-   .ps-6{
-     height: 5.7rem;
-     width: 6rem;
-     border-top-right-radius: 90px;
-     background-color: #B4ADFA;
-   }
-   .ps-7{
-    color: #7165E3;
-    margin-right: 2rem;
-    margin-top:3rem
-   }
-   .ps-8{
-    padding-left: 5px;
-   }
+.ps-5 {
+  background-color: white;
+  height: 100vh;
+}
+.ps-1 {
+  color: #7165e3;
+  text-align: center;
+}
+.ps-2 {
+  height: 40vh;
+  width: 80%;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding-top: 1rem;
+}
+.ps-3 {
+  height: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+}
+.ps-4 {
+  padding: 10px;
+}
+.ps-6 {
+  height: 5.7rem;
+  width: 6rem;
+  border-top-right-radius: 90px;
+  background-color: #b4adfa;
+}
+.ps-7 {
+  color: #7165e3;
+  margin-right: 2rem;
+  margin-top: 3rem;
+}
+.ps-8 {
+  padding-left: 5px;
+}
 </style>

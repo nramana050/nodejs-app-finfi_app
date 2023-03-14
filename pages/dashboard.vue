@@ -1,5 +1,5 @@
 <template lang="pug">
-div.ps-1A
+div.home-comtainer.ps-1A
   div.ps-1
     div.flex.flex-row.justify-between
       span
@@ -16,7 +16,7 @@ div.ps-1A
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
   div(v-if="isCardEnabled && this.enableM2P")
     div
-      P.font-bold.text-sm.ps-5 MyVirtual Card
+      h3.font-bold.text-sm.ps-5 MyVirtual Card
     div
       button.ps-6(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
@@ -26,15 +26,18 @@ div.ps-1A
           span.ps-7A Order a Physical card
           FaIcon.mx-auto.ps-7B(icon='angle-right')
   div.pt-10
-    P.font-bold.text-sm.ps-5 Discount On Top Brands
+    h3.font-bold.text-sm.ps-5 Discount On Top Brands
       ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5' v-if="homeProducts?.length")
         div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
           img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
-  div.container.corp-exp.p-10
-    h2 corp exp    
+  div.container.corp-exp.p-5
+    h3.font-bold.text-sm Corporate Expense    
+  div.latest-claim.p-5
+    h3.font-bold.text-sm Latest Claim
+    ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
     button.claim-btn(@click="naToClaimSettelment") Claim Your Expense 
   //- div.flex-row
-  //-   div.col-auto.offset-md-2.block.border
+  //-   div.col-auto.offset-md-2.block
   //-     div.wrapper-progressBar
   //-       ul.progressBar
   //-         li.active Request Raised
@@ -51,6 +54,7 @@ export default {
 
   data() {
     return {
+      claims: [],
       user: this.$auth.user,
       accounts: [],
       requestedAmount: null,
@@ -89,6 +93,7 @@ export default {
     if (this.$auth.strategy.token.status().valid()) {
       this.getHomeProducts()
     }
+    this.fetchClaims()
   },
   async beforeMount() {
     if (this.$auth.strategy.token.status().valid()) {
@@ -132,6 +137,20 @@ export default {
     },
     navToFAQ() {
       this.$router.push('/askedquestions')
+    },
+    async fetchClaims() {
+      const res = await this.$axios.$get(
+        '/api/coprx/claims?sort=desc&limit=1',
+        {
+          headers: {
+            Authorization: this.token,
+          },
+        }
+      )
+      console.log('CLAIMS', res)
+      if (res?.status) {
+        this.claims = res?.claims
+      }
     },
     async navToPhysicalCard() {
       const isVartualCard = await this.$axios.get('m2p/requestPhysicalCard', {
@@ -300,6 +319,19 @@ export default {
 </script>
 
 <style scoped>
+.latest-claim {
+  background-color: #ffffff !important;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  margin: 0 20px;
+}
+.latest-claim > h3 {
+  margin-bottom: 10px;
+}
+.home-comtainer {
+  padding-bottom: 50px;
+}
 .claim-btn {
   background-color: #7165e3;
   color: #fff;
@@ -312,7 +344,7 @@ export default {
 .wrapper-progressBar {
   width: 100%;
   position: relative;
-  z-index: 100;
+  z-index: 1;
 }
 
 .progressBar {

@@ -12,16 +12,16 @@
 </template>
 <script>
 import moment from 'moment'
-export default{
-    data(){
-        return{
-            PastPlans:[],
-        }
-    },
-    mounted() {
+export default {
+  data() {
+    return {
+      PastPlans: [],
+    }
+  },
+  mounted() {
     this.getPastPlans()
   },
-  methods:{
+  methods: {
     getPastPlans() {
       const payload = { status: ['CLOSED'] }
       this.$axios.$post(`/snbl/orders`, payload).then((result) => {
@@ -31,14 +31,14 @@ export default{
         })
       })
     },
-  }
+  },
 }
 </script>
 <style scoped>
-  .ps-1A{
-    margin-bottom: 4rem;
-  }
-   .ps-3 {
+.ps-1A {
+  margin-bottom: 4rem;
+}
+.ps-3 {
   text-align: center;
   background-color: white;
   height: 12vh;

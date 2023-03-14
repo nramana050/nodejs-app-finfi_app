@@ -62,6 +62,8 @@ export default {
   background-color: white;
   color: black;
   height: 3.5rem;
+  position: relative;
+  z-index: 100;
 }
 .ps-A1 {
   height: 20px;

@@ -39,10 +39,10 @@ export default {
       try {
         await this.$axios.$post('/m2p/register', this.form, {
           headers: {
-            'Authorization': this.token
-          }
-        });
-        this.isSuccess = true;
+            Authorization: this.token,
+          },
+        })
+        this.isSuccess = true
         await this.$axios.$post('/m2p/vkyc')
       } catch (err) {
         this.isSuccess = false
@@ -63,10 +63,10 @@ export default {
     cancel(e) {
       this.$router.push('/cards')
       e.preventDefault()
-    //   this.$emit('close')
-    // },
+      //   this.$emit('close')
+      // },
+    },
   },
-}
 }
 </script>
 <style scoped>
