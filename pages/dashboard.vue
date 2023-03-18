@@ -35,7 +35,7 @@ div.home-comtainer.ps-1A
   div.latest-claim.p-5
     h3.font-bold.text-sm Latest Claim
     ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
-    button.claim-btn(@click="naToClaimSettelment") Claim Your Expense 
+    button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
   //- div.flex-row
   //-   div.col-auto.offset-md-2.block
   //-     div.wrapper-progressBar
@@ -117,7 +117,7 @@ export default {
     })
   },
   methods: {
-    naToClaimSettelment() {
+    navToClaimSettelment() {
       this.$router.push('/claim')
     },
     navToTransferScreen() {

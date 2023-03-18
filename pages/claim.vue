@@ -169,19 +169,6 @@ export default {
       this.setDefautltAccount(this.userAccounts)
       await this.fetchTransactions()
     },
-    setDefautltAccount(accounts) {
-      const ACCOUNT_TYPE = 'CASH'
-      if (accounts.length > 1) {
-        const selectedAccounts = accounts.filter(
-          (acc) => acc.account_type === ACCOUNT_TYPE
-        )
-        this.accountType = selectedAccounts[0]?.account_type
-        this.accountId = selectedAccounts[0]?.account_id
-      } else {
-        this.accountType = accounts[0]?.account_type
-        this.accountId = accounts[0]?.account_id
-      }
-    },
 
     setDefautltAccount(accounts) {
       const ACCOUNT_TYPE = 'CASH'

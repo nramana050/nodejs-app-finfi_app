@@ -27,7 +27,6 @@ div.p-2.trans-container
             span.deleteFile(@click.stop="()=>onDeleteFile(idx)")  
               FaIcon(icon='trash')
         div(class="form-item bg-gray-50 px-4 py-3 text-right sm:px-6")   
-          //- button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="close" v-if="this.claimDetails?.id") Cancel
           button(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" type='Submit') {{this.claimDetails?.id ? 'Edit Your Claim' : 'Submit Your Claim'}}  
 </template>
 
@@ -131,6 +130,8 @@ export default {
             this.$toast.success(res?.message)
             this.onFormclose()
             this.reset()
+          } else {
+            this.$toast.error(res?.message)
           }
         } else {
           const res = await this.$axios.$post('/api/coprx/claim', formData, {
@@ -142,12 +143,15 @@ export default {
           if (res.status) {
             this.$toast.success(res?.message)
             this.reset()
+          } else {
+            this.$toast.error(res?.message)
           }
         }
         this.claimAmount = 0
         this.user_comment = ''
       } catch (error) {
-        console.log(error)
+        console.error(error)
+        this.$toast.error(error?.message)
       }
     },
     selectLocalFiles(event) {

@@ -1,9 +1,9 @@
 <template lang="pug">
-div.claim-item(@click="()=>onClaimSelect(claimData?.id)")
-    div.header
+div.claim-item
+    div.header(@click="()=>onClaimSelect(claimData?.id)")
         div.sub-header  
             span
-            span.status.approved  {{claimData?.status}}
+            span(:class="claimData?.status.toLowerCase()") {{claimData?.status}}
         div.sub-header
             span Ref Id
             span {{ claimData?.claim_ref_id }}
@@ -12,19 +12,11 @@ div.claim-item(@click="()=>onClaimSelect(claimData?.id)")
             span
               span Claimed On 
               span {{ formatDate(this.claimData?.created_at) }} 
-        //- div.header-content
-        //-     span Claimed On 
-        //-     span {{ formatDate(this.claimData?.created_at) }} 
     div.content.p-3(v-if="selectedClaim && !disableActions")
-        div.amt-status
-            //- span Approved Amount &#8377;  6000
         div.amt-mode 
             div.settle-container(v-if="claimDetails?.reimbursement?.length>1" v-for="reimb in claimDetails?.reimbursement") 
              span &#8377; {{ reimb?.amount }} setteled in {{reimb?.account_type}} Account
              span {{formatDate(reimb?.date)}} 
-            //- div.settle-container(v-else) 
-            //-     span Setteled Amount &#8377; {{claimDetails?.reimbursement?.[0].amount}}
-            //-     span {{formatDate(claimDetails?.reimbursement?.[0].date)}}
         div.comments 
             span.edit-claim(@click.stop="openBlockCard") Edit Claim
             span.view-conv(@click.stop.prevent="onToggleConversation") Conversation {{ isConversationEnabled ? '(-)' : '(+)' }} 
@@ -38,17 +30,9 @@ div.claim-item(@click="()=>onClaimSelect(claimData?.id)")
                                 div.msg-info-name {{supplement.added_by_user_type}}
                                 div.msg-info-time {{formatDateTime(supplement.added_at)}}
                             div.msg-text {{supplement.comment}}
-                        div.msg-bubble.img-type(v-if="supplement?.document?.length" v-for="doc in supplement?.document")
-                            div.msg-text
-                              img(:src="doc?.doc_url" crossorigin="anonymous")   
-                    
-                    //- div.msg.right-msg
-                    //-     div.msg-img(style="background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg)")
-                    //-     div.msg-bubble
-                    //-         div.msg-info
-                    //-             div.msg-info-name Sajad
-                    //-             div.msg-info-time 12:46
-                    //-         div.msg-text You can change your name in JS section!    
+                                div.supportive-docs(v-if="supplement?.document?.length")
+                                  LightBox(:imagesData="supplement?.document.map((doc) => ({src: doc.doc_url,crossorigin: 'anonymous',}))")
+                                         
 </template>
 
 <script>
@@ -149,6 +133,24 @@ export default {
 }
 </script>
 <style scoped>
+.rejected {
+  color: red;
+  font-weight: bold;
+}
+.approved {
+  color: green;
+  font-weight: bold;
+}
+.on_hold,
+.returned {
+  color: orange;
+  font-weight: bold;
+}
+.resubmitted,
+.new {
+  color: #4d4de5;
+  font-weight: bold;
+}
 .settle-container {
   display: flex;
   justify-content: space-between;
