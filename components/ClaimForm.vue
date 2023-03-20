@@ -71,18 +71,6 @@ export default {
       attachments: [],
     }
   },
-  async beforeMount() {
-    if (this.$auth.strategy.token.status().valid()) {
-      const apiResult = await this.$axios.get('/organizations/config', {
-        headers: {
-          Authorization: this.token,
-        },
-      })
-      if (!apiResult.data?.user?.is_corporate_expense_enabled) {
-        this.$router.push('/dashboard')
-      }
-    }
-  },
   methods: {
     onFormclose() {
       this.$FModal.hide()

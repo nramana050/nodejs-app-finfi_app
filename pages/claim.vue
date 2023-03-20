@@ -1,5 +1,5 @@
 <template lang="pug">
-div.claim-container-layout.flex.flex-col
+div.claim-container-layout.flex.flex-col(v-if="isCorpEnabled")
   div.flex-0
     PageHeader.uppercase(:title="'Claim your Expenses'")
   div.flex.flex-row
@@ -53,6 +53,7 @@ export default {
   layout: 'session',
   data() {
     return {
+      isCorpEnabled: false,
       tabs: [
         {
           key: 'new_claim',
@@ -77,6 +78,20 @@ export default {
       totalTransactionSelectedAmt: 0,
       currentAmount: null,
       comment: null,
+    }
+  },
+  async beforeMount() {
+    if (this.$auth.strategy.token.status().valid()) {
+      const apiResult = await this.$axios.get('/organizations/config', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      if (apiResult.data?.user?.is_corporate_expense_enabled) {
+        this.isCorpEnabled = true
+      } else {
+        this.$router.push('/dashboard')
+      }
     }
   },
   mounted() {
