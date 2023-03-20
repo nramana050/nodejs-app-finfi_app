@@ -30,9 +30,9 @@ div.home-comtainer.ps-1A
       ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5' v-if="homeProducts?.length")
         div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
           img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
-  div.container.corp-exp.p-5
+  div.container.corp-exp.p-5(v-if="corpExEnabled")
     h3.font-bold.text-sm Corporate Expense    
-  div.latest-claim.p-5
+  div.latest-claim.p-5(v-if="corpExEnabled")
     h3.font-bold.text-sm Latest Claim
     ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
     button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
@@ -63,6 +63,7 @@ export default {
       kycStatus: null,
       vciplink: null,
       availableLimit: null,
+      corpExEnabled: false,
       isCardEnabled: false,
       isCardNumber: false,
       isCardLock: false,
@@ -93,6 +94,7 @@ export default {
     if (this.$auth.strategy.token.status().valid()) {
       this.getHomeProducts()
     }
+    console.log('CONFIG::', this.$auth)
     this.fetchClaims()
   },
   async beforeMount() {
@@ -103,18 +105,8 @@ export default {
         },
       })
       this.isCardEnabled = apiResult.data.is_card_enabled
+      this.corpExEnabled = apiResult.data?.user.is_corporate_expense_enabled
     }
-
-    const employeeCorpexStatus = await this.$axios.get('/corporate/enabled', {
-      headers: {
-        Authorization: this.token,
-      },
-    })
-
-    this.$store.commit('set', {
-      param: 'is_corporate_expense_enabled',
-      value: employeeCorpexStatus.data.status,
-    })
   },
   methods: {
     navToClaimSettelment() {
