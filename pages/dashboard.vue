@@ -333,8 +333,8 @@ export default {
   padding-bottom: 50px;
 }
 .claim-btn {
-  background-color: #7165e3;
-  color: #fff;
+  border: 1px solid #7165e3;
+  color: #7165e3;
   padding: 5px;
   width: 100%;
   border-radius: 10px;

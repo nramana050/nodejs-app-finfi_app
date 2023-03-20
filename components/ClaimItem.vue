@@ -8,17 +8,36 @@ div.claim-item
             span Ref Id
             span {{ claimData?.claim_ref_id }}
         div.sub-header
-            span Amount &#8377;  {{claimData?.total_claim_amount}} 
-            span
+            span Amount 
+            span &#8377;  {{claimData?.total_claim_amount}} 
+        div.sub-header
               span Claimed On 
               span {{ formatDate(this.claimData?.created_at) }} 
+        div.sub-header
+              span Last Updated On 
+              span {{ formatDate(this.claimData?.updated_at) }} 
     div.content.p-3(v-if="selectedClaim && !disableActions")
-        div.amt-mode 
-            div.settle-container(v-if="claimDetails?.reimbursement?.length>1" v-for="reimb in claimDetails?.reimbursement") 
+        div.amt-mode(v-if="claimDetails?.reimbursement?.length>1")
+            div.settle-container( v-for="reimb in claimDetails?.reimbursement") 
              span &#8377; {{ reimb?.amount }} setteled in {{reimb?.account_type}} Account
              span {{formatDate(reimb?.date)}} 
+        div.claim-edit-action 
+            span.edit-claim(v-if="claimData?.status === 'NEW'|| claimData?.status ==='RESUBMITTED' || claimData?.status==='RETURNED'" @click.stop="openBlockCard") Edit Claim
         div.comments 
-            span.edit-claim(@click.stop="openBlockCard") Edit Claim
+            span.view-conv(@click.stop.prevent="onToggleTransaction") Transactions {{ isTransactionEnabled ? '(-)' : '(+)' }} 
+        div(class="overflow-x-auto transaction-container" v-if="isTransactionEnabled")
+          table(class="table-auto min-w-full text-left text-sm font-light")
+            thead(class="border-b font-medium dark:border-neutral-500")
+              tr
+                th(scope="col" class="px-2 py-2") Comment   
+                th(scope="col" class="px-2 py-2 min-w-50") Amount(&#8377;)
+                th(scope="col" class="px-2 py-2") Date (dd/mm/yyyy)
+            tbody
+              tr(class="border-b dark:border-neutral-500" v-for="transaction in claimDetails?.transactions")
+                td(class="whitespace-nowrap px-2 py-2 font-medium") {{ transaction.transaction_comments }}  
+                td(class="whitespace-nowrap px-2 py-2 font-medium") {{ transaction.transaction_amount }} 
+                td(class="whitespace-nowrap px-2 py-2 font-medium") {{ formatDate(transaction.transaction_time) }}   
+        div.comments 
             span.view-conv(@click.stop.prevent="onToggleConversation") Conversation {{ isConversationEnabled ? '(-)' : '(+)' }} 
         div.msg-container(v-if="isConversationEnabled")    
             section.msger
@@ -60,6 +79,7 @@ export default {
       claimDate: '',
       isClaimDetailFetched: false,
       isConversationEnabled: false,
+      isTransactionEnabled: false,
     }
   },
   mounted() {},
@@ -91,6 +111,9 @@ export default {
     },
     onToggleConversation() {
       this.isConversationEnabled = !this.isConversationEnabled
+    },
+    onToggleTransaction() {
+      this.isTransactionEnabled = !this.isTransactionEnabled
     },
     formatDate(d) {
       if (d) {
@@ -133,6 +156,10 @@ export default {
 }
 </script>
 <style scoped>
+.claim-edit-action {
+  display: flex;
+  justify-content: flex-end;
+}
 .rejected {
   color: red;
   font-weight: bold;
@@ -164,7 +191,7 @@ export default {
 .claim-item {
   border: 1px solid #f0f0f0;
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 13px;
 }
 .claim-item .header {
   background-color: #f0f0f0;
@@ -212,7 +239,6 @@ export default {
   text-decoration: underline;
   color: #579ffb;
   cursor: pointer;
-  width: 110px;
 }
 .msg-container {
   display: flex;

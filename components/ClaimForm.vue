@@ -1,5 +1,5 @@
 <template lang="pug">
-div.p-2.trans-container
+div.p-3.trans-container
   form(@submit.prevent="createClaim")
         div.form-item(v-if="isDiplayTotalAmount")
           label.block.text-sm.font-medium.leading-6.text-gray-900(for="amount")
@@ -18,15 +18,15 @@ div.p-2.trans-container
           div.mt-2
           textarea(maxlength="100" class="p-2 mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6" placeholder="Put your comment" id="comment" name="comment" v-model="user_comment" rows="3" cols="30")
         div.form-item.flex.text-sm.text-gray-600
-          label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500" for="addproofs")
-            span(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500") Upload File(s)
+          label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600" for="addproofs")
+            span(class="inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
             input(type="file" class="file sr-only" id="addproofs" accept="image/jpeg, image/png" @change="selectLocalFiles($event)" multiple) 
         div(v-if="attachments?.length" v-for="(file, idx) in attachments" :key="idx")
           div.file-item 
             span {{file?.name}}
             span.deleteFile(@click.stop="()=>onDeleteFile(idx)")  
               FaIcon(icon='trash')
-        div(class="form-item bg-gray-50 px-4 py-3 text-right sm:px-6")   
+        div(class="form-item bg-gray-50 py-3 text-right")   
           button(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" type='Submit') {{this.claimDetails?.id ? 'Edit Your Claim' : 'Submit Your Claim'}}  
 </template>
 
