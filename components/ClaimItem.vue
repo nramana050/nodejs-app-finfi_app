@@ -17,12 +17,13 @@ div.claim-item
               span Last Updated On 
               span {{ formatDate(this.claimData?.updated_at) }} 
     div.content.p-3(v-if="selectedClaim && !disableActions")
-        div.amt-mode(v-if="claimDetails?.reimbursement?.length>1")
-            div.settle-container( v-for="reimb in claimDetails?.reimbursement") 
-             span &#8377; {{ reimb?.amount }} setteled in {{reimb?.account_type}} Account
-             span {{formatDate(reimb?.date)}} 
         div.claim-edit-action 
             span.edit-claim(v-if="claimData?.status === 'NEW'|| claimData?.status ==='RESUBMITTED' || claimData?.status==='RETURNED'" @click.stop="openBlockCard") Edit Claim
+        div.comments 
+            span.view-conv(v-if="claimDetails?.reimbursement?.length>0" @click.stop.prevent="onToggleReimbursement") Reimbursement {{ isReimbursementEnabled ? '(-)' : '(+)' }} 
+        div.amt-mode(v-if="isReimbursementEnabled")
+            div.settle-container( v-for="reimb in claimDetails?.reimbursement") 
+             span &#8377; {{ reimb?.reimbursed_amount }} setteled in {{reimb?.account_type}} Account  
         div.comments 
             span.view-conv(@click.stop.prevent="onToggleTransaction") Transactions {{ isTransactionEnabled ? '(-)' : '(+)' }} 
         div(class="overflow-x-auto transaction-container" v-if="isTransactionEnabled")
@@ -78,6 +79,7 @@ export default {
       claimDetails: null,
       claimDate: '',
       isClaimDetailFetched: false,
+      isReimbursementEnabled: false,
       isConversationEnabled: false,
       isTransactionEnabled: false,
     }
@@ -114,6 +116,9 @@ export default {
     },
     onToggleTransaction() {
       this.isTransactionEnabled = !this.isTransactionEnabled
+    },
+    onToggleReimbursement() {
+      this.isReimbursementEnabled = !this.isReimbursementEnabled
     },
     formatDate(d) {
       if (d) {
