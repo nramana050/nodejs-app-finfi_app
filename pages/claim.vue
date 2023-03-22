@@ -8,7 +8,7 @@ div.claim-container-layout.flex.flex-col(v-if="isCorpEnabled")
     :class="[tabSelected==tab.key ? 'bg-blue-600' : 'bg-white']")
       button {{tab.name}}   
       
-  div(v-if="tabSelected=='new_claim'") 
+  div(v-if="tabSelected=='new_claim' && transactions?.length") 
     div.p-3.trans-container
       h2 Select Transactions
       div.transactions
@@ -31,6 +31,8 @@ div.claim-container-layout.flex.flex-col(v-if="isCorpEnabled")
     div.p-2.trans-container.disclaimer
      h2 * Disclaimer
      span.content Your fund will be transfered to your preferd mode till settelment limit. If exeeds remaing will go to another mode.
+  div.no-data.p-3(v-else-if="tabSelected=='new_claim' && !transactions?.length")
+    span You don't have any transactions for claim.
 
   div(v-if="tabSelected=='claim_history'") 
     div.claim-history-filters.p-3
