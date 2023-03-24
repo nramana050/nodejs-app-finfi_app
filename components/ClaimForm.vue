@@ -10,7 +10,7 @@ div.p-3.trans-container
           label.block.text-sm.font-medium.leading-6.text-gray-900(for="amount")
             span Claim Amount
              sup.required *
-          input(min="1" :max="totalAmount" class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" id="amount" name="amount" placeholder="Enter your claim amount" v-model="claimAmount")
+          input(min="1"  class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" id="amount" name="amount" placeholder="Enter your claim amount" v-model="claimAmount")
         div.form-item
           label.block.text-sm.font-medium.leading-6.text-gray-900(for="comment") 
            span Comment
@@ -20,7 +20,7 @@ div.p-3.trans-container
         div.form-item.flex.text-sm.text-gray-600
           label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600" for="addproofs")
             span(class="inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
-            input(type="file" class="file sr-only" id="addproofs" accept="image/jpeg, image/png" @change="selectLocalFiles($event)" multiple) 
+            input(type="file" class="file sr-only" id="addproofs" accept="image/*" ref="uploader" @change="selectLocalFiles($event)" multiple) 
         div(v-if="attachments?.length" v-for="(file, idx) in attachments" :key="idx")
           div.file-item 
             span {{file?.name}}
@@ -156,13 +156,36 @@ export default {
     },
     selectLocalFiles(event) {
       const files = event.target.files
-      console.log(event.target.files)
-      // if (files.length > 5) {
-      //   return this.$toast.error(
-      //     'Max 5 files you can select, each file should not be more than 2MB'
-      //   )
-      // }
-      this.attachments = [...this.attachments, ...files]
+      console.log(files)
+      const errors = []
+      const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png']
+      const allowedFileSize = 2 * 1024 * 1024
+      if (Object.keys(files)?.length) {
+        Object.keys(files).forEach((file) => {
+          if (!allowedFormats?.includes(files[file].type)) {
+            errors.push({
+              name: files[file].name,
+              message: 'Allowed formats are [.jpg,.jpeg,.png]',
+            })
+          }
+          if (files[file].size > allowedFileSize) {
+            errors.push({
+              name: files[file].name,
+              message:
+                'Allowed file size for each file less than or equal to 2MB.',
+            })
+          }
+        })
+      }
+
+      if (!errors?.length) {
+        this.attachments = [...this.attachments, ...files]
+      } else {
+        this.$toast.error(
+          `Unable to upload ${errors[0].name}. ${errors[0].message}`
+        )
+      }
+      this.$refs.uploader.value = ''
     },
     onDeleteFile(idx) {
       this.attachments.splice(idx, 1)
