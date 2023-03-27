@@ -24,6 +24,10 @@ div.claim-item
         div.amt-mode(v-if="isReimbursementEnabled")
             div.settle-container( v-for="reimb in claimDetails?.reimbursement") 
              span &#8377; {{ reimb?.reimbursed_amount }} setteled in {{reimb?.account_type}} Account  
+        div.comments(v-if="isPreferedAccountTypeVisible") 
+            span.view-conv(@click.stop.prevent="onTogglePreferedAccountType") Prefered Account Type {{ isPreferedAccountTypeEnabled ? '(-)' : '(+)' }}      
+        div(class="overflow-x-auto transaction-container" v-if="isPreferedAccountTypeVisible && isPreferedAccountTypeEnabled") Your prefered account is 
+           span.prefered-account-type {{ claimDetails?.summary?.preferred_reimbursement_accounty_type }}
         div.comments 
             span.view-conv(@click.stop.prevent="onToggleTransaction") Transactions {{ isTransactionEnabled ? '(-)' : '(+)' }} 
         div(class="overflow-x-auto transaction-container" v-if="isTransactionEnabled")
@@ -72,12 +76,16 @@ export default {
     disableActions: {
       type: Boolean,
     },
+    isPreferedAccountTypeVisible: {
+      type: Boolean,
+    },
   },
   data() {
     return {
       selectedClaim: false,
       claimDetails: null,
       claimDate: '',
+      isPreferedAccountTypeEnabled: false,
       isClaimDetailFetched: false,
       isReimbursementEnabled: false,
       isConversationEnabled: false,
@@ -110,6 +118,9 @@ export default {
     },
     close() {
       this.$FModal.hide()
+    },
+    onTogglePreferedAccountType() {
+      this.isPreferedAccountTypeEnabled = !this.isPreferedAccountTypeEnabled
     },
     onToggleConversation() {
       this.isConversationEnabled = !this.isConversationEnabled
@@ -169,7 +180,8 @@ export default {
   color: red;
   font-weight: bold;
 }
-.approved {
+.approved,
+.prefered-account-type {
   color: green;
   font-weight: bold;
 }

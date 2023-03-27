@@ -17,16 +17,13 @@ div.home-comtainer.ps-1A
   div(v-if="isCardEnabled && this.enableM2P")
     div
       h3.font-bold.text-sm.ps-5 MyVirtual Card
-    div
-      button.ps-6(@click="navToCard")
+    div.latest-claim.p-5
+      button.card-button(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    div(v-if="this.card_type != 'PHYSICAL'")
-      button.ps-7(@click="navToPhysicalCard")
-        div.flex.flex-row.justify-between
-          span.ps-7A Order a Physical card
-          FaIcon.mx-auto.ps-7B(icon='angle-right')
-  div.pt-10(v-if="homeProducts?.length")
-    h3.font-bold.text-sm.ps-5 Discount On Top Brands
+      button.claim-btn(v-if="this.card_type != 'PHYSICAL'" @click="navToPhysicalCard") Order a Physical card  
+  div.container.corp-exp.p-5(v-if="homeProducts?.length")
+    h3.font-bold.text-sm Discount On Top Brands     
+  div.latest-claim.pt-10(v-if="homeProducts?.length")
       ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5')
         div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
           img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
@@ -36,6 +33,7 @@ div.home-comtainer.ps-1A
     h3.font-bold.text-sm Latest Claim
     ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
     button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
+    button.claim-btn(@click="navToClaimHistory") Claim History 
   //- div.flex-row
   //-   div.col-auto.offset-md-2.block
   //-     div.wrapper-progressBar
@@ -109,6 +107,9 @@ export default {
     }
   },
   methods: {
+    navToClaimHistory() {
+      this.$router.push('/claim?activeTab=claim_history')
+    },
     navToClaimSettelment() {
       this.$router.push('/claim')
     },
@@ -311,6 +312,12 @@ export default {
 </script>
 
 <style scoped>
+.card-button {
+  width: 100%;
+}
+.card-button > img {
+  height: 180px;
+}
 .latest-claim {
   background-color: #ffffff !important;
   padding: 20px;
@@ -390,20 +397,19 @@ export default {
 .progressBar .active:after {
   background-color: dodgerblue;
 }
-
 .custom-pro-slide {
   border-radius: 50%;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
-  height: 120px;
-  width: 12px;
+  background-color: #fff;
+  height: 85px;
+  border: 1px solid #000000;
 }
 .custom-pro-slide > img {
-  height: 75px;
-  width: 75px;
+  height: 55px;
+  width: 60px;
 }
 .ps-1 {
   height: 30vh;
@@ -424,8 +430,8 @@ export default {
   height: 10rem;
   background-color: #ffffff;
   color: #1c1939;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   padding-right: 2rem;
   box-shadow: 0px 35px 65px rgba(0, 0, 0, 0.0790811);
 }

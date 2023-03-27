@@ -20,7 +20,7 @@ div.claim-container-layout.flex.flex-col(v-if="isCorpEnabled")
       div.p-2.total-trans-amt 
         span.text-sm.font-medium.leading-6.text-gray-900 Total Transaction Amount 
         span &#8377; {{ totalTransactionSelectedAmt }}
-    div.p-2.trans-container.prefmode(v-if="userAccounts?.length>1")
+    div.p-2.trans-container.prefmode(v-if="isPreferedAccountTypeVisible")
       h2 Prefere Mode
       div.onoffswitch
         input( type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" :checked="isPreferModeSelected" @click="onModeChange")
@@ -44,7 +44,7 @@ div.claim-container-layout.flex.flex-col(v-if="isCorpEnabled")
         option(value="pending") Pending
         option(value="others") Others  
     div.claim-transactions.p-3(v-if="filteredClaims?.length" )
-      ClaimItem(v-for="claim in filteredClaims" :claimData="claim" :refetch="editRefetch")
+      ClaimItem(v-for="claim in filteredClaims" :claimData="claim" :refetch="editRefetch" :isPreferedAccountTypeVisible="isPreferedAccountTypeVisible")
     div.no-data.p-3(v-else) No Claims
 
 </template>
@@ -97,6 +97,10 @@ export default {
     }
   },
   mounted() {
+    console.log('ROUTE DATA::', this.$route)
+    if (this.$route?.query?.activeTab) {
+      this.tabSelected = this.$route?.query?.activeTab
+    }
     this.fetchUserConfig()
     this.fetchTransactions()
   },
@@ -111,6 +115,11 @@ export default {
       this.claims = []
       this.isClaimsFetched = false
     }
+  },
+  computed: {
+    isPreferedAccountTypeVisible() {
+      return this.userAccounts?.length > 1
+    },
   },
   watch: {},
   methods: {
