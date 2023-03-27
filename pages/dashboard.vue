@@ -15,8 +15,8 @@ div.home-comtainer.ps-1A
   div(v-if="accounts.length > 0 && organization")
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
   div(v-if="isCardEnabled && this.enableM2P")
-    div
-      h3.font-bold.text-sm.ps-5 MyVirtual Card
+    div.container.corp-exp.p-5
+      h3.font-bold.text-sm MyVirtual Card
     div.latest-claim.p-5
       button.card-button(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
@@ -459,6 +459,11 @@ export default {
   margin-bottom: 1rem;
   margin-left: 2rem;
   margin-right: 2rem;
+}
+
+.corp-exp {
+  padding-bottom: 5px;
+  padding-left: 25px;
 }
 
 .ps-6 {
