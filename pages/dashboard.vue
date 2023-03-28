@@ -30,19 +30,20 @@ div.home-comtainer.ps-1A
   div.container.corp-exp.p-5(v-if="corpExEnabled")
     h3.font-bold.text-sm Corporate Expense    
   div.latest-claim.p-5(v-if="corpExEnabled")
+    div.display-corp-limit.font-bold.text-sm 
+      div
+        span Allocated 
+        span &#8377; {{ allocatedCorpBalance }}
+      div  
+        span Available 
+        span &#8377; {{availableCorpBalance}}
+      div  
+        span Consumed 
+        span &#8377; {{ consumedCorpBalance }}
     h3.font-bold.text-sm Latest Claim
     ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
     button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
-    button.claim-btn(@click="navToClaimHistory") Claim History 
-  //- div.flex-row
-  //-   div.col-auto.offset-md-2.block
-  //-     div.wrapper-progressBar
-  //-       ul.progressBar
-  //-         li.active Request Raised
-  //-         li.active Review
-  //-         li Approve
-  //- div.container
-  //-   span recent 5 tansactions        
+    button.claim-btn(@click="navToClaimHistory") Claim History     
 </template>
 
 <script>
@@ -87,6 +88,15 @@ export default {
     organization() {
       return this.$auth.user.organization
     },
+    availableCorpBalance() {
+      return this.$store.getters.getUserConfig?.corpx_limit?.available || 0
+    },
+    allocatedCorpBalance() {
+      return this.$store.getters.getUserConfig?.corpx_limit?.allocated || 0
+    },
+    consumedCorpBalance() {
+      return this.$store.getters.getUserConfig?.corpx_limit?.consumed || 0
+    },
   },
   mounted() {
     if (this.$auth.strategy.token.status().valid()) {
@@ -94,6 +104,7 @@ export default {
     }
     console.log('CONFIG::', this.$auth)
     this.fetchClaims()
+    this.fetchUserConfig()
   },
   async beforeMount() {
     if (this.$auth.strategy.token.status().valid()) {
@@ -107,6 +118,19 @@ export default {
     }
   },
   methods: {
+    async fetchUserConfig() {
+      const res = await this.$axios.$get('/api/coprx/userconfig', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      if (res?.status) {
+        this.$store.commit('setUserConfig', {
+          account: res?.account,
+          corpx_limit: res?.corpx_limit,
+        })
+      }
+    },
     navToClaimHistory() {
       this.$router.push('/claim?activeTab=claim_history')
     },
@@ -312,6 +336,17 @@ export default {
 </script>
 
 <style scoped>
+.display-corp-limit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20px;
+}
+.display-corp-limit > div > span {
+  display: block;
+}
 .card-button {
   width: 100%;
 }
@@ -338,64 +373,6 @@ export default {
   width: 100%;
   border-radius: 10px;
   margin: 10px 0;
-}
-
-.wrapper-progressBar {
-  width: 100%;
-  position: relative;
-  z-index: 1;
-}
-
-.progressBar {
-}
-
-.progressBar li {
-  list-style-type: none;
-  float: left;
-  width: 33%;
-  position: relative;
-  text-align: center;
-}
-
-.progressBar li:before {
-  content: ' ';
-  line-height: 30px;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ddd;
-  display: block;
-  text-align: center;
-  margin: 0 auto 10px;
-  background-color: white;
-}
-
-.progressBar li:after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 4px;
-  background-color: #ddd;
-  top: 15px;
-  left: -50%;
-  z-index: -1;
-}
-
-.progressBar li:first-child:after {
-  content: none;
-}
-
-.progressBar li.active {
-  color: dodgerblue;
-}
-
-.progressBar li.active:before {
-  border-color: dodgerblue;
-  background-color: dodgerblue;
-}
-
-.progressBar .active:after {
-  background-color: dodgerblue;
 }
 .custom-pro-slide {
   border-radius: 50%;

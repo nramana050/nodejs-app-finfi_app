@@ -9,6 +9,7 @@ export const state = () => ({
     category: null,
     product: null,
   },
+  userConfig: {},
 })
 
 export const mutations = {
@@ -37,11 +38,17 @@ export const mutations = {
   clearrequestAmount(state) {
     state.data.requestedAmount = null
   },
+  setUserConfig(state, payload) {
+    state.userConfig = { ...payload }
+  },
 }
 
 export const getters = {
   organization(state) {
     return state.organization
+  },
+  getUserConfig(state) {
+    return state.userConfig
   },
   is_corporate_expense_enabled(state) {
     return state.is_corporate_expense_enabled
