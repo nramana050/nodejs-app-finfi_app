@@ -30,7 +30,7 @@ div.home-comtainer.ps-1A
   div.container.corp-exp.p-5(v-if="corpExEnabled")
     h3.font-bold.text-sm Corporate Expense    
   div.latest-claim.p-5(v-if="corpExEnabled")
-    div.display-corp-limit.font-bold.text-sm 
+    div.display-corp-limit.text-sm 
       div
         span Allocated 
         span &#8377; {{ allocatedCorpBalance }}
