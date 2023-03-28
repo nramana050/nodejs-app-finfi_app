@@ -20,7 +20,7 @@ div.p-3.trans-container
         div.form-item.flex.text-sm.text-gray-600
           label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600" for="addproofs")
             span(class="inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
-            input(type="file" class="file sr-only" id="addproofs" accept="image/png, image/jpg, image/jpeg" ref="uploader" @change="selectLocalFiles($event)" multiple) 
+            input(type="file" class="file sr-only" id="addproofs" accept="image/png, image/jpeg" ref="uploader" @change="selectLocalFiles($event)" multiple) 
         div(v-if="attachments?.length" v-for="(file, idx) in attachments" :key="idx")
           div.file-item 
             span {{file?.name}}
