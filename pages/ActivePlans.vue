@@ -17,7 +17,7 @@ import moment from 'moment'
 
 export default {
   name: 'ActivePlans',
-  layout: 'empty',
+  layout: 'session',
   data() {
     return {
       ActivePlans: [],
@@ -28,12 +28,14 @@ export default {
   },
 
   mounted() {
-    this.getActivePlans()
+    if (this.$auth.strategy.token.status().valid()) {
+      this.getActivePlans()
+    }
     //  this.monthsLeft=this.item.start_date.diff(this.item.end_date, 'months')
   },
   methods: {
     navToSaveNow() {
-      this.$router.push('/saveNow')
+      this.$router.push('/shopnow')
     },
     getActivePlans() {
       const payload = { status: ['ACTIVE'] }

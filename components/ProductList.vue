@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     navToStartPlan() {
-      this.$router.push('/StartPlan')
+      this.$router.push('/startplan')
     },
     selectProduct(Product) {
       this.selectedProduct = []

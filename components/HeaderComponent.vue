@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     navToSaveNow() {
-      this.$router.push('/saveNow')
+      this.$router.push('/shopnow')
     },
   },
 }

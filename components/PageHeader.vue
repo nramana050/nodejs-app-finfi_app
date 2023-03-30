@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     navToDashboard() {
-      this.$router.push('/Dashboard')
+      this.$router.push('/dashboard')
     },
   },
 }

@@ -54,7 +54,7 @@ export default {
   methods: {
     nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
-        e.preventDefault();
+        e.preventDefault()
       }
     },
     async generateOTP(e) {

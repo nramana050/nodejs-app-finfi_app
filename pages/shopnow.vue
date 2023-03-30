@@ -45,7 +45,9 @@ export default {
     }
   },
   mounted() {
-    this.getCategories()
+    if (this.$auth.strategy.token.status().valid()) {
+      this.getCategories()
+    }
   },
   methods: {
     navToSearch() {
@@ -55,10 +57,10 @@ export default {
       this.$router.push('/dashboard')
     },
     navToActivePlans() {
-      this.$router.push('/ActivePlans')
+      this.$router.push('/activeplans')
     },
     navToPastPlans() {
-      this.$router.push('/PastPlans')
+      this.$router.push('/pastplans')
     },
     navToCategories() {
       this.$router.push('/categoriesList')

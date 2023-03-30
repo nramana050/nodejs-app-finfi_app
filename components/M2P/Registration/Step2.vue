@@ -54,7 +54,7 @@ export default {
   methods: {
     nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
-        e.preventDefault();
+        e.preventDefault()
       }
     },
     async next() {
@@ -86,7 +86,7 @@ export default {
 .btn {
   background-color: #7165e3;
 }
-.ps-1{
+.ps-1 {
   margin-bottom: 1rem;
   text-align: center;
 }

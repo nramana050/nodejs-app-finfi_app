@@ -1,12 +1,15 @@
 export const state = () => ({
   organization: null,
-  data:{
-    cashRequest:0
+  is_corporate_expense_enabled: false,
+  new_transaction: [],
+  data: {
+    cashRequest: 0,
   },
   snbl: {
     category: null,
     product: null,
   },
+  userConfig: {},
 })
 
 export const mutations = {
@@ -29,17 +32,28 @@ export const mutations = {
   clearProduct(state) {
     state.snbl.product = null
   },
-  setrequestAmount(state,amount){
-    state.data.requestedAmount=amount
+  setrequestAmount(state, amount) {
+    state.data.requestedAmount = amount
   },
-  clearrequestAmount(state){
-    state.data.requestedAmount=null
-  }
-
+  clearrequestAmount(state) {
+    state.data.requestedAmount = null
+  },
+  setUserConfig(state, payload) {
+    state.userConfig = { ...payload }
+  },
 }
 
 export const getters = {
   organization(state) {
     return state.organization
+  },
+  getUserConfig(state) {
+    return state.userConfig
+  },
+  is_corporate_expense_enabled(state) {
+    return state.is_corporate_expense_enabled
+  },
+  new_transaction(state) {
+    return state.new_transaction
   },
 }

@@ -103,7 +103,6 @@ export default {
   padding-top: 10px;
   padding-bottom: 10px;
   border: 1px solid #ccc;
-  
 }
 .ps-5 {
   color: white;

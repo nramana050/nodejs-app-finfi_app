@@ -41,14 +41,14 @@
         //-   button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit" @click="saveBankDetail") Save  
         div
           div.flex.flex-row.justify-between.ps-9
-            div
-              p.text-sm Change Passcode
-            button(@click="")
-              FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
-          div.flex.flex-row.justify-between.ps-9
-            p.text-sm Notification
-            button(@click="")
-              FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
+            //- div
+            //-   p.text-sm Change Passcode
+            //- button(@click="")
+            //-   FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
+            //- div.flex.flex-row.justify-between.ps-9
+            //-   p.text-sm Notification
+            //-   button(@click="")
+            //-   FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
           div.flex.flex-row.justify-between.ps-9
             p.text-sm Logout
             button(@click="logout")

@@ -1,5 +1,5 @@
 <template lang="pug">
-div.ps-1A
+div.home-comtainer.ps-1A
   div.ps-1
     div.flex.flex-row.justify-between
       span
@@ -15,21 +15,35 @@ div.ps-1A
   div(v-if="accounts.length > 0 && organization")
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
   div(v-if="isCardEnabled && this.enableM2P")
-    div
-      P.font-bold.text-sm.ps-5 MyVirtual Card
-    div
-      button.ps-6(@click="navToCard")
+    div.container.corp-exp.p-5
+      h3.font-bold.text-sm MyVirtual Card
+    div.latest-claim.p-5
+      button.card-button(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
-    div(v-if="this.card_type != 'PHYSICAL'")
-      button.ps-7(@click="navToPhysicalCard")
-        div.flex.flex-row.justify-between
-          span.ps-7A Order a Physical card
-          FaIcon.mx-auto.ps-7B(icon='angle-right')
-  div.pt-10
-    P.font-bold.text-sm.ps-5 Discount On Top Brands
-      ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5' v-if="homeProducts?.length")
+      button.claim-btn(v-if="this.card_type != 'PHYSICAL'" @click="navToPhysicalCard") Order a Physical card  
+  div.container.corp-exp.p-5(v-if="homeProducts?.length")
+    h3.font-bold.text-sm Discount On Top Brands     
+  div.latest-claim.pt-10(v-if="homeProducts?.length")
+      ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5')
         div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
           img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
+  div.container.corp-exp.p-5(v-if="corpExEnabled")
+    h3.font-bold.text-sm Corporate Expense    
+  div.latest-claim.p-5(v-if="corpExEnabled")
+    div.display-corp-limit.text-sm 
+      div
+        span Allocated 
+        span &#8377; {{ allocatedCorpBalance }}
+      div  
+        span Available 
+        span &#8377; {{availableCorpBalance}}
+      div  
+        span Consumed 
+        span &#8377; {{ consumedCorpBalance }}
+    h3.font-bold.text-sm Latest Claim
+    ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
+    button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
+    button.claim-btn(@click="navToClaimHistory") Claim History     
 </template>
 
 <script>
@@ -39,6 +53,7 @@ export default {
 
   data() {
     return {
+      claims: [],
       user: this.$auth.user,
       accounts: [],
       requestedAmount: null,
@@ -47,6 +62,7 @@ export default {
       kycStatus: null,
       vciplink: null,
       availableLimit: null,
+      corpExEnabled: false,
       isCardEnabled: false,
       isCardNumber: false,
       isCardLock: false,
@@ -72,29 +88,57 @@ export default {
     organization() {
       return this.$auth.user.organization
     },
+    availableCorpBalance() {
+      return this.$store.getters.getUserConfig?.corpx_limit?.available || 0
+    },
+    allocatedCorpBalance() {
+      return this.$store.getters.getUserConfig?.corpx_limit?.allocated || 0
+    },
+    consumedCorpBalance() {
+      return this.$store.getters.getUserConfig?.corpx_limit?.consumed || 0
+    },
   },
   mounted() {
-    // this.getCategories()
-    // this.getProducts()
-    this.getHomeProducts()
+    if (this.$auth.strategy.token.status().valid()) {
+      this.getHomeProducts()
+    }
+    console.log('CONFIG::', this.$auth)
+    this.fetchClaims()
+    this.fetchUserConfig()
   },
   async beforeMount() {
-    const apiResult = await this.$axios.get('/organizations/config', {
-      headers: {
-        Authorization: this.token,
-      },
-    })
-    this.isCardEnabled = apiResult.data.is_card_enabled
+    if (this.$auth.strategy.token.status().valid()) {
+      const apiResult = await this.$axios.get('/organizations/config', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      this.isCardEnabled = apiResult.data.is_card_enabled
+      this.corpExEnabled = apiResult.data?.user.is_corporate_expense_enabled
+    }
   },
-
-  // mounted() {
-  // this.kycStatus = this.$auth.user.kyc_status.kyc_status;
-  // this.fetchVkyc()
-  // },
-
   methods: {
+    async fetchUserConfig() {
+      const res = await this.$axios.$get('/api/coprx/userconfig', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      if (res?.status) {
+        this.$store.commit('setUserConfig', {
+          account: res?.account,
+          corpx_limit: res?.corpx_limit,
+        })
+      }
+    },
+    navToClaimHistory() {
+      this.$router.push('/claim?activeTab=claim_history')
+    },
+    navToClaimSettelment() {
+      this.$router.push('/claim')
+    },
     navToTransferScreen() {
-      this.$router.push('/TransferScreen')
+      this.$router.push('/transferscreen')
     },
     navToCard() {
       this.$router.push('/cards')
@@ -106,10 +150,24 @@ export default {
       this.$router.push('/profile')
     },
     navToSaveNow() {
-      this.$router.push('/saveNow')
+      this.$router.push('/shopnow')
     },
     navToFAQ() {
-      this.$router.push('/AskedQuestions')
+      this.$router.push('/askedquestions')
+    },
+    async fetchClaims() {
+      const res = await this.$axios.$get(
+        '/api/coprx/claims?sort=desc&limit=1',
+        {
+          headers: {
+            Authorization: this.token,
+          },
+        }
+      )
+      console.log('CLAIMS', res)
+      if (res?.status) {
+        this.claims = res?.claims
+      }
     },
     async navToPhysicalCard() {
       const isVartualCard = await this.$axios.get('m2p/requestPhysicalCard', {
@@ -157,7 +215,7 @@ export default {
       this.selectedProduct.push(productObj)
       this.selected = true
       this.$store.commit('setProduct', productObj)
-      this.$router.push('/StartPlan')
+      this.$router.push('/startplan')
     },
     cardNumber() {
       if (this.isCardNumber === true) {
@@ -278,19 +336,57 @@ export default {
 </script>
 
 <style scoped>
+.display-corp-limit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20px;
+}
+.display-corp-limit > div > span {
+  display: block;
+}
+.card-button {
+  width: 100%;
+}
+.card-button > img {
+  height: 180px;
+}
+.latest-claim {
+  background-color: #ffffff !important;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  margin: 0 20px;
+}
+.latest-claim > h3 {
+  margin-bottom: 10px;
+}
+.home-comtainer {
+  padding-bottom: 50px;
+}
+.claim-btn {
+  border: 1px solid #7165e3;
+  color: #7165e3;
+  padding: 5px;
+  width: 100%;
+  border-radius: 10px;
+  margin: 10px 0;
+}
 .custom-pro-slide {
   border-radius: 50%;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
-  height: 120px;
-  width: 12px;
+  background-color: #fff;
+  height: 85px;
+  border: 1px solid #000000;
 }
 .custom-pro-slide > img {
-  height: 75px;
-  width: 75px;
+  height: 55px;
+  width: 60px;
 }
 .ps-1 {
   height: 30vh;
@@ -311,8 +407,8 @@ export default {
   height: 10rem;
   background-color: #ffffff;
   color: #1c1939;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   padding-right: 2rem;
   box-shadow: 0px 35px 65px rgba(0, 0, 0, 0.0790811);
 }
@@ -340,6 +436,11 @@ export default {
   margin-bottom: 1rem;
   margin-left: 2rem;
   margin-right: 2rem;
+}
+
+.corp-exp {
+  padding-bottom: 5px;
+  padding-left: 25px;
 }
 
 .ps-6 {

@@ -31,7 +31,6 @@ export default {
       dates: [new Date(), new Date()],
       transactions: [],
       isLoading: false,
-      
     }
   },
 
@@ -40,15 +39,12 @@ export default {
   },
 
   methods: {
-
-    
-
     disableDate(date) {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
       return date >= new Date(today.getTime() + 24 * 3600 * 1000)
     },
-    
+
     async fetchTransactions() {
       this.transactions = []
       this.isLoading = true
@@ -69,13 +65,11 @@ export default {
 }
 </script>
 <style scoped>
-
-.msg{
+.msg {
   display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 50vh;
   justify-content: center;
 }
-
 </style>

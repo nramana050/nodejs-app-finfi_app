@@ -13,66 +13,63 @@
       
 </template>
 <script>
-export default{
-    name:'TransferScreen',
-    layout:'empty',
-    props: {
+export default {
+  name: 'TransferScreen',
+  layout: 'empty',
+  props: {
     message: {
       type: String,
       required: true,
     },
   },
-    data(){
-        return{
-
-        }
+  data() {
+    return {}
+  },
+  methods: {
+    navToDasahboard() {
+      this.$router.push('/dashboard')
     },
-    methods:{
-        navToDasahboard(){
-            this.$router.push('/dashboard')
-        },
-        navToTransfer(){
-          this.$router.push('/TransferScreen')
-        }
-    }
+    navToTransfer() {
+      this.$router.push('/transferscreen')
+    },
+  },
 }
 </script>
 <style scoped>
-.ps-1{
-    background-color: #7165e3;
-    height: 3rem;
+.ps-1 {
+  background-color: #7165e3;
+  height: 3rem;
 }
-.ps-2{
-    height: 8rem;
-    width: 8rem;
-    margin-top: 8rem;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+.ps-2 {
+  height: 8rem;
+  width: 8rem;
+  margin-top: 8rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-.ps-3{
-    text-align: center;
-    color: #000000;
-    margin: 2rem;
+.ps-3 {
+  text-align: center;
+  color: #000000;
+  margin: 2rem;
 }
-.ps-4{
-    color: #000000;
-    background-color: white;
-    height: 2.5rem;
-    width: 9rem;
-    margin-left: 2rem;
-    margin-right: 1rem;
-    margin-bottom: 3rem;
-    border: 1px solid #ccc;
+.ps-4 {
+  color: #000000;
+  background-color: white;
+  height: 2.5rem;
+  width: 9rem;
+  margin-left: 2rem;
+  margin-right: 1rem;
+  margin-bottom: 3rem;
+  border: 1px solid #ccc;
 }
 .ps-5 {
   color: white;
-  background-color:#7165e3;
+  background-color: #7165e3;
   height: 2.5rem;
   width: 9rem;
   margin-left: 1rem;
   margin-right: 2rem;
   margin-bottom: 3rem;
-  
 }
 </style>

@@ -24,22 +24,24 @@ export default {
     }
   },
   async beforeMount() {
-    const apiResult = await this.$axios.get('/organizations/config', {
-      headers: {
-        Authorization: this.token,
-      },
-    })
-    this.isCardEnabled = apiResult.data.is_card_enabled
+    if (this.$auth.strategy.token.status().valid()) {
+      const apiResult = await this.$axios.get('/organizations/config', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      this.isCardEnabled = apiResult.data.is_card_enabled
+    }
   },
   methods: {
     navToDashboard() {
       this.$router.push('/dashboard')
     },
     navToTransfer() {
-      this.$router.push('/TransferScreen')
+      this.$router.push('/transferscreen')
     },
     navToSaveNow() {
-      this.$router.push('/saveNow')
+      this.$router.push('/shopnow')
     },
     navToTranscation() {
       this.$router.push('/transactions')
@@ -60,6 +62,8 @@ export default {
   background-color: white;
   color: black;
   height: 3.5rem;
+  position: relative;
+  z-index: 100;
 }
 .ps-A1 {
   height: 20px;
