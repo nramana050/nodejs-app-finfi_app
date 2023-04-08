@@ -55,7 +55,7 @@ div.claim-item
                                 div.msg-info-time {{formatDateTime(supplement.added_at)}}
                             div.msg-text {{supplement.comment}}
                                 div.supportive-docs(v-if="supplement?.document?.length")
-                                  LightBox(:imagesData="supplement?.document.map((doc) => ({src: doc.doc_url,crossorigin: 'anonymous',}))")
+                                  LightBox(:imagesData="supplement?.document.map((doc) => ({src: doc.doc_url}))")
                                          
 </template>
 
