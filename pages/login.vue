@@ -120,7 +120,7 @@ export default {
         const result = await this.$auth.loginWith('token', {
           data: {
             mobile: Number(this.mobile),
-            passcode: Number(this.passcode),
+            passcode: this.passcode,
             organization_code: this.organization.code.toUpperCase(),
           },
         })

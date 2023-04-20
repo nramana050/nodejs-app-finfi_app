@@ -36,7 +36,7 @@ export default {
       }
       try {
         await this.$axios.post('/profile/passcode', {
-          passcode: Number(this.passcode_1),
+          passcode: this.passcode_1,
         })
         this.$toast.info('Passcode updated successfully')
       } catch (err) {
