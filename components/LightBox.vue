@@ -1,8 +1,8 @@
 <template lang="pug">
 div
-  CoolLightBox(:items="images" :index="index" @close="index=null" crossorigin="anonymous")
+  CoolLightBox(:items="images" :index="index" @close="index=null")
   div.images-wrapper
-    img(:src="image.src" v-for="(image, imageIndex) in images" :key="imageIndex" @click="index = imageIndex" crossorigin="anonymous")
+    img(:src="image.src" v-for="(image, imageIndex) in images" :key="imageIndex" @click="index = imageIndex")
   </template>
 
 <script>
@@ -57,6 +57,7 @@ export default {
 .supportive-docs .images-wrapper {
   display: flex;
   overflow-x: scroll;
+  max-width: 275px;
 }
 .supportive-docs img {
   height: 100px;
