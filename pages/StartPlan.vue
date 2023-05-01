@@ -253,16 +253,16 @@ export default {
               currency: res.data.currency,
               amount: res.data.amount,
               key: res.data.key,
-              name: res.data.name,
+              name: res.data?.name,
               description: res.data.description,
               image: res.data.image,
               prefill: {
-                name: res.data.prefill.name,
-                email: res.data.prefill.email,
-                contact: res.data.prefill.contact,
+                name: res.data.prefill?.name,
+                email: res.data.prefill?.email,
+                contact: res.data.prefill?.contact,
               },
               theme: {
-                color: res.data.theme.color,
+                color: res.data.theme?.color,
               },
               handler: async (response) => {
                 const verify_payment_response = await this.verifySignature(
@@ -277,8 +277,10 @@ export default {
               },
             }
 
-            const rzp1 = new Razorpay(options)
-            rzp1.open()
+            console.log('OPTIONS::', options)
+
+            //const rzp1 = new Razorpay(options)
+            // rzp1.open()
           })
       } catch (err) {
         console.log(err)

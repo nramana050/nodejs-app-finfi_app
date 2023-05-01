@@ -21,6 +21,7 @@ div.home-comtainer.ps-1A
       button.card-button(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
       button.claim-btn(v-if="this.card_type != 'PHYSICAL'" @click="navToPhysicalCard") Order a Physical card  
+      button.claim-btn(v-if="this.financialPartnerType" @click="navToLoadYourCard") Load Your Card  
   div.container.corp-exp.p-5(v-if="homeProducts?.length")
     h3.font-bold.text-sm Discount On Top Brands     
   div.latest-claim.pt-10(v-if="homeProducts?.length")
@@ -65,6 +66,7 @@ export default {
       corpExEnabled: false,
       isCardEnabled: false,
       isCardNumber: false,
+      financialPartnerType: null,
       isCardLock: false,
       enableFinfi: false,
       enableM2P: false,
@@ -102,7 +104,6 @@ export default {
     if (this.$auth.strategy.token.status().valid()) {
       this.getHomeProducts()
     }
-    console.log('CONFIG::', this.$auth)
     this.fetchClaims()
     this.fetchUserConfig()
   },
@@ -115,6 +116,7 @@ export default {
       })
       this.isCardEnabled = apiResult.data.is_card_enabled
       this.corpExEnabled = apiResult.data?.user.is_corporate_expense_enabled
+      this.financialPartnerType = apiResult.data?.financial_partner_type
     }
   },
   methods: {
@@ -154,6 +156,9 @@ export default {
     },
     navToFAQ() {
       this.$router.push('/askedquestions')
+    },
+    navToLoadYourCard() {
+      this.$router.push('/loadyourcard')
     },
     async fetchClaims() {
       const res = await this.$axios.$get(
