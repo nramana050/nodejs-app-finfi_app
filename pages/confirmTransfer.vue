@@ -37,6 +37,7 @@ export default {
       transferAmount: null,
       cashRequestSent: false,
       cashRequestFailed: false,
+      financial_partner_type: 'FINFI',
       errorMessage: '',
       num1: null,
       num2: null,
@@ -56,9 +57,25 @@ export default {
       )
     },
   },
+  async beforeMount() {
+    if (this.$auth.strategy.token.status().valid()) {
+      const apiResult = await this.$axios.get('/organizations/config', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      this.financial_partner_type = apiResult.data.financial_partner_type
+    }
+  },
   methods: {
     navToTransfer() {
-      this.$router.push('/transferscreen')
+      if (this.financial_partner_type === 'FINFI') {
+        this.$router.push('/transferscreen')
+      } else if (this.financial_partner_type === 'NBFC') {
+        this.$router.push('/loadbankaccount')
+      } else {
+        this.$toast.error('Financial partner type not found')
+      }
     },
     changeRange(index, value, event) {
       if (event.data != null) {
@@ -111,10 +128,10 @@ export default {
         if (this.addNumbers === null) {
           this.$toasted.error('Please enter passcode')
         }
-        const regPasscode = await this.$axios.post('/auth/transfer', {
+        await this.$axios.post('/auth/transfer', {
           passcode: this.addNumbers,
         })
-        console.log('passcode ', regPasscode)
+        // console.log('passcode ', regPasscode)
       } catch (err) {
         this.$toasted.error('Incorrect Passcode')
         return
@@ -159,9 +176,20 @@ export default {
           )
           return
         }
-        await this.$axios.post(`/accounts/${finfiAccount[0].id}/withdrawals`, {
-          amount: this.requestAmount,
-        })
+        
+          await this.$axios.post(
+            `/accounts/${finfiAccount[0].id}/withdrawals`,
+            {
+              amount: this.requestAmount,
+            }
+          )
+        // Check the financial_partner_type
+        if (this.financial_partner_type === 'NBFC'){
+          // alert("Transfer to NBFC SITE ")
+          const url = "https://www.paymeindia.in/";
+          const newTab = window.open(url, "_blank");
+          newTab.focus();
+        }
         // this.$toast.success('Cash request sent');
         this.cashRequestSent = true
         // this.$router.push('/TransferSuccess')
