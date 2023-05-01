@@ -35,6 +35,7 @@
     "node-sass": "^7.0.1",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
+    "vue-cool-lightbox": "2.7.0",
     "vue-final-modal": "^2.4.1",
     "vue-fullpage-modal": "^0.5.3",
     "vue-iframes": "^0.0.19",
@@ -46,7 +47,6 @@
     "vue-template-compiler": "^2.6.14",
     "vue2-datepicker": "^3.10.4",
     "vuex-persistedstate": "^3.2.1",
-    "vue-cool-lightbox": "2.7.0",
     "webpack": "^4.46.0"
   },
   "devDependencies": {
