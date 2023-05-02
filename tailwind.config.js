@@ -14,4 +14,3 @@ module.exports = {
   },
   plugins: [],
 }
-// test ci/cd pipeline
