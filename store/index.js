@@ -10,6 +10,7 @@ export const state = () => ({
     product: null,
   },
   userConfig: {},
+  accounts:[],
 })
 
 export const mutations = {
@@ -41,6 +42,11 @@ export const mutations = {
   setUserConfig(state, payload) {
     state.userConfig = { ...payload }
   },
+  setAccountsBalance(state,payload){
+    if(payload){
+      state.accounts=[...payload]
+    }
+  }
 }
 
 export const getters = {

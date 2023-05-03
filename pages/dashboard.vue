@@ -21,7 +21,7 @@ div.home-comtainer.ps-1A
       button.card-button(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
       button.claim-btn(v-if="this.card_type != 'PHYSICAL'" @click="navToPhysicalCard") Order a Physical card  
-      button.claim-btn(v-if="this.financialPartnerType" @click="navToLoadYourCard") Load Your Card  
+      button.claim-btn(v-if="this.financialPartnerType=='NBFC'" @click="navToLoadYourCard") Load Your Card  
   div.container.corp-exp.p-5(v-if="homeProducts?.length")
     h3.font-bold.text-sm Discount On Top Brands     
   div.latest-claim.pt-10(v-if="homeProducts?.length")
@@ -169,7 +169,7 @@ export default {
           },
         }
       )
-      console.log('CLAIMS', res)
+      // console.log('CLAIMS', res)
       if (res?.status) {
         this.claims = res?.claims
       }
@@ -254,6 +254,7 @@ export default {
         for (const item of accountresult.data) {
           if (orgAccountTypes.includes(item.account.account_type)) {
             this.accounts.push(item.account)
+            this.$store.commit('setAccountsBalance',this.accounts)
             if (item.account.account_type !== 'PAYABLE') {
               this.availableLimit += item.account.account_balance
             }
