@@ -10,8 +10,8 @@ div.ps-1
   div.flex.justify-between
     div.flex-0.text-left
       div.tracking-wide.text-xs
-        | Salary Used
-        sup.pl-1 *
+        span(class="card-info") Advance <br/> Taken
+         sup.pl-1.card-info-sup *
       p.ps-3.tracking-wider.text-sm &#8377; {{ payableAmount }} 
 
     div.flex-0(v-if="earnedLimit!==null")
@@ -22,13 +22,15 @@ div.ps-1
       p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(earnedLimit).toLocaleString('en-IN') }}
     div.flex-0(v-if="cashLimit!==null")
       div.flex.tracking-wide.text-xs
-        p.flex-1 Cash Limit
-        div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
+        p.flex-1 
+         span( class="card-info") Advance <br/> Available
+        div.text-xs.ps-6.card-info-tool-tip(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
           solid-information-circle-icon.w-4.h-4
       p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toLocaleString('en-IN') }}
     div.flex-0.text-right(v-if="cardLimit!==null")
       div.flex.tracking-wide.text-xs
-        p.flex-1 Card Limit
+        p.flex-1 
+         span(class="card-info") Prepaid <br/> Balance
         div.flex-0(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
           solid-information-circle-icon.w-4.h-4
       p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toLocaleString('en-IN') }}
@@ -141,6 +143,19 @@ export default {
 }
 </script>
 <style scoped>
+.card-info {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-info-sup {
+  position: relative;
+  top: -10px;
+}
+.card-info-tool-tip {
+  font-size: 12px;
+}
 .ps-3 {
   padding-top: 7px;
   padding-right: 15px;
@@ -160,5 +175,9 @@ export default {
 
 .ps-6 {
   color: #1c1939;
+}
+.popover-inner {
+  font-size: 12px;
+  line-height: 1.5;
 }
 </style>
