@@ -16,12 +16,12 @@ div.home-comtainer.ps-1A
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
   div(v-if="isCardEnabled && this.enableM2P")
     div.container.corp-exp.p-5
-      h3.font-bold.text-sm MyVirtual Card
+      h3.font-bold.text-sm Get Upto 10% Cashback on monthly spend
     div.latest-claim.p-5
       button.card-button(@click="navToCard")
         img.ps-6A(src="~/assets/cardimage.jpg")
+      button.claim-btn(v-if="this.financialPartnerType=='NBFC'" @click="navToLoadYourCard") Load Your Prepaid Card  
       button.claim-btn(v-if="this.card_type != 'PHYSICAL'" @click="navToPhysicalCard") Order a Physical card  
-      button.claim-btn(v-if="this.financialPartnerType=='NBFC'" @click="navToLoadYourCard") Load Your Card  
   div.container.corp-exp.p-5(v-if="homeProducts?.length")
     h3.font-bold.text-sm Discount On Top Brands     
   div.latest-claim.pt-10(v-if="homeProducts?.length")
@@ -254,7 +254,7 @@ export default {
         for (const item of accountresult.data) {
           if (orgAccountTypes.includes(item.account.account_type)) {
             this.accounts.push(item.account)
-            this.$store.commit('setAccountsBalance',this.accounts)
+            this.$store.commit('setAccountsBalance', this.accounts)
             if (item.account.account_type !== 'PAYABLE') {
               this.availableLimit += item.account.account_balance
             }
