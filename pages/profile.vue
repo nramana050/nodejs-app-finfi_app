@@ -5,7 +5,7 @@
         button.ps-7.text-left(@click="navToDashBoard")
           FaIcon.mx-auto(icon='angle-left')
         div.w-24.rounded-full.text-center.mx-auto.ps-2
-          img.object-cover.h-24.w-24.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
+          img.object-cover.h-24.w-24.rounded-full(src="~/assets/myfinfi-icons/profile.png")
         p.font-bold.text-xl.text-center {{ profile.first_name }} {{ profile.last_name }}
         p.text-center.text-sm.ps-3 {{ profile.email }}
         p.text-center.text-sm.ps-4 {{ profile.mobile }}
@@ -28,41 +28,11 @@
             div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
               button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
               button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit") Save     
-        //- div.flex.flex-row.justify-between.ps-6
-        //-   p.text-sm Account number
-        //-   FormulateInput(type="text" name="account_number" :disabled="!isEditMode" validation="required" )
-        //-   //- p.text-sm(v-if="!isEditMode") {{this.bank.account_number}}
-        //- div.flex.flex-row.justify-between.ps-8
-        //-   p.text-sm IFSC code 
-        //-   FormulateInput(type="text" name="ifsc_code" :disabled="!isEditMode" validation="required" v-model="this.bank.ifsc_code")
-        //-   //- p.text-sm(v-if="!isEditMode") {{this.bank.ifsc_code}}
-        //- div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
-        //-   button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
-        //-   button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit" @click="saveBankDetail") Save  
         div
-          div.flex.flex-row.justify-between.ps-9
-            //- div
-            //-   p.text-sm Change Passcode
-            //- button(@click="")
-            //-   FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
-            //- div.flex.flex-row.justify-between.ps-9
-            //-   p.text-sm Notification
-            //-   button(@click="")
-            //-   FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right') 
           div.flex.flex-row.justify-between.ps-9
             p.text-sm Logout
             button(@click="logout")
               FaIcon.mx-auto.font-bold.w-3.h-3(icon='chevron-right')
-
-        //- div.flex
-        //-   FormulateForm(v-model="bank" @submit="saveBankDetail")
-        //-     div.flex.flex-row.justify-between.pb-4
-        //-       FormulateInput(type="text" label="IFSC Code" name="ifsc_code" :disabled="!isEditMode" validation="required")
-        //-       FormulateInput(type="text" label="Account Number" name="account_number" :disabled="!isEditMode" validation="required")
-        //-     button.h-10.bg-gray-700.text-white.uppercase.text-lg.rounded-md.font-bold.my-4.tracking-wider.px-8(@click="logout") logout
-        //-     div.flex.flex-row.justify-between.pb-4(v-if="isEditMode")
-        //-       button.bg-red-700.w-full.h-6.rounded.text-white.mr-3(@click="cancelEdit") Cancel
-        //-       button.bg-green-700.w-full.h-6.rounded.text-white.mr-3(type="submit") Save     
 </template>
 
 <script>

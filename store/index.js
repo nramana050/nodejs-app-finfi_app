@@ -10,7 +10,8 @@ export const state = () => ({
     product: null,
   },
   userConfig: {},
-  accounts:[],
+  accounts: [],
+  userDetails: {},
 })
 
 export const mutations = {
@@ -42,11 +43,14 @@ export const mutations = {
   setUserConfig(state, payload) {
     state.userConfig = { ...payload }
   },
-  setAccountsBalance(state,payload){
-    if(payload){
-      state.accounts=[...payload]
+  setAccountsBalance(state, payload) {
+    if (payload) {
+      state.accounts = [...payload]
     }
-  }
+  },
+  setUserDetails(state, payload) {
+    state.userDetails = payload
+  },
 }
 
 export const getters = {
@@ -61,5 +65,8 @@ export const getters = {
   },
   new_transaction(state) {
     return state.new_transaction
+  },
+  getUserDetails(state) {
+    return state.userDetails
   },
 }

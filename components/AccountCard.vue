@@ -1,44 +1,22 @@
 <template lang="pug">
-div.ps-1
-  //- div.uppercase.pb-5
-  //-   p.tracking-wider.font-bold {{ user.first_name }} {{ user.last_name }}
-  //-   p.tracking-wider.text-sm {{ provider.name }}
-  //- div.flex.justify-between.pb-5
-  //-   div.flex-0
-  //-     p.tracking-wide.text-xs Available Balance
-  //-     p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(availableLimit).toFixed(2) }}
-  div.flex.justify-between
-    div.flex-0.text-left
-      div.tracking-wide.text-xs
-        span(class="card-info") Advance <br/> Taken
-         sup.pl-1.card-info-sup *
-      p.ps-3.tracking-wider.text-sm &#8377; {{ payableAmount }} 
-
-    div.flex-0(v-if="earnedLimit!==null")
-      div.flex.tracking-wide.text-xs
-        p.flex-1 Limit
-        div.text-xs.ps-6(v-if="earnedCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.earnedCycle[0].credit_value} per day between ${this.earnedCycle[0].credit_start_day} and ${this.earnedCycle[0].credit_end_day} of the month`")
-          solid-information-circle-icon.w-4.h-4 
-      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(earnedLimit).toLocaleString('en-IN') }}
-    div.flex-0(v-if="cashLimit!==null")
-      div.flex.tracking-wide.text-xs
-        p.flex-1 
-         span( class="card-info") Advance <br/> Available
-        div.text-xs.ps-6.card-info-tool-tip(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
-          solid-information-circle-icon.w-4.h-4
-      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toLocaleString('en-IN') }}
-    div.flex-0.text-right(v-if="cardLimit!==null")
-      div.flex.tracking-wide.text-xs
-        p.flex-1 
-         span(class="card-info") Prepaid <br/> Balance
-        div.flex-0(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
-          solid-information-circle-icon.w-4.h-4
-      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toLocaleString('en-IN') }}
-  div.ps-4      
-  div
-    p.text-xs.ps-5
-      sup.pr-1 *
-      | Employer will deduct from the next salary
+div.ew-info
+  h3 Salary advance
+  div.flex.justify-between.ew-stats
+    div.flex-0.text-left.stat-container.green
+      div.text-xs
+        div(class="card-info") Earned
+        div.amt.text-sm &#8377; {{earnedLimit}}
+    div.flex-0.text-left.stat-container.red
+      div.text-xs
+        div(class="card-info") Withdrawn
+        div.amt.text-sm &#8377; {{payableAmount}}
+    div.flex-0.text-left.stat-container.yellow
+      div.text-xs
+        div(class="card-info") Available
+        div.amt.text-sm &#8377; {{availableLimit}}      
+  div.ew-action
+   button(@click="navToTransferScreen") Transfer to Bank Account
+ 
 </template>
 
 <script>
@@ -62,33 +40,33 @@ export default {
     }
   },
   computed: {
+    availableLimit() {
+      return this.earnedLimit - this.payableAmount
+    },
     payableAmount() {
       const payableAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'PAYABLE'
       )
-      return payableAccount[0].account_balance
+      return payableAccount[0].account_balance || 0
     },
     cashLimit() {
       const cashAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'CASH'
       )
-      return cashAccount.length > 0 ? cashAccount[0].account_balance : null
+      return cashAccount.length > 0 ? cashAccount[0].account_balance : 0
     },
     cardLimit() {
       const cardAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'CARD'
       )
-      return cardAccount.length > 0 ? cardAccount[0].account_balance : null
+      return cardAccount.length > 0 ? cardAccount[0].account_balance : 0
     },
     earnedLimit() {
       const earnedAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
       )
-      return earnedAccount.length > 0 ? earnedAccount[0].account_balance : null
+      return earnedAccount.length > 0 ? earnedAccount[0].account_balance : 0
     },
-    // availableLimit() {
-    //   return Number(0) + Number(0)
-    // }
   },
   mounted() {
     this.fetchFundCycle()
@@ -139,45 +117,68 @@ export default {
         }
       }
     },
+    navToTransferScreen() {
+      this.$router.push('/transferscreen')
+    },
   },
 }
 </script>
 <style scoped>
+.ew-info {
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.ew-info > h3 {
+  font-size: 16px;
+  line-height: 21px;
+}
+.ew-stats {
+  margin-top: 20px;
+}
+.stat-container {
+  box-shadow: 1px 2px 20px 20px #f0f0f0;
+  padding-right: 35px;
+  height: 56px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.stat-container.green {
+  border-left: 5px solid #3ba99c;
+  border-radius: 5px;
+}
+.stat-container.red {
+  border-left: 5px solid #d3455b;
+  border-radius: 5px;
+}
+.stat-container.yellow {
+  border-left: 5px solid #ffd422;
+  border-radius: 5px;
+}
 .card-info {
-  text-align: center;
+  padding-left: 5px;
+  color: #898a8d;
+  font-size: 11px;
+}
+.amt {
+  padding-left: 5px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 25px;
+}
+.ew-action {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 25px;
 }
-.card-info-sup {
-  position: relative;
-  top: -10px;
-}
-.card-info-tool-tip {
-  font-size: 12px;
-}
-.ps-3 {
-  padding-top: 7px;
-  padding-right: 15px;
-}
-
-.ps-4 {
-  height: 1px;
-  background: #f2f2f2;
-  margin-top: 7px;
-  margin-left: -2rem;
-  margin-right: -2rem;
-}
-
-.ps-5 {
-  margin-top: 2rem;
-}
-
-.ps-6 {
-  color: #1c1939;
-}
-.popover-inner {
-  font-size: 12px;
-  line-height: 1.5;
+.ew-action > button {
+  width: 232px;
+  height: 35px;
+  background: #7165e3;
+  border-radius: 14px;
+  color: #fff;
+  text-align: center;
 }
 </style>
