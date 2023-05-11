@@ -17,7 +17,7 @@ div.home-comtainer.ps-1A
       p Get an instant loan
     div.action
      img(src="~/assets/myfinfi-icons/right_arrow.png")
-  div.account-card(v-if="isCardEnabled")
+  div.account-card
    div.header
     span.info 
      img(src='~/assets/myfinfi-icons/wallet.png') 
@@ -28,13 +28,13 @@ div.home-comtainer.ps-1A
    div.content
     div.stats
      span.head Total Limit 
-     span.amt ₹ {{ cardLimit }}
+     span.amt ₹ {{ cardData?.earned || 0 }}
     div.stats
-     span.head Prepaid Balance
-     span.amt ₹ 0  
+     span.head Prepaid Balance (Used)
+     span.amt ₹ {{ cardData?.used || 0 }} 
     div.stats
-     span.head Salary advance available
-     span.amt ₹ 0
+     span.head Available Salary
+     span.amt ₹ {{ cardData?.account_balance || 0 }}
    div.card.actions
     button(@click="navToLoadYourCard") Add Money  
     button(@click="navToCard") Card Details  
@@ -137,11 +137,11 @@ export default {
 
       return isEnable
     },
-    cardLimit() {
+    cardData() {
       const cardAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'CARD'
       )
-      return cardAccount.length > 0 ? cardAccount[0].account_balance : 0
+      return cardAccount.length > 0 ? cardAccount[0] : {}
     },
     userName() {
       return `${this.$store.getters.getUserDetails?.first_name} ${this.$store.getters.getUserDetails?.last_name}`
@@ -379,7 +379,7 @@ export default {
 <style scoped>
 .corp-exp.products {
   background: #e5e2ff;
-  margin-top: 20px;
+  margin-top: 10px;
   font-weight: 700;
   font-size: 14px;
   line-height: 18px;
@@ -397,7 +397,7 @@ export default {
 }
 .claim-exp {
   background-color: #ffffff;
-  margin: 15px;
+  margin: 10px 15px;
   border-radius: 10px;
 }
 .display-corp-limit {
@@ -415,7 +415,8 @@ export default {
 .account-card {
   background: #fff;
   border-radius: 10px;
-  margin: 20px 15px;
+  margin: 10px 15px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 .account-card .header {
   display: flex;
@@ -497,7 +498,7 @@ export default {
 }
 
 .marketing {
-  margin: 20px 15px;
+  margin: 10px 15px;
 }
 .marketing .card {
   background: #ffffff;
@@ -507,6 +508,7 @@ export default {
   min-height: 65px;
   align-items: center;
   padding: 10px 15px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .marketing .card .icon {
   margin-right: 10px;
@@ -661,8 +663,7 @@ export default {
 }
 
 .corp-exp {
-  padding-bottom: 5px;
-  padding-left: 25px;
+  padding: 10px 15px 0px 15px;
 }
 
 .ps-6 {

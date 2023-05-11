@@ -5,15 +5,15 @@ div.ew-info
     div.flex-0.text-left.stat-container.green
       div.text-xs
         div(class="card-info") Earned
-        div.amt.text-sm &#8377; {{earnedLimit}}
+        div.amt.text-sm &#8377; {{earnedData?.earned}}
     div.flex-0.text-left.stat-container.red
       div.text-xs
         div(class="card-info") Withdrawn
-        div.amt.text-sm &#8377; {{payableAmount}}
+        div.amt.text-sm &#8377; {{earnedData?.used}}
     div.flex-0.text-left.stat-container.yellow
       div.text-xs
         div(class="card-info") Available
-        div.amt.text-sm &#8377; {{availableLimit}}      
+        div.amt.text-sm &#8377; {{earnedData?.account_balance}}      
   div.ew-action
    button(@click="navToTransferScreen") Transfer to Bank Account
  
@@ -65,7 +65,13 @@ export default {
       const earnedAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
       )
-      return earnedAccount.length > 0 ? earnedAccount[0].account_balance : 0
+      return earnedAccount.length > 0 ? earnedAccount[0].earned : 0
+    },
+    earnedData() {
+      const earnedAccount = this.accounts.filter(
+        (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
+      )
+      return earnedAccount.length > 0 ? earnedAccount[0] : {}
     },
   },
   mounted() {
@@ -128,6 +134,7 @@ export default {
   padding-top: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
 }
 .ew-info > h3 {
   font-size: 16px;
