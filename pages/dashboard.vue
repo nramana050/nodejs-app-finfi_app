@@ -8,15 +8,16 @@ div.home-comtainer.ps-1A
           img.object-cover.h-8.w-8.rounded-full(src="~/assets/myfinfi-icons/profile.png")
   div(v-if="accounts.length > 0 && organization")
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
-  div.marketing
-   div.card
-    div.icon
-     img(src="~/assets/myfinfi-icons/more_money.png")
-    div.content
-      h2 Need more money
-      p Get an instant loan
-    div.action
-     img(src="~/assets/myfinfi-icons/right_arrow.png")
+  div.marketing(v-if="promotionalCards.length")
+   ssr-carousel(:slides-per-page=1 :loop='true' :show-arrows='false' :feather='false' :peek-right='50' )
+    div.card(v-for="promotionalCard in promotionalCards")
+      div.icon
+       img(:src="promotionalCard.pc_icon_file_name" crossorigin="anonymous")
+      div.content
+        h2 {{promotionalCard.pc_title}}
+        p {{promotionalCard.pc_text}}
+      div.action(v-if="promotionalCard.pc_href_page_url")
+        img(src="~/assets/myfinfi-icons/right_arrow.png" @click="()=> cardNavTo(promotionalCard.pc_href_page_url)")
   div.account-card
    div.header
     span.info 
@@ -111,6 +112,7 @@ export default {
       selectedProduct: [],
       selected: false,
       baseUrl: this.$axios.defaults.baseURL,
+      promotionalCards: [],
     }
   },
 
@@ -155,6 +157,7 @@ export default {
     this.fetchUserConfig()
     this.captureEvent()
     this.fetchAccountDetails()
+    this.fetchMarketingCards()
   },
   async beforeMount() {
     if (this.$auth.strategy.token.status().valid()) {
@@ -170,6 +173,9 @@ export default {
     this.fetchUserDetails()
   },
   methods: {
+    cardNavTo(uri) {
+      this.$router.push(uri)
+    },
     async fetchAccountDetails() {
       await this.getAccountDetails()
     },
@@ -244,7 +250,6 @@ export default {
           },
         }
       )
-      // console.log('CLAIMS', res)
       if (res?.status) {
         this.claims = res?.claims
       }
@@ -369,8 +374,17 @@ export default {
     },
     async fetchUserDetails() {
       const profileResult = await this.$axios.get('/profile')
-      console.log('PROFILE::DATA::>>', profileResult.data)
       this.$store.commit('setUserDetails', profileResult.data)
+    },
+    async fetchMarketingCards() {
+      const promotionalCards = await this.$axios.get('/pc/cards')
+      if (
+        promotionalCards.data?.status &&
+        promotionalCards.data?.result?.length
+      ) {
+        this.promotionalCards = promotionalCards.data?.result
+      }
+      console.log('Marketing::DATA::>>', promotionalCards.data)
     },
   },
 }
@@ -508,7 +522,7 @@ export default {
   min-height: 65px;
   align-items: center;
   padding: 10px 15px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
 }
 .marketing .card .icon {
   margin-right: 10px;
