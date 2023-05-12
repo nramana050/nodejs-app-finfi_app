@@ -67,12 +67,16 @@ export default {
             'Sorry,the amount entered must be below or equal to the available limit'
           )
         }
+
         const razorpayOrderId = await this.$axios.post(
           '/payment/gateway/order_id',
           {
             amount: amt * 100,
+            purpose: "PrePaidCardLoad",
+            description: "Adding Funds In Card",
           }
         )
+
         const { id: orderId, amount, currency } = razorpayOrderId.data
         const profileResult = await this.$axios.get('/profile')
         const { first_name, last_name, mobile, email } = profileResult.data
@@ -120,7 +124,7 @@ export default {
       console.log('Checkout form closed')
     },
     async verifySignature(response) {
-      const Response = { ...response, skiplog: true }
+      const Response = { ...response, skiplog: true}
       return await this.$axios.post('/payment/gateway/verify', Response)
     },
   },

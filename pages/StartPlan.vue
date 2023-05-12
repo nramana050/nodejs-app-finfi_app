@@ -220,11 +220,13 @@ export default {
         this.$toast.error(err.message)
       }
     },
-    async buyNow(razorpay_paid) {
+
+    async buyNow(razorpay_paid,razorpay_order_id) {
       const payload = {
         product: this.selecteProduct.product,
         amount: parseInt(this.instantPayment),
         razorpay_paid: razorpay_paid,
+        razorpay_order_id:razorpay_order_id,
       }
       try {
         const res = await this.$axios.$post(`/snbl/instant-voucher`, payload)
@@ -244,32 +246,40 @@ export default {
           amount: parseInt(this.instantPayment),
           product: this.product,
         }
-        await this.$axios
-          .post('/payment/gateway/instant-voucher', data)
-          .then((res) => {
-            this.voucher_data = res.data.voucher_data
+        const razorpayOrderId = await this.$axios.post(
+          '/payment/gateway/order_id',
+          {
+            amount: parseInt(this.instantPayment)*100,
+            purpose: "InstantVoucher",
+            description: "Payment for Instant Voucher",
+          }
+        )
+
+        const { id: orderId, amount, currency } = razorpayOrderId.data
+
+        const profileResult = await this.$axios.get('/profile')
+        const { first_name, last_name, mobile, email } = profileResult.data
+        const full_name = `${first_name} ${last_name}`
+            
             const options = {
-              order_id: res.data.order_id,
-              currency: res.data.currency,
-              amount: res.data.amount,
-              key: res.data.key,
-              name: res.data?.name,
-              description: res.data.description,
-              image: res.data.image,
-              prefill: {
-                name: res.data.prefill?.name,
-                email: res.data.prefill?.email,
-                contact: res.data.prefill?.contact,
-              },
-              theme: {
-                color: res.data.theme?.color,
-              },
+            order_id: orderId,
+            currency: currency,
+            image: 'https://app.myfinfi.com/_ipx/s_140x140/finfi.png',
+            amount: amount,
+            prefill: {
+              name: full_name,
+              email: email,
+              contact: mobile,
+            },
+            theme: {
+              color: '#7165E3',
+            },
               handler: async (response) => {
                 const verify_payment_response = await this.verifySignature(
                   response
                 )
                 if (verify_payment_response.data.status) {
-                  this.buyNow(true)
+                  this.buyNow(true,orderId)
                   this.$toast.success('Successfully bought the voucher.')
                 } else {
                   this.$toast.error('Failed to make the payment.')
@@ -277,11 +287,9 @@ export default {
               },
             }
 
-            console.log('OPTIONS::', options)
+            const rzp1 = new Razorpay(options)
+            rzp1.open()
 
-            //const rzp1 = new Razorpay(options)
-            // rzp1.open()
-          })
       } catch (err) {
         console.log(err)
         this.$toast.error('Failed to buy the voucher')
@@ -289,7 +297,8 @@ export default {
     },
 
     async verifySignature(response) {
-      return await this.$axios.post('/payment/gateway/verify', response)
+      const Response = { ...response, skiplog: true }
+      return await this.$axios.post('/payment/gateway/verify', Response)
     },
   },
 }
