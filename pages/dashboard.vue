@@ -9,7 +9,7 @@ div.home-comtainer.ps-1A
   div(v-if="accounts.length > 0 && organization")
     AccountCard.ps-2(:accounts="accounts" :provider="organization")
   div.marketing(v-if="promotionalCards.length")
-   ssr-carousel(:slides-per-page=1 :loop='true' :show-arrows='false' :feather='false' :peek-right='50' )
+   ssr-carousel(:slides-per-page=1 :loop='true' :show-arrows='false' :feather='false' :peek-right='70' :gutter='10' :autoplay-delay='5')
     div.card(v-for="promotionalCard in promotionalCards")
       div.icon
        img(:src="promotionalCard.pc_icon_file_name" crossorigin="anonymous")
@@ -18,7 +18,13 @@ div.home-comtainer.ps-1A
         p {{promotionalCard.pc_text}}
       div.action(v-if="promotionalCard.pc_href_page_url")
         img(src="~/assets/myfinfi-icons/right_arrow.png" @click="()=> cardNavTo(promotionalCard.pc_href_page_url)")
-  div.account-card
+  div.account-card.no-virual(v-if='this.cardStatus === "VIRTUAL_CARD_NOT_ENABLED"')
+    div.icon
+     img(src='~/assets/myfinfi-icons/wallet.png') 
+    div.content
+     span.header Get your Prepaid Rupay Card Now
+     span.body Earn upto 10% cashback on your monthly spends  
+  div.account-card(v-else)
    div.header
     span.info 
      img(src='~/assets/myfinfi-icons/wallet.png') 
@@ -27,24 +33,27 @@ div.home-comtainer.ps-1A
       img(src='~/assets/myfinfi-icons/unlock.png')
       img(src='~/assets/myfinfi-icons/settings.png' @click="navToCard")
    div.content
+    //- div.stats
+    //-  span.head Total Limit 
+    //-  span.amt ₹ {{ cardData?.earned || 0 }}
+    //- div.stats
+    //-  span.head Prepaid Balance (Used)
+    //-  span.amt ₹ {{ cardData?.used || 0 }} 
     div.stats
-     span.head Total Limit 
-     span.amt ₹ {{ cardData?.earned || 0 }}
-    div.stats
-     span.head Prepaid Balance (Used)
-     span.amt ₹ {{ cardData?.used || 0 }} 
-    div.stats
-     span.head Available Salary
      span.amt ₹ {{ cardData?.account_balance || 0 }}
+     span.head Balance
    div.card.actions
     button(@click="navToLoadYourCard") Add Money  
-    button(@click="navToCard") Card Details  
+    button(@click="navToCard") Card Details 
+   div.message 
+     img(src='~/assets/myfinfi-icons/card_msg.png') 
+     span Earn upto 10% cashback on your monthly spends  
   div.container.corp-exp.products.p-5(v-if="homeProducts?.length")
     h3.font-bold
      span Get upto 15% discount on major brands   
      span.action(@click="navToShop") See All
     div.latest-claim(v-if="homeProducts?.length")
-        ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5')
+        ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='false' :feather='false' :autoplay-delay='5')
           div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
             div.slide-header
              img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
@@ -54,10 +63,10 @@ div.home-comtainer.ps-1A
             div.slide-product-availability
              span.mode(v-if="product?.acceptance_mode === 'ONLINE' || product?.acceptance_mode==='BOTH'")
               img(src="~/assets/myfinfi-icons/online.png")
-              span  ONLINE
+              span  Online
              span.mode(v-if="product?.acceptance_mode === 'INSTORE' || product?.acceptance_mode==='BOTH'")
               img(src="~/assets/myfinfi-icons/instore.png")
-              span  INSTORE
+              span  In-Store
   div.container.corp-exp.p-5(v-if="corpExEnabled")
     h3.font-bold.text-sm Corporate Expense    
   div.claim-exp.p-5(v-if="corpExEnabled")
@@ -75,8 +84,8 @@ div.home-comtainer.ps-1A
     ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
     button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
     button.claim-btn(@click="navToClaimHistory") Claim History 
-  div.claim-exp.p-5    
-   button.claim-btn(v-if="deferredPrompt" ref="addBtn" class="add-button" @click="clickCallback") Add To HomeScreen  
+  div.claim-exp.p-5(v-if="deferredPrompt" )   
+   button.claim-btn(ref="addBtn" class="add-button" @click="clickCallback") Add To Mobile HomeScreen  
 </template>
 
 <script>
@@ -113,6 +122,7 @@ export default {
       selected: false,
       baseUrl: this.$axios.defaults.baseURL,
       promotionalCards: [],
+      cardStatus: null,
     }
   },
 
@@ -155,6 +165,7 @@ export default {
     }
     this.fetchClaims()
     this.fetchUserConfig()
+    this.fetchCardStatus()
     this.captureEvent()
     this.fetchAccountDetails()
     this.fetchMarketingCards()
@@ -376,6 +387,10 @@ export default {
       const profileResult = await this.$axios.get('/profile')
       this.$store.commit('setUserDetails', profileResult.data)
     },
+    async fetchCardStatus() {
+      const checkCardStatus = await this.$axios.get('/m2p/requestPhysicalCard')
+      this.cardStatus = checkCardStatus?.data?.card_status_code
+    },
     async fetchMarketingCards() {
       const promotionalCards = await this.$axios.get('/pc/cards')
       if (
@@ -384,7 +399,6 @@ export default {
       ) {
         this.promotionalCards = promotionalCards.data?.result
       }
-      console.log('Marketing::DATA::>>', promotionalCards.data)
     },
   },
 }
@@ -466,7 +480,7 @@ export default {
 }
 .account-card .content .stats {
   text-align: center;
-  border-right: 1px solid #e9e9fc;
+  /* border-right: 1px solid #e9e9fc; */
   padding-right: 20px;
   margin-top: 10px;
 }
@@ -496,7 +510,7 @@ export default {
 
 .account-card .card.actions {
   margin: 10px;
-  padding: 20px 10px;
+  padding: 0px 10px;
   display: flex;
   justify-content: space-around;
 }
@@ -509,6 +523,64 @@ export default {
   border-radius: 10px;
   text-align: center;
   color: #674297;
+}
+.account-card .message {
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #898a8d;
+  padding: 10px 10px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.account-card .message > img {
+  margin-right: 10px;
+}
+
+.account-card.no-virual {
+  display: flex;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+.account-card.no-virual > .icon {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.account-card.no-virual > .content {
+  background: #e5e2ff;
+  margin: 0;
+  display: block;
+  padding: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.account-card.no-virual > .content > span {
+  display: block;
+}
+.account-card.no-virual > .content .header {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  color: #232526;
+  display: block;
+  border-bottom: 0;
+  margin: 0;
+  padding: 5px 10px 5px;
+}
+.account-card.no-virual > .content .body {
+  top: calc(50% - 37px / 2 + 19px);
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 1px;
+  color: #83888a;
+  display: block;
 }
 
 .marketing {
@@ -598,7 +670,7 @@ export default {
 .slide-product-availability {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  padding: 15px;
   padding-bottom: 0;
   position: absolute;
   top: 150px;
@@ -611,8 +683,10 @@ export default {
 }
 .slide-product-availability .mode img {
   margin-right: 5px;
-  height: 15px;
-  width: 15px;
+  height: 12px;
+  width: 12px;
+  top: 2px;
+  position: relative;
 }
 .custom-pro-slide .slide-content .product-name {
   font-weight: 400;

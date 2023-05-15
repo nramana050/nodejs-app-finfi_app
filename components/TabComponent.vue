@@ -11,7 +11,7 @@
       p Shop
     button.grid.text-center(@click="navToTranscation")
       FaIcon.mx-auto.ps-A1(icon='scroll')
-      p History
+      p Transactions
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
       token: this.$auth.strategy.token.get(),
       organization: this.$store.getters.organization,
       isCardEnabled: false,
-      financial_partner_type:"FINFI",
+      financial_partner_type: 'FINFI',
     }
   },
   async beforeMount() {
@@ -32,8 +32,7 @@ export default {
         },
       })
       this.isCardEnabled = apiResult.data.is_card_enabled
-      this.financial_partner_type=apiResult.data.financial_partner_type
-
+      this.financial_partner_type = apiResult.data.financial_partner_type
     }
   },
   methods: {
@@ -41,16 +40,13 @@ export default {
       this.$router.push('/dashboard')
     },
     navToTransfer() {
-      if(this.financial_partner_type==="FINFI"){
-         this.$router.push('/transferscreen')
-      }
-      else if(this.financial_partner_type==="NBFC"){
+      if (this.financial_partner_type === 'FINFI') {
+        this.$router.push('/transferscreen')
+      } else if (this.financial_partner_type === 'NBFC') {
         this.$router.push('/loadbankaccount')
-      }
-      else{
+      } else {
         this.$toast.error('Financial partner type not found')
       }
-     
     },
     navToSaveNow() {
       this.$router.push('/shopnow')

@@ -149,6 +149,7 @@ export default {
   height: 56px;
   padding-top: 10px;
   padding-bottom: 10px;
+  width: 94px;
 }
 .stat-container.green {
   border-left: 5px solid #3ba99c;
@@ -185,7 +186,11 @@ export default {
   height: 35px;
   background: #7165e3;
   border-radius: 14px;
-  color: #fff;
   text-align: center;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 17px;
+  color: #ffffff;
 }
 </style>
