@@ -18,7 +18,7 @@ div.home-comtainer.ps-1A
         p {{promotionalCard.pc_text}}
       div.action(v-if="promotionalCard.pc_href_page_url")
         img(src="~/assets/myfinfi-icons/right_arrow.png" @click="()=> cardNavTo(promotionalCard.pc_href_page_url)")
-  div.account-card.no-virual(v-if='this.cardStatus === "VIRTUAL_CARD_NOT_ENABLED"')
+  div.account-card.no-virual(v-if='this.cardStatus === "VIRTUAL_CARD_NOT_ENABLED"' @click="gotoCardRegistration")
     div.icon
      img(src='~/assets/myfinfi-icons/wallet.png') 
     div.content
@@ -221,6 +221,9 @@ export default {
           corpx_limit: res?.corpx_limit,
         })
       }
+    },
+    gotoCardRegistration() {
+      this.$router.push('/cardregistration')
     },
     navToClaimHistory() {
       this.$router.push('/claim?activeTab=claim_history')
