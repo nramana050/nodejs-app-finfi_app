@@ -53,7 +53,7 @@ div.home-comtainer.ps-1A
      span Get upto 15% discount on major brands   
      span.action(@click="navToShop") See All
     div.latest-claim(v-if="homeProducts?.length")
-        ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='false' :feather='false' :autoplay-delay='5')
+        ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='false' :feather='false' :autoplay-delay='5' :gutter='10')
           div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
             div.slide-header
              img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
@@ -406,7 +406,7 @@ export default {
 
 <style scoped>
 .corp-exp.products {
-  background: #e5e2ff;
+  background: rgba(229, 226, 255, 0.4);
   margin-top: 10px;
   font-weight: 700;
   font-size: 14px;
