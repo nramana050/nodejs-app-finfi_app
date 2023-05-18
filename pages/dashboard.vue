@@ -223,7 +223,7 @@ export default {
       }
     },
     gotoCardRegistration() {
-      this.$router.push('/cardregistration')
+      this.$router.push('/cards')
     },
     navToClaimHistory() {
       this.$router.push('/claim?activeTab=claim_history')
