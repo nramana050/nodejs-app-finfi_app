@@ -46,8 +46,8 @@ div.home-comtainer.ps-1A
     button(@click="navToLoadYourCard") Add Money  
     button(@click="navToCard") Card Details 
    div.message 
-     img(src='~/assets/myfinfi-icons/card_msg.png') 
-     span Earn upto 10% cashback on your monthly spends  
+     img(src='~/assets/myfinfi-icons/cashback.png') 
+     span Bharat Ka Best Cashback Card
   div.container.corp-exp.products.p-5(v-if="homeProducts?.length")
     h3.font-bold
      span Get upto 15% discount on major brands   
@@ -513,7 +513,7 @@ export default {
 
 .account-card .card.actions {
   margin: 10px;
-  padding: 0px 10px;
+  padding: 0px 10px 10px;
   display: flex;
   justify-content: space-around;
 }
@@ -528,16 +528,22 @@ export default {
   color: #674297;
 }
 .account-card .message {
-  font-size: 12px;
-  line-height: 14px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
   text-align: center;
   letter-spacing: 1px;
-  color: #898a8d;
-  padding: 10px 10px 15px;
+  color: #f5f5f5;
+  height: 55px;
+  background: #7165e3;
+  border-radius: 0px 0px 10px 10px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding-left: 20px;
 }
+
 .account-card .message > img {
   margin-right: 10px;
 }
