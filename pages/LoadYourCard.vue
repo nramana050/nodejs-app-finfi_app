@@ -1,16 +1,26 @@
 <template lang="pug">
 div.flex.flex-col
   div.flex-0
-    PageHeader.uppercase(:title="'Load Your Prepaid Card'")
-  div.load-your-card-container
-    div.limt-info
-      span Max Limit - &#8377;  {{ cardLoadLimit.toLocaleString() }}
-      span Card Balance  - &#8377; {{ cardLimit }}
-      span Available Limit - &#8377; {{ availableLimit.toLocaleString() }}
+    PageHeader.uppercase(:title="'Add Money'")
+  div.maincontainer  
+    div.load-your-card-container
+      div.limt-info
+        div.amt-info
+          span.title Maximum limit of your card
+          span.amt &#8377;  {{ cardLoadLimit.toLocaleString() }}
+        div.amt-info
+          span.title  Card Balance
+          span.amt &#8377;  {{ cardLimit||0 }}
+        div.amt-info
+          span.title Maximum amount you can add
+          span.amt &#8377;  {{ availableLimit.toLocaleString() }}
     div.amt-container  
-      input(v-model="amount"  :max='cardLoadLimit' class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" placeholder="Enter Amount")
+      h3.title Enter amount 
+      div.amt-input
+        span ₹ 
+        input(v-model="amount"  :max='cardLoadLimit' class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" placeholder="Enter Amount")
     div.action-container(@click="payViaRazor")
-      button(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500") Load Your Prepaid Card             
+        button(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500") Add Money      
 </template>
 
 <script
@@ -72,8 +82,8 @@ export default {
           '/payment/gateway/order_id',
           {
             amount: amt * 100,
-            purpose: "PrePaidCardLoad",
-            description: "Adding Funds In Card",
+            purpose: 'PrePaidCardLoad',
+            description: 'Adding Funds In Card',
           }
         )
 
@@ -124,7 +134,7 @@ export default {
       console.log('Checkout form closed')
     },
     async verifySignature(response) {
-      const Response = { ...response, skiplog: true}
+      const Response = { ...response, skiplog: true }
       return await this.$axios.post('/payment/gateway/verify', Response)
     },
   },
@@ -132,27 +142,99 @@ export default {
 </script>
 
 <style scoped>
+.maincontainer {
+  background: #f5f5f5;
+  height: 100vh;
+}
 .load-your-card-container {
   padding: 20px;
   margin: 1.5rem;
   background-color: #fff;
   color: #1c1939;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.07908);
+  height: 160px;
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  margin-top: 4.5rem;
 }
 
 .limt-info > span {
   display: block;
 }
 
-.amt-container {
-  margin-top: 20px;
+.amt-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.amt-info .title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: #000000;
+}
+.amt-info .amt {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 21px;
+  color: #1c1939;
+}
+
+.amt-container .title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 23px;
+  color: #1c1939;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.amt-container,
+.action-container {
+  margin: 20px;
 }
 
 .action-container {
-  margin-top: 20px;
+  position: absolute;
+  bottom: 20px;
 }
-
-.action-container > button {
-  width: 100%;
+.amt-container .amt-input > span {
+  font-size: 24px;
+  line-height: 31px;
+  color: #1c1939;
+}
+.amt-container .amt-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 200px;
+  margin: 0 auto;
+  font-size: 22px;
+}
+.amt-container .amt-input input {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  margin: 0;
+}
+.action-container button {
+  width: 350px;
+  height: 44px;
+  background: #7165e3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+  color: #ffffff;
 }
 </style>
