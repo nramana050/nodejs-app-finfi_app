@@ -40,6 +40,9 @@ export default {
     if (this.$auth.loggedIn && this.$auth.strategy.token.status().valid()) {
       this.$router.push('/dashboard')
     }
+    else{
+      this.$router.push('/login')
+    }
     this.$store.commit('clear', 'organization')
   },
   methods: {
@@ -57,6 +60,7 @@ export default {
       const organization = await this.$axios.$post(`/ext/organization`, {
         code: this.organizationCode,
       })
+      
       const { status, code, name } = organization
       if (!status) {
         this.$toast.error('Organization not registered')

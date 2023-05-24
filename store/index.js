@@ -16,6 +16,7 @@ export const state = () => ({
 
 export const mutations = {
   set(state, data) {
+    
     const { param, value } = data
     state[param] = value
   },

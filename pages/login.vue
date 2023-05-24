@@ -5,7 +5,7 @@ div.ps-c
       NuxtLink(to="/")
         FaIcon.mx-auto.ps-7(icon='angle-left')
     div(v-if="!this.otpSent")
-      LeadHeader.font-bold.text-2xl.ps-1(:title="organization ? organization.name : ''" )
+      LeadHeader.font-bold.text-2xl.ps-1(title="Welcome")
       LeadHeader.ps-2(:lead="'Please enter the mobile number'")
       LeadHeader.ps-3(:lead="'that is registered with your employer'")
     div(v-else)
@@ -58,14 +58,33 @@ export default {
     },
   },
   beforeMount() {
+
     if (this.$auth.strategy.token.status().valid()) {
       this.$router.push('/dashboard')
     }
     if (!this.organization) {
-      this.$router.push('/')
+      this.$router.push('/login')
     }
+
   },
   methods: {
+
+  setOrganization(organizationStatus,organizationCode,organizationName){
+
+      if (organizationStatus==="INACTIVE") {
+        this.$toast.error('Organization not registered')
+        return false
+      }
+
+      // console.log(organizationCode,organizationName)
+      this.$store.commit('set', {
+        param: 'organization',
+        value: { organizationCode,organizationName},
+      })
+
+      return true
+  },
+
     async initiateOTP() {
       this.otp = null
       try {
@@ -105,7 +124,7 @@ export default {
           data: {
             mobile: Number(this.mobile),
             otp: Number(this.otp),
-            organization_code: this.organization.code.toUpperCase(),
+            organization_code: this.organization.organizationCode.toUpperCase(),
           },
         })
         await this.$auth.setUserToken(result.data.access_token)
@@ -121,7 +140,7 @@ export default {
           data: {
             mobile: Number(this.mobile),
             passcode: this.passcode,
-            organization_code: this.organization.code.toUpperCase(),
+            organization_code: this.organization.organizationCode.toUpperCase(),
           },
         })
         await this.$auth.setUserToken(result.data.access_token)
@@ -150,17 +169,25 @@ export default {
         return
       }
       const user = await this.$axios.$post(`/ext/user`, {
+        // orginazation id 
         mobile: Number(this.mobile),
       })
       // eslint-disable-next-line camelcase
-      const { status } = user
+      const { status,organization_status,organization_code,organization_name} = user
+      // console.log(organization_status,organization_code)
       if (!status) {
         this.isUserRegistered = false
         this.$toast.error('Mobile number not registered')
         return
       }
-      this.isUserRegistered = true
-      // eslint-disable-next-line camelcase
+      const orgStatus = this.setOrganization(organization_status,organization_code,organization_name)
+    
+
+      // console.log("Org status set ",orgStatus)
+      // console.log(this.organization.organizationCode.toUpperCase())
+      if(orgStatus){
+        this.isUserRegistered = true
+      }
       if (!user.skip_otp) {
         this.initiateOTP()
         return
