@@ -15,6 +15,7 @@ export const state = () => ({
   shop: {
     products: [],
     cart: null,
+    selectedCategory: null,
   },
 })
 
@@ -28,6 +29,9 @@ export const mutations = {
   },
   setShop(state, data) {
     state.shop.products = data
+  },
+  setSelectedCategory(state, data) {
+    state.shop.selectedCategory = data
   },
   setCart(state, product) {
     state.shop.cart = product
@@ -82,10 +86,13 @@ export const getters = {
   getUserDetails(state) {
     return state.userDetails
   },
-  getShopProducts(satate) {
+  getShopProducts(state) {
     return state.shop.products
   },
-  getShopCart(satate) {
+  getSelectedCategory(state) {
+    return state.shop.selectedCategory
+  },
+  getShopCart(state) {
     return state.shop.cart
   },
 }

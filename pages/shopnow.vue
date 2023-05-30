@@ -30,7 +30,7 @@
         div.container.corp-exp.products.p-5(v-for='categoryWiseProduct in categoryWiseProductListing')
           h3.font-bold
             span {{categoryWiseProduct?.category.category_name}}   
-            span.action See All
+            span.action(@click="()=> navToCategory(categoryWiseProduct)") See All
           div.latest-claim(v-if="categoryWiseProduct?.products?.length")
               ssr-carousel(:slides-per-page=2 :loop='true' :show-arrows='false' :feather='false' :gutter='10')
                 div.slide.custom-pro-slide(v-for="product in categoryWiseProduct?.products" @click="selectProduct(product)") 
@@ -98,6 +98,10 @@ export default {
   methods: {
     toggleHowItWorks() {
       this.isHowItWorks = !this.isHowItWorks
+    },
+    navToCategory(data) {
+      this.$store.commit('setSelectedCategory', data)
+      this.$router.push('/shopByCategory')
     },
     navToSearch() {
       this.$router.push('/search')
