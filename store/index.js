@@ -12,16 +12,28 @@ export const state = () => ({
   userConfig: {},
   accounts: [],
   userDetails: {},
+  shop: {
+    products: [],
+    cart: null,
+  },
 })
 
 export const mutations = {
   set(state, data) {
-    
     const { param, value } = data
     state[param] = value
   },
   clear(state, param) {
     state[param] = null
+  },
+  setShop(state, data) {
+    state.shop.products = data
+  },
+  setCart(state, product) {
+    state.shop.cart = product
+  },
+  clearCart(state) {
+    state.shop.cart = null
   },
   setCategory(state, selectedCategories) {
     state.snbl.category = selectedCategories
@@ -69,5 +81,11 @@ export const getters = {
   },
   getUserDetails(state) {
     return state.userDetails
+  },
+  getShopProducts(satate) {
+    return state.shop.products
+  },
+  getShopCart(satate) {
+    return state.shop.cart
   },
 }
