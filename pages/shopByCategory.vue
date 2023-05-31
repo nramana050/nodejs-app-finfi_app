@@ -3,11 +3,11 @@
     div.flex-0 
       PageHeader.font-bold(:title="selectedCategoryAndProducts?.category?.category_name")
       div.main-container
-        div.px-5
+        div.px-4
           input(type='text' id="search-product" placeholder="Search" @focus="navToSearch")  
         div.container.corp-exp.products.p-2
           div.latest-claim(v-if="selectedCategoryAndProducts?.products?.length")
-                div.slide.custom-pro-slide(v-for="product in selectedCategoryAndProducts?.products" @click="selectProduct(product)") 
+                div.slide.custom-pro-slide(v-for="product in selectedCategoryAndProducts?.products" @click="addToCart({category: selectedCategoryAndProducts.category, product: product?.product})") 
                   div.slide-header
                     img(:src="baseUrl+product.product.product_image" crossorigin="anonymous")
                   div.slide-content
@@ -33,15 +33,14 @@ export default {
       selectedCategoryAndProducts: this.$store.getters.getSelectedCategory,
     }
   },
-  mounted() {
-    console.log('SELECTED CAT PRODUCTS::', this.selectedCategoryAndProducts)
-  },
+  mounted() {},
   methods: {
     navToSearch() {
       this.$router.push('/search')
     },
-    navToDashboard() {
-      this.$router.push('/dashboard')
+    addToCart(product) {
+      this.$store.commit('setCart', product)
+      this.$router.push('/ShoppingCart')
     },
   },
 }
@@ -55,7 +54,7 @@ export default {
 /* search component */
 #search-product {
   margin-top: 10px;
-  height: 42px;
+  height: 48px;
   width: 100%;
   font-size: 18px;
   padding: 10px;
@@ -76,7 +75,7 @@ export default {
 .corp-exp.products > div {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
 }
 .corp-exp.products > h3 {
   display: flex;
@@ -90,7 +89,7 @@ export default {
 .custom-pro-slide {
   text-align: center;
   background-color: #fff;
-  width: 165px;
+  width: 172px;
   border-radius: 15px;
   padding-top: 10px;
   padding-bottom: 10px;

@@ -3,7 +3,7 @@
     div.flex-0 
       PageHeader.font-bold(:title="'Shop'")
       div.main-container
-        div.px-5
+        div.px-4
           div.how_it_works.container
               div.header
                 span.info {{isHowItWorks ? "How to use voucher" : "Buy Voucher"}} 
@@ -33,7 +33,7 @@
             span.action(@click="()=> navToCategory(categoryWiseProduct)") See All
           div.latest-claim(v-if="categoryWiseProduct?.products?.length")
               ssr-carousel(:slides-per-page=2 :loop='true' :show-arrows='false' :feather='false' :gutter='10')
-                div.slide.custom-pro-slide(v-for="product in categoryWiseProduct?.products" @click="selectProduct(product)") 
+                div.slide.custom-pro-slide(v-for="product in categoryWiseProduct?.products" @click="addToCart({category: categoryWiseProduct.category, product: product?.product})") 
                   div.slide-header
                     img(:src="baseUrl+product.product.product_image" crossorigin="anonymous")
                   div.slide-content
@@ -46,48 +46,17 @@
                     span.mode(v-if="product.product?.acceptance_mode === 'INSTORE' || product.product?.acceptance_mode==='BOTH'")
                       img(src="~/assets/myfinfi-icons/instore.png")
                       span  In-Store
-        //- div.flex.flex-row.justify-between
-        //-   span.ps-2(v-for="name in items" :key="items.id"
-        //-   @click="selectedItem(name.name)"
-        //-   :class="[itemSelected==name.name ? 'bg-blue-600' : 'bg-white']")
-        //-     button {{name.name}}    
-        //- div(v-if="itemSelected=='Explore'")
-        //-   CategoriesList.px-5(:categories="categories" v-on:select-category="selectedCategory")
-        //-   ProductList(:productList="productList" :selectedCategory="category" v-if='Boolean(category)')
-        //-   div.flex.ps-4.items-center.justify-center(v-if="!productList.length && categories.length && !category ") Please Select Category to View Products.  
-        //- div(v-if="itemSelected=='Active plan'")
-        //-   ActivePlans
-        //- div(v-if="itemSelected=='Past plan'")
-        //-   PastPlans
 </template>
 
 <script>
 export default {
-  name: 'SaveNow',
+  name: 'ShopNow',
   layout: 'session',
   data() {
     return {
       isHowItWorks: false,
       categoryWiseProductListing: [],
       baseUrl: this.$axios.defaults.baseURL,
-      items: [
-        {
-          id: '01',
-          name: 'Explore',
-        },
-        // {
-        //   id: '02',
-        //   name: 'Active plan',
-        // },
-        // {
-        //   id: '03',
-        //   name: 'Past plan',
-        // },
-      ],
-      itemSelected: 'Explore',
-      categories: [],
-      productList: [],
-      category: '',
     }
   },
   mounted() {
@@ -106,26 +75,8 @@ export default {
     navToSearch() {
       this.$router.push('/search')
     },
-    navToDashboard() {
-      this.$router.push('/dashboard')
-    },
-    navToActivePlans() {
-      this.$router.push('/activeplans')
-    },
-    navToPastPlans() {
-      this.$router.push('/pastplans')
-    },
-    navToCategories() {
-      this.$router.push('/categoriesList')
-    },
-    selectedItem(name) {
-      this.itemSelected = []
-      this.itemSelected.push(name)
-    },
-
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
-      this.categories = categories.data
       // get all categories product and set shop
       const promiseArray = []
       categories.data.forEach(({ category }) => {
@@ -136,7 +87,6 @@ export default {
         category: { ...category.category },
         products: products[idx],
       }))
-      console.log('CAT PRODs:', catProducts)
       this.categoryWiseProductListing = catProducts
       this.$store.commit('setShop', catProducts)
     },
@@ -146,18 +96,9 @@ export default {
         .$post(`/snbl/products`, payload)
         .then((result) => result?.data)
     },
-    selectedCategory(category) {
-      this.category = category
-      this.getProducts()
-    },
-
-    async getProducts() {
-      const payload = !this.category
-        ? { category: [] }
-        : { category: [this.category.id] }
-      await this.$axios.$post(`/snbl/products`, payload).then((result) => {
-        this.productList = result?.data
-      })
+    addToCart(product) {
+      this.$store.commit('setCart', product)
+      this.$router.push('/ShoppingCart')
     },
   },
 }
@@ -224,7 +165,6 @@ export default {
 .how_it_works.container > .content.steps {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 .step1-color {
   color: #7165e3;
@@ -259,7 +199,7 @@ export default {
 
 /* search component */
 #search-product {
-  height: 42px;
+  height: 48px;
   width: 100%;
   font-size: 18px;
   padding: 10px;
