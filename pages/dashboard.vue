@@ -120,7 +120,7 @@ export default {
       homeProducts: [],
       selectedProduct: [],
       selected: false,
-      baseUrl: this.$axios.defaults.baseURL,
+      baseUrl: 'https://myfinfi-uat-uploads.s3.ap-south-1.amazonaws.com',
       promotionalCards: [],
       cardStatus: null,
     }

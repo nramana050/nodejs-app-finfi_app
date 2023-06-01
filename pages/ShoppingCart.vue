@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       isHowItWorks: false,
-      baseUrl: this.$axios.defaults.baseURL,
+      baseUrl: 'https://myfinfi-uat-uploads.s3.ap-south-1.amazonaws.com',
       selectedProduct: this.$store.getters.getShopCart,
       voucherAmount: this.$store.getters.getShopCart?.product?.min,
     }
