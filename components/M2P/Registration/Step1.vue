@@ -1,30 +1,27 @@
 <template lang="pug">
-div.flex.flex-col
+div.flex.flex-col.verify-user-details
   FormulateForm(v-model="form" @submit="next")
     div
-      FormulateInput.pr-3(type="text" label="First Name" name="first_name" validation="required")
+      FormulateInput(type="text" label="First Name as per Aadhaar" name="first_name" validation="required")
     div
-      FormulateInput.pr-3(type="text" label="Last Name" name="last_name"  validation="required")
+      FormulateInput(type="text" label="Last Name as per Aadhaar" name="last_name"  validation="required")
     div
-      FormulateInput.pb-2.pr-3(type="number" label="Mobile Number" name="mobile"  validation="required")
+      FormulateInput.pb-2(type="number" label="Mobile number registered with Aadhaar" name="mobile"  validation="required")
     div
-      FormulateInput.pb-2.pr-3(type="text" label="Email" name="email"  validation="required")
+      FormulateInput.pb-2(type="text" label="eMail ID" name="email"  validation="required")
     div
       div.flex-1
-        FormulateInput.pr-3(type="select" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")
+        FormulateInput(type="radio" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")
       div.flex-1 
-        p.p-1 Date Of Birth
+        p.p-1.custom-label Date of Birth
         date-picker(v-model="form.dob" valueType="format" placeholder="DOB" :disabled-date="disabledRange" :input-attr="{required: 'true'}") 
+    div.flex.flex-cpl.tnc-block
+      FormulateInput(type="checkbox" name="agree" validation="required" v-model="agree" )
+      div.tnc I have read & agreed to the 
+       a(href="https://www.myfinfi.com/policies" target="_blank") Terms & Conditions.
+    
     div.flex.flex-cpl
-      FormulateInput.pb-2.pr-3.w-full(type="text" label="OTP" name="otp" maxlength="6" validation="required" v-model="otp" @keydown="nameKeydown($event)" )
-    div.flex-1.pr-4
-      div.flex.flex-row.py-4.justify-between
-        button.btn.h-8.px-4.text-white.rounded.font-bold(@click="generateOTP" :disabled="isOTPSent" :class="[isOTPSent ? 'bg-blue-200': 'bg-gray-200']")
-          | Send OTP 
-          span(v-if="isOTPSent") ({{timer}})
-        div(v-if="otp")
-          button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Next
-        button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
+     button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Confirm
 </template>
 
 <script>
@@ -44,7 +41,7 @@ export default {
         gender: '',
         dob: '',
       },
-      genders: { M: 'Male', F: 'Female' },
+      genders: { M: 'Male', F: 'Female', O: 'Others' },
       isOTPSent: false,
       timer: 60,
       timerFunction: null,
@@ -95,8 +92,80 @@ export default {
   },
 }
 </script>
-<style scoped>
-.btn {
-  background-color: #7165e3;
+<style>
+.verify-user-details > .formulate-form label,
+.verify-user-details .custom-label {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  color: #979797;
+}
+.verify-user-details > .formulate-form input {
+  border: 1px solid #e9f0e6;
+  border-radius: 12px;
+  height: 42px;
+  width: 100%;
+}
+.verify-user-details .mx-datepicker {
+  width: 100%;
+}
+.verify-user-details .btn {
+  height: 44px;
+  background: #7165e3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  width: 100%;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formulate-input-element.formulate-input-element--group > div {
+  border: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.formulate-input-element.formulate-input-element--group,
+.formulate-input-element.formulate-input-element--group
+  > div
+  .formulate-input-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 42px;
+}
+.formulate-input-element.formulate-input-element--group
+  > div
+  .formulate-input-wrapper
+  label {
+  margin-left: 10px;
+}
+.formulate-input-element.formulate-input-element--radio {
+  display: flex;
+}
+.formulate-input-element.formulate-input-element--radio input {
+  height: initial;
+}
+.tnc-block {
+  margin: 15px 0px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #898a8d;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.tnc-block a {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration-line: underline;
+  color: #7165e3;
 }
 </style>

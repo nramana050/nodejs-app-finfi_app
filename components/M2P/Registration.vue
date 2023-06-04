@@ -38,19 +38,19 @@ export default {
       steps: [
         {
           id: 1,
-          title: 'User Verification',
+          title: 'Verify Your details',
         },
         {
           id: 2,
-          title: 'Address',
+          title: 'Aadhaar Address',
         },
         {
           id: 3,
-          title: 'KYC Documents',
+          title: 'Documents',
         },
         {
           id: 4,
-          title: 'Status',
+          title: 'Verify with an OTP',
         },
       ],
       currentStep: 1,
@@ -117,6 +117,6 @@ export default {
   margin-right: 1rem;
 }
 .ps-4 {
-  margin: 2rem;
+  margin: 1rem;
 }
 </style>
