@@ -9,7 +9,7 @@ div.flex.flex-col.verify-user-details
       FormulateInput(type="text" label="Pincode - as per Aadhaar" name="pincode" validation="required" maxlength="6" @keydown="nameKeydown($event)")
       FormulateInput(type="text" label="City, District" name="city" validation="required" @keydown="nameKeydown($event)")
       FormulateInput(type="select" label="State" name="state" :options="states" placeholder="Select state" validation="required")
-    div.flex
+    div.flex.action
         button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Confirm
         
 </template>
@@ -80,7 +80,17 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style>
+.verify-user-details {
+  height: 100vh;
+}
+.verify-user-details > form {
+  margin-top: 20px;
+  min-height: 100vh;
+}
+.verify-user-details > form > div {
+  margin-bottom: 10px;
+}
 .verify-user-details > .formulate-form label,
 .verify-user-details .custom-label {
   font-size: 12px;
@@ -94,6 +104,7 @@ export default {
   border-radius: 12px;
   height: 42px;
   width: 100%;
+  text-align: left;
 }
 .verify-user-details .mx-datepicker {
   width: 100%;
@@ -116,5 +127,9 @@ export default {
 .ps-1 {
   margin-bottom: 1rem;
   text-align: center;
+}
+.action {
+  position: relative;
+  bottom: 0px;
 }
 </style>

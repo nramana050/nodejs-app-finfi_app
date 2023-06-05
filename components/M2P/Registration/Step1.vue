@@ -15,13 +15,13 @@ div.flex.flex-col.verify-user-details
       div.flex-1 
         p.p-1.custom-label Date of Birth
         date-picker(v-model="form.dob" valueType="format" placeholder="DOB" :disabled-date="disabledRange" :input-attr="{required: 'true'}") 
-    div.flex.flex-cpl.tnc-block
-      FormulateInput(type="checkbox" name="agree" validation="required" v-model="agree" )
-      div.tnc I have read & agreed to the 
-       a(href="https://www.myfinfi.com/policies" target="_blank") Terms & Conditions.
-    
-    div.flex.flex-cpl
-     button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Confirm
+    div.action 
+      div.flex.flex-cpl.tnc-block
+        FormulateInput(type="checkbox" name="agree" validation="required" v-model="agree" )
+        div.tnc I have read & agreed to the 
+        a(href="https://www.myfinfi.com/policies" target="_blank") Terms & Conditions.
+      div.flex.flex-cpl
+        button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Confirm
 </template>
 
 <script>
@@ -41,6 +41,7 @@ export default {
         gender: '',
         dob: '',
       },
+      agree: true,
       genders: { M: 'Male', F: 'Female', O: 'Others' },
       isOTPSent: false,
       timer: 60,
@@ -93,6 +94,16 @@ export default {
 }
 </script>
 <style>
+.verify-user-details {
+  height: 100vh;
+}
+.verify-user-details > form {
+  margin-top: 20px;
+  min-height: 100vh;
+}
+.verify-user-details > form > div {
+  margin-bottom: 10px;
+}
 .verify-user-details > .formulate-form label,
 .verify-user-details .custom-label {
   font-size: 12px;
@@ -105,6 +116,11 @@ export default {
   border-radius: 12px;
   height: 42px;
   width: 100%;
+  text-align: left;
+}
+.verify-user-details > .formulate-form input[type='checkbox'] {
+  height: 18px;
+  margin-right: 20px;
 }
 .verify-user-details .mx-datepicker {
   width: 100%;
@@ -167,5 +183,9 @@ export default {
   line-height: 16px;
   text-decoration-line: underline;
   color: #7165e3;
+}
+.action {
+  position: relative;
+  bottom: 0px;
 }
 </style>

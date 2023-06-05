@@ -60,7 +60,17 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style>
+.verify-user-details {
+  height: 100vh;
+}
+.verify-user-details > form {
+  margin-top: 20px;
+  min-height: 100vh;
+}
+.verify-user-details > form > div {
+  margin-bottom: 10px;
+}
 .verify-user-details > .formulate-form label,
 .verify-user-details .custom-label {
   font-size: 12px;
@@ -69,11 +79,12 @@ export default {
   color: #979797;
 }
 .verify-user-details > .formulate-form input,
-.verify-user-details > .formulate-form select {
+.formulate-input-element.formulate-input-element--select > select {
   border: 1px solid #e9f0e6;
   border-radius: 12px;
   height: 42px;
   width: 100%;
+  text-align: left;
 }
 .verify-user-details .mx-datepicker {
   width: 100%;
@@ -91,5 +102,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.action {
+  position: relative;
+  bottom: 0px;
 }
 </style>

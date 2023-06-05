@@ -2,9 +2,9 @@
 div
   div.flex.flex-row.justify-between.ps-1
     span.ps-2
-      p.text-md.font-bold.tracking-wide.uppercase {{ step.title }}
-    span.ps-3
-      p.text-xs.font-light.font-mono.tracking-wide.uppercase Step {{ step.id }}/{{ steps.length }}
+      p.text-md.font-bold.tracking-wide {{ step.title }}
+    //- span.ps-3
+    //-   p.text-xs.font-light.font-mono.tracking-wide Step {{ step.id }}/{{ steps.length }}
   div.ps-4
     Step1Component(v-if="step.id === 1" v-on:next="step1next" v-on:close="close")
     Step2Component(v-if="step.id === 2" v-on:next="step2next" v-on:close="close")
