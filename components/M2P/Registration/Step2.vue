@@ -56,6 +56,7 @@ export default {
       }
     },
     async next() {
+      //TODO:
       try {
         await this.$axios.$post(
           '/profile/address',
@@ -80,7 +81,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .verify-user-details {
   height: 100vh;
 }

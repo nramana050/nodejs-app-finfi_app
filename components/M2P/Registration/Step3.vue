@@ -22,35 +22,64 @@ export default {
   },
 
   async beforeMount() {
-    // const apiResult = await this.$axios.$get('/profile/kyc/docs?type=PAN', {
-    //   headers: {
-    //     Authorization: this.token,
-    //   },
-    // })
-    // if (apiResult.length > 0) {
-    //   const data = apiResult[0]
-    //   data.document_number = Buffer.from(
-    //     data.document_number,
-    //     'base64'
-    //   ).toString('ascii')
-    //   this.form.document_type = data.document_type
-    //   this.form.document_number = data.document_number
-    // }
+    try {
+      const apiResult = await this.$axios.$get('/profile/kyc/docs?type=PAN', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      if (apiResult.length > 0) {
+        const data = apiResult[0]
+        data.document_number = Buffer.from(
+          data.document_number,
+          'base64'
+        ).toString('ascii')
+        this.form.document_type = data.document_type
+        this.form.document_number = data.document_number
+      }
+    } catch (error) {
+      console.log(error)
+    }
   },
 
   methods: {
+    async generateOTP() {
+      debugger
+      return await this.$axios.$post('/m2p/otp', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+
+      // this.$toast.success('OTP generated and sent to your mobile number')
+      // this.isOTPSent = true
+      // setTimeout(() => {
+      //   this.isOTPSent = false
+      //   this.timer = 60
+      // }, 60000)
+      // this.timerFunction = setInterval(() => {
+      //   this.timer -= 1
+      //   if (this.timer === 1) {
+      //     clearInterval(this.timerFunction)
+      //   }
+      // }, 1000)
+    },
     async next() {
-      this.form.document_number = Buffer.from(
-        this.form.document_number
-      ).toString('base64')
       try {
+        this.form.document_number = Buffer.from(
+          this.form.document_number
+        ).toString('base64')
         await this.$axios.$post('/profile/kyc/docs', this.form, {
           headers: {
             Authorization: this.token,
           },
         })
+        const otpREs = await this.generateOTP()
+        if (otpREs?.message === 'Success') {
+          console.log('OTPRES::', otpREs)
+          this.$emit('next', this.form)
+        }
       } catch (err) {}
-      this.$emit('next', this.form)
     },
     cancel(e) {
       this.$router.push('/cards')
@@ -60,7 +89,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .verify-user-details {
   height: 100vh;
 }

@@ -12,8 +12,11 @@ div.flex.flex-col.verify-user-details
           input(type='text'  maxlength='1' id="otp4" v-model="num4" @input="changeRange(3,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(3)")
           input(type='text'  maxlength='1' id="otp5" v-model="num5" @input="changeRange(4,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(4)")
           input(type='text'  maxlength='1' id="otp6" v-model="num6" @input="changeRange(5,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(5)")  
+  div.otp-resend
+   span Resend OTP 
+    span.resend-button(@click="generateOTP") Resend
   div.flex.flex-col.action
-    button.btn.h-10.px-4.text-white.rounded.font-bold.my-5(@click="restart") Confirm
+    button.btn.h-10.px-4.text-white.rounded.font-bold.my-5(@click="registerAction") Confirm
   //- div(v-if="isLoading")
   //-   p Registering... Please wait
   //- div(v-else)
@@ -39,7 +42,11 @@ export default {
     return {
       isLoading: true,
       isSuccess: true,
+      otpresend: false,
+      defaultTimerValue: 60,
+      timerValue: 60,
       errorMessage: null,
+      timerFunction: null,
       num1: null,
       num2: null,
       num3: null,
@@ -62,9 +69,31 @@ export default {
 
   async mounted() {
     await this.registerAction()
+
+    // TODO: IMPEMENT RESEND TIMER
+    // // setTimeout(() => {
+    // //   this.isOTPSent = false
+    // //   this.timer = 60
+    // // }, 60000)
+    // this.timerFunction = setInterval(() => {
+    //   this.timer -= 1
+    //   if (this.timer === 1) {
+    //     clearInterval(this.timerFunction)
+    //   }
+    // }, 1000)
   },
 
   methods: {
+    async generateOTP() {
+      const otpRes = await this.$axios.$post('/m2p/otp', {
+        headers: {
+          Authorization: this.token,
+        },
+      })
+      if (otpRes?.message === 'Success') {
+        this.$toast.success('OTP generated and sent to your mobile number')
+      }
+    },
     changeRange(index, value, event) {
       if (event.data != null) {
         if (index === 0) {
@@ -104,7 +133,12 @@ export default {
     async registerAction() {
       this.errorMessage = null
       try {
-        await this.$axios.$post('/m2p/register', this.form, {
+        console.log('FORM DATA::', this.form)
+        const payload = {
+          ...this.form,
+        }
+        payload.user.otp = this.addNumbers
+        await this.$axios.$post('/m2p/register', payload, {
           headers: {
             Authorization: this.token,
           },
@@ -136,7 +170,17 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
+.otp-resend {
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  color: #9ca3af;
+}
+.otp-resend > span > span.resend-button {
+  color: #7165e3;
+  cursor: pointer;
+}
 .otp-info {
   margin-top: 20px;
 }

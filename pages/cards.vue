@@ -130,6 +130,7 @@ export default {
       this.isLoading = true
       try {
         const cardList = await this.$axios.get(`/m2p/cards/list`)
+        debugger
         if (cardList.data.result.length > 0) {
           this.isCardAvailable = true
           this.card = cardList.data.result[0]
@@ -140,6 +141,7 @@ export default {
         this.isLoading = false
       } catch (err) {
         this.isLoading = false
+        this.$router.push('/cardregistration')
         // this.$toasted.error(err.response.data.message);
       }
     },

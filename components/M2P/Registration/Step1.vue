@@ -37,7 +37,7 @@ export default {
         last_name: this.$auth.user.last_name,
         mobile: this.$auth.user.mobile,
         email: this.$auth.user.email,
-        otp: '',
+        // otp: '',
         gender: '',
         dob: '',
       },
@@ -76,11 +76,12 @@ export default {
       }, 1000)
     },
     next() {
-      this.$emit('next', {
-        otp: this.form.otp,
-        gender: this.form.gender,
-        dob: this.form.dob,
-      })
+      // this.$emit('next', {
+      //   // otp: this.form.otp,
+      //   gender: this.form.gender,
+      //   dob: this.form.dob,
+      // })
+      this.$emit('next', this.form)
     },
     cancel(e) {
       this.$router.push('/cards')
@@ -93,7 +94,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .verify-user-details {
   height: 100vh;
 }
