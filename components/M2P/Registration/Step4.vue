@@ -1,21 +1,46 @@
 <template lang="pug">
 div.flex.flex-col.verify-user-details
-  div.otp-info
+  div.success-error-screen(v-if="isSuccess || isError")
+    div.img-container
+      img(src='~/assets/myfinfi-icons/success.png' v-if="isSuccess") 
+      img(src='~/assets/myfinfi-icons/error.png' v-if="isError")
+    div.successfull(v-if="isSuccess")  
+      div.header  
+        h4 Congratulations!
+      div.success-body  
+        p Virtual card generated successfully.
+        p Now earn up to 10% on your monthly online spends. Your card is currently locked for security.
+      div.header  
+        h4 Want more!  
+      div.success-body  
+        p Order a physical card and earn up to 10% on your in-store transactions also 
+          span(@click="requestPhysicalCard") Order Now  
+    div.successfull(v-if="isError")
+      div.header  
+          h4 Failed  
+      div.success-body  
+          p Virtual card failed to generate due to "error desc from M2P"
+    div.actions
+      button.goto-home(@click="cancel") Home 
+      button.unlock(v-if="isSuccess") Unlock your Card
+      button.retry(v-if="isError" @click="restart") Retry
+
+  div.otp-info(v-else)
    h3 Enter the 6 digit OTP
    p Please confirm your request by entering the OTP sent to 
     span 999999999
 
-    div.flex.flex-row.justify-between.ps-6
+    div.flex.flex-row.justify-between.ps-6(v-if="!isError && !isSuccess")
           input(type='text'  maxlength='1' id="otp1" v-model="num1" @input="changeRange(0,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(0)")
           input(type='text'  maxlength='1' id="otp2" v-model="num2" @input="changeRange(1,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(1)")
           input(type='text'  maxlength='1' id="otp3" v-model="num3" @input="changeRange(2,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(2)")
           input(type='text'  maxlength='1' id="otp4" v-model="num4" @input="changeRange(3,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(3)")
           input(type='text'  maxlength='1' id="otp5" v-model="num5" @input="changeRange(4,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(4)")
           input(type='text'  maxlength='1' id="otp6" v-model="num6" @input="changeRange(5,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(5)")  
-  div.otp-resend
+  div.otp-resend(v-if="!isError && !isSuccess")
    span Resend OTP 
     span.resend-button(@click="generateOTP") Resend
-  div.flex.flex-col.action
+  div.flex.flex-col.action(v-if="!isError && !isSuccess")
     button.btn.h-10.px-4.text-white.rounded.font-bold.my-5(@click="registerAction") Confirm
   //- div(v-if="isLoading")
   //-   p Registering... Please wait
@@ -41,7 +66,8 @@ export default {
   data() {
     return {
       isLoading: true,
-      isSuccess: true,
+      isSuccess: false,
+      isError: false,
       otpresend: false,
       defaultTimerValue: 60,
       timerValue: 60,
@@ -133,7 +159,6 @@ export default {
     async registerAction() {
       this.errorMessage = null
       try {
-        console.log('FORM DATA::', this.form)
         const payload = {
           ...this.form,
         }
@@ -161,8 +186,12 @@ export default {
       e.preventDefault()
       this.$emit('restart')
     },
+    requestPhysicalCard(e) {
+      this.$router.push('/RequestPhysical')
+      e.preventDefault()
+    },
     cancel(e) {
-      this.$router.push('/cards')
+      this.$router.push('/dashboard')
       e.preventDefault()
       //   this.$emit('close')
       // },
@@ -171,6 +200,65 @@ export default {
 }
 </script>
 <style scoped>
+.success-error-screen {
+  height: 100vh;
+  padding-top: 30px;
+}
+.success-error-screen > .img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.success-error-screen > .img-container > img {
+  width: 171px;
+  height: 171px;
+}
+.success-error-screen > .successfull > .header {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+  color: #979797;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.success-error-screen > .successfull > .success-body {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: #979797;
+}
+.success-error-screen > .successfull > .success-body p > span {
+  letter-spacing: 0.01em;
+  color: #7165e3;
+}
+.success-error-screen > .actions {
+  margin-top: 30px;
+}
+.success-error-screen > .actions > button {
+  width: 350px;
+  height: 44px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+}
+.success-error-screen > .actions > button.goto-home {
+  background: #ffffff;
+  border: 1px solid #979797;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: #7165e3;
+}
+.success-error-screen > .actions > button.retry,
+.success-error-screen > .actions > button.unlock {
+  background: #7165e3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: #ffffff;
+}
 .otp-resend {
   font-weight: 400;
   font-size: 16px;

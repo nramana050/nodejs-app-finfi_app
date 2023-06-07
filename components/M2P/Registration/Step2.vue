@@ -56,7 +56,6 @@ export default {
       }
     },
     async next() {
-      //TODO:
       try {
         await this.$axios.$post(
           '/profile/address',
@@ -70,7 +69,9 @@ export default {
             },
           }
         )
-      } catch (err) {}
+      } catch (err) {
+        console.log(err)
+      }
       this.$emit('next', this.form)
     },
     cancel(e) {
