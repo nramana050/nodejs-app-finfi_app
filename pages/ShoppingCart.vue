@@ -53,7 +53,7 @@
               span Terms & Conditions  
             div.make-payment
              button.via-payment-gateway(@click="payViaRazor") Buy from Payment Gateway
-             button.via-salary-advance Buy from Salary Advance             
+             button.via-salary-advance(@click="openBlockCard") Buy from Salary Advance             
      
     
 
@@ -64,6 +64,8 @@
   src="https://checkout.razorpay.com/v1/checkout.js"
 ></script>
 <script>
+import BuyNowConfim from '~/components/M2P/BuyNowConfim.vue'
+
 export default {
   name: 'ShoppingCart',
   layout: 'session',
@@ -119,6 +121,36 @@ export default {
     nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
         e.preventDefault()
+      }
+    },
+    openBlockCard() {
+      this.$FModal.show(
+        { component: BuyNowConfim },
+        { amt: parseInt(this.voucherAmount), buyNow: this.buyNow }
+      )
+    },
+    close() {
+      this.$FModal.hide()
+    },
+    // default value will be false
+    async buyNow(razorpay_paid = false, razorpay_order_id) {
+      const payload = {
+        product: this.selectedProduct?.product,
+        amount: parseInt(this.voucherAmount),
+        razorpay_paid: razorpay_paid,
+        razorpay_order_id: razorpay_order_id,
+      }
+
+      try {
+        const res = await this.$axios.$post(`/snbl/instant-voucher`, payload)
+        if (res?.status.toLowerCase() === 'failed') {
+          this.$toast.error(res.message)
+          return
+        }
+        this.$toast.info(res?.message)
+        // this.$router.push('/shopnow')
+      } catch (err) {
+        this.$toast.error('Failed to start plan')
       }
     },
     async payViaRazor() {
