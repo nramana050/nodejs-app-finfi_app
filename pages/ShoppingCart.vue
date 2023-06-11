@@ -1,9 +1,11 @@
 <template lang="pug">
-  div.ps-3.shop-container
+div.ps-3.shop-container
     div.flex-0 
       PageHeader.font-bold(:title="'Buy Voucher'")
       div.main-container
-        div.px-4
+        div.alert-container
+         SuccessError(:isSuccess="isSuccess" :isError="isError")
+        div.px-4(v-if="!isSuccess && !isError")
           div.how_it_works.container
                 div.header
                   span.info {{isHowItWorks ? "How to use voucher" : `Buy ${selectedProduct?.product?.product_name} Voucher`}} 
@@ -65,6 +67,7 @@
 ></script>
 <script>
 import BuyNowConfim from '~/components/M2P/BuyNowConfim.vue'
+import SuccessError from '~/components/SuccessError.vue'
 
 export default {
   name: 'ShoppingCart',
@@ -81,6 +84,8 @@ export default {
   },
   data() {
     return {
+      isSuccess: false,
+      isError: false,
       isHowItWorks: false,
       baseUrl: 'https://myfinfi-uat-uploads.s3.ap-south-1.amazonaws.com',
       selectedProduct: this.$store.getters.getShopCart,
@@ -116,7 +121,7 @@ export default {
       this.isHowItWorks = !this.isHowItWorks
     },
     focusVoucherAmount() {
-      this.$refs.voucherAmt.focus()
+      this.$refs?.voucherAmt?.focus()
     },
     nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
@@ -145,9 +150,11 @@ export default {
         const res = await this.$axios.$post(`/snbl/instant-voucher`, payload)
         if (res?.status.toLowerCase() === 'failed') {
           this.$toast.error(res.message)
+          this.isError = true
           return
         }
         this.$toast.info(res?.message)
+        this.isSuccess = true
         // this.$router.push('/shopnow')
       } catch (err) {
         this.$toast.error('Failed to start plan')
@@ -163,9 +170,7 @@ export default {
             description: 'Payment for Instant Voucher',
           }
         )
-
         const { id: orderId, amount, currency } = razorpayOrderId.data
-
         const profileResult = await this.$axios.get('/profile')
         const { first_name, last_name, mobile, email } = profileResult.data
         const full_name = `${first_name} ${last_name}`
@@ -188,8 +193,10 @@ export default {
             if (verify_payment_response.data.status) {
               this.buyNow(true, orderId)
               this.$toast.success('Successfully bought the voucher.')
+              this.isSuccess = true
             } else {
               this.$toast.error('Failed to make the payment.')
+              this.isError = true
             }
           },
         }
@@ -210,6 +217,12 @@ export default {
 }
 </script>
 <style scoped>
+.alert-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 /** STEPS TO REDEEM */
 .steps-to-redeem {
   position: relative;

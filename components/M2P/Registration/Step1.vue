@@ -94,7 +94,7 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style>
 .verify-user-details {
   height: 100vh;
 }
@@ -105,7 +105,12 @@ export default {
 .verify-user-details > form > div {
   margin-bottom: 10px;
 }
-.verify-user-details > .formulate-form label,
+.verify-user-details > form label {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  color: #979797;
+}
 .verify-user-details .custom-label {
   font-size: 12px;
   line-height: 16px;

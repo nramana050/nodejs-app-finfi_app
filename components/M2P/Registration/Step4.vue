@@ -1,31 +1,7 @@
 <template lang="pug">
 div.flex.flex-col.verify-user-details
-  div.success-error-screen(v-if="isSuccess || isError")
-    div.img-container
-      img(src='~/assets/myfinfi-icons/success.png' v-if="isSuccess") 
-      img(src='~/assets/myfinfi-icons/error.png' v-if="isError")
-    div.successfull(v-if="isSuccess")  
-      div.header  
-        h4 Congratulations!
-      div.success-body  
-        p Virtual card generated successfully.
-        p Now earn up to 10% on your monthly online spends. Your card is currently locked for security.
-      div.header  
-        h4 Want more!  
-      div.success-body  
-        p Order a physical card and earn up to 10% on your in-store transactions also 
-          span(@click="requestPhysicalCard") Order Now  
-    div.successfull(v-if="isError")
-      div.header  
-          h4 Failed  
-      div.success-body  
-          p Virtual card failed to generate due to "error desc from M2P"
-    div.actions
-      button.goto-home(@click="cancel") Home 
-      button.unlock(v-if="isSuccess") Unlock your Card
-      button.retry(v-if="isError" @click="restart") Retry
-
-  div.otp-info(v-else)
+  SuccessError(:isSuccess="isSuccess" :isError="isError" :isCardOrder="true" :buttonText="'Retry'" v-on:callBack="restart" :successMessage1="'Virtual card generated successfully.'" :successMessage2="'Now earn up to 10% on your monthly online spends. Your card is currently locked for security.'")
+  div.otp-info(v-if="!isSuccess && !isError")
    h3 Enter the 6 digit OTP
    p Please confirm your request by entering the OTP sent to 
     span 999999999
@@ -37,31 +13,24 @@ div.flex.flex-col.verify-user-details
           input(type='text'  maxlength='1' id="otp4" v-model="num4" @input="changeRange(3,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(3)")
           input(type='text'  maxlength='1' id="otp5" v-model="num5" @input="changeRange(4,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(4)")
           input(type='text'  maxlength='1' id="otp6" v-model="num6" @input="changeRange(5,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(5)")  
+  
   div.otp-resend(v-if="!isError && !isSuccess")
    span Resend OTP 
     span.resend-button(@click="generateOTP") Resend
   div.flex.flex-col.action(v-if="!isError && !isSuccess")
     button.btn.h-10.px-4.text-white.rounded.font-bold.my-5(@click="registerAction") Confirm
-  //- div(v-if="isLoading")
-  //-   p Registering... Please wait
-  //- div(v-else)
-  //-   div(v-if="isSuccess")
-  //-     p Card created successfully
-  //-     div.flex
-  //-       button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="reload") View Card
-  //-   div(v-else)
-  //-     p Failed to register card
-  //-     p {{ errorMessage }}
-  //-     div.flex.flex-col
-  //-       button.btn.h-10.px-4.text-white.rounded.font-bold.my-5(@click="restart") Try Again
-  //-       button.h-10.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
 </template>
 
 <script>
+import SuccessError from '~/components/SuccessError.vue'
+
 export default {
   name: 'Step4Component',
+  components: {
+    SuccessError,
+  },
   // eslint-disable-next-line vue/require-prop-types
-  props: ['form'],
+  props: ['form', 'resetSteps'],
 
   data() {
     return {
@@ -182,19 +151,15 @@ export default {
       // this.$emit('reload')
       this.$router.push('/cards')
     },
-    restart(e) {
-      e.preventDefault()
-      this.$emit('restart')
+    restart() {
+      this.resetSteps()
     },
     requestPhysicalCard(e) {
       this.$router.push('/RequestPhysical')
       e.preventDefault()
     },
-    cancel(e) {
+    cancel() {
       this.$router.push('/dashboard')
-      e.preventDefault()
-      //   this.$emit('close')
-      // },
     },
   },
 }

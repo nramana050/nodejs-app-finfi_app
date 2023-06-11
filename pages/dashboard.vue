@@ -312,8 +312,10 @@ export default {
       this.selectedProduct = []
       this.selectedProduct.push(productObj)
       this.selected = true
-      this.$store.commit('setProduct', productObj)
-      this.$router.push('/startplan')
+      // this.$store.commit('setProduct', productObj)
+      // this.$router.push('/startplan')
+      this.$store.commit('setCart', productObj)
+      this.$router.push('/ShoppingCart')
     },
     cardNumber() {
       if (this.isCardNumber === true) {

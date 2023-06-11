@@ -2,8 +2,8 @@
 div.ps-c
   div
     div.flex.flex-row.text-white.border.p-4.items-center.ps-9
-      NuxtLink(to="/")
-        FaIcon.mx-auto.ps-7(icon='angle-left')
+      //- NuxtLink(to="/")
+      //-   FaIcon.mx-auto.ps-7(icon='angle-left')
     div(v-if="!this.otpSent")
       LeadHeader.font-bold.text-2xl.ps-1(title="Welcome")
       LeadHeader.ps-2(:lead="'Please enter the mobile number'")
@@ -58,20 +58,16 @@ export default {
     },
   },
   beforeMount() {
-
     if (this.$auth.strategy.token.status().valid()) {
       this.$router.push('/dashboard')
     }
     if (!this.organization) {
       this.$router.push('/login')
     }
-
   },
   methods: {
-
-  setOrganization(organizationStatus,organizationCode,organizationName){
-
-      if (organizationStatus==="INACTIVE") {
+    setOrganization(organizationStatus, organizationCode, organizationName) {
+      if (organizationStatus === 'INACTIVE') {
         this.$toast.error('Organization not registered')
         return false
       }
@@ -79,11 +75,11 @@ export default {
       // console.log(organizationCode,organizationName)
       this.$store.commit('set', {
         param: 'organization',
-        value: { organizationCode,organizationName},
+        value: { organizationCode, organizationName },
       })
 
       return true
-  },
+    },
 
     async initiateOTP() {
       this.otp = null
@@ -169,23 +165,31 @@ export default {
         return
       }
       const user = await this.$axios.$post(`/ext/user`, {
-        // orginazation id 
+        // orginazation id
         mobile: Number(this.mobile),
       })
       // eslint-disable-next-line camelcase
-      const { status,organization_status,organization_code,organization_name} = user
+      const {
+        status,
+        organization_status,
+        organization_code,
+        organization_name,
+      } = user
       // console.log(organization_status,organization_code)
       if (!status) {
         this.isUserRegistered = false
         this.$toast.error('Mobile number not registered')
         return
       }
-      const orgStatus = this.setOrganization(organization_status,organization_code,organization_name)
-    
+      const orgStatus = this.setOrganization(
+        organization_status,
+        organization_code,
+        organization_name
+      )
 
       // console.log("Org status set ",orgStatus)
       // console.log(this.organization.organizationCode.toUpperCase())
-      if(orgStatus){
+      if (orgStatus) {
         this.isUserRegistered = true
       }
       if (!user.skip_otp) {

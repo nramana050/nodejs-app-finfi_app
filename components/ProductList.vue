@@ -1,22 +1,21 @@
 <template lang="pug">
-  div
+div
     div.ps-5
-      div.ps-2(v-for="item in this.productList" :key="item.product.id" @click="navToStartPlan(); selectProduct(item)")
-        div.ps-3.d-flex.justify-center
-          img(v-if="item.product.product_image" :src='baseUrl+item.product.product_image' crossorigin="anonymous")
-          img.custom-img(v-else :src='baseUrl+selectedCategory?.category_image' crossorigin="anonymous")
-        div.ps-4
-          div.font-bold.text-sm.ps-4B {{item.product.product_name}}
-          div.text-sm.ps-4B.custom-info-container 
-           img.custom-icon(src='~/assets/discount.svg')
-           span Discount of {{item.product.merchant_discount}}%
-          div.text-sm.ps-4B.custom-product-info
-          div.custom-info-container
-           img.custom-icon(src='~/assets/rupee.svg')
-           span {{item.product.acceptance_mode === "BOTH"? 'Online & Store Purchase' : item.product.acceptance_mode === "OFFLINE"? 'Store Purchase': 'Online' }} 
-          div.custom-info-container.custom-f-r 
-           img.custom-icon(src='~/assets/validity.svg')
-           span Valid till {{item.product.validity}}
+      div.container.corp-exp.products.p-2
+            div.latest-claim(v-if="productList?.length")
+                  div.slide.custom-pro-slide(v-for="product in this.productList" @click="addToCart({ product: product?.product})") 
+                    div.slide-header
+                      img(:src="baseUrl+product.product.product_image" crossorigin="anonymous")
+                    div.slide-content
+                      div.product-name {{product.product?.product_name}}
+                      div.product-discount Get {{ product.product?.merchant_discount + product.product?.finfi_discount }}% discount
+                    div.slide-product-availability
+                      span.mode(v-if="product.product?.acceptance_mode === 'ONLINE' || product.product?.acceptance_mode==='BOTH'")
+                        img(src="~/assets/myfinfi-icons/online.png")
+                        span  Online
+                      span.mode(v-if="product.product?.acceptance_mode === 'INSTORE' || product.product?.acceptance_mode==='BOTH'")
+                        img(src="~/assets/myfinfi-icons/instore.png")
+                        span  In-Store
       div.flex.ps-4.items-center.justify-center(v-if="!productList.length && selectedCategory") No Products Found for Selected Category      
       div.flex.ps-4.items-center.justify-center(v-if="!productList.length && !selectedCategory") No Products Found  
 </template>
@@ -41,6 +40,9 @@ export default {
     //   return this.$store.state.snbl.category
     // },
   },
+  updated() {
+    console.log('PRODUCT LIST::', this.productList)
+  },
   mounted() {
     this.$emit('product', this.selectProduct)
   },
@@ -54,10 +56,98 @@ export default {
       this.selected = true
       this.$store.commit('setProduct', Product)
     },
+    addToCart(product) {
+      this.$store.commit('setCart', product)
+      this.$router.push('/ShoppingCart')
+    },
   },
 }
 </script>
 <style scoped>
+/* Product Slider */
+.corp-exp.products {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  color: #000000;
+}
+.corp-exp.products > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.corp-exp.products > h3 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.corp-exp.products > h3 > span.action {
+  color: #4c83b3;
+  cursor: pointer;
+}
+.custom-pro-slide {
+  text-align: center;
+  background-color: #fff;
+  width: 172px;
+  border-radius: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: relative;
+  margin: 5px;
+}
+.custom-pro-slide > .slide-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #7165e3;
+  margin: 0 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.custom-pro-slide > .slide-header > img {
+  height: 70px;
+  width: 75px;
+}
+.custom-pro-slide .slide-content {
+  padding: 0px 5px;
+  min-height: 80px;
+}
+.slide-product-availability {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  padding-bottom: 0;
+  position: absolute;
+  top: 150px;
+}
+.slide-product-availability .mode {
+  display: flex;
+  font-size: 12px;
+  line-height: 16px;
+  color: #898a8d;
+}
+.slide-product-availability .mode img {
+  margin-right: 5px;
+  height: 12px;
+  width: 12px;
+  top: 2px;
+  position: relative;
+}
+.custom-pro-slide .slide-content .product-name {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  color: #000000;
+}
+.custom-pro-slide .slide-content .product-discount {
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  color: #898a8d;
+}
+/* Product Slider */
 .custom-icon {
   height: 15px;
   width: 15px;
