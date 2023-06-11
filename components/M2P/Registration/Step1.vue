@@ -10,7 +10,7 @@ div.flex.flex-col.verify-user-details
     div
       FormulateInput.pb-2(type="text" label="eMail ID" name="email"  validation="required")
     div
-      div.flex-1
+      div.flex-1.mb-3
         FormulateInput(type="radio" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")
       div.flex-1 
         p.p-1.custom-label Date of Birth
@@ -151,6 +151,36 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  box-shadow: 0px 2px 48px rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  margin: 0 10px;
+  height: 42px;
+}
+.formulate-input-element.formulate-input-element--group > div > div {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+.formulate-input-element.formulate-input-element--group
+  > div
+  > div
+  > div[data-type='radio'] {
+  opacity: 0;
+}
+.formulate-input-element.formulate-input-element--group
+  > div[data-has-value='true'] {
+  background-color: #7165e3 !important;
+}
+.formulate-input-element.formulate-input-element--group
+  > div[data-has-value='true']
+  > div
+  > label {
+  color: #ffffff;
 }
 .formulate-input-element.formulate-input-element--group,
 .formulate-input-element.formulate-input-element--group
@@ -165,7 +195,8 @@ export default {
   > div
   .formulate-input-wrapper
   label {
-  margin-left: 10px;
+  position: absolute;
+  top: 15px;
 }
 .formulate-input-element.formulate-input-element--radio {
   display: flex;
