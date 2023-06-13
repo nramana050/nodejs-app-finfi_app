@@ -4,10 +4,10 @@
       PageHeader.font-bold(:title="selectedCategoryAndProducts?.category?.category_name")
       div.main-container
         div.px-4
-          input(type='text' id="search-product" placeholder="Search" @focus="navToSearch")  
+          input(type='text' id="search-product" placeholder="Search" @input="navToSearch")  
         div.container.corp-exp.products.p-2
           div.latest-claim(v-if="selectedCategoryAndProducts?.products?.length")
-                div.slide.custom-pro-slide(v-for="product in selectedCategoryAndProducts?.products" @click="addToCart({category: selectedCategoryAndProducts.category, product: product?.product})") 
+                div.slide.custom-pro-slide(v-for="product in filteredProductList" @click="addToCart({category: selectedCategoryAndProducts.category, product: product?.product})") 
                   div.slide-header
                     img(:src="baseUrl+product.product.product_image" crossorigin="anonymous")
                   div.slide-content
@@ -20,7 +20,8 @@
                     span.mode(v-if="product.product?.acceptance_mode === 'INSTORE' || product.product?.acceptance_mode==='BOTH'")
                       img(src="~/assets/myfinfi-icons/instore.png")
                       span  In-Store
-
+          div.no-results-found(v-if="!filteredProductList?.length")     
+            span No Results found for the search query    
 </template>
 
 <script>
@@ -31,12 +32,32 @@ export default {
     return {
       baseUrl: 'https://myfinfi-uat-uploads.s3.ap-south-1.amazonaws.com',
       selectedCategoryAndProducts: this.$store.getters.getSelectedCategory,
+      filteredProductList: [],
     }
   },
-  mounted() {},
+  mounted() {
+    this.filteredProductList = this.selectedCategoryAndProducts?.products
+  },
   methods: {
-    navToSearch() {
-      this.$router.push('/search')
+    navToSearch(e) {
+      const keyword = e?.target?.value?.toLowerCase()
+      if (keyword) {
+        console.log(
+          ' this.selectedCategoryAndProducts',
+          this.selectedCategoryAndProducts
+        )
+        this.filteredProductList =
+          this.selectedCategoryAndProducts?.products.filter((OBJ) => {
+            const productName = OBJ.product?.product_name?.toLowerCase()
+            if (productName.includes(keyword)) {
+              return OBJ
+            }
+            return false
+          })
+      } else {
+        this.filteredProductList = this.selectedCategoryAndProducts?.products
+      }
+      // this.$router.push('/search')
     },
     addToCart(product) {
       this.$store.commit('setCart', product)
@@ -146,6 +167,13 @@ export default {
   line-height: 18px;
   text-align: center;
   color: #898a8d;
+}
+
+.corp-exp.products > div.no-results-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 /* Product Slider */
 

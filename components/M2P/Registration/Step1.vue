@@ -1,11 +1,11 @@
 <template lang="pug">
 div.flex.flex-col.verify-user-details
-  iframe(src="https://rrfincap.tech/authenicate/web/user?access_token=RPAvp18BUwFLhXA0gndlmmubi57qnOxh2tYZnJTS" width="100%" height="800px" 
-    referrerpolicy="unsafe-url"  
-    onload="window.parent.scrollTo(0,0)"
-    allowtransparency="true"
-    allowfullscreen="true"
-    allow="geolocation; microphone; camera")
+  //- iframe(src="https://rrfincap.tech/authenicate/web/user?access_token=RPAvp18BUwFLhXA0gndlmmubi57qnOxh2tYZnJTS" width="100%" height="800px" 
+  //-   referrerpolicy="unsafe-url"  
+  //-   onload="window.parent.scrollTo(0,0)"
+  //-   allowtransparency="true"
+  //-   allowfullscreen="true"
+  //-   allow="geolocation; microphone; camera")
   FormulateForm(v-model="form" @submit="next")
     div
       FormulateInput(type="text" label="First Name as per Aadhaar" name="first_name" validation="required")
