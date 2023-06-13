@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.ps-3.shop-container
+div.ps-3.shop-container
     div.flex-0 
       PageHeader.font-bold(:title="selectedCategoryAndProducts?.category?.category_name")
       div.main-container

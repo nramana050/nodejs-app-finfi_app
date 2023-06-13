@@ -14,10 +14,12 @@ div.ps-3.shop-container
                   img(:src="baseUrl+selectedProduct.product.product_image" crossorigin="anonymous")
                 div.purchase(v-if='!isHowItWorks')
                   div.addValue
-                    input(class="focus:outline-none focus:shadow-outline" ref='voucherAmt' type="numeric" v-bind:min="min" v-bind:max="max" v-model="voucherAmount" @keydown="nameKeydown($event)")  
+                    input(v-if="!fixedSteps" class="focus:outline-none focus:shadow-outline" ref='voucherAmt' type="numeric" v-bind:min="min" v-bind:max="max" v-model="voucherAmount" @keydown="nameKeydown($event)")  
+                    select.ps-14.custom-select(v-if="fixedSteps?.length" v-model="voucherAmount")
+                      option(value=amt v-for="amt in this.fixedSteps") {{ amt }}
                     span Voucher Amount
                   div.cashback-received
-                    input(class="focus:outline-none focus:shadow-outline" ref='cashbackAmt' type="numeric" disabled=true)  
+                    input(class="focus:outline-none focus:shadow-outline" ref='cashbackAmt' type="numeric" v-model="cashBack" disabled=true)  
                     span Cashback
                 div.action(v-if='!isHowItWorks')
                   div.slide-product-availability
@@ -114,6 +116,23 @@ export default {
         this.selectedProduct.product?.acceptance_mode === 'ONLINE' ||
         this.selectedProduct.product?.acceptance_mode === 'BOTH'
       )
+    },
+    fixedSteps() {
+      if (this.selectedProduct.product?.fixed_steps) {
+        const stepsArray = this.selectedProduct.product?.fixed_steps.split(',')
+        this.voucherAmount = stepsArray[0]
+        return stepsArray
+      }
+      return null
+    },
+    cashBack() {
+      const merchantDiscount =
+        this.selectedProduct.product?.merchant_discount || 0
+      const finfiDiscount =
+        this.selectedProduct.product?.merchant_discount?.finfi_discount || 0
+      const combineDiscount =
+        parseFloat(merchantDiscount) + parseFloat(finfiDiscount)
+      return parseFloat((this.voucherAmount * combineDiscount) / 100).toFixed(0)
     },
   },
   methods: {
