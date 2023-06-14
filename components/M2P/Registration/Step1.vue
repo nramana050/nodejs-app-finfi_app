@@ -1,6 +1,5 @@
 <template lang="pug">
 div.flex.flex-col.verify-user-details
-  // test iframe  
   iframe(src="https://rrfincap.tech/authenicate/web/user?access_token=RPAvp18BUwFLhXA0gndlmmubi57qnOxh2tYZnJTS" width="100%" height="800px" 
     referrerpolicy="unsafe-url"  
     onload="window.parent.scrollTo(0,0)"
