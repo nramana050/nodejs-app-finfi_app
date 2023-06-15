@@ -38,6 +38,7 @@ export default {
       cashRequestSent: false,
       cashRequestFailed: false,
       financial_partner_type: 'FINFI',
+      web_journy_url:null,
       errorMessage: '',
       num1: null,
       num2: null,
@@ -45,6 +46,7 @@ export default {
       num4: null,
       num5: null,
       num6: null,
+
     }
   },
   computed: {
@@ -114,6 +116,7 @@ export default {
       }
     },
     async passwordVerification() {
+      alert("Password-v Call")
       try {
         const regPasscode = await this.$axios.post('/auth/transfer', {
           passcode: this.passcode,
@@ -128,10 +131,10 @@ export default {
         if (this.addNumbers === null) {
           this.$toasted.error('Please enter passcode')
         }
-        await this.$axios.post('/auth/transfer', {
+        const response=await this.$axios.post('/auth/transfer', {
           passcode: this.addNumbers,
         })
-        // console.log('passcode ', regPasscode)
+        this.web_journy_url=response.data.webJournyUrl
       } catch (err) {
         this.$toasted.error('Incorrect Passcode')
         return
@@ -142,7 +145,7 @@ export default {
       //   this.$toasted.error('Incorrect passcode')
       //   return
       // }
-
+      // alert(this.web_journy_url)
       this.inProgress = true
       const accountresult = await this.$axios.get('/accounts')
       this.accounts = []
@@ -184,12 +187,24 @@ export default {
             }
           )
         // Check the financial_partner_type
-        if (this.financial_partner_type === 'NBFC'){
-          // alert("Transfer to NBFC SITE ")
-          const url = "https://www.paymeindia.in/";
-          const newTab = window.open(url, "_blank");
-          newTab.focus();
-        }
+        // if (this.financial_partner_type === 'NBFC'){
+        //   const url = this.web_journy_url;
+        //   const width = "375"
+        //   const height = "667";
+
+        //   const screenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+        //   const screenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+        //   const screenWidth = window.innerWidth || document.documentElement.clientWidth || window.screen.width;
+        //   const screenHeight = window.innerHeight || document.documentElement.clientHeight || window.screen.height;
+
+        //   const left = screenLeft + (screenWidth / 2) - (width / 2);
+        //   const top = screenTop + (screenHeight / 2) - (height / 2);
+
+        //   const options = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top;
+        //   window.open(url, "_blank", options);
+          
+        // }
         // this.$toast.success('Cash request sent');
         this.cashRequestSent = true
         // this.$router.push('/TransferSuccess')

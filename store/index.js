@@ -2,6 +2,8 @@ export const state = () => ({
   organization: null,
   is_corporate_expense_enabled: false,
   new_transaction: [],
+  nbfc_status:null,
+  web_journey_url:null,
   data: {
     cashRequest: 0,
   },
@@ -68,6 +70,12 @@ export const mutations = {
   setUserDetails(state, payload) {
     state.userDetails = payload
   },
+  setNbfcStatus(state,payload){
+    state.nbfc_status=payload
+  },
+  setWebJourneyUrl(state,payload){
+    state.web_journey_url=payload
+  }
 }
 
 export const getters = {

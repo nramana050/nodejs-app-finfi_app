@@ -14,8 +14,15 @@ div.ew-info
       div.text-xs
         div(class="card-info") Available
         div.amt.text-sm &#8377; {{earnedData?.account_balance}}      
-  div.ew-action
-   button(@click="navToTransferScreen") Transfer to Bank Account
+  div
+    div.ew-action.flex.gap-4(v-if="financialPartnerType==='NBFC'")
+      button(v-if='nbfcStatus === "NOT_IN_FINSERV" '  @click="checkYourLimitOnClick") Check Your Limit
+      button(v-if='nbfcStatus === "CREATED" '  @click="checkYourLimitOnClick") Check Your Limit
+      button(v-if='nbfcStatus === "PREAPPROVED" ' @click="navToNbfcScreen") Transfer to Bank Account
+    div.ew-action.flex.gap-4(v-if="financialPartnerType==='FINFI'")
+      button( @click="navToTransferScreen") Transfer to Bank Account
+  //-  button(v-if='nbfcStatus === "NOT_IN_FINSERV || CREATED" '  @click="checkYourLimitOnClick") Check Your Limit
+  //-  button(v-else  @click="navToTransferScreen") Transfer to Bank Account
  
 </template>
 
@@ -30,6 +37,10 @@ export default {
       type: Object,
       required: true,
     },
+    financialPartnerType:{
+      type:String,
+      required:true
+    }
   },
   data() {
     return {
@@ -37,9 +48,13 @@ export default {
       cardFundCycle: [],
       cashFundCycle: [],
       earnedCycle: [],
+      // nbfcStatus:
     }
   },
   computed: {
+    nbfcStatus(){
+      return this.$store.state.nbfc_status
+    },
     availableLimit() {
       return this.earnedLimit - this.payableAmount
     },
@@ -76,6 +91,7 @@ export default {
   },
   mounted() {
     this.fetchFundCycle()
+    this.checkYourLimit()
   },
   methods: {
     calculateCreditValue(num, percentage) {
@@ -123,9 +139,27 @@ export default {
         }
       }
     },
-    navToTransferScreen() {
-      this.$router.push('/transferscreen')
+    navToTransferScreen(){
+      this.$router.push('/transferScreen')
     },
+    navToNbfcScreen() {
+      this.$router.push('/nbfcscreen')
+    },
+   async checkYourLimit(){
+    try{
+      const response = await this.$axios.get(`/nbfc/borrower/hasid`)
+      this.$store.commit('setNbfcStatus',response.data.result.status)
+      this.$store.commit('setWebJourneyUrl',response.data.result.webJournyUrl)
+      // alert(this.nbfcStatus)
+    }
+    catch(error){
+      // alert(error)
+    }
+    },
+    checkYourLimitOnClick(){
+      // alert(this.financialPartnerType)
+      this.$router.push('/NbfcRegestration')
+    }
   },
 }
 </script>
