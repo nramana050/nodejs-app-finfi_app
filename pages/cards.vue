@@ -130,7 +130,6 @@ export default {
       this.isLoading = true
       try {
         const cardList = await this.$axios.get(`/m2p/cards/list`)
-        debugger
         if (cardList.data.result.length > 0) {
           this.isCardAvailable = true
           this.card = cardList.data.result[0]

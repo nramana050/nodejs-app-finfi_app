@@ -3,7 +3,7 @@ div.flex.flex-col.p-8#window
   div(v-if="isLoading")
     img#loader(src="~/assets/loader.gif")
   div(v-else)
-    p.ps-18.font-bold.tracking-wide.uppercase.pb-5.underline Preferences
+    p.ps-18.font-bold.tracking-wide.uppercase.pb-5.underline Controls
     div.flex.justify-between.pb-4.ps-18
       div.miam.miam-active ECOM
       div.text-sm.ps-22 {{ this.form.ecom? 'On' : 'Off' }}
