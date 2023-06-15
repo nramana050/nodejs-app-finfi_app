@@ -7,7 +7,7 @@ div.home-comtainer.ps-1A
         button(@click="navToProfile")
           img.object-cover.h-8.w-8.rounded-full(src="~/assets/myfinfi-icons/profile.png")
   div(v-if="accounts.length > 0 && organization")
-    AccountCard.ps-2(:accounts="accounts" :provider="organization")
+    AccountCard.ps-2(:accounts="accounts" :provider="organization" :financialPartnerType="financialPartnerType")
   div.marketing(v-if="promotionalCards.length")
    ssr-carousel(:slides-per-page=1 :loop='true' :show-arrows='false' :feather='false' :peek-right='70' :gutter='10' :autoplay-delay='5')
     div.card(v-for="promotionalCard in promotionalCards")
