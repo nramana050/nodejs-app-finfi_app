@@ -44,7 +44,6 @@ export default {
 
   methods: {
     async generateOTP() {
-      debugger
       return await this.$axios.$post('/m2p/otp', {
         headers: {
           Authorization: this.token,
@@ -74,9 +73,8 @@ export default {
             Authorization: this.token,
           },
         })
-        const otpREs = await this.generateOTP()
-        if (otpREs?.message === 'Success') {
-          console.log('OTPRES::', otpREs)
+        const otpRes = await this.generateOTP()
+        if (otpRes?.message === 'Success') {
           this.$emit('next', this.form)
         }
       } catch (err) {}

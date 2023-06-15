@@ -128,17 +128,19 @@ export default {
     async registerAction() {
       this.errorMessage = null
       try {
-        const payload = {
-          ...this.form,
+        if (this.addNumbers) {
+          const payload = {
+            ...this.form,
+          }
+          payload.user.otp = this.addNumbers
+          await this.$axios.$post('/m2p/register', payload, {
+            headers: {
+              Authorization: this.token,
+            },
+          })
+          this.isSuccess = true
+          await this.$axios.$post('/m2p/vkyc')
         }
-        payload.user.otp = this.addNumbers
-        await this.$axios.$post('/m2p/register', payload, {
-          headers: {
-            Authorization: this.token,
-          },
-        })
-        this.isSuccess = true
-        await this.$axios.$post('/m2p/vkyc')
       } catch (err) {
         this.isSuccess = false
         this.errorMessage = err.response.data.message
