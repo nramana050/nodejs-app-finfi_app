@@ -76,8 +76,8 @@ export default {
         } else {
           navigator.geolocation.getCurrentPosition(
             (position)=>{
-              this.form.latitude=(position.coords.latitude *10).toString()
-              this.form.longitude=(position.coords.longitude *10).toString()
+              this.form.latitude=(position.coords.latitude).toString()
+              this.form.longitude=(position.coords.longitude).toString()
               // alert(this.form.latitude)
             },(error)=>{
               // console.log("The error is from location api",error)
