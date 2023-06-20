@@ -17,11 +17,12 @@ div.flex.flex-col.verify-user-details
         date-picker(v-model="form.dob" valueType="format" placeholder="DOB" :disabled-date="disabledRange" :input-attr="{required: 'true'}") 
     div.action 
       div.flex.flex-cpl.tnc-block
-        FormulateInput(type="checkbox" name="agree" validation="required" v-model="agree" )
+        FormulateInput(type="checkbox" name="agree" v-model="agree" )
         div.tnc I have read & agreed to the 
         a(href="https://www.myfinfi.com/policies" target="_blank") Terms & Conditions.
+      div.req-msg(v-if='!this.agree') Check Terms & Conditions  
       div.flex.flex-cpl
-        button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Confirm
+        button(type="submit" :disabled="!this.agree" :class="`btn h-8 px-4 text-white rounded font-bold ${!agree? 'disabled':' '}`" ) Confirm
 </template>
 
 <script>
@@ -95,6 +96,14 @@ export default {
 }
 </script>
 <style>
+.req-msg {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #ff5141;
+  margin-bottom: 15px;
+  padding-left: 7px;
+}
 .verify-user-details {
   height: 100vh;
 }
@@ -144,6 +153,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.verify-user-details .btn.disabled {
+  background: #979797;
 }
 
 .formulate-input-element.formulate-input-element--group > div {
@@ -197,6 +209,9 @@ export default {
   label {
   position: absolute;
   top: 15px;
+  height: 100%;
+  width: 100%;
+  text-align: center;
 }
 .formulate-input-element.formulate-input-element--radio {
   display: flex;
@@ -213,6 +228,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 5px;
 }
 .tnc-block a {
   font-weight: 400;

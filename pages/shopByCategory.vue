@@ -3,7 +3,7 @@ div.ps-3.shop-container
     div.flex-0 
       PageHeader.font-bold(:title="selectedCategoryAndProducts?.category?.category_name")
       div.main-container
-        div.px-4
+        div.px-4.mb-2(v-if="selectedCategoryAndProducts?.products?.length>8")
           input(type='text' id="search-product" placeholder="Search" @input="navToSearch")  
         div.container.corp-exp.products.p-2
           div.latest-claim(v-if="selectedCategoryAndProducts?.products?.length")
@@ -87,7 +87,7 @@ export default {
 
 /* Product Slider */
 .corp-exp.products {
-  margin-top: 10px;
+  /* margin-top: 10px; */
   font-weight: 700;
   font-size: 14px;
   line-height: 18px;
