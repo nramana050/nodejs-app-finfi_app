@@ -19,7 +19,7 @@ div.flex.flex-col.verify-user-details
       div.flex.flex-cpl.tnc-block
         FormulateInput(type="checkbox" name="agree" v-model="agree" )
         div.tnc I have read & agreed to the 
-        a(href="https://www.myfinfi.com/policies" target="_blank") Terms & Conditions.
+        a(@click="navToTnC" target="_blank") Terms & Conditions.
       div.req-msg(v-if='!this.agree') Check Terms & Conditions  
       div.flex.flex-cpl
         button(type="submit" :disabled="!this.agree" :class="`btn h-8 px-4 text-white rounded font-bold ${!agree? 'disabled':' '}`" ) Confirm
@@ -51,6 +51,9 @@ export default {
   },
 
   methods: {
+    navToTnC() {
+      this.$router.push('/TermsAndConditions')
+    },
     nameKeydown(e) {
       if (/^\W$/.test(e.key)) {
         e.preventDefault()
