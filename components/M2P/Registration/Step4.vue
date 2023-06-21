@@ -16,9 +16,10 @@ div.flex.flex-col.verify-user-details
   
   div.otp-resend(v-if="!isError && !isSuccess")
    span Resend OTP 
-    span.resend-button(@click="generateOTP") Resend
+    span(:class="`resend-timer ${this.timerOn ? 'active-timer' :''}`")
+    span.resend-button(v-if="!this.timerOn" @click="generateOTP") Resend
   div.flex.flex-col.action(v-if="!isError && !isSuccess")
-    button.btn.h-10.px-4.text-white.rounded.font-bold.my-5(@click="registerAction") Confirm
+    button(:class="`btn h-10 px-4 text-white rounded font-bold my-5 ${ !this.addNumbers ? 'disabled':''}`" @click="registerAction" :disabled="!this.addNumbers") Confirm
 </template>
 
 <script>
@@ -38,8 +39,7 @@ export default {
       isSuccess: false,
       isError: false,
       otpresend: false,
-      defaultTimerValue: 60,
-      timerValue: 60,
+      defaultTimerValue: 120,
       errorMessage: null,
       timerFunction: null,
       num1: null,
@@ -48,6 +48,7 @@ export default {
       num4: null,
       num5: null,
       num6: null,
+      timerOn: true,
     }
   },
 
@@ -64,19 +65,9 @@ export default {
 
   async mounted() {
     await this.registerAction()
-
-    // TODO: IMPEMENT RESEND TIMER
-    // // setTimeout(() => {
-    // //   this.isOTPSent = false
-    // //   this.timer = 60
-    // // }, 60000)
-    // this.timerFunction = setInterval(() => {
-    //   this.timer -= 1
-    //   if (this.timer === 1) {
-    //     clearInterval(this.timerFunction)
-    //   }
-    // }, 1000)
+    this.timer(this.defaultTimerValue)
   },
+  unmounted() {},
 
   methods: {
     async generateOTP() {
@@ -87,6 +78,8 @@ export default {
       })
       if (otpRes?.message === 'Success') {
         this.$toast.success('OTP generated and sent to your mobile number')
+        this.timerOn = true
+        this.timer(this.defaultTimerValue)
       }
     },
     changeRange(index, value, event) {
@@ -163,6 +156,31 @@ export default {
     cancel() {
       this.$router.push('/dashboard')
     },
+    timer(remaining) {
+      const self = this
+      let m = Math.floor(remaining / 60)
+      let s = remaining % 60
+
+      m = m < 10 ? '0' + m : m
+      s = s < 10 ? '0' + s : s
+      document.querySelector('.resend-timer').innerHTML = m + ':' + s
+      remaining -= 1
+
+      if (remaining >= 0 && self.timerOn) {
+        setTimeout(function () {
+          self.timer(remaining)
+        }, 1000)
+        return
+      }
+
+      if (!self.timerOn) {
+        // Do validate stuff here
+        return
+      }
+
+      // Do timeout stuff here
+      self.timerOn = false
+    },
   },
 }
 </script>
@@ -232,6 +250,13 @@ export default {
   letter-spacing: 0.01em;
   color: #9ca3af;
 }
+.otp-resend > span > span.resend-timer {
+  color: #7165e3;
+  display: none;
+}
+.otp-resend > span > span.resend-timer.active-timer {
+  display: inline-block;
+}
 .otp-resend > span > span.resend-button {
   color: #7165e3;
   cursor: pointer;
@@ -278,6 +303,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.verify-user-details .btn.disabled {
+  background: #979797;
 }
 .verify-user-details .action {
   position: relative;

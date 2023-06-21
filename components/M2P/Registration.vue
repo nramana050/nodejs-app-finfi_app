@@ -1,7 +1,8 @@
 <template lang="pug">
 div
   div.flex.flex-row.justify-between.ps-1
-    span.ps-2
+    span.step-header
+      FaIcon.mx-auto.ps-3(icon='angle-left' @click="navStepBack")
       p.text-md.font-bold.tracking-wide {{ step.title }}
     //- span.ps-3
     //-   p.text-xs.font-light.font-mono.tracking-wide Step {{ step.id }}/{{ steps.length }}
@@ -64,6 +65,13 @@ export default {
   },
 
   methods: {
+    navStepBack() {
+      if (this.step?.id === 1) {
+        this.$router.push('/dashboard')
+      } else {
+        this.currentStep -= 1
+      }
+    },
     next() {
       this.currentStep += 1
     },
@@ -100,6 +108,14 @@ export default {
 </script>
 
 <style scoped>
+.step-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.step-header > svg {
+  cursor: pointer;
+}
 #container {
   min-height: 80vh;
 }

@@ -2,7 +2,7 @@
 div.flex.flex-col.verify-user-details
   FormulateForm(v-model="form" @submit="next")
     FormulateInput(type="select" label="Document Type" name="document_type" :options="types" placeholder="Select document type" validation="required")
-    FormulateInput(type="text" label="Document/ID no." name="document_number" validation="required" :input-class="['uppercase']")
+    FormulateInput(type="text" label="Document/ID no." name="document_display_number" validation="required" :input-class="['uppercase']")
     div.flex
         button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Verify with an OTP
 </template>
@@ -16,6 +16,7 @@ export default {
       form: {
         document_type: '',
         document_number: '',
+        document_display_number: '',
       },
       types: { PAN: 'PAN Card' },
     }
@@ -29,13 +30,14 @@ export default {
         },
       })
       if (apiResult.length > 0) {
-        const data = apiResult[0]
+        const data = { ...apiResult[0] }
         data.document_number = Buffer.from(
           data.document_number,
           'base64'
         ).toString('ascii')
         this.form.document_type = data.document_type
         this.form.document_number = data.document_number
+        this.form.document_display_number = apiResult[0]?.document_number
       }
     } catch (error) {
       console.log(error)
@@ -49,24 +51,11 @@ export default {
           Authorization: this.token,
         },
       })
-
-      // this.$toast.success('OTP generated and sent to your mobile number')
-      // this.isOTPSent = true
-      // setTimeout(() => {
-      //   this.isOTPSent = false
-      //   this.timer = 60
-      // }, 60000)
-      // this.timerFunction = setInterval(() => {
-      //   this.timer -= 1
-      //   if (this.timer === 1) {
-      //     clearInterval(this.timerFunction)
-      //   }
-      // }, 1000)
     },
     async next() {
       try {
         this.form.document_number = Buffer.from(
-          this.form.document_number
+          this.form.document_display_number
         ).toString('base64')
         await this.$axios.$post('/profile/kyc/docs', this.form, {
           headers: {
