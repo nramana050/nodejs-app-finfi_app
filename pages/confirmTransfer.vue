@@ -53,6 +53,9 @@ export default {
     requestAmount() {
       return this.$store.state.data.requestedAmount
     },
+    requestDocumentForBankTransfer(){
+      return this.$store.state.data.attachments
+    },
     addNumbers() {
       return (
         this.num1 + this.num2 + this.num3 + this.num4 + this.num5 + this.num6
@@ -180,12 +183,32 @@ export default {
           return
         }
         
-          await this.$axios.post(
-            `/accounts/${finfiAccount[0].id}/withdrawals`,
-            {
-              amount: this.requestAmount,
-            }
-          )
+
+        // alert(this.requestDocumentForBankTransfer)
+        const formData = new FormData()
+        formData.append('amount', this.requestAmount)
+
+        if (this.requestDocumentForBankTransfer?.length) {
+        for (let i = 0; i < this.requestDocumentForBankTransfer.length; i++) {
+          formData.append('attachments', this.requestDocumentForBankTransfer[i])
+        }
+      }
+
+         await this.$axios.$post(`/accounts/${finfiAccount[0].id}/withdrawals`, formData, {
+            headers: {
+              'Content-Type': `multipart/form-data`,
+              Authorization: this.token,
+            },
+          })
+
+          // await this.$axios.post(
+          //   `/accounts/${finfiAccount[0].id}/withdrawals`,
+          //   {
+          //     amount: this.requestAmount,
+          //     // attachments:this.this.requestDocumentForBankTransfer
+          //   }
+          // )
+          // alert("This is on success full ...")
         // Check the financial_partner_type
         // if (this.financial_partner_type === 'NBFC'){
         //   const url = this.web_journy_url;

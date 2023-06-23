@@ -1,7 +1,7 @@
 <template lang="pug">
     div.ps-0.shop-container
       div.flex-0 
-        PageHeader.font-bold(:title="'NBFC'")
+        PageHeader.font-bold(:title="'Check Your Credit Limit'")
         div.main-container.w-full
             iframe.ifgh.w-full.h-screen(:src="webJournyUrl",allow="geolocation; camera; microphone")
 

@@ -56,9 +56,19 @@ export const mutations = {
   setrequestAmount(state, amount) {
     state.data.requestedAmount = amount
   },
+
   clearrequestAmount(state) {
     state.data.requestedAmount = null
   },
+
+  requestDocumentForBankTransfer(state, attachments) {
+    state.data.attachments = attachments
+  },
+
+  clearRequestDocumentForBankTransfer(state){
+    state.data.attachments=[]
+  },
+
   setUserConfig(state, payload) {
     state.userConfig = { ...payload }
   },
