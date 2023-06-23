@@ -17,15 +17,15 @@ div
     //-         LoadingIcon.w-6.h-6.text-black.mx-auto
     //-       span(v-else) Transfer
 
-    form(@submit.prevent="uploadAttachment")
+    form.flex.justify-center.mt-6(@submit.prevent="uploadAttachment")
         div.form-item.flex.text-sm.text-gray-600
           label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600" for="addproofs")
-            span(class="inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
+            span(class="w-72 inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
             input(type="file" class="file sr-only" id="addproofs" accept="image/png, image/jpeg" ref="uploader" @change="selectLocalFiles($event)" multiple) 
-        div(v-if="attachments?.length" v-for="(file, idx) in attachments" :key="idx")
-          div.file-item 
+    ul.px-8.mt-6.list-decimal(v-if="attachments?.length")
+          li.file-item.flex.justify-between.mt-2(v-for="(file, idx) in attachments" :key="idx") 
             span {{file?.name}}
-            span.deleteFile(@click.stop="()=>onDeleteFile(idx)")  
+            span.deleteFile.cursor-pointer.text-red-600(@click.stop="()=>onDeleteFile(idx)")  
               FaIcon(icon='trash')
 
     div(v-if="requestedAmount>0")
@@ -100,7 +100,7 @@ export default {
 
       this.amount.push(this.transferAmount)
       this.$store.commit('setrequestAmount', this.transferAmount)
-      this.$store.commit('requestDocumentForBankTransfer',this.attachments)
+      this.$store.commit('requestDocumentForBankTransfer', this.attachments)
       // alert(this.$store.state.data.attachments.length)
       this.$router.push('/confirmTransfer')
     },
@@ -177,7 +177,6 @@ export default {
       }
     },
 
-
     selectLocalFiles(event) {
       const files = event.target.files
       // console.log(files)
@@ -216,7 +215,6 @@ export default {
     },
 
     uploadAttachment() {
-
       // if (!this.attachments?.length && !this.claimDetails?.id) {
       //   return this.$toast.error('Please attach a supportive document(s).')
       // }
@@ -232,12 +230,11 @@ export default {
       // try {
 
       //   alert(this.attachments.length)
-     
+
       // } catch (error) {
       //   console.error(error)
       //   this.$toast.error(error?.message)
       // }
-
     },
 
     // async fetchRecentWithdrawal(accountId) {
