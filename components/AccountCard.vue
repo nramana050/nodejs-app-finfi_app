@@ -16,9 +16,9 @@ div.ew-info
         div.amt.text-sm &#8377; {{earnedData?.account_balance}}      
   div
     div.ew-action.flex.gap-4(v-if="financialPartnerType==='NBFC'")
-      button(v-if='nbfcStatus === "NOT_IN_FINSERV" '  @click="checkYourLimitOnClick") Check Your Limit
-      button(v-if='nbfcStatus === "CREATED" '  @click="checkYourLimitOnClick") Check Your Limit
-      button(v-if='nbfcStatus === "PREAPPROVED" ' @click="navToNbfcScreen") Transfer to Bank Account
+      button(v-if='nbfcStatus === "NOT_IN_FINSERV" '  @click="checkYourLimitOnClick") Check Your Credit Limit
+      button(v-if='nbfcStatus === "CREATED" '  @click="checkYourLimitOnClick") Check Your Credit Limit
+      button(v-if='nbfcStatus === "PREAPPROVED" ' @click="navToNbfcScreen") Check Your Credit Limit
     div.ew-action.flex.gap-4(v-if="financialPartnerType==='FINFI'")
       button( @click="navToTransferScreen") Transfer to Bank Account
   //-  button(v-if='nbfcStatus === "NOT_IN_FINSERV || CREATED" '  @click="checkYourLimitOnClick") Check Your Limit
@@ -158,7 +158,10 @@ export default {
     },
     checkYourLimitOnClick(){
       // alert(this.financialPartnerType)
-      this.$router.push('/NbfcRegestration')
+      // this.$router.push('/NbfcRegestration')
+      this.$toast.error(
+          `User User is not available.`
+        )
     }
   },
 }

@@ -75,6 +75,7 @@ export default {
     onFormclose() {
       this.$FModal.hide()
     },
+    
     async createClaim() {
       if (!this.selectedTransactionIds?.length) {
         return this.$toast.error('Please select transactions to proceed')
