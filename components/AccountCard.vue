@@ -17,8 +17,10 @@ div.ew-info
   div
     div.ew-action.flex.gap-4(v-if="financialPartnerType==='NBFC'")
       button(v-if='nbfcStatus === "NOT_IN_FINSERV" '  @click="checkYourLimitOnClick") Check Your Credit Limit
-      button(v-if='nbfcStatus === "CREATED" '  @click="checkYourLimitOnClick") Check Your Credit Limit
-      button(v-if='nbfcStatus === "PREAPPROVED" ' @click="navToNbfcScreen") Check Your Credit Limit
+      button(v-else-if='nbfcStatus === "CREATED" '  @click="checkYourLimitOnClick") Check Your Credit Limit
+      button(v-else-if='nbfcStatus === "PREAPPROVED" ' @click="navToNbfcScreen") Check Your Credit Limit
+      button(v-else @click="navToNbfcScreen") Check Your Credit Limit 
+      //- // "APPROVED" 
     div.ew-action.flex.gap-4(v-if="financialPartnerType==='FINFI'")
       button( @click="navToTransferScreen") Transfer to Bank Account
   //-  button(v-if='nbfcStatus === "NOT_IN_FINSERV || CREATED" '  @click="checkYourLimitOnClick") Check Your Limit
@@ -37,10 +39,10 @@ export default {
       type: Object,
       required: true,
     },
-    financialPartnerType:{
-      type:String,
-      required:true
-    }
+    financialPartnerType: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -52,7 +54,7 @@ export default {
     }
   },
   computed: {
-    nbfcStatus(){
+    nbfcStatus() {
       return this.$store.state.nbfc_status
     },
     availableLimit() {
@@ -139,30 +141,30 @@ export default {
         }
       }
     },
-    navToTransferScreen(){
+    navToTransferScreen() {
       this.$router.push('/transferScreen')
     },
     navToNbfcScreen() {
       this.$router.push('/nbfcscreen')
     },
-   async checkYourLimit(){
-    try{
-      const response = await this.$axios.get(`/nbfc/borrower/hasid`)
-      this.$store.commit('setNbfcStatus',response.data.result.status)
-      this.$store.commit('setWebJourneyUrl',response.data.result.webJournyUrl)
-      // alert(this.nbfcStatus)
-    }
-    catch(error){
-      // alert(error)
-    }
+    async checkYourLimit() {
+      try {
+        const response = await this.$axios.get(`/nbfc/borrower/hasid`)
+        this.$store.commit('setNbfcStatus', response.data.result.status)
+        this.$store.commit(
+          'setWebJourneyUrl',
+          response.data.result.webJournyUrl
+        )
+        // alert(this.nbfcStatus)
+      } catch (error) {
+        // alert(error)
+      }
     },
-    checkYourLimitOnClick(){
+    checkYourLimitOnClick() {
       // alert(this.financialPartnerType)
       // this.$router.push('/NbfcRegestration')
-      this.$toast.error(
-          `User User is not available.`
-        )
-    }
+      this.$toast.error(`User User is not available.`)
+    },
   },
 }
 </script>
