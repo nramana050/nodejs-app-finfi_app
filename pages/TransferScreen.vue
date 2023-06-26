@@ -17,26 +17,24 @@ div
     //-         LoadingIcon.w-6.h-6.text-black.mx-auto
     //-       span(v-else) Transfer
 
-    form.flex.justify-center.mt-6(@submit.prevent="uploadAttachment")
-        div.form-item.flex.text-sm.text-gray-600
-          label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600" for="addproofs")
-            span(class="w-72 inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
-            input(type="file" class="file sr-only" id="addproofs" accept="image/png, image/jpeg" ref="uploader" @change="selectLocalFiles($event)" multiple) 
-    ul.px-8.mt-6.list-decimal(v-if="attachments?.length")
-          li.file-item.flex.justify-between.mt-2(v-for="(file, idx) in attachments" :key="idx") 
-            span {{file?.name}}
-            span.deleteFile.cursor-pointer.text-red-600(@click.stop="()=>onDeleteFile(idx)")  
-              FaIcon(icon='trash')
+    div.upload-container(v-if="isBank_transfer_document_required !== 'NO'")
+      form.flex.justify-center.mt-6(@submit.prevent="uploadAttachment")
+          div.form-item.flex.text-sm.text-gray-600
+            label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600" for="addproofs")
+              span(class="w-72 inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
+                span.isRequired(v-if="isUploadRequired") *
+              input(type="file" class="file sr-only" id="addproofs" accept="image/png, image/jpeg" ref="uploader" @change="selectLocalFiles($event)" multiple) 
+      ul.px-8.mt-6.list-decimal(v-if="attachments?.length")
+            li.file-item.flex.justify-between.mt-2(v-for="(file, idx) in attachments" :key="idx") 
+              span {{file?.name}}
+              span.deleteFile.cursor-pointer.text-red-600(@click.stop="()=>onDeleteFile(idx)")  
+                FaIcon(icon='trash')
 
-    div(v-if="requestedAmount>0")
+    div(v-if="requestedAmount>0 && isUpload")
       div.flex-0.fixed.bottom-0
         button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="requestAmount")
           span Transfer &#8377; {{transferAmount}}
     
-    
-
-
-
 </template>
 <script>
 export default {
@@ -59,6 +57,8 @@ export default {
         account_number: null,
       },
       interval: null,
+      isBank_transfer_document_required: null,
+      isUploadRequired: false,
     }
   },
   // async fetch() {
@@ -76,9 +76,23 @@ export default {
     this.interval = setInterval(function () {
       _this.transferAmount = _this.requestedAmount
     }, 1000)
+
+    this.isBank_transfer_document_required =
+      this.$store.getters.getOrgConfig?.bank_transfer_document_required
+    this.isUploadRequired =
+      this.$store.getters.getOrgConfig?.bank_transfer_document_required ===
+      'MANDATORY'
   },
   destroyed() {
     clearInterval(this.interval)
+  },
+  computed: {
+    isUpload() {
+      if (this.isUploadRequired && this.attachments?.length <= 0) {
+        return false
+      }
+      return true
+    },
   },
   methods: {
     navToDashboard() {
@@ -253,6 +267,10 @@ export default {
 }
 </script>
 <style scoped>
+.isRequired {
+  color: red;
+  margin-left: 5px;
+}
 .ps-7 {
   color: #ffffff;
   margin-left: 2rem;

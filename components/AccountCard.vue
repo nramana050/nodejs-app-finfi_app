@@ -1,7 +1,8 @@
 <template lang="pug">
 div.ew-info
-  h3 Salary advance
-  div.flex.justify-between.ew-stats
+  h3(v-if="bank_transfer_used_for === 'SALARY_ADVANCE'") Salary advance
+  h3(v-if="bank_transfer_used_for === 'POST_PAYMENT'") Payment
+  div.flex.justify-between.ew-stats(v-if="bank_transfer_used_for")
     div.flex-0.text-left.stat-container.green
       div.text-xs
         div(class="card-info") Earned
@@ -51,6 +52,7 @@ export default {
       cashFundCycle: [],
       earnedCycle: [],
       // nbfcStatus:
+      bank_transfer_used_for: null,
     }
   },
   computed: {
@@ -94,6 +96,8 @@ export default {
   mounted() {
     this.fetchFundCycle()
     this.checkYourLimit()
+    this.bank_transfer_used_for =
+      this.$store.getters.getOrgConfig?.bank_transfer_used_for
   },
   methods: {
     calculateCreditValue(num, percentage) {

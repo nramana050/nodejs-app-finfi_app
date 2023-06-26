@@ -2,8 +2,8 @@ export const state = () => ({
   organization: null,
   is_corporate_expense_enabled: false,
   new_transaction: [],
-  nbfc_status:null,
-  web_journey_url:null,
+  nbfc_status: null,
+  web_journey_url: null,
   data: {
     cashRequest: 0,
   },
@@ -12,6 +12,7 @@ export const state = () => ({
     product: null,
   },
   userConfig: {},
+  orgConfig: {},
   accounts: [],
   userDetails: {},
   shop: {
@@ -65,13 +66,17 @@ export const mutations = {
     state.data.attachments = attachments
   },
 
-  clearRequestDocumentForBankTransfer(state){
-    state.data.attachments=[]
+  clearRequestDocumentForBankTransfer(state) {
+    state.data.attachments = []
   },
 
   setUserConfig(state, payload) {
     state.userConfig = { ...payload }
   },
+  setOrgConfig(state, payload) {
+    state.orgConfig = { ...payload }
+  },
+
   setAccountsBalance(state, payload) {
     if (payload) {
       state.accounts = [...payload]
@@ -80,12 +85,12 @@ export const mutations = {
   setUserDetails(state, payload) {
     state.userDetails = payload
   },
-  setNbfcStatus(state,payload){
-    state.nbfc_status=payload
+  setNbfcStatus(state, payload) {
+    state.nbfc_status = payload
   },
-  setWebJourneyUrl(state,payload){
-    state.web_journey_url=payload
-  }
+  setWebJourneyUrl(state, payload) {
+    state.web_journey_url = payload
+  },
 }
 
 export const getters = {
@@ -94,6 +99,9 @@ export const getters = {
   },
   getUserConfig(state) {
     return state.userConfig
+  },
+  getOrgConfig(state) {
+    return state.orgConfig
   },
   is_corporate_expense_enabled(state) {
     return state.is_corporate_expense_enabled

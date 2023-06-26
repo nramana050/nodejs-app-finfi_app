@@ -177,6 +177,9 @@ export default {
           Authorization: this.token,
         },
       })
+      this.$store.commit('setOrgConfig', {
+        ...apiResult.data,
+      })
       this.isCardEnabled = apiResult.data.is_card_enabled
       this.corpExEnabled = apiResult.data?.user.is_corporate_expense_enabled
       this.financialPartnerType = apiResult.data?.financial_partner_type
