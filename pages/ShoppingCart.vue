@@ -14,12 +14,16 @@ div.ps-3.shop-container
                   img(:src="baseUrl+selectedProduct.product.product_image" crossorigin="anonymous")
                 div.purchase(v-if='!isHowItWorks')
                   div.addValue
-                    input(v-if="!fixedSteps" class="focus:outline-none focus:shadow-outline" ref='voucherAmt' type="numeric" v-bind:min="min" v-bind:max="max" v-model="voucherAmount" @keydown="nameKeydown($event)")  
-                    select.ps-14.custom-select(v-if="fixedSteps?.length" v-model="voucherAmount")
-                      option(value=amt v-for="amt in this.fixedSteps") {{ amt }}
+                    div.input-container
+                     span ₹
+                     input(v-if="!fixedSteps" class="focus:outline-none focus:shadow-outline" ref='voucherAmt' type="numeric" v-bind:min="min" v-bind:max="max" v-model="voucherAmount" @keydown="nameKeydown($event)")  
+                     select.ps-14.custom-select(v-if="fixedSteps?.length" v-model="voucherAmount")
+                       option(value=amt v-for="amt in this.fixedSteps") {{ amt }}
                     span Voucher Amount
                   div.cashback-received
-                    input(class="focus:outline-none focus:shadow-outline" ref='cashbackAmt' type="numeric" v-model="cashBack" disabled=true)  
+                    div.input-container
+                     span ₹
+                     input(class="focus:outline-none focus:shadow-outline" ref='cashbackAmt' type="numeric" v-model="cashBack" disabled=true)  
                     span Cashback
                 div.action(v-if='!isHowItWorks')
                   div.slide-product-availability
@@ -369,12 +373,12 @@ export default {
 .how_it_works.container > .purchase > div {
   text-align: center;
 }
-.how_it_works.container > .purchase > div > input {
-  border-bottom: 1px solid #7165e3;
+.how_it_works.container > .purchase > div > div > input {
+  /* border-bottom: 1px solid #7165e3; */
   max-width: 80px;
   font-size: 18px;
   line-height: 23px;
-  text-align: center;
+  text-align: left;
   color: #898a8d;
 }
 .how_it_works.container > .purchase > div > span {
@@ -536,5 +540,13 @@ export default {
 }
 .ps-3 {
   min-height: 100vh;
+}
+.how_it_works.container > .purchase .cashback-received > div {
+  border-bottom: 0;
+}
+.input-container {
+  display: flex;
+  border-bottom: 1px solid #7165e3;
+  color: #898a8d;
 }
 </style>

@@ -9,9 +9,12 @@
                 span.info {{isHowItWorks ? "How to use voucher" : "Buy Voucher"}} 
                 span.takeaction(@click="toggleHowItWorks") {{isHowItWorks ? "Back" : "How it works?"}}
               div.body(v-if='!isHowItWorks')
-                span aws image
+                div.latest-claim(v-if="homeProducts?.length")
+                  ssr-carousel(:slides-per-page=1 :loop='true' :show-arrows='false' :feather='false' :gutter='0' :center='true')
+                    div.slide.custom-pro-slide.shopnow(v-for="product in homeProducts" @click="addToCart({ product: product})") 
+                      img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
               div.action(v-if='!isHowItWorks')
-                button Pick a Brand
+                button(@click='navToPickABrand') Pick a Brand
               div.content.steps(v-if='isHowItWorks')
                 div.step1
                   h3.step1-color  Step 1
@@ -56,17 +59,25 @@ export default {
     return {
       isHowItWorks: false,
       categoryWiseProductListing: [],
+      homeProducts: [],
       baseUrl: 'https://myfinfi-uat-uploads.s3.ap-south-1.amazonaws.com',
     }
   },
   mounted() {
     if (this.$auth.strategy.token.status().valid()) {
       this.getCategories()
+      this.getHomeProducts()
     }
   },
   methods: {
     toggleHowItWorks() {
       this.isHowItWorks = !this.isHowItWorks
+    },
+    async getHomeProducts() {
+      const res = await this.$axios.$get(`/snbl/home-products`)
+      if (res.message === 'Success') {
+        this.homeProducts = res.data
+      }
     },
     navToCategory(data) {
       this.$store.commit('setSelectedCategory', data)
@@ -74,6 +85,9 @@ export default {
     },
     navToSearch() {
       this.$router.push('/search')
+    },
+    navToPickABrand() {
+      this.$router.push('/pickABrand')
     },
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
@@ -96,6 +110,7 @@ export default {
         .$post(`/snbl/products`, payload)
         .then((result) => result?.data)
     },
+
     addToCart(product) {
       this.$store.commit('setCart', product)
       this.$router.push('/ShoppingCart')
@@ -104,6 +119,18 @@ export default {
 }
 </script>
 <style scoped>
+.latest-claim {
+  width: 100%;
+}
+.slide.custom-pro-slide.shopnow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.slide.custom-pro-slide.shopnow > img {
+  height: 100px;
+  width: 100px;
+}
 .shop-container > div > div:nth-child(1) {
   height: 100px;
   padding-top: 0;
