@@ -6,15 +6,15 @@ div.ew-info
     div.flex-0.text-left.stat-container.green
       div.text-xs
         div(class="card-info") Earned
-        div.amt.text-sm &#8377; {{earnedData?.earned}}
+        div.amt.text-sm &#8377; {{earnedData?.earned || cashLimit?.earned}}
     div.flex-0.text-left.stat-container.red
       div.text-xs
         div(class="card-info") Withdrawn
-        div.amt.text-sm &#8377; {{earnedData?.used}}
+        div.amt.text-sm &#8377; {{earnedData?.used || cashLimit?.used}}
     div.flex-0.text-left.stat-container.yellow
       div.text-xs
         div(class="card-info") Available
-        div.amt.text-sm &#8377; {{earnedData?.account_balance}}      
+        div.amt.text-sm &#8377; {{earnedData?.account_balance ||cashLimit?.account_balance}}      
   div
     div.ew-action.flex.gap-4(v-if="financialPartnerType==='NBFC'")
       button(v-if='nbfcStatus === "NOT_IN_FINSERV" '  @click="checkYourLimitOnClick") Check Your Credit Limit
@@ -72,7 +72,7 @@ export default {
       const cashAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'CASH'
       )
-      return cashAccount.length > 0 ? cashAccount[0].account_balance : 0
+      return cashAccount.length > 0 ? cashAccount[0] : 0
     },
     cardLimit() {
       const cardAccount = this.accounts.filter(
