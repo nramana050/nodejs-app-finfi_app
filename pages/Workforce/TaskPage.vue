@@ -18,7 +18,7 @@
         <img
           class="rounded-full h-8 w-8 ml-auto mr-4"
           
-          src="../../assets/headerImage.png"
+          src="../../assets/Workforce/headerImage.png"
           alt=""
         />
       </div>
@@ -27,13 +27,13 @@
 
       <div class="flex pt-1 pb-5 mb-5 justify-center items-center">
     <a href="/TaskPage">
-        <img class="ml-auto mr-5" src="../../assets/leftIcon.svg" alt="" />
+        <img class="ml-auto mr-5" src="../../assets/Workforce/leftIcon.svg" alt="" />
     </a>
     
     <p class="ml-2 mr-5 pt-1 text-gray-700 text-xl font-medium text-center">Today</p>
 
     <a href="/TaskPage">
-        <img class="ml-5" src="../../assets/RightIcon.svg" alt="" />
+        <img class="ml-5" src="../../assets/Workforce/RightIcon.svg" alt="" />
     </a>
 </div> 
 
@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import TaskCard from '~/components/Workforce_Management/TaskCard.vue';
-import TaskBox from '~/components/Workforce_Management/TaskBox.vue';
+import TaskCard from '~/components/Workforce/TaskCard.vue';
+import TaskBox from '~/components/Workforce/TaskBox.vue';
 export default {
   components: {
    TaskCard,

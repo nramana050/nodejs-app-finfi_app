@@ -19,7 +19,7 @@
         <img
           class="rounded-full h-8 w-8 ml-auto mr-4"
           
-          src="../../assets/headerImage.png"
+          src="../../assets/Workforce/headerImage.png"
           alt=""
         />
       </div>
@@ -29,13 +29,13 @@
 
       <div class="flex pt-1 pb-5 mb-5 mt-5 justify-center items-center">
     <a href="/TaskPage">
-        <img class="ml-auto mr-5" src="../../assets/leftIcon.svg" alt="" />
+        <img class="ml-auto mr-5" src="../../assets/Workforce/leftIcon.svg" alt="" />
     </a>
     
     <p class="ml-2 mr-5 pt-1 text-gray-700 text-xl font-medium text-center">1st March</p>
 
     <a href="/TaskPage">
-        <img class="ml-5" src="../../assets/RightIcon.svg" alt="" />
+        <img class="ml-5" src="../../assets/Workforce/RightIcon.svg" alt="" />
     </a>
 </div> 
 
@@ -68,8 +68,8 @@
 
 <script>
 
-import ReusableBox from '~/components/Workforce_Management/ReusableBox.vue';
-import ReusableTask from '~/components/Workforce_Management/ReusableTask.vue';
+import ReusableBox from '~/components/Workforce/ReusableBox.vue';
+import ReusableTask from '~/components/Workforce/ReusableTask.vue';
 export default {
   components: {
     ReusableBox,

@@ -4,7 +4,7 @@
       <div class="m-4 flex justify-between items-center">
         <p class="text-gray-500 text-xs font-prompt font-normal leading-normal">{{ time }}</p>
         <a href="/TaskPage">
-          <img class="ml-auto" src="../../assets/RightIcon.svg" alt="" />
+          <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
         </a>
       </div>
       <p class="m-4">{{ company }}</p>

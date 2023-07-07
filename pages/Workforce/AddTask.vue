@@ -21,7 +21,7 @@
         <img
           class="rounded-full h-8 w-8 ml-auto mr-4"
           
-          src="../../assets/headerImage.png"
+          src="../../assets/Workforce/headerImage.png"
           alt=""
         />
       </div>
@@ -32,7 +32,7 @@
 
 <div style="border-radius: 12px; border: 1px solid #E6E8E6; background: #FFF; width: 330px;  height: 48px; flex-shrink: 0; margin: 30px;" class="flex">
   <div class="flex items-center ml-2">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/search.svg" alt="Image" />
+    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/search.svg" alt="Image" />
   </div>
   
   <div class="flex items-center ml-2">
@@ -52,7 +52,7 @@
 
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Company.png" alt="Image" />
+    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Company.png" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
@@ -65,7 +65,7 @@
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-4">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Vector.svg" alt="Image" />
+    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Vector.svg" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
@@ -75,7 +75,7 @@
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Group.svg" alt="Image" />
+    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Group.svg" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
@@ -91,7 +91,7 @@
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Location.png" alt="Image" />
+    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Location.png" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
@@ -101,7 +101,7 @@
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Notes.svg" alt="Image" />
+    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Notes.svg" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">

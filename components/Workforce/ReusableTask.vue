@@ -16,7 +16,7 @@
 </p>
 
     <a href="/DailyTask">
-      <img class="ml-auto" src="../../assets/RightIcon.svg" alt="" />
+      <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
     </a>
 </div>
 
