@@ -34,9 +34,13 @@ export default {
     }
   },
 
-  mounted() {
+  beforeMount() {
     window.initMap = this.initMap
   },
+
+  // mounted() {
+  //   window.initMap = this.initMap
+  // },
 
   methods: {
     initMap() {
