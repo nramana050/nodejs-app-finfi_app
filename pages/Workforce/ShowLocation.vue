@@ -15,7 +15,7 @@ export default {
     script: [
       {
         type: 'text/javascript',
-        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyD5OPNPtE5honF4E7LyLyND1PNMf-bmP24&callback=window.initMap&v=weekly`,
+        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyD5OPNPtE5honF4E7LyLyND1PNMf-bmP24&callback=initMap&v=weekly`,
         async: true,
         defer: true,
         body: true,
