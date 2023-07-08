@@ -19,13 +19,13 @@ div.flex.flex-col
       div.amt-input
         span ₹ 
         input(v-model="amount"  :max='cardLoadLimit' class="p-2 mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="number" placeholder="Enter Amount")
-    div.action-container(@click="payViaRazor")
+    div.action-container(@click="payViaEasebuzz")
         button(class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500") Add Money      
 </template>
 
 <script
   type="application/javascript"
-  src="https://checkout.razorpay.com/v1/checkout.js"
+  src="https://ebz-static.s3.ap-south-1.amazonaws.com/easecheckout/easebuzz-checkout.js"
 ></script>
 <script>
 import { v4 as uuidv4 } from 'uuid'
@@ -36,7 +36,7 @@ export default {
     script: [
       {
         type: 'text/javascript',
-        src: 'https://checkout.razorpay.com/v1/checkout.js',
+        src: 'https://ebz-static.s3.ap-south-1.amazonaws.com/easecheckout/easebuzz-checkout.js',
         async: true,
         body: true,
       },
@@ -63,10 +63,10 @@ export default {
   },
 
   methods: {
-    async payViaRazor() {
+    async payViaEasebuzz() {
       const _this = this
       try {
-        const amt = parseInt(this.amount)
+        const amt = parseInt(this.amount).toFixed(2)
         const amountRegex = /^(?!0*(\.0+)?$)\d+(\.\d+)?$/
 
         if (!amountRegex.test(amt)) {
@@ -82,7 +82,7 @@ export default {
           '/payment/gateway/order_id',
           {
             amount: amt * 100,
-            purpose: 'PrePaidCardLoad',
+            purpose: 'PrePaidCardLoadByEasebuzz',
             description: 'Adding Funds In Card',
           }
         )
@@ -91,52 +91,93 @@ export default {
         const profileResult = await this.$axios.get('/profile')
         const { first_name, last_name, mobile, email } = profileResult.data
         const full_name = `${first_name} ${last_name}`
+        
+        const data={
+                "txnid": orderId,
+                "amount":amt.toString(),
+                "name": full_name,
+                "email":  email,
+                "phone": mobile,
+                "productinfo": "PrePaidCardLoad",
+                "surl": "http://localhost:8000/pg/easebuzz/initiate/success",
+                "furl": "http://localhost:3000/response",
+                "udf1": "",
+                "udf2": "",
+                "udf3": "",
+                "udf4": "",
+                "udf5": "",
+                "address1": "",
+                "address2": "",
+                "city": "",
+                "state": "",
+                "country": "",
+                "zipcode": "",
+                "sub_merchant_id": "",
+                "unique_id": "",
+                "split_payments": "",
+                "customer_authentication_id": "",
+                "udf6": "",
+                "udf7": "",
+                "udf8": "",
+                "udf9": "",
+                "udf10": ""
+              }
+
+          const getEasebuzzPaymentCred = await this.$axios.post(
+          '/pg/easebuzz/initiate',data)
+
+          if(!getEasebuzzPaymentCred.data.status){
+            alert(getEasebuzzPaymentCred.data.data)
+          }
+
+
+        const key=getEasebuzzPaymentCred.data.key
+        const access_key=getEasebuzzPaymentCred.data.access_key
+        const env=getEasebuzzPaymentCred.env // EaseBuzz environment 
 
         const options = {
-          order_id: orderId,
-          currency: currency,
-          amount: amount,
-          prefill: {
-            name: full_name,
-            email: email,
-            contact: mobile,
-          },
-          theme: {
-            color: '#7165E3',
-          },
-          handler: _this.paymentResponse,
-          modal: {
-            ondismiss: _this.onPaymentCancel,
-          },
+        access_key: access_key, // access key received via Initiate Payment
+        
+        onResponse: (response) =>  {
+            // const res=JSON.stringify(response);
+            const {status}=response
+            if(status==="success"){
+              _this.paymentResponse(amt)
+            }
+            else{
+              this.$toast.error('Payment declined by user.')
+            }
+        },
+        theme: "#7165E3" // color hex
         }
-        const rzp1 = new Razorpay(options)
-        rzp1.open()
+        
+
+        const easebuzzCheckout = new EasebuzzCheckout(key, env);
+        easebuzzCheckout.initiatePayment(options);
       } catch (err) {
-        console.log(err)
         this.$toast.error('Failed to make payment')
       }
+
+
     },
-    async paymentResponse(response) {
-      const verify_payment_response = await this.verifySignature(response)
-      if (verify_payment_response.data.status) {
+
+
+    async paymentResponse(amt) {
         const loadCardBalance = await this.$axios.post('/nbfc/loadcard', {
           amount: amt,
         })
+
         this.$router.push('/dashboard')
+
         this.$toast.success(
           `Your account has been credited with a balance of ${amt}`
         )
-      } else {
-        this.$toast.error(verify_payment_response.data.message)
-      }
     },
-    async onPaymentCancel() {
-      console.log('Checkout form closed')
-    },
-    async verifySignature(response) {
-      const Response = { ...response, skiplog: true }
-      return await this.$axios.post('/payment/gateway/verify', Response)
-    },
+
+    // async onPaymentCancel() {
+    //   console.log('Checkout form closed')
+    // },
+
   },
 }
 </script>
