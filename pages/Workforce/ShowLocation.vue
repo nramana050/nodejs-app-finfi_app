@@ -3,7 +3,6 @@
     <div>
       <button @click="getTrailHandler">Get Trail</button>
     </div>
-
     <div ref="map" style="width: 100%; height: 400px"></div>
   </div>
 </template>
@@ -37,10 +36,6 @@ export default {
   beforeMount() {
     window.initMap = this.initMap
   },
-
-  // mounted() {
-  //   window.initMap = this.initMap
-  // },
 
   methods: {
     initMap() {
