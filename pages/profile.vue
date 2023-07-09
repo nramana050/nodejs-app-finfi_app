@@ -12,8 +12,8 @@
       div.uppercase
         div.flex.flex-row.justify-between.ps-5
           p.text-md.tracking-wide.font-bold.uppercase Bank Details
-          p.text-right(v-if="!isEditMode" @click="enableEditMode")
-            outline-pencil-alt-icon.w-5.h-5
+          //- p.text-right(v-if="!isEditMode" @click="enableEditMode")
+          //-   outline-pencil-alt-icon.w-5.h-5
         div.flex.ps-5
           FormulateForm(v-model="bank" @submit="saveBankDetail")
             div.flex.flex-row.justify-between
