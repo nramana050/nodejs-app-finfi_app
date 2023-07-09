@@ -1,6 +1,8 @@
 <template>
   <div>
     <div>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-3" @click="navToDashboard">Go
+        to Dashboard</button>
       <button @click="getTrailHandler">Get Trail</button>
     </div>
     <div ref="map" style="width: 100%; height: 400px"></div>
@@ -38,6 +40,9 @@ export default {
   },
 
   methods: {
+    navToDashboard() {
+      this.$router.push('/dashboard')
+    },
     initMap() {
       // Create a map object
       const map = new window.google.maps.Map(this.$refs.map, {
@@ -83,17 +88,17 @@ export default {
             }
 
             // Send data to backend
-            this.$axios
-              .post('/workforce/locationdata', locData)
-              .then((response) => {
-                console.log(response.data)
+            // this.$axios
+            //   .post('/workforce/locationdata', locData)
+            //   .then((response) => {
+            //     console.log(response.data)
 
-                // Start periodic location tracking
-                setInterval(this.updateCurrentLocation.bind(this), 10 * 1000)
-              })
-              .catch((error) => {
-                console.error(error)
-              })
+            //     // Start periodic location tracking
+            //     setInterval(this.updateCurrentLocation.bind(this), 10 * 1000)
+            //   })
+            //   .catch((error) => {
+            //     console.error(error)
+            //   })
           },
           () => {
             // Handle location retrieval error
@@ -150,14 +155,14 @@ export default {
               ],
             }
 
-            this.$axios
-              .post('/workforce/locationdata', locData)
-              .then((response) => {
-                console.log(response.data)
-              })
-              .catch((error) => {
-                console.error(error)
-              })
+            // this.$axios
+            //   .post('/workforce/locationdata', locData)
+            //   .then((response) => {
+            //     console.log(response.data)
+            //   })
+            //   .catch((error) => {
+            //     console.error(error)
+            //   })
           },
           () => {
             // Handle location retrieval error
@@ -172,22 +177,63 @@ export default {
 
     getTrailHandler() {
       // Draw the already collected trail.
-
+      this.infoWindow = new google.maps.InfoWindow({});
       const self = this
-      for (let count = 0; count < self.locArr.length; count++) {
+
+      var locationArray ={}; 
+      this.$axios
+        .get('/workforce/location')
+        .then((response) => {
+          console.log("Inside showlocation: ", response.data.payload);
+          console.log("KEYSSS ", Object.keys(response.data.payload));
+          locationArray = response.data.payload;
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+
+      // for (let count = 0; count < self.locArr.length; count++) {
+      //   const marker = new window.google.maps.Marker({
+      //     position: new window.google.maps.LatLng(
+      //       self.locArr[count].lat,
+      //       self.locArr[count].lng
+      //     ),
+      //     map: self.map,
+      //     animation: window.google.maps.Animation.DROP,
+      //     title: 'I was at ' + count.toString(), // locations[count][0]
+      //   })
+
+      //   // gotoCurrentLocation();
+
+      //   this.infoWindow.setContent('I was at' + count.toString())
+      //   this.infoWindow.open(self.map, marker)
+
+      //   window.google.maps.event.addListener(
+      //     marker,
+      //     'click',
+      //     (function (marker, count) {
+      //       return function () {
+      //         this.infoWindow.setContent('I was at' + count.toString())
+      //         this.infoWindow.open(this.map, marker)
+      //       }
+      //     })(marker, count)
+      //   )
+      // }
+      for (let count = 0; count < locationArray.length; count++) {
         const marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(
-            self.locArr[count].lat,
-            self.locArr[count].lng
+            // self.locArr[count].lat,
+            locationArray.location[count].locations.latitude,
+            locationArray.location[count].locations.longitude
           ),
           map: self.map,
           animation: window.google.maps.Animation.DROP,
-          title: 'I was at ' + count.toString(), // locations[count][0]
+          title: 'Location Number:  ' + count.toString(), // locations[count][0]
         })
 
         // gotoCurrentLocation();
 
-        this.infoWindow.setContent('I was at' + count.toString())
+        this.infoWindow.setContent('Location Number: ' + count.toString())
         this.infoWindow.open(self.map, marker)
 
         window.google.maps.event.addListener(
@@ -195,7 +241,7 @@ export default {
           'click',
           (function (marker, count) {
             return function () {
-              this.infoWindow.setContent('I was at' + count.toString())
+              this.infoWindow.setContent('Location Number: ' + count.toString())
               this.infoWindow.open(this.map, marker)
             }
           })(marker, count)
@@ -224,9 +270,9 @@ export default {
       const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.sin(dLon / 2) *
-          Math.sin(dLon / 2) *
-          Math.cos(lat1rad) *
-          Math.cos(lat2rad)
+        Math.sin(dLon / 2) *
+        Math.cos(lat1rad) *
+        Math.cos(lat2rad)
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
       const d = R * c
       return d

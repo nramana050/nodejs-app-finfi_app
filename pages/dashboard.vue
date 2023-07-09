@@ -85,7 +85,8 @@ div.home-comtainer.ps-1A
     h3.font-bold.text-sm Latest Claim
     ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
     button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
-    button.claim-btn(@click="navToClaimHistory") Claim History 
+    button.claim-btn(@click="navToClaimHistory") Claim History
+    button.claim-btn(@click="navToGeolocation") Geolocation 
   div.claim-exp.p-5(v-if="deferredPrompt" )   
    button.claim-btn(ref="addBtn" class="add-button" @click="clickCallback") Add To Mobile HomeScreen  
 </template>
@@ -259,6 +260,9 @@ export default {
     },
     navToLoadYourCard() {
       this.$router.push('/loadyourcard')
+    },
+    navToGeolocation() {
+      this.$router.push('/workforce/showlocation')
     },
     async fetchClaims() {
       const res = await this.$axios.$get(
