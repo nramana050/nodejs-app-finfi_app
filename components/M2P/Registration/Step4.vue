@@ -4,7 +4,7 @@ div.flex.flex-col.verify-user-details
   div.otp-info(v-if="!isSuccess && !isError")
    h3 Enter the 6 digit OTP
    p Please confirm your request by entering the OTP sent to 
-    span 999999999
+    span {{ mobile }}
 
     div.flex.flex-row.justify-between.ps-6(v-if="!isError && !isSuccess")
           input(type='text'  maxlength='1' id="otp1" v-model="num1" @input="changeRange(0,$event.target.value,$event)" v-on:keyup.delete="onClickDelete(0)")
@@ -35,6 +35,7 @@ export default {
 
   data() {
     return {
+      mobile: this.$auth.user.mobile,
       isLoading: true,
       isSuccess: false,
       isError: false,

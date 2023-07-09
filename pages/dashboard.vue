@@ -24,7 +24,7 @@ div.home-comtainer.ps-1A
     div.content
      span.header Get your Prepaid Rupay Card Now
      span.body Earn upto 10% cashback on your monthly spends  
-  div.account-card(v-else)
+  div.account-card(v-else-if='this.cardStatus === "PHYSICAL_CARD_NOT_ORDERD" || this.cardStatus === "PHYSICAL_CARD_ORDERED_ACCPECTED" ')
    div.header
     span.info 
      img(src='~/assets/myfinfi-icons/wallet.png') 
@@ -48,6 +48,8 @@ div.home-comtainer.ps-1A
    div.message 
      img(src='~/assets/myfinfi-icons/cashback.png') 
      span Bharat Ka Best Cashback Card
+  
+  
   div.container.corp-exp.products.p-5(v-if="homeProducts?.length")
     h3.font-bold
      span Get upto 15% discount on major brands   
