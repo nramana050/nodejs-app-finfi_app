@@ -99,8 +99,8 @@ export default {
                 "email":  email,
                 "phone": mobile,
                 "productinfo": "PrePaidCardLoad",
-                "surl": "https://uatapi.myfinfi.com/pg/easebuzz/initiate/success",
-                "furl": "https://uatapi.myfinfi.com/pg/easebuzz/initiate/failure",
+                "surl": "https://uatapi.myfinfi.com//pg/easebuzz/initiate/success",
+                "furl": "https://uatapi.myfinfi.com//pg/easebuzz/initiate/failure",
                 "udf1": "",
                 "udf2": "",
                 "udf3": "",
@@ -129,7 +129,7 @@ export default {
 
         const key=getEasebuzzPaymentCred.data.key
         const access_key=getEasebuzzPaymentCred.data.access_key
-        const env=getEasebuzzPaymentCred.env // EaseBuzz environment 
+        const env=getEasebuzzPaymentCred.data.env // EaseBuzz environment 
 
         const options = {
         access_key: access_key, // access key received via Initiate Payment
@@ -148,7 +148,7 @@ export default {
         }
         
 
-        const easebuzzCheckout = new EasebuzzCheckout(key, env);
+        const easebuzzCheckout = new EasebuzzCheckout(key,env);
         easebuzzCheckout.initiatePayment(options);
       } catch (err) {
         this.$toast.error('Failed to make payment')
