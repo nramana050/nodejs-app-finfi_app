@@ -43,12 +43,66 @@ export default {
     navToDashboard() {
       this.$router.push('/dashboard')
     },
-    initMap() {
+    async initMap() {
       // Create a map object
+      var maxDistance = 0;
+      var locationArray = {};
+      await this.$axios
+        .get('/workforce/location')
+        .then((response) => {
+          // var maxDistance = 0;
+          locationArray = (response.data.payload)['location'];
+          for (let i = 0; i < locationArray.length; i++) {
+            for (let j = 0; j < locationArray.length; j++) {
+              var d = 1000 * this.calcCrow(locationArray[i].locations.latitude, locationArray[i].locations.longitude, locationArray[j].locations.latitude, locationArray[j].locations.longitude);
+              // console.log("d", d);
+              maxDistance = Math.max(d, maxDistance);
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+        });
+
+      var metersPerPx = maxDistance / (Math.sqrt(2) * 25);
+      var zoomLevel = Math.floor(Math.log2(40075016.686 / metersPerPx));
+
+      console.log("maxD: ", maxDistance);
+      console.log("zoom: ", zoomLevel);
       const map = new window.google.maps.Map(this.$refs.map, {
         center: { lat: 0, lng: 0 },
-        zoom: 15,
+        zoom: zoomLevel,
       })
+      var bounds = new google.maps.LatLngBounds();
+
+      for (let count = 0; count < locationArray.length; count++) {
+       
+            const marker = new window.google.maps.Marker({
+              position: new window.google.maps.LatLng(
+                locationArray[count].locations.latitude,
+                locationArray[count].locations.longitude
+              ),
+              map: self.map,
+              animation: window.google.maps.Animation.DROP,
+              title: 'Location Number: ' + count.toString(),
+            })
+
+            bounds.extend(marker.getPosition());
+
+          }
+          map.setCenter(bounds.getCenter());
+
+          map.fitBounds(bounds);
+
+          //remove one zoom level to ensure no marker is on the edge.
+          map.setZoom(map.getZoom() - 1);
+
+          // set a minimum zoom 
+          // if you got only 1 marker or all markers are on the same address map will be zoomed too much.
+          if (map.getZoom() > 15) {
+            map.setZoom(15);
+          }
+
 
       this.infowindow = new window.google.maps.InfoWindow({})
 
@@ -87,18 +141,7 @@ export default {
               ],
             }
 
-            // Send data to backend
-            // this.$axios
-            //   .post('/workforce/locationdata', locData)
-            //   .then((response) => {
-            //     console.log(response.data)
 
-            //     // Start periodic location tracking
-            //     setInterval(this.updateCurrentLocation.bind(this), 10 * 1000)
-            //   })
-            //   .catch((error) => {
-            //     console.error(error)
-            //   })
           },
           () => {
             // Handle location retrieval error
@@ -155,14 +198,7 @@ export default {
               ],
             }
 
-            // this.$axios
-            //   .post('/workforce/locationdata', locData)
-            //   .then((response) => {
-            //     console.log(response.data)
-            //   })
-            //   .catch((error) => {
-            //     console.error(error)
-            //   })
+
           },
           () => {
             // Handle location retrieval error
@@ -175,79 +211,58 @@ export default {
       }
     },
 
+  
     getTrailHandler() {
       // Draw the already collected trail.
       this.infoWindow = new google.maps.InfoWindow({});
       const self = this
+      // var bounds = new google.maps.LatLngBounds();
 
-      var locationArray ={}; 
       this.$axios
         .get('/workforce/location')
         .then((response) => {
-          console.log("Inside showlocation: ", response.data.payload);
+          console.log("Inside showlocation: ", (response.data.payload)['location']);
           console.log("KEYSSS ", Object.keys(response.data.payload));
-          locationArray = response.data.payload;
+          const locationArray = (response.data.payload)['location'];
+          console.log("count: ", locationArray.length);
+
+          for (let count = 0; count < locationArray.length; count++) {
+            console.log("Lat:", locationArray[count].locations.latitude);
+            console.log("Long:", locationArray[count].locations.longitude);
+
+            const marker = new window.google.maps.Marker({
+              position: new window.google.maps.LatLng(
+                locationArray[count].locations.latitude,
+                locationArray[count].locations.longitude
+              ),
+              map: self.map,
+              animation: window.google.maps.Animation.DROP,
+              title: 'Location Number: ' + count.toString(),
+            })
+
+            this.infoWindow.setContent('Location Number: ' + count.toString())
+            this.infoWindow.open(self.map, marker)
+            // bounds.extend(marker.getPosition());
+
+            window.google.maps.event.addListener(
+              marker,
+              'click',
+              (function (marker, count) {
+                return function () {
+                  this.infoWindow.setContent('Location Number: ' + count.toString())
+                  this.infoWindow.open(this.map, marker)
+                  // bounds.extend(marker.getPosition());
+                }
+              })(marker, count)
+            )
+          }
+
         })
         .catch((error) => {
           console.error(error)
         })
-
-      // for (let count = 0; count < self.locArr.length; count++) {
-      //   const marker = new window.google.maps.Marker({
-      //     position: new window.google.maps.LatLng(
-      //       self.locArr[count].lat,
-      //       self.locArr[count].lng
-      //     ),
-      //     map: self.map,
-      //     animation: window.google.maps.Animation.DROP,
-      //     title: 'I was at ' + count.toString(), // locations[count][0]
-      //   })
-
-      //   // gotoCurrentLocation();
-
-      //   this.infoWindow.setContent('I was at' + count.toString())
-      //   this.infoWindow.open(self.map, marker)
-
-      //   window.google.maps.event.addListener(
-      //     marker,
-      //     'click',
-      //     (function (marker, count) {
-      //       return function () {
-      //         this.infoWindow.setContent('I was at' + count.toString())
-      //         this.infoWindow.open(this.map, marker)
-      //       }
-      //     })(marker, count)
-      //   )
-      // }
-      for (let count = 0; count < locationArray.length; count++) {
-        const marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(
-            // self.locArr[count].lat,
-            locationArray.location[count].locations.latitude,
-            locationArray.location[count].locations.longitude
-          ),
-          map: self.map,
-          animation: window.google.maps.Animation.DROP,
-          title: 'Location Number:  ' + count.toString(), // locations[count][0]
-        })
-
-        // gotoCurrentLocation();
-
-        this.infoWindow.setContent('Location Number: ' + count.toString())
-        this.infoWindow.open(self.map, marker)
-
-        window.google.maps.event.addListener(
-          marker,
-          'click',
-          (function (marker, count) {
-            return function () {
-              this.infoWindow.setContent('Location Number: ' + count.toString())
-              this.infoWindow.open(this.map, marker)
-            }
-          })(marker, count)
-        )
-      }
     },
+
 
     // TBD : it displays info to user in infoWindow
     handleLocationError(browserHasGeolocation, infoWindow, pos) {
