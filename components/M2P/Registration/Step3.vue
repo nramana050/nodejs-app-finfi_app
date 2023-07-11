@@ -3,8 +3,14 @@ div.flex.flex-col.verify-user-details
   FormulateForm(v-model="form" @submit="next")
     FormulateInput(type="select" label="Document Type" name="document_type" :options="types" placeholder="Select document type" validation="required")
     FormulateInput(type="text" label="Document/ID no." name="document_display_number" validation="required" :input-class="['uppercase']")
+    div.action 
+      div.flex.flex-cpl.tnc-block
+        FormulateInput(type="checkbox" name="agree" v-model="agree" )
+        div.tnc I have read & agreed to the 
+        a(@click="navToTnC" target="_blank") Terms & Conditions.
+      //- div.req-msg(v-if='!this.agree') Check Terms & Conditions 
     div.flex
-        button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Verify with an OTP
+        button(:disabled="!this.agree" type="submit" :class="`btn h-8 px-4 text-white rounded font-bold ${!agree? 'disabled':' '}`") Verify with an OTP
 </template>
 
 <script>
@@ -18,6 +24,7 @@ export default {
         document_number: '',
         document_display_number: '',
       },
+      agree: false,
       types: { PAN: 'PAN Card' },
     }
   },
@@ -45,6 +52,9 @@ export default {
   },
 
   methods: {
+    navToTnC() {
+      this.$router.push('/TermsAndConditions')
+    },
     async generateOTP() {
       return await this.$axios.$post('/m2p/otp', {
         headers: {
@@ -77,6 +87,11 @@ export default {
 }
 </script>
 <style scoped>
+.verify-user-details .btn.disabled {
+  background: #979797;
+  cursor: initial;
+}
+
 .verify-user-details {
   height: 100vh;
 }
@@ -118,6 +133,32 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.tnc-block {
+  margin: 15px 0px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #898a8d;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.tnc-block a {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration-line: underline;
+  color: #7165e3;
+}
+.req-msg {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #ff5141;
+  margin-bottom: 15px;
+  padding-left: 7px;
 }
 .action {
   position: relative;
