@@ -29,6 +29,7 @@ div.flex.flex-col
 ></script>
 <script>
 import { v4 as uuidv4 } from 'uuid'
+
 export default {
   name: 'LoadYourCard',
   layout: 'empty',
@@ -275,3 +276,4 @@ export default {
   color: #ffffff;
 }
 </style>
+

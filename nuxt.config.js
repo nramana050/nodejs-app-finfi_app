@@ -108,7 +108,7 @@ export default {
 
   server: {
     host: '0.0.0.0',
-    port: 8002,
+    port: 9002,
   },
 
   router: {

@@ -87,6 +87,7 @@ div.home-comtainer.ps-1A
     button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
     button.claim-btn(@click="navToClaimHistory") Claim History
     button.claim-btn(@click="navToGeolocation") Geolocation 
+    button.claim-btn(@click="navToTest") Go to test website 
   div.claim-exp.p-5(v-if="deferredPrompt" )   
    button.claim-btn(ref="addBtn" class="add-button" @click="clickCallback") Add To Mobile HomeScreen  
 </template>
@@ -263,6 +264,9 @@ export default {
     },
     navToGeolocation() {
       this.$router.push('/workforce/showlocation')
+    },
+    navToTest(){
+      window.location.href = 'https://rrfincap.tech/authenicate/web/user?access_token=RPAvp18BUwFLhXA0gndlmmubi57qnOxh2tYZnJTS'
     },
     async fetchClaims() {
       const res = await this.$axios.$get(
