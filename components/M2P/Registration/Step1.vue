@@ -38,9 +38,8 @@ export default {
         last_name: this.$auth.user.last_name,
         mobile: this.$auth.user.mobile,
         email: this.$auth.user.email,
-        // otp: '',
-        gender: '',
-        dob: '',
+        gender: this.$auth.user.kyc_status.gender,
+        dob: this.$auth.user.kyc_status.dob,
       },
       agree: true,
       genders: { M: 'Male', F: 'Female', O: 'Others' },
@@ -82,7 +81,7 @@ export default {
     async next() {
       try {
         // TODO: This function need to call in parent
-        
+
         await this.$axios.$post(
           '/profile/update',
           {
@@ -107,6 +106,9 @@ export default {
     disabledRange(date) {
       return date > new Date()
     },
+  },
+  mounted() {
+    console.log('USER DATA', this.$auth.user)
   },
 }
 </script>

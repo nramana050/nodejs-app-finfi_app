@@ -5,7 +5,7 @@ div
     button(@click="navToDashboard")
         FaIcon.mx-auto.ps-3(icon='angle-left')
     div.text-center.font-bold Card Details 
-  div(v-if="!this.isLoading && sCardAvailable && cardFetch > 0")
+  div(v-if="!this.isLoading && isCardAvailable && cardFetch > 0")
     div
       div.ps-8(v-if="card.url && !isCardBlocked")
         object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
