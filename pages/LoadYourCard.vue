@@ -100,8 +100,6 @@ export default {
                 "email":  email,
                 "phone": mobile,
                 "productinfo": "PrePaidCardLoad",
-                "surl": "https://uatapi.myfinfi.com/pg/easebuzz/initiate/success",
-                "furl": "https://uatapi.myfinfi.com/pg/easebuzz/initiate/failure",
                 "udf1": "",
                 "udf2": "",
                 "udf3": "",

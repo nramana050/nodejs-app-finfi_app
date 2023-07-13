@@ -79,12 +79,24 @@ export default {
         }
       }, 1000)
     },
-    next() {
-      // this.$emit('next', {
-      //   // otp: this.form.otp,
-      //   gender: this.form.gender,
-      //   dob: this.form.dob,
-      // })
+    async next() {
+      try {
+        // TODO: This function need to call in parent
+        
+        await this.$axios.$post(
+          '/profile/update',
+          {
+            ...this.form,
+          },
+          {
+            headers: {
+              Authorization: this.token,
+            },
+          }
+        )
+      } catch (err) {
+        this.$toast.error('Failed to update the profile.')
+      }
       this.$emit('next', this.form)
     },
     cancel(e) {
