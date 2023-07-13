@@ -14,6 +14,7 @@ div.flex.flex-col.verify-user-details
 </template>
 
 <script>
+const regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/
 export default {
   name: 'Step3Component',
 
@@ -44,7 +45,10 @@ export default {
         ).toString('ascii')
         this.form.document_type = data.document_type
         this.form.document_number = data.document_number
-        this.form.document_display_number = apiResult[0]?.document_number
+        this.form.document_display_number = Buffer.from(
+          apiResult[0]?.document_number,
+          'base64'
+        ).toString('ascii')
       }
     } catch (error) {
       console.log(error)
@@ -64,10 +68,19 @@ export default {
     },
     async next() {
       try {
-        this.form.document_number = Buffer.from(
-          this.form.document_display_number
-        ).toString('base64')
-        await this.$axios.$post('/profile/kyc/docs', this.form, {
+        if (!regex.test(this.form.document_display_number.toUpperCase())) {
+          this.$toast.error('Enter a valid PAN number')
+          return
+        }
+
+        const payload = {
+          document_number: Buffer.from(
+            this.form.document_display_number.toUpperCase()
+          ).toString('base64'),
+          document_type: this.form.document_type,
+        }
+
+        await this.$axios.$post('/profile/kyc/docs', payload, {
           headers: {
             Authorization: this.token,
           },
@@ -76,7 +89,9 @@ export default {
         if (otpRes?.message === 'Success') {
           this.$emit('next', this.form)
         }
-      } catch (err) {}
+      } catch (err) {
+        this.$toast.error(err?.response?.data?.message || err.message)
+      }
     },
     cancel(e) {
       this.$router.push('/cards')
