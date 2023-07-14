@@ -40,10 +40,10 @@ div.home-comtainer.ps-1A
     //-  span.head Prepaid Balance (Used)
     //-  span.amt ₹ {{ cardData?.used || 0 }} 
     div.stats
-     span.amt ₹ {{ cardData?.account_balance || 0 }}
+     span.amt ₹ {{ cardData?.account_balance || isEarnedWages?.isVisible ? isEarnedWages?.balance : 0  }}
      span.head Balance
    div.card.actions
-    button(@click="navToLoadYourCard") Add Money  
+    button(v-if="!Boolean(isEarnedWages?.isVisible)" @click="navToLoadYourCard") Add Money  
     button(@click="navToCard") Card Details 
    div.message 
      img(src='~/assets/myfinfi-icons/cashback.png') 
@@ -131,6 +131,21 @@ export default {
   },
 
   computed: {
+    isEarnedWages() {
+      const ernedData = this.accounts.filter(
+        (acc) => acc?.account_type === 'EARNED_WAGES'
+      )
+      return {
+        isVisible: ernedData?.length,
+        balance: ernedData?.[0]?.account_balance,
+      }
+    },
+    earnedData() {
+      const earnedAccount = this.accounts.filter(
+        (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
+      )
+      return earnedAccount.length > 0 ? earnedAccount[0] : {}
+    },
     organization() {
       return this.$auth.user.organization
     },

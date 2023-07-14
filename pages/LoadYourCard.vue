@@ -90,7 +90,6 @@ export default {
         const { id: orderId, amount, currency } = razorpayOrderId.data
         const profileResult = await this.$axios.get('/profile')
         const accountresult = await this.$axios.get('/accounts')
-
         const accountId = accountresult.data?.filter(
           (acc) => acc?.account?.account_type === 'CARD'
         )?.[0]?.account?.id
