@@ -125,30 +125,42 @@ export default {
             alert(getEasebuzzPaymentCred.data.data)
           }
 
+          const url=getEasebuzzPaymentCred.data.url
+          const windowName = "_blank";
+          const width = 800;
+          const height = 600;
+          const left = window.innerWidth / 2 - width / 2;
+          const top = window.innerHeight / 2 - height / 2;
 
-        const key=getEasebuzzPaymentCred.data.key
-        const access_key=getEasebuzzPaymentCred.data.access_key
-        const env=getEasebuzzPaymentCred.data.env // EaseBuzz environment 
+          const windowFeatures = `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars=yes`;
+          window.open(url, windowName, windowFeatures);
 
-        const options = {
-        access_key: access_key, // access key received via Initiate Payment
+ 
+
+
+        // const key=getEasebuzzPaymentCred.data.key
+        // const access_key=getEasebuzzPaymentCred.data.access_key
+        // const env=getEasebuzzPaymentCred.data.env // EaseBuzz environment 
+
+        // const options = {
+        // access_key: access_key, // access key received via Initiate Payment
         
-        onResponse: (response) =>  {
-            // const res=JSON.stringify(response);
-            const {status}=response
-            if(status==="success"){
-              _this.paymentResponse(amt)
-            }
-            else{
-              this.$toast.error('Payment declined by user.')
-            }
-        },
-        theme: "#7165E3" // color hex
-        }
+        // onResponse: (response) =>  {
+        //     // const res=JSON.stringify(response);
+        //     const {status}=response
+        //     if(status==="success"){
+        //       _this.paymentResponse(amt)
+        //     }
+        //     else{
+        //       this.$toast.error('Payment declined by user.')
+        //     }
+        // },
+        // theme: "#7165E3" // color hex
+        // }
         
 
-        const easebuzzCheckout = new EasebuzzCheckout(key,env);
-        easebuzzCheckout.initiatePayment(options);
+        // const easebuzzCheckout = new EasebuzzCheckout(key,env);
+        // easebuzzCheckout.initiatePayment(options);
       } catch (err) {
         this.$toast.error('Failed to make payment')
       }
@@ -157,17 +169,17 @@ export default {
     },
 
 
-    async paymentResponse(amt) {
-        const loadCardBalance = await this.$axios.post('/nbfc/loadcard', {
-          amount: amt,
-        })
+    // async paymentResponse(amt) {
+    //     const loadCardBalance = await this.$axios.post('/nbfc/loadcard', {
+    //       amount: amt,
+    //     })
 
-        this.$router.push('/dashboard')
+    //     this.$router.push('/dashboard')
 
-        this.$toast.success(
-          `Your account has been credited with a balance of ${amt}`
-        )
-    },
+    //     this.$toast.success(
+    //       `Your account has been credited with a balance of ${amt}`
+    //     )
+    // },
 
     // async onPaymentCancel() {
     //   console.log('Checkout form closed')

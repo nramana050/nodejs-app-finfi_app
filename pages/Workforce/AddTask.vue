@@ -42,7 +42,7 @@
 
     
 <div class="mt-12 ml-5">
-<p class="text-black text-base font-urbanist font-normal font-medium leading-normal tracking-wider">Add a task</p>
+<p class="text-black text-base font-urbanist font-normal leading-normal tracking-wider">Add a task</p>
 
 
 <!-- these are tasks  -->
@@ -57,7 +57,7 @@
   
   <div class="flex items-center ml-5">
    
-   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" placeholder=" Company Name">
+   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" v-model="companyName" placeholder=" Company Name">
   
 
   </div>
@@ -69,7 +69,7 @@
   </div>
   
   <div class="flex items-center ml-5">
-   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" placeholder="Contact Person">
+   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" v-model="contactPerson" placeholder="Contact Person">
   </div>
 </div>
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
@@ -83,6 +83,7 @@
    <input
   class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide"
   type="date"
+  v-model="appointmentDate"
   placeholder="Appointment Date"
 >
 
@@ -95,7 +96,7 @@
   </div>
   
   <div class="flex items-center ml-5">
-  <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" placeholder=" Location">
+  <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text"  v-model="location" placeholder=" Location">
   </div>
 </div>
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
@@ -105,13 +106,13 @@
   </div>
   
   <div class="flex items-center ml-5">
-   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" placeholder="Notes">
+   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" v-model="notes" placeholder="Notes">
   </div>
 </div>
 
 
 
-<button style="width: 356px; height: 48px; flex-shrink: 0; border-radius: 24px; background: #54A7E2; color: #FFF; text-align: center; line-height: 48px; margin-top: 230px;  margin-left: 5px; margin-right: 5px; margin-bottom: 10px;">Submit</button>
+<button style="width: 356px; height: 48px; flex-shrink: 0; border-radius: 24px; background: #54A7E2; color: #FFF; text-align: center; line-height: 48px; margin-top: 230px;  margin-left: 5px; margin-right: 5px; margin-bottom: 10px;" @click="handleSubmit">Submit</button>
 
 
 
@@ -131,11 +132,41 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+    data() {
+    return {
+       companyName: '', 
+      contactPerson: '',
+      appointmentDate: '',
+      location: '',
+      notes: '',
+    };
+  },
 
   methods:{
     navToDashboard() {
       this.$router.push('/dashboard');
+    },
+     handleSubmit() {
+      
+      const data = {
+        companyName: this.companyName,
+        contactPerson: this.contactPerson,
+        appointmentDate: this.appointmentDate,
+        location: this.location,
+        notes: this.notes,
+        
+      };
+
+      
+      axios.post('http://localhost:8003/task', data)
+  .then(response => {
+    console.log(response);
+  })
+  .catch(error => {
+    console.log("Error occurred:", error);
+  });
     }
   }
 }
