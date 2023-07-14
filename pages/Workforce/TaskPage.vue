@@ -54,7 +54,7 @@
  <!-- Fourth section  Tasks-->
 
       <div v-for="(task, index) in Tasks" :key="index">
-      <TaskCard :time="task.time" :company="task.company" />
+      <TaskCard :time="task.appointmentDate" :companyName="task.selectLead" />
     </div>
 
 
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import TaskCard from '~/components/Workforce/TaskCard.vue';
 import TaskBox from '~/components/Workforce/TaskBox.vue';
 export default {
@@ -73,20 +74,32 @@ export default {
   },
    data() {
     return {
-      Tasks: [
-        { time: '10:00 AM', company: 'ABC Corporation' },
-        { time: '11:30 AM', company: 'XYZ Corporation' },
-        { time: '1:15 PM', company: 'Example Corp' },
-        { time: '3:45 PM', company: 'Acme Inc.' },
-        { time: '5:30 PM', company: 'Global Industries' }
-      ]
+      Tasks: []
+  
+      
     };
   },
   methods:{
     navToDashboard() {
       this.$router.push('/dashboard');
-    }
-  }
+    },
+     fetchData() {
+      axios
+        .get('http://localhost:8003/alltask')
+        .then(response => {
+          this.Tasks = response.data.task;
+          console.log(response);
+          console.log(this.Tasks);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+  },
+  mounted() {
+    this.fetchData();
+  },
+  
 }
 </script>
 

@@ -7,7 +7,7 @@
           <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
         </a>
       </div>
-      <p class="m-4">{{ company }}</p>
+      <p class="m-4">{{ companyName }}</p>
     </div>
   </div>
 </template>
@@ -20,7 +20,7 @@ export default {
       type: String,
       required: true
     },
-    company: {
+    companyName: {
       type: String,
       required: true
     }

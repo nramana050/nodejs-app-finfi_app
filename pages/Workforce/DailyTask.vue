@@ -55,7 +55,7 @@
 <!-- These are task assigned for today -->
 
   <div>
-        <ReusableTask v-for="task in tasks" :key="task.time" :time="task.time" :work="task.work" :company="task.company" :nextTask="task.nextTask" />
+        <ReusableTask v-for="task in tasks" :key="task._id" :time="'9:00 AM'" :work="'Presentaion'" :company="task.selectLead" :nextTask="task.managerNotes" />
       </div>
  
 
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 import ReusableBox from '~/components/Workforce/ReusableBox.vue';
 import ReusableTask from '~/components/Workforce/ReusableTask.vue';
 export default {
@@ -78,32 +78,9 @@ export default {
 
  data() {
     return {
-      tasks: [
-        {
-          time: "9:00 AM",
-          work: "Task 1",
-          company: "ABC Company",
-          nextTask: "Task 2"
-        },
-        {
-          time: "11:00 AM",
-          work: "Task 3",
-          company: "XYZ Company",
-          nextTask: "Task 4"
-        },
-        {
-          time: "2:00 PM",
-          work: "Task 5",
-          company: "PQR Company",
-          nextTask: "Task 6"
-        },
-        {
-          time: "4:00 PM",
-          work: "Task 7",
-          company: "LMN Company",
-          nextTask: "Task 8"
-        }
-      ]
+      tasks: []
+        
+      
     };
   },
 
@@ -114,8 +91,25 @@ export default {
   methods:{
     navToDashboard() {
       this.$router.push('/dashboard');
-    }
-  }
+    },
+    
+     fetchData() {
+      axios
+        .get('http://localhost:8003/alltask')
+        .then(response => {
+          this.tasks = response.data.task;
+          console.log(response);
+          console.log(this.tasks);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+  },
+  mounted() {
+    this.fetchData();
+  },
+
 }
 </script>
 
