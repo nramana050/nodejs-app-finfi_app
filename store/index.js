@@ -121,4 +121,7 @@ export const getters = {
   getShopCart(state) {
     return state.shop.cart
   },
+  getAccounts(state) {
+    return state.accounts
+  },
 }

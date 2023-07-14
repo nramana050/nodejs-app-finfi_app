@@ -62,7 +62,6 @@ export default {
       return this.cardLoadLimit - this.cardLimit
     },
   },
-
   methods: {
     async payViaEasebuzz() {
       const _this = this
@@ -90,61 +89,68 @@ export default {
 
         const { id: orderId, amount, currency } = razorpayOrderId.data
         const profileResult = await this.$axios.get('/profile')
-        const { first_name, last_name, mobile, email } = profileResult.data
+        const accountresult = await this.$axios.get('/accounts')
+
+        const accountId = accountresult.data?.filter(
+          (acc) => acc?.account?.account_type === 'CARD'
+        )?.[0]?.account?.id
+        const { first_name, last_name, mobile, email, organization } =
+          profileResult.data
         const full_name = `${first_name} ${last_name}`
-        
-        const data={
-                "txnid": orderId,
-                "amount":amt.toString(),
-                "name": full_name,
-                "email":  email,
-                "phone": mobile,
-                "productinfo": "PrePaidCardLoad",
-                "udf1": "LOADBALANCE", // purpose status
-                "udf2": "2019", // account_id
-                "udf3": "17", // organization_id
-                "udf4": "",
-                "udf5": "",
-                "address1": "",
-                "address2": "",
-                "city": "",
-                "state": "",
-                "country": "",
-                "zipcode": "",
-                "udf6": "",
-                "udf7": "",
-                "udf8": "",
-                "udf9": "",
-                "udf10": ""
-              }
 
-          const getEasebuzzPaymentCred = await this.$axios.post(
-          '/pg/easebuzz/initiate',data)
+        const data = {
+          txnid: orderId,
+          amount: amt.toString(),
+          name: full_name,
+          email: email,
+          phone: mobile,
+          productinfo: 'PrePaidCardLoad',
+          udf1: 'LOADBALANCE', // purpose status
+          udf2: accountId?.toString(), // account_id
+          udf3: organization?.id?.toString(), // organization_id
+          udf4: '',
+          udf5: '',
+          address1: '',
+          address2: '',
+          city: '',
+          state: '',
+          country: '',
+          zipcode: '',
+          udf6: '',
+          udf7: '',
+          udf8: '',
+          udf9: '',
+          udf10: '',
+        }
 
-          if(!getEasebuzzPaymentCred.data.status){
-            alert(getEasebuzzPaymentCred.data.data)
-          }
+        console.log('DATA:::PAYLOAD::', data)
 
-          const url=getEasebuzzPaymentCred.data.url
-          const windowName = "_blank";
-          const width = 800;
-          const height = 600;
-          const left = window.innerWidth / 2 - width / 2;
-          const top = window.innerHeight / 2 - height / 2;
+        const getEasebuzzPaymentCred = await this.$axios.post(
+          '/pg/easebuzz/initiate',
+          data
+        )
 
-          const windowFeatures = `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars=yes`;
-          window.open(url, windowName, windowFeatures);
+        if (!getEasebuzzPaymentCred.data.status) {
+          alert(getEasebuzzPaymentCred.data.data)
+        }
 
- 
+        const url = getEasebuzzPaymentCred.data.url
+        const windowName = '_blank'
+        const width = 800
+        const height = 600
+        const left = window.innerWidth / 2 - width / 2
+        const top = window.innerHeight / 2 - height / 2
 
+        const windowFeatures = `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars=yes`
+        window.open(url, windowName, windowFeatures)
 
         // const key=getEasebuzzPaymentCred.data.key
         // const access_key=getEasebuzzPaymentCred.data.access_key
-        // const env=getEasebuzzPaymentCred.data.env // EaseBuzz environment 
+        // const env=getEasebuzzPaymentCred.data.env // EaseBuzz environment
 
         // const options = {
         // access_key: access_key, // access key received via Initiate Payment
-        
+
         // onResponse: (response) =>  {
         //     // const res=JSON.stringify(response);
         //     const {status}=response
@@ -157,17 +163,13 @@ export default {
         // },
         // theme: "#7165E3" // color hex
         // }
-        
 
         // const easebuzzCheckout = new EasebuzzCheckout(key,env);
         // easebuzzCheckout.initiatePayment(options);
       } catch (err) {
         this.$toast.error('Failed to make payment')
       }
-
-
     },
-
 
     // async paymentResponse(amt) {
     //     const loadCardBalance = await this.$axios.post('/nbfc/loadcard', {
@@ -184,7 +186,6 @@ export default {
     // async onPaymentCancel() {
     //   console.log('Checkout form closed')
     // },
-
   },
 }
 </script>
