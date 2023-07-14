@@ -68,19 +68,21 @@ export default {
     await this.registerAction()
     this.timer(this.defaultTimerValue)
   },
-  unmounted() {},
-
   methods: {
     async generateOTP() {
-      const otpRes = await this.$axios.$post('/m2p/otp', {
-        headers: {
-          Authorization: this.token,
-        },
-      })
-      if (otpRes?.message === 'Success') {
-        this.$toast.success('OTP generated and sent to your mobile number')
-        this.timerOn = true
-        this.timer(this.defaultTimerValue)
+      try {
+        const otpRes = await this.$axios.$post('/m2p/otp', {
+          headers: {
+            Authorization: this.token,
+          },
+        })
+        if (otpRes?.message === 'Success') {
+          this.$toast.success('OTP generated and sent to your mobile number')
+          this.timerOn = true
+          this.timer(this.defaultTimerValue)
+        }
+      } catch (err) {
+        this.$toast.error(err?.response?.data?.message || err.message)
       }
     },
     changeRange(index, value, event) {
@@ -138,6 +140,7 @@ export default {
       } catch (err) {
         this.isSuccess = false
         this.errorMessage = err.response.data.message
+        this.$toast.error(err?.response?.data?.message || err.message)
       } finally {
         this.isLoading = false
       }
