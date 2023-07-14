@@ -42,7 +42,7 @@
 
     
 <div class="mt-12 ml-5">
-<p class="text-black text-base font-urbanist font-normal font-medium leading-normal tracking-wider">Add a task</p>
+<p class="text-black text-base font-urbanist font-normal leading-normal tracking-wider">Add a task</p>
 
 
 <!-- these are tasks  -->
