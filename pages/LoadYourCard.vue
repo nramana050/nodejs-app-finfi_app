@@ -100,9 +100,9 @@ export default {
                 "email":  email,
                 "phone": mobile,
                 "productinfo": "PrePaidCardLoad",
-                "udf1": "",
-                "udf2": "",
-                "udf3": "",
+                "udf1": "LOADBALANCE", // purpose status
+                "udf2": "2019", // account_id
+                "udf3": "17", // organization_id
                 "udf4": "",
                 "udf5": "",
                 "address1": "",
