@@ -40,7 +40,7 @@ div.home-comtainer.ps-1A
     //-  span.head Prepaid Balance (Used)
     //-  span.amt ₹ {{ cardData?.used || 0 }} 
     div.stats
-     span.amt ₹ {{ cardData?.account_balance || isEarnedWages?.isVisible ? isEarnedWages?.balance : 0  }}
+     span.amt ₹ {{   isEarnedWages?.isVisible ? isEarnedWages?.balance : cardData?.account_balance  }}
      span.head Balance
    div.card.actions
     button(v-if="!Boolean(isEarnedWages?.isVisible)" @click="navToLoadYourCard") Add Money  
