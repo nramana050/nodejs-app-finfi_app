@@ -54,7 +54,7 @@
  <!-- Fourth section  Tasks-->
 
       <div v-for="(task, index) in Tasks" :key="index">
-      <TaskCard :time="task.time" :companyName="task.companyName" />
+      <TaskCard :time="task.appointmentDate" :companyName="task.selectLead" />
     </div>
 
 
