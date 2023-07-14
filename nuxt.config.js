@@ -84,8 +84,8 @@ export default {
   components: true,
 
   axios: {
-    // baseURL: 'https://uatapi.myfinfi.com',
-    baseURL: 'http://localhost:8000'
+    baseURL: 'https://uatapi.myfinfi.com',
+    // baseURL: 'http://localhost:8000'
   },
 
   pwa: {
