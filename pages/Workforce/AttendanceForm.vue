@@ -7,7 +7,7 @@
     <div class="bg-gray-100">
       <!-- Arrow section -->
       <div class="flex p-3">
-        <button class="ml-5" @click="navToDashboard" >
+        <button class="ml-5" @click="navToDashboard">
           <FaIcon class="mx-auto" icon="arrow-left" />
         </button>
 
@@ -82,7 +82,8 @@
       <!-- Submit Button -->
       <button
         class="block mt-64 mb-10 w-11/12 h-12 text-center mx-auto text-white bg-blue-400 rounded-3xl hover:bg-blue-600"
-      >
+      @click="submitForm"
+        >
         Submit
       </button>
     </div>
@@ -94,6 +95,34 @@ export default {
   methods: {
     navToDashboard() {
       this.$router.push('/dashboard')
+    },
+    submitForm() {
+      const location = document.getElementById('location').value
+      const dateFrom = document.getElementById('dateFrom').value
+      const dateTo = document.getElementById('dateTo').value
+      const reason = document.getElementById('reason').value
+
+      const formData = {
+        location,
+        dateFrom,
+        dateTo,
+        reason,
+      }
+
+      fetch('http://localhost:8003/attendence', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     },
   },
 }
