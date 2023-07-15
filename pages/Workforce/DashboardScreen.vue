@@ -31,7 +31,7 @@
        <p  class="text-white">Clock In</p>
 
         
-        <p class="ml-auto text-white">Tap here to clock In </p>
+        <button class="ml-auto" @click="clockIn"><p class="text-white">Tap here to clock In </p> </button>
       </div>
 </div>
 
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-
+import axios from "axios";
 import ScheduleCard from '~/components/Workforce/ScheduleCard.vue';
 
 
@@ -152,7 +152,25 @@ export default {
     navToDashboard(){
       this.$router.push('/Workforce/TaskPage');
       
-    }
+    },
+    clockIn() {
+
+      const data = {
+        clockin : true
+      }
+           axios.post('http://localhost:8003/clock', data)
+  .then(response => {
+    console.log(response);
+  })
+  .catch(error => {
+    console.log("Error occurred:", error);
+  });
+
+
+
+      this.$router.push('/Workforce/ClockoutPage');
+      console.log("Clocking in...");
+    },
   }
 
  
