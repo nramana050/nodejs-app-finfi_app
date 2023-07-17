@@ -21,7 +21,7 @@ div.success-error-screen(v-if="isSuccess || isError")
           p {{ errorMessage }}
     div.actions
       button.goto-home(@click="goToHome") Home 
-      button.unlock(v-if="isSuccess && isCardOrder") Unlock your Card
+      //- button.unlock(v-if="isSuccess && isCardOrder") Unlock your Card
       button.retry(v-if="isError && buttonText" @click="callBack") {{buttonText}}
  
 </template>

@@ -5,21 +5,33 @@
         div.main-container.w-full
             //- iframe.ifgh.w-full.h-screen(:src="webJournyUrl",allow="geolocation; camera; microphone")
   </template> -->
-  
-  <template >
-    <div class="flex flex-col justify-center items-center mt-5">
-        <h2 class="font-light justify-center items-center text-2xl my-2">Check Your Credit Limit</h2>
-        <div class="main-container w-full">
-          <p class="text-center text-xl px-0.5">You will be redirected to RR fincorp website to check your credit limit.</p>
-          <div class="my-5">
-            <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mx-1 my-1 rounded" @click="popupNav">Click here to continue</button>
-            <button class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 my-1 rounded" @click="navToDashboard">Click here to go back</button>
-          </div>
-        </div>
-    </div>
-            
 
-  </template>
+<template>
+  <div class="flex flex-col justify-center items-center mt-5">
+    <h2 class="font-light justify-center items-center text-2xl my-2">
+      Check Your Credit Limit
+    </h2>
+    <div class="main-container w-full">
+      <p class="text-center text-xl px-0.5">
+        You will be redirected to RR Fincap website to check your credit limit.
+      </p>
+      <div class="my-5">
+        <button
+          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mx-1 my-1 rounded"
+          @click="popupNav"
+        >
+          Click here to continue
+        </button>
+        <button
+          class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 my-1 rounded"
+          @click="navToDashboard"
+        >
+          Click here to go back
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
 export default {
@@ -38,22 +50,22 @@ export default {
   methods: {
     reloadIframe() {
       const iframe = document.getElementsByClassName('ifgh')[0]
-      iframe.src =this.$store.state.web_journey_url
+      iframe.src = this.$store.state.web_journey_url
     },
     webJournyUrl() {
       return this.$store.state.web_journey_url
     },
-    popupNav(){
-      // alert(this.$store.state.web_journey_url);
-      window.open(this.$store.state.web_journey_url, 'Popup', 'width=400,height=300');
-      // alert("After window open");
+    popupNav() {
+      window.open(
+        this.$store.state.web_journey_url,
+        'Popup',
+        'width=400,height=300'
+      )
     },
     navToDashboard() {
-      this.$router.push('/dashboard');
-    }
+      this.$router.push('/dashboard')
+    },
   },
-
-
 }
 </script>
 

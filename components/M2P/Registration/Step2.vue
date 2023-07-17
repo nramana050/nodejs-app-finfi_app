@@ -1,9 +1,9 @@
 <template lang="pug">
 div.flex.flex-col.verify-user-details
   FormulateForm(v-model="form" @submit="next")
-    FormulateInput(type="text" label="Flat, House no., Building, Apartment - as per Aadhaar" name="address_line_1" validation="required" @keydown="nameKeydown($event)")
-    FormulateInput(type="text" label="Area, Street, Colony, Road, Lane - as per Aadhaar" name="address_line_2" validation="required" @keydown="nameKeydown($event)")
-    FormulateInput(type="text" label="Village, Town, City - as per Aadhaar" name="address_line_3" validation="required" @keydown="nameKeydown($event)")
+    FormulateInput(type="text" label="Flat, House no., Building, Apartment - as per Aadhaar" name="address_line_1" validation="required" validation-name="This field" @keydown="nameKeydown($event)")
+    FormulateInput(type="text" label="Area, Street, Colony, Road, Lane - as per Aadhaar" name="address_line_2" validation="required" validation-name="This field" @keydown="nameKeydown($event)")
+    FormulateInput(type="text" label="Village, Town, City - as per Aadhaar" name="address_line_3" validation="required"  validation-name="This field" @keydown="nameKeydown($event)")
     div
     div.flex.flex-col
       FormulateInput(type="text" label="Pincode - as per Aadhaar" name="pincode" validation="required" maxlength="6" @keydown="nameKeydown($event)")

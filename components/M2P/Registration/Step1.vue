@@ -8,7 +8,7 @@ div.flex.flex-col.verify-user-details
     div
       FormulateInput.pb-2(type="number" label="Mobile number registered with Aadhaar" name="mobile"  validation="required")
     div
-      FormulateInput.pb-2(type="text" label="eMail ID" name="email"  validation="required")
+      FormulateInput.pb-2(type="text" label="Email ID" name="email"  validation="required")
     div
       div.flex-1.mb-3
         FormulateInput(type="radio" label="Gender" name="gender" :options="genders" placeholder="Select" validation="required")

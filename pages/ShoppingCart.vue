@@ -60,8 +60,9 @@ div.ps-3.shop-container
              p By continuing you agree to the brand’s & our 
               span Terms & Conditions  
             div.make-payment
-             button.via-payment-gateway(@click="payViaRazor") Buy from Payment Gateway
-             button.via-salary-advance(@click="openBlockCard") Buy from Salary Advance             
+             button.via-salary-advance(@click="openBlockCard") Pay through Prepaid card            
+            //-  button.via-payment-gateway(@click="payViaRazor") Buy from Payment Gateway
+            //-  button.via-salary-advance(@click="openBlockCard") Buy from Salary Advance             
      
     
 
@@ -100,6 +101,7 @@ export default {
   },
   mounted() {
     this.focusVoucherAmount()
+    console.log('SELECED PRODUCT::', this.selectedProduct)
   },
   computed: {
     min() {
@@ -154,7 +156,7 @@ export default {
     openBlockCard() {
       this.$FModal.show(
         { component: BuyNowConfim },
-        { amt: parseInt(this.voucherAmount), buyNow: this.buyNow }
+        { amt: parseInt(this.voucherAmount), buyNow: this.payViaM2p }
       )
     },
     close() {
@@ -181,6 +183,38 @@ export default {
         // this.$router.push('/shopnow')
       } catch (err) {
         this.$toast.error('Failed to start plan')
+      }
+    },
+    async payViaM2p() {
+      try {
+        const razorpayOrderId = await this.$axios.post(
+          '/payment/gateway/order_id',
+          {
+            amount: parseInt(this.voucherAmount) * 100,
+            purpose: 'InstantVoucher',
+            description: 'Payment for Instant Voucher',
+          }
+        )
+        const { id: orderId, amount, currency } = razorpayOrderId.data
+
+        const res = await this.$axios.post('/m2p/payment', {
+          amount: parseInt(this.voucherAmount),
+          transactionType: 'PURCHASE',
+          transactionOrigin: 'MOBILE',
+          externalTransactionId: orderId,
+          productId: 'GENERAL',
+        })
+        if (res.data.status) {
+          this.$toast.success(res.data.message)
+          this.isSuccess = true
+        } else {
+          this.$toast.error(res.data.message)
+          this.isError = true
+        }
+      } catch (err) {
+        this.$toast.error('Failed to make the payment.')
+        this.isError = true
+        console.log(err)
       }
     },
     async payViaRazor() {
