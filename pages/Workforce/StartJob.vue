@@ -1,83 +1,96 @@
-
 <template>
-<div>
+  <div>
     <!-- first Header Section -->
-    <div class="bg-blue-500 h-6">
-    
-    </div>
+    <div class="bg-blue-500 h-6"></div>
 
     <div class="bg-gray-100">
-
-       <!-- Arrow section -->
+      <!-- Arrow section -->
       <div class="flex p-3">
         <button class="ml-5" @click="navToDashboard">
           <FaIcon class="mx-auto" icon="arrow-left" />
         </button>
 
-        <p class="ml-4 pt-1 text-gray-600 font-roboto text-base font-medium">BeHilly Industries</p>
-
-
-        
+        <p class="ml-4 pt-1 text-gray-600 font-roboto text-base font-medium">
+          BeHilly Industries
+        </p>
       </div>
 
-    <div ref="map" style="width: 100%; height: 400px"></div>
+      <div ref="map" style="width: 100%; height: 400px"></div>
 
-        <div class="mt-3">
+      <div class="mt-3">
         <p class="text-gray-700 font-roboto text-xl font-medium mx-7">Step-2</p>
 
-        <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px;"></div>
-        <div class="m-4 flex  items-center">
-        <p class="text-gray-700 font-roboto text-base font-normal leading-6 mr-4">Status</p>
-        <p class="text-gray-700 font-roboto text-base font-normal leading-6">Step 1 done</p>
-        <a href="/TaskPage" class="ml-auto">
-          <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
-        </a>
-      </div>
-      <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px;"></div>
-       
-        <div class="m-4 flex  items-center">
-        <p class="text-gray-700 font-roboto text-base font-normal leading-6 mr-4">Manager's note</p>
-
-        <a href="/TaskPage" class="ml-auto">
-          <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
-        </a>
-      </div>
-
+        <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px"></div>
+        <div class="m-4 flex items-center">
+          <p
+            class="text-gray-700 font-roboto text-base font-normal leading-6 mr-4"
+          >
+            Status
+          </p>
+          <p class="text-gray-700 font-roboto text-base font-normal leading-6">
+            Step 1 done
+          </p>
+          <a href="/TaskPage" class="ml-auto">
+            <img
+              class="ml-auto"
+              src="../../assets/Workforce/RightIcon.svg"
+              alt=""
+            />
+          </a>
         </div>
-        <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px;"></div>
-       
-        <div class="m-4 flex  items-center">
-        <p class="text-gray-700 font-roboto text-base font-normal leading-6 mr-4">Details</p>
+        <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px"></div>
+
+        <div class="m-4 flex items-center">
+          <p
+            class="text-gray-700 font-roboto text-base font-normal leading-6 mr-4"
+          >
+            Manager's note
+          </p>
+
+          <a href="/TaskPage" class="ml-auto">
+            <img
+              class="ml-auto"
+              src="../../assets/Workforce/RightIcon.svg"
+              alt=""
+            />
+          </a>
+        </div>
+      </div>
+      <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px"></div>
+
+      <div class="m-4 flex items-center">
+        <p
+          class="text-gray-700 font-roboto text-base font-normal leading-6 mr-4"
+        >
+          Details
+        </p>
 
         <a href="/TaskPage" class="ml-auto">
-          <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
+          <img
+            class="ml-auto"
+            src="../../assets/Workforce/RightIcon.svg"
+            alt=""
+          />
         </a>
       </div>
-      <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px;"></div>
+      <div class="w-370 h-1 bg-gray-300 mt-3" style="width: 383px"></div>
 
-       
-
-
-
-        <div class="mt-5 ">
+      <div class="mt-5">
         <button
-        class="block my-10 w-11/12 h-12 text-center mx-auto text-white bg-blue-400 rounded-3xl hover:bg-blue-600"
-      >
-       Start Job
-      </button>
-        </div>
- </div>
-
+          class="block my-10 w-11/12 h-12 text-center mx-auto text-white bg-blue-400 rounded-3xl hover:bg-blue-600"
+        >
+          Start Job
+        </button>
+      </div>
     </div>
+  </div>
 
-</div>
-
+  <!-- </div> -->
 </template>
 <!-- import { gmapApi } from 'vue2-google-maps'; -->
 <script>
 export default {
-
-      name: 'ShowLocation',
+  name: 'ShowLocation',
   head: {
     script: [
       {
@@ -111,64 +124,68 @@ export default {
     },
     async initMap() {
       // Create a map object
-      let maxDistance = 0;
-      let locationArray = {};
+      let maxDistance = 0
+      let locationArray = {}
       await this.$axios
         .get('/workforce/location')
         .then((response) => {
           // var maxDistance = 0;
-          locationArray = (response.data.payload)["'location'"];
+          locationArray = response.data.payload["'location'"]
           for (let i = 0; i < locationArray.length; i++) {
             for (let j = 0; j < locationArray.length; j++) {
-              const d = 1000 * this.calcCrow(locationArray[i].locations.latitude, locationArray[i].locations.longitude, locationArray[j].locations.latitude, locationArray[j].locations.longitude);
+              const d =
+                1000 *
+                this.calcCrow(
+                  locationArray[i].locations.latitude,
+                  locationArray[i].locations.longitude,
+                  locationArray[j].locations.latitude,
+                  locationArray[j].locations.longitude
+                )
               // console.log("d", d);
-              maxDistance = Math.max(d, maxDistance);
+              maxDistance = Math.max(d, maxDistance)
             }
           }
         })
         .catch((error) => {
           console.error(error)
-        });
+        })
 
-      const metersPerPx = maxDistance / (Math.sqrt(2) * 25);
-      const zoomLevel = Math.floor(Math.log2(40075016.686 / metersPerPx));
+      const metersPerPx = maxDistance / (Math.sqrt(2) * 25)
+      const zoomLevel = Math.floor(Math.log2(40075016.686 / metersPerPx))
 
-      console.log("maxD: ", maxDistance);
-      console.log("zoom: ", zoomLevel);
+      console.log('maxD: ', maxDistance)
+      console.log('zoom: ', zoomLevel)
       const map = new window.google.maps.Map(this.$refs.map, {
         center: { lat: 0, lng: 0 },
         zoom: zoomLevel,
       })
-      const bounds = new window.google.maps.LatLngBounds();
+      const bounds = new window.google.maps.LatLngBounds()
 
       for (let count = 0; count < locationArray.length; count++) {
-       
-            const marker = new window.google.maps.Marker({
-              position: new window.google.maps.LatLng(
-                locationArray[count].locations.latitude,
-                locationArray[count].locations.longitude
-              ),
-              map: self.map,
-              animation: window.google.maps.Animation.DROP,
-              title: 'Location Number: ' + count.toString(),
-            })
+        const marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(
+            locationArray[count].locations.latitude,
+            locationArray[count].locations.longitude
+          ),
+          map: self.map,
+          animation: window.google.maps.Animation.DROP,
+          title: 'Location Number: ' + count.toString(),
+        })
 
-            bounds.extend(marker.getPosition());
+        bounds.extend(marker.getPosition())
+      }
+      map.setCenter(bounds.getCenter())
 
-          }
-          map.setCenter(bounds.getCenter());
+      map.fitBounds(bounds)
 
-          map.fitBounds(bounds);
+      // remove one zoom level to ensure no marker is on the edge.
+      map.setZoom(map.getZoom() - 1)
 
-          // remove one zoom level to ensure no marker is on the edge.
-          map.setZoom(map.getZoom() - 1);
-
-          // set a minimum zoom 
-          // if you got only 1 marker or all markers are on the same address map will be zoomed too much.
-          if (map.getZoom() > 15) {
-            map.setZoom(15);
-          }
-
+      // set a minimum zoom
+      // if you got only 1 marker or all markers are on the same address map will be zoomed too much.
+      if (map.getZoom() > 15) {
+        map.setZoom(15)
+      }
 
       this.infowindow = new window.google.maps.InfoWindow({})
 
@@ -206,8 +223,6 @@ export default {
             //     },
             //   ],
             // }
-
-
           },
           () => {
             // Handle location retrieval error
@@ -219,13 +234,7 @@ export default {
         console.log("Error: Your browser doesn't support geolocation.")
       }
     },
-  }
-
-
-
-
-
-
+  },
 }
 </script>
 
