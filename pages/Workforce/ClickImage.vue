@@ -2,6 +2,7 @@
     <div>
       <!-- Header Section -->
       <div class="bg-blue-500 h-6"></div>
+      
   
       <!-- This div for background color -->
       <div class="bg-gray-100">
@@ -29,6 +30,7 @@
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4" @click="sendImage">
               Send
             </button>
+             
           </div>
         </div>
       </div>
@@ -59,11 +61,13 @@
       sendImage() {
         // Placeholder logic to send the captured image
         console.log('Sending Image:', this.capturedImage);
+        this.$router.push('/Workforce/VoiceRecord');
         this.capturedImage = null;
       },
       navToDashboard() {
         // Implement navigation logic to go back to the dashboard
       },
+      
     },
   };
   </script>

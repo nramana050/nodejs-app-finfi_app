@@ -40,12 +40,12 @@
 
 <div>
 
-<div style="display: flex; flex-direction: column; margin-right: 20px; justify-content: center; align-items: flex-start; gap: 6px; width: 153px; height: 110px; padding: 0px 16px; border-radius: 12px; background: linear-gradient(to bottom right, #8553F3 0%, #A37EF6 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #8553F3 0%, #A37EF6 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #8553F3 0%, #A37EF6 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #8553F3 0%, #A37EF6 50%) top right / 50% 50% no-repeat;">
+<div @click="navToAttendance" style="display: flex; flex-direction: column; margin-right: 20px; justify-content: center; align-items: flex-start; gap: 6px; width: 153px; height: 110px; padding: 0px 16px; border-radius: 12px; background: linear-gradient(to bottom right, #8553F3 0%, #A37EF6 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #8553F3 0%, #A37EF6 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #8553F3 0%, #A37EF6 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #8553F3 0%, #A37EF6 50%) top right / 50% 50% no-repeat;">
   
-<div style="border-radius: 24px; background: #FFF; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center;">
+<div  style="border-radius: 24px; background: #FFF; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center;">
   <img src="../../assets/Workforce/AttendenceIcon.svg" style="display: block;">
 </div>
-<p class="text-white">Attendence  </p>
+<p class="text-white">Attendance  </p>
 
 
 </div>
@@ -152,6 +152,9 @@ export default {
     navToDashboard(){
       this.$router.push('/Workforce/TaskPage');
       
+    },
+    navToAttendance() {
+      this.$router.push('/Workforce/AttendanceForm');
     },
     clockIn() {
 

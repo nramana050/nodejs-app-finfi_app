@@ -77,6 +77,7 @@
 
       <div class="mt-5">
         <button
+        @click = "navToClick"
           class="block my-10 w-11/12 h-12 text-center mx-auto text-white bg-blue-400 rounded-3xl hover:bg-blue-600"
         >
           Start Job
@@ -121,6 +122,9 @@ export default {
   methods: {
     navToDashboard() {
       this.$router.push('/dashboard')
+    },
+    navToClick() {
+      this.$router.push('/Workforce/ClickImage')
     },
     async initMap() {
       // Create a map object
