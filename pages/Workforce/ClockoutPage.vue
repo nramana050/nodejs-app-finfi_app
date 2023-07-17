@@ -48,7 +48,7 @@
         <!-- These are all the task  -->
 
     <div>
-        <ScheduleCard v-for="task in tasks" :key="task.time" :time="task.time"  :company="task.company"  :name="task.name"/>
+        <ScheduleCard v-for="task in tasks" :key="task._id" :time="task.timefrom" :timeTo="task.timeTo"  :company="task.leadID"  :name="task.meetingWith"/>
       </div>
 
   
@@ -73,36 +73,36 @@ export default {
   data() {
     return {
       tasks: [
-        {
-          time: "9:00 AM - 10:00 AM",
+        // {
+        //   time: "9:00 AM - 10:00 AM",
         
-          company: "ABC Company",
-          name : "Siddarth"
-        },
-        {
-          time: "11:00  - 11: 30 AM",
+        //   company: "ABC Company",
+        //   name : "Siddarth"
+        // },
+        // {
+        //   time: "11:00  - 11: 30 AM",
          
-          company: "XYZ Company",
-          name : "Yash"
-        },
-        {
-          time: "2:00 PM - 3:00 PM",
+        //   company: "XYZ Company",
+        //   name : "Yash"
+        // },
+        // {
+        //   time: "2:00 PM - 3:00 PM",
          
-          company: "PQR Company",
-         name : "Tapesh"
-        },
-        {
-          time: "4:00 PM - 5:00 PM",
+        //   company: "PQR Company",
+        //  name : "Tapesh"
+        // },
+        // {
+        //   time: "4:00 PM - 5:00 PM",
          
-          company: "LMN Company",
-          name : "Rahul"
-        },
-        {
-          time: "5:00 PM - 6:00 PM",
+        //   company: "LMN Company",
+        //   name : "Rahul"
+        // },
+        // {
+        //   time: "5:00 PM - 6:00 PM",
          
-          company: "LMN Company",
-          name : "prasad"
-        }
+        //   company: "LMN Company",
+        //   name : "prasad"
+        // }
       ]
     };
   },
@@ -127,10 +127,27 @@ export default {
 
 
       this.$router.push('/Workforce/DashboardScreen');
-      console.log("Clocking out");
+      // console.log("Clocking out");
+    },
+    fetchData() {
+      axios
+        .get('http://localhost:8003/alltask')
+        .then(response => {
+          this.tasks = response.data.task;
+          console.log(response);
+          console.log(this.tasks);
+        })
+        .catch(error => {
+          console.error(error);
+        });
     },
 
-  }
+
+
+  },
+  mounted() {
+    this.fetchData();
+  },
 
  
 }

@@ -30,7 +30,7 @@
 <div class="flex m-3 mb-1">
     <img src="../../assets/Workforce/Time Circle.png" alt="Your Image" class="w-5 h-5 flex-shrink-0">
     <p class="text-blue-900  ml-2 font-urbanist text-xs font-normal leading-normal" style="color: #0E123E; font-size: 12px; font-style: normal; font-weight: 500; line-height: 130%;">
-        {{time}}
+        {{time}} &nbsp;&nbsp;{{timeTo}}
     </p>
 </div>
 
@@ -59,6 +59,10 @@ export default {
   props: {
     time: {
       type: String,
+      required: true
+    },
+    timeTo:{
+      type : String,
       required: true
     },
    name :{
