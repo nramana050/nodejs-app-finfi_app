@@ -29,7 +29,7 @@
 <div style="border-radius: 14px; background: #55ADAF; width: 339px; height: 58px; flex-shrink: 0; margin-top: 40px; margin-left: 20px;">
   <div class="flex p-3 pt-4">
     <p class="text-white">Clock Out</p>
-    <button class="ml-auto"><p class="text-white">Tap here to clock Out</p></button>
+    <button class="ml-auto" @click="clockOut"><p class="text-white">Tap here to clock Out</p></button>
   </div>
 </div>
 
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-
+import axios from "axios";
 import ScheduleCard from '~/components/Workforce/ScheduleCard.vue';
 
 
@@ -110,7 +110,26 @@ export default {
     navToDashboard(){
       this.$router.push('/Workforce/TaskPage');
       
-    }
+    },
+     clockOut() {
+
+      const data = {
+        clockin : false
+      }
+           axios.post('http://localhost:8003/clock', data)
+  .then(response => {
+    console.log(response);
+  })
+  .catch(error => {
+    console.log("Error occurred:", error);
+  });
+
+
+
+      this.$router.push('/Workforce/DashboardScreen');
+      console.log("Clocking out");
+    },
+
   }
 
  

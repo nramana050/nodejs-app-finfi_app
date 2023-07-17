@@ -37,6 +37,7 @@ export default {
     { src: '~/plugins/vue.modal.2', ssr: false },
     { src: '~/plugins/vue.iframe', ssr: false },
     { src: '~/plugins/vue.tooltip', ssr: false },
+    { src: '~/plugins/vue.calendar', ssr: false },
     // { src: '~/plugins/swiper.js', ssr: false },
 
     '~/plugins/fontawesome.js',
