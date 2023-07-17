@@ -1,22 +1,22 @@
 <template>
     <div>
-      <video ref="video" class="w-full h-auto" v-if="!capturedImage"></video>
+      <video ref="video" class="w-full h-4/6" v-if="!capturedImage"></video>
       <img :src="capturedImage" alt="Captured" class="w-full h-auto" v-if="capturedImage">
       <div v-if="!stream && !capturedImage">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="startCamera">
-          Start Camera
+        <button class="bg-black hover:bg-gray-800 text-white font-bold py-10 mt-60 px-10 border-2 m-auto block border-gray-500 rounded-full" @click="startCamera">
+          Start
         </button>
       </div>
       <div v-if="stream && !capturedImage">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="captureImage">
-          Capture Image
+        <button class="bg-gray-400 hover:bg-gray-800 m-auto  text-white py-10 px-10 mt-60 block font-bold border-2 border-black rounded-full" @click="captureImage">
+         Click 
         </button>
       </div>
-      <div v-if="capturedImage">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="retakeImage">
+      <div v-if="capturedImage" class="flex justify-center">
+        <!-- <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="retakeImage">
           Retake
-        </button>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="sendImage">
+        </button> -->
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 mt-60 px-4 rounded" @click="sendImage">
           Send
         </button>
       </div>
@@ -65,6 +65,7 @@
       sendImage() {
         // Implement logic to send the captured image
         console.log('Sending Image:', this.capturedImage);
+        this.$router.push('/Workforce/VoiceRecord');
       },
       stopCamera() {
         if (this.stream) {
