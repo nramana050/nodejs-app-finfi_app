@@ -40,27 +40,29 @@
       <!-- Form Input -->
       <div class="mt-6">
         <form class="w-5/6 m-auto font-medium">
-          <div class="mb-4">
+          <div class="mb-8">
             <label for="location">Approver</label>
             <br />
             <input
+            v-model="approver"
               id="location"
               type="text"
               class="w-full h-10 px-3 py-2 m-auto border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               placeholder="Select one"
             />
           </div>
-          <div class="mb-4">
+          <div class="mb-4 mt-4">
             <label for="selectOption">Leave Type</label>
             <select
+              v-model="selectOption"
               id="selectOption"
               class="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-gray-300"
             >
               <option value="leave">Leave Type</option>
-              <option value="option1">Medical Leave</option>
-              <option value="option2">Personal Leave</option>
-              <option value="option3">Public and religious holidays</option>
-              <option value="option4">Holiday Leave</option>
+              <option value="Medical Leave">Medical Leave</option>
+              <option value="Personal Leave">Personal Leave</option>
+              <option value="Public and religious holidays">Public and religious holidays</option>
+              <option value="Holiday Leave">Holiday Leave</option>
             </select>
           </div>
 
@@ -74,6 +76,7 @@
         <div>
         <label for="dateFrom">Date from</label>
           <input
+          v-model="dateFrom"
           id="dateFrom"
           type="date"
           class="text-gray-400 font-urbanist text-base font-medium leading-normal"
@@ -83,6 +86,7 @@
         <div class="ml-auto">
         <label for="dateto">Date to</label>
           <input
+          v-model="dateTo"
           id="dateto"
           type="date"
           class="text-gray-400 font-urbanist text-base font-medium leading-normal"
@@ -95,7 +99,7 @@
    
 
 <label class="flex items-center">
-  <input type="checkbox" class="
+  <input  v-model="firstHalf" type="checkbox" class="
     
     border border-gray-500 rounded-md
     w-4 h-4 checked:bg-gray-500 checked:border-transparent
@@ -104,7 +108,7 @@
   <span class="ml-2">First half</span>
 </label>
 <label class="flex items-center ml-auto">
- <input type="checkbox" class="
+ <input v-model="secondHalf" type="checkbox" class="
    
     border border-gray-500 rounded-md
     w-4 h-4 checked:bg-gray-500 checked:border-transparent
@@ -118,9 +122,10 @@
       </div>
 
 
-      <div class="mb-6 mx-9 mt-5">
+      <div class="mb-8 mx-9 mt-5">
             <br />
             <input
+              v-model="reason"
               id="reason"
               type="text"
               class="w-full placeholder-relative-top-0 h-12 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
@@ -135,6 +140,7 @@
             <label for="location">Add an attachment </label>
             <br />
             <input
+              
               id="location"
               type="file"
               class="mt-3"
@@ -146,7 +152,8 @@
 
      
       <button
-        class="block mt-64 mb-10 w-11/12 h-12 text-center mx-auto text-white bg-blue-400 rounded-3xl hover:bg-blue-600"
+        class="block mt-32 mb-10 w-11/12 h-12 text-center mx-auto text-white bg-blue-400 rounded-3xl hover:bg-blue-600"
+        @click="requestLeave()"
       >
         Request For Leave
       </button>
@@ -155,11 +162,52 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+      data() {
+      return {
+        approval: '',
+        leaveType: '',
+        leaveDateFrom: '',
+        leaveDateTo: '',
+        firstHalf: false,
+        secondHalf: false,
+        reason: '',
+        // attachment: null,
+        // <!-- v-model="attachment" -->
+      };
+    },
   methods: {
+    requestLeave() {
+      console.log("what this ")
+        const data = {
+          approval: this.approver,
+          leaveType: this.selectOption,
+          leaveDateFrom: this.dateFrom,
+          leaveDateTo: this.dateTo,
+          firstHalf: this.firstHalf,
+          secondHalf: this.secondHalf,
+          reason: this.reason,
+          // attachment: this.attachment,
+        };
+
+        axios
+          .post('http://localhost:8003/leaves', data)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log('Error occurred:', error);
+          });
+
+          this.$router.push('/Workforce/DashboardScreen');
+      },
+    
     navToDashboard() {
       this.$router.push('/dashboard')
-    },
+    }
+
+
   },
 }
 </script>

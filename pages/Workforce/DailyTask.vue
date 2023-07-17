@@ -55,7 +55,7 @@
 <!-- These are task assigned for today -->
 
   <div>
-        <ReusableTask v-for="task in tasks" :key="task._id" :time="'9:00 AM'" :work="'Presentaion'" :company="task.selectLead" :nextTask="task.managerNotes" />
+        <ReusableTask v-for="task in tasks" :key="task._id" :time="task.timefrom" :work="task.meetingNotes" :company="task.leadID" :nextTask="task.meetingNotes" />
       </div>
  
 
