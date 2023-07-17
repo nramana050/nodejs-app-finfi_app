@@ -156,7 +156,7 @@ export default {
 
     navToAttendance() {
       this.$router.push('/Workforce/AttendanceForm');
-
+    },
     navToLeave(){
       this.$router.push('/Workforce/LeaveApply');
 
