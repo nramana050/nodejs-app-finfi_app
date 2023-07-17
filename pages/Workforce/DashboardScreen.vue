@@ -61,14 +61,14 @@
 
 <div>
 
-<div  @click="navToDashboard" style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 26px; width: 153px; height: 140px; padding: 16px; border-radius: 12px; background: linear-gradient(to bottom right, #3A9ADE 0%, #5EACE4 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #3A9ADE 0%, #5EACE4 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #3A9ADE 0%, #5EACE4 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #3A9ADE 0%, #5EACE4 50%) top right / 50% 50% no-repeat;">
+<div  @click="navToTaskPage" style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 26px; width: 153px; height: 140px; padding: 16px; border-radius: 12px; background: linear-gradient(to bottom right, #3A9ADE 0%, #5EACE4 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #3A9ADE 0%, #5EACE4 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #3A9ADE 0%, #5EACE4 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #3A9ADE 0%, #5EACE4 50%) top right / 50% 50% no-repeat; cursor: pointer;">
 <div style="border-radius: 24px; background: #FFF; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center;">
   <img src="../../assets/Workforce/AttendenceIcon.svg" style="display: block;">
 </div>
 <p class="text-white">Tasks </p>
 </div>
 
-<div style="display: flex; width: 153px; height: 100px; margin-top: 20px; padding: 16px; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; border-radius: 12px; background: linear-gradient(to bottom right, #DD4A4A 0%, #E87777 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DD4A4A 0%, #E87777 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DD4A4A 0%, #E87777 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DD4A4A 0%, #E87777 50%) top right / 50% 50% no-repeat;">
+<div @click="navToLeave" style="display: flex; width: 153px; height: 100px; margin-top: 20px; padding: 16px; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; border-radius: 12px; background: linear-gradient(to bottom right, #DD4A4A 0%, #E87777 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DD4A4A 0%, #E87777 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DD4A4A 0%, #E87777 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DD4A4A 0%, #E87777 50%) top right / 50% 50% no-repeat; cursor: pointer;">
 <div style="border-radius: 24px; background: #FFF; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center;">
   <img src="../../assets/Workforce/AttendenceIcon.svg" style="display: block;">
 </div>
@@ -90,7 +90,7 @@
         <!-- These are all the task  -->
 
     <div>
-        <ScheduleCard v-for="task in tasks" :key="task.time" :time="task.time"  :company="task.company"  :name="task.name"/>
+        <ScheduleCard v-for="task in tasks" :key="task._id" :time="task.timefrom" :timeTo="task.timeTo"  :company="task.leadID"  :name="task.meetingWith"/>
       </div>
 
   
@@ -115,46 +115,51 @@ export default {
   data() {
     return {
       tasks: [
-        {
-          time: "9:00 AM - 10:00 AM",
+        // {
+        //   time: "9:00 AM - 10:00 AM",
         
-          company: "ABC Company",
-          name : "Siddarth"
-        },
-        {
-          time: "11:00  - 11: 30 AM",
+        //   company: "ABC Company",
+        //   name : "Siddarth"
+        // },
+        // {
+        //   time: "11:00  - 11: 30 AM",
          
-          company: "XYZ Company",
-          name : "Yash"
-        },
-        {
-          time: "2:00 PM - 3:00 PM",
+        //   company: "XYZ Company",
+        //   name : "Yash"
+        // },
+        // {
+        //   time: "2:00 PM - 3:00 PM",
          
-          company: "PQR Company",
-         name : "Tapesh"
-        },
-        {
-          time: "4:00 PM - 5:00 PM",
+        //   company: "PQR Company",
+        //  name : "Tapesh"
+        // },
+        // {
+        //   time: "4:00 PM - 5:00 PM",
          
-          company: "LMN Company",
-          name : "Rahul"
-        },
-        {
-          time: "5:00 PM - 6:00 PM",
+        //   company: "LMN Company",
+        //   name : "Rahul"
+        // },
+        // {
+        //   time: "5:00 PM - 6:00 PM",
          
-          company: "LMN Company",
-          name : "prasad"
-        }
+        //   company: "LMN Company",
+        //   name : "prasad"
+        // }
       ]
     };
   },
   methods:{
-    navToDashboard(){
+    navToTaskPage(){
       this.$router.push('/Workforce/TaskPage');
       
     },
+
     navToAttendance() {
       this.$router.push('/Workforce/AttendanceForm');
+
+    navToLeave(){
+      this.$router.push('/Workforce/LeaveApply');
+
     },
     clockIn() {
 
@@ -174,7 +179,24 @@ export default {
       this.$router.push('/Workforce/ClockoutPage');
       console.log("Clocking in...");
     },
-  }
+    fetchData() {
+      axios
+        .get('http://localhost:8003/alltask')
+        .then(response => {
+          this.tasks = response.data.task;
+          console.log(response);
+          console.log(this.tasks);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+
+  },
+  mounted() {
+    this.fetchData();
+  },
 
  
 }

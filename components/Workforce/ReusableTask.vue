@@ -21,7 +21,7 @@
 </div>
 
 <div class="m-4 flex  items-center">
-    <p class="text-gray-500 text-xs font-prompt font-normal leading-normal">Next Step -  </p>
+    <p class="text-gray-500 text-xs font-prompt font-normal leading-normal">Next Step - &nbsp;&nbsp;  </p>
     
       <p class=" text-gray-500 text-xs font-prompt font-normal leading-normal">{{nextTask}}  </p>
     

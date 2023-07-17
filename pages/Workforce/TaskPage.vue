@@ -40,7 +40,7 @@
       
     <!-- Third section boxes  -->
      
-      <div class="m-2 mt-5 mb-8 flex">
+      <div class="m-2 mt-5 mb-5 flex">
      <TaskBox :no_of_tasks="42" color="blue-500" class="ml-8" :task="'Missed'" />
 <TaskBox :no_of_tasks="30" color="green-500" :task="'Completed'" />
 <TaskBox :no_of_tasks="45" color="pink-500" :task="'Pending'" />
@@ -51,10 +51,16 @@
  
 </div>
 
+
+      <div @click="navToaddTask" class="w-8 h-8 ml-auto  mr-5 rounded-full bg-blue-500 flex justify-center items-center cursor-pointer">
+        <img  src="../../assets/Workforce/PlusIcon.svg" alt="" />
+      </div>
+
+
  <!-- Fourth section  Tasks-->
 
       <div v-for="(task, index) in Tasks" :key="index">
-      <TaskCard :time="task.appointmentDate" :companyName="task.selectLead" />
+      <TaskCard :time="task.timefrom" :timeTo="task.timeTo" :companyName="task.leadID" />
     </div>
 
 
@@ -82,6 +88,9 @@ export default {
   methods:{
     navToDashboard() {
       this.$router.push('/dashboard');
+    },
+    navToaddTask(){
+      this.$router.push('/Workforce/AddTask');
     },
      fetchData() {
       axios

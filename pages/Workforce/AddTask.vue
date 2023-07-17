@@ -52,12 +52,17 @@
 
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Company.png" alt="Image" />
+    <img style="width: 25.601px; height: 30px; flex-shrink: 0;" src="../../assets/Workforce/Company.png" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
    
-   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" v-model="companyName" placeholder=" Company Name">
+  <input
+  type="text"
+  v-model="leadID"
+  placeholder="Select Lead"
+  class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:outline-blue-500 hover:border-blue-500"
+/>
   
 
   </div>
@@ -65,23 +70,23 @@
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-4">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Vector.svg" alt="Image" />
+    <img style="width: 25.601px; height: 30px; flex-shrink: 0;" src="../../assets/Workforce/Vector.svg" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
-   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" v-model="contactPerson" placeholder="Contact Person">
+   <input class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:outline-blue-500 hover:border-blue-500" type="text" v-model="meetingWith" placeholder="Contact Person">
   </div>
 </div>
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Group.svg" alt="Image" />
+    <img style="width: 25.601px; height: 30px; flex-shrink: 0;" src="../../assets/Workforce/Group.svg" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
    
    <input
-  class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide"
+  class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:outline-blue-500 hover:border-blue-500"
   type="date"
   v-model="appointmentDate"
   placeholder="Appointment Date"
@@ -92,27 +97,51 @@
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Location.png" alt="Image" />
+    <img style="width: 16.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Group.svg" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
-  <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text"  v-model="location" placeholder=" Location">
+   
+   <input
+  type="time"
+  v-model="timefrom"
+  class="w-25 px-3 py-2 mr-5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+  placeholder="From Time"
+/>
+
+<input
+  type="time"
+  v-model="timeTo"
+  class="w-25 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+  placeholder="To Time"
+/>
+
   </div>
 </div>
 <div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
 <div class="flex mx-12 mt-3">
   <div class="flex items-center">
-    <img style="width: 18.601px; height: 20px; flex-shrink: 0;" src="../../assets/Workforce/Notes.svg" alt="Image" />
+    <img style="width: 25.601px; height: 30px; flex-shrink: 0;" src="../../assets/Workforce/Location.png" alt="Image" />
   </div>
   
   <div class="flex items-center ml-5">
-   <input class="text-gray-600 text-sm font-urbanist font-medium leading-normal tracking-wide" type="text" v-model="notes" placeholder="Notes">
+  <input class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:outline-blue-500 hover:border-blue-500" type="text"  v-model="meetingLocation" placeholder=" Location">
+  </div>
+</div>
+<div class="w-288 h-1 bg-gray-300 mx-12 mt-3"></div>
+<div class="flex mx-12 mt-3">
+  <div class="flex items-center">
+    <img style="width: 25.601px; height: 30px; flex-shrink: 0;" src="../../assets/Workforce/Notes.svg" alt="Image" />
+  </div>
+  
+  <div class="flex items-center ml-5">
+   <input class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:outline-blue-500 hover:border-blue-500" type="text" v-model="meetingNotes" placeholder="Notes">
   </div>
 </div>
 
 
 
-<button style="width: 356px; height: 48px; flex-shrink: 0; border-radius: 24px; background: #54A7E2; color: #FFF; text-align: center; line-height: 48px; margin-top: 230px;  margin-left: 5px; margin-right: 5px; margin-bottom: 10px;" @click="handleSubmit">Submit</button>
+<button style="width: 356px; height: 48px; flex-shrink: 0; border-radius: 24px; background: #54A7E2; color: #FFF; text-align: center; line-height: 48px; margin-top: 240px;  margin-left: 5px; margin-right: 5px; margin-bottom: 10px;" @click="handleSubmit">Submit</button>
 
 
 
@@ -120,7 +149,14 @@
 
 
 
+<!-- <div>
+<input
+  type="time"
+  v-model="selectedTime"
+  class="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+/>
 
+</div> -->
 
 
 
@@ -136,11 +172,13 @@ import axios from 'axios';
 export default {
     data() {
     return {
-       companyName: '', 
-      contactPerson: '',
+       leadID: '', 
+      meetingWith: '',
       appointmentDate: '',
-      location: '',
-      notes: '',
+      timefrom: '',
+      timeTo: '',
+      meetingLocation: '',
+      meetingNotes: '',
     };
   },
 
@@ -151,11 +189,14 @@ export default {
      handleSubmit() {
       
       const data = {
-        companyName: this.companyName,
-        contactPerson: this.contactPerson,
+        leadID: this.leadID,
+        meetingWith: this.meetingWith,
+
         appointmentDate: this.appointmentDate,
-        location: this.location,
-        notes: this.notes,
+        timefrom: this.timefrom,
+        timeTo: this.timeTo,
+        meetingLocation: this.meetingLocation,
+        meetingNotes: this.meetingNotes,
         
       };
 
@@ -167,6 +208,8 @@ export default {
   .catch(error => {
     console.log("Error occurred:", error);
   });
+     this.$router.push('/Workforce/TaskPage');
+
     }
   }
 }
