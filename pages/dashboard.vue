@@ -88,7 +88,7 @@ div.home-comtainer.ps-1A
     button.claim-btn(@click="navToClaimHistory") Claim History
     button.claim-btn(@click="navToGeolocation") Geolocation 
     button.claim-btn(@click="navToTest") Go to test website 
-  div.claim-exp.p-5(v-if="deferredPrompt" )   
+  div.claim-exp.p-5(v-if="deferredPrompt" )  
    button.claim-btn(ref="addBtn" class="add-button" @click="clickCallback") Add To Mobile HomeScreen  
   //- vc-calendar
 </template>
