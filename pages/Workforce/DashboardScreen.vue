@@ -166,7 +166,7 @@ export default {
       const data = {
         clockin : true
       }
-           axios.post('http://localhost:8003/clock', data)
+           axios.post('http://localhost:8003/clocking', data)
   .then(response => {
     console.log(response);
   })
@@ -181,7 +181,7 @@ export default {
     },
     fetchData() {
       axios
-        .get('http://localhost:8003/alltask')
+        .get('http://localhost:8003/tasks') // Vikas: alltask -> task
         .then(response => {
           this.tasks = response.data.task;
           console.log(response);
