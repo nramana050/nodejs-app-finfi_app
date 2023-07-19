@@ -199,9 +199,10 @@ export default {
         meetingNotes: this.meetingNotes,
         
       };
-
+      debugger;
+      this.$axios.post('/tasks', data) // Vikas: trial
       
-      axios.post('http://localhost:8003/task', data)
+      // axios.post('http://localhost:8003/tasks', data)
   .then(response => {
     console.log(response);
   })
