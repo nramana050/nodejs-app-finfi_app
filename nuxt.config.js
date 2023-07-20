@@ -31,6 +31,7 @@ export default {
   ],
 
   plugins: [
+    { src: '@/plugins/globalFunctions.js', ssr: false }, // Vikas: July 20
     { src: '~/plugins/vue.modal' },
     { src: '~/plugins/date.picker', ssr: false },
     { src: '~/plugins/vuex.persist' },

@@ -192,7 +192,7 @@ export default {
         };
 
         axios
-          .post('http://localhost:8003/leaves', data)
+          .post(this.$getWFMUrlBase() + '/leaves', data)
           .then(response => {
             console.log(response);
           })

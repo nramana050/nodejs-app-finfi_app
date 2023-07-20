@@ -94,7 +94,7 @@ export default {
     },
      fetchData() {
       axios
-        .get('http://localhost:8003/tasks') // Vikas: alltask -> tasks
+        .get(this.$getWFMUrlBase() + '/tasks') // Vikas: alltask -> tasks
         .then(response => {
           this.Tasks = response.data.task;
           console.log(response);
