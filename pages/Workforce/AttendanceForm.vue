@@ -109,7 +109,7 @@ export default {
         reason,
       }
 
-      fetch('http://localhost:8003/attendence', {
+      fetch(this.$getWFMUrlBase() + '/attendence', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

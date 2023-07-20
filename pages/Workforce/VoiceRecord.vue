@@ -113,7 +113,7 @@ export default {
         // Call your submit function or API request here
 
         axios
-          .post('http://localhost:8003/audio', {
+          .post(this.$getWFMUrlBase() + '/audio', {
             audioLink: this.audioLink
           })
           .then(response => {
