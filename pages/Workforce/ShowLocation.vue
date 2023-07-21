@@ -132,7 +132,7 @@ export default {
             )
 
             const locData = {
-              userID: 'S2023',
+              userId: 1234, // VikasRev:July22:Important: is number. should send actual data.
               locations: [
                 {
                   latitude: pos.lat,
@@ -189,7 +189,7 @@ export default {
 
             // Send data to backend
             const locData = {
-              userID: 'S2023',
+              userId: 1234, // VikasRev:July22:Important: is number. should send actual data.
               locations: [
                 {
                   latitude: pos.lat,

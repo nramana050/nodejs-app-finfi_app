@@ -219,7 +219,7 @@ export default {
             )
 
             // const locData = {
-            //   userID: 'S2023',
+            //   userId: 1234,
             //   locations: [
             //     {
             //       latitude: pos.lat,
