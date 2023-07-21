@@ -162,6 +162,9 @@
 </template>
 
 <script>
+
+// VikasRev:July22: where are we filling userId? I believe finfi_server
+//   can derive it based on auth tokens. is that the approach?
 import axios from 'axios';
 export default {
       data() {

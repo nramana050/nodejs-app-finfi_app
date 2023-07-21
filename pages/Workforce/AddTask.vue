@@ -59,7 +59,7 @@
    
   <input
   type="text"
-  v-model="leadID"
+  v-model="leadId"
   placeholder="Select Lead"
   class="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:outline-blue-500 hover:border-blue-500"
 />
@@ -168,11 +168,13 @@
 </template>
 
 <script>
-import axios from 'axios';
+
+// VikasRev:July22:changed ID to Id
+//import axios from 'axios';
 export default {
     data() {
     return {
-       leadID: '', 
+       leadId: '', 
       meetingWith: '',
       appointmentDate: '',
       timefrom: '',
@@ -189,7 +191,7 @@ export default {
      handleSubmit() {
       
       const data = {
-        leadID: this.leadID,
+        leadId: this.leadId,
         meetingWith: this.meetingWith,
 
         appointmentDate: this.appointmentDate,

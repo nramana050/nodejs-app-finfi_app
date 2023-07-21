@@ -60,7 +60,7 @@
  <!-- Fourth section  Tasks-->
 
       <div v-for="(task, index) in Tasks" :key="index">
-      <TaskCard :time="task.timefrom" :timeTo="task.timeTo" :companyName="task.leadID" />
+      <TaskCard :time="task.timefrom" :timeTo="task.timeTo" :companyName="task.leadId" />
     </div>
 
 
