@@ -9,6 +9,13 @@
 
         <p class="ml-4 pt-1">R & R Industries</p>
 
+        <!-- <button
+          class="ml-auto mr-5 text-blue-400 hover:text-blue-600"
+          @click="phone"
+        >
+          PhoneOtp
+        </button> -->
+
         <img
           class="rounded-full h-8 w-8 ml-auto mr-4"
           src="../../assets/Workforce/headerImage.png"
@@ -17,13 +24,17 @@
       </div>
       <div>
         <!-- company data came here -->
-        
       </div>
 
       <div>
-          <!-- mapping all the audio -->
-
+        <!-- mapping all the audio -->
       </div>
+      <!-- <button
+        class="block mt-4 mb-10 w-11/12 h-12 text-center mx-auto text-blue-400 bg-white border border-black rounded-3xl hover:bg-blue-600 hover:text-white"
+        @click="phone"
+      >
+        PhoneOtp
+      </button> -->
       <div class="mt-96">
         <audio
           ref="audio"
@@ -56,13 +67,64 @@
         >
           END JOB
         </button>
+        <div
+          class="bg-white absolute inset-x-0 bottom-0 rounded-t-3xl"
+          :class="{ hidden: !showPhoneNumberForm }"
+        >
+          <div class="text-center mt-10">
+            <h3>Add phone number</h3>
+            <p>We will send a verification code to this number</p>
+            <input
+              class="mt-4 w-7/8 h-12 focus border border-slate-300 rounded-md"
+              type="text"
+              v-model="phoneNumber"
+            />
+          </div>
+          <button
+            class="block relative mt-7 w-11/12 h-12 text-center mx-auto text-blue-400 bg-white border border-black rounded-3xl hover:bg-blue-600 hover:text-white"
+            @click="otp"
+          >
+            SEND OTP
+          </button>
+        </div>
+        <div
+          class="bg-white absolute inset-x-0 bottom-0 rounded-t-3xl"
+          :class="{ hidden: !showOtpForm }"
+        >
+          <div class="text-center mt-4">
+            <h3>Enter the 6 digit code</h3>
+            <p>
+              Please confirm your account for entering the <br />
+              authorization code sent to ****_****-5000
+            </p>
+            <input
+              class="mt-6 mb-4 w-7/8 h-12 focus border border-slate-300 rounded-md"
+              type="text"
+              v-model="enteredOtp"
+            />
+          </div>
+          <div class="flex">
+            <button
+              class="block mt-4 px-4 py-2 text-center mx-auto text-blue-400 bg-white border border-black rounded-3xl hover:bg-blue-600 hover:text-white"
+              @click="resendOtp"
+            >
+              RESEND
+            </button>
+            <button
+              class="block mt-4 px-4 py-2 text-center mx-auto text-blue-400 bg-white border border-black rounded-3xl hover:bg-blue-600 hover:text-white"
+              @click="confirmOtp"
+            >
+              CONFIRM
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -70,6 +132,11 @@ export default {
       mediaRecorder: null,
       audioChunks: [],
       audioLink: null,
+      showPhoneNumberForm: false,
+      showOtpForm: false,
+      phoneNumber: '',
+      otpNumber: '',
+      enteredOtp: '',
     }
   },
   methods: {
@@ -114,15 +181,65 @@ export default {
 
         axios
           .post(this.$getWFMUrlBase() + '/audio', {
-            audioLink: this.audioLink
+            audioLink: this.audioLink,
           })
-          .then(response => {
-            console.log('Audio submitted successfully');
+          .then((response) => {
+            console.log('Audio submitted successfully')
+            console.log(response)
+            this.phone()
           })
-          .catch(error => {
-            console.error('Error submitting audio:', error);
-          });
+          .catch((error) => {
+            console.error('Error submitting audio:', error)
+          })
       }
+      
+    },
+
+    validatePhoneNumber() {
+      return /^\d{10}$/.test(this.phoneNumber)
+    },
+
+    phone() {
+      this.showPhoneNumberForm = !this.showPhoneNumberForm
+      console.log(this.showPhoneNumberForm)
+      this.showOtpForm = false
+
+      //   const randomOtp = Math.floor(100000 + Math.random() * 900000);
+      //   this.otpNumber = String(randomOtp);
+      //   console.log(this.otpNumber)
+    },
+
+    otp() {
+      if (this.phoneNumber.length === 10) {
+        this.generateAndSendOtp()
+        this.showPhoneNumberForm = false
+        console.log(this.showPhoneNumberForm)
+        this.showOtpForm = true
+        this.enteredOtp = ''
+      } else if (this.phoneNumber.length === 0) {
+        alert('Please enter a 10-digit phone number.')
+      } else {
+        alert('Please enter a valid 10-digit phone number.')
+      }
+    },
+
+    generateAndSendOtp() {
+      const randomOtp = Math.floor(100000 + Math.random() * 900000)
+      this.otpNumber = String(randomOtp)
+      console.log(this.otpNumber)
+    },
+
+    confirmOtp() {
+      if (this.enteredOtp.toString() === this.otpNumber) {
+        this.$router.push('/Workforce/MeetPage')
+      } else {
+        alert('Incorrect OTP. Please try again.')
+        this.enteredOtp = ''
+      }
+    },
+    resendOtp() {
+      this.enteredOtp = ''
+      this.generateAndSendOtp()
     },
   },
 }
