@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -85,11 +86,47 @@ export default {
       this.startCamera()
       this.video.play()
     },
-    sendImage() {
-      // Implement logic to send the captured image
-      console.log('Sending Image:', this.capturedImage)
-      this.$router.push('/Workforce/VoiceRecord')
+    async sendImage() {
+      try {
+        // Prepare the image data for upload
+        const imageData = this.capturedImage;
+
+        // Convert the base64 data to a Blob (file-like object)
+        const blobData = this.dataURLtoBlob(imageData);
+
+        // Create a new File object from the Blob
+        const file = new File([blobData], "image.png", { type: "image/png" });
+
+        // Set the endpoint URL for the backend route
+        const endpoint = this.$getWFMUrlBase()+"/api/upload-image"; // Assuming the frontend is hosted on the same domain as the backend
+
+        // Create a FormData object and append the file to it
+        const formData = new FormData();
+        formData.append("imageFile", file);
+
+        // Send the image data to the backend using the HTTP POST request
+        const response = await axios.post(endpoint, formData);
+
+        // The response from the backend should contain the image URL if the upload is successful
+        const imageUrl = response.data.imageUrl;
+        console.log("Image uploaded to S3:", imageUrl);
+        this.$router.push("/Workforce/VoiceRecord");
+      } catch (error) {
+        console.error("Error uploading image to the server:", error);
+      }
     },
+    dataURLtoBlob(dataURL) {
+      // Convert base64 to Blob
+      const byteString = atob(dataURL.split(",")[1]);
+      const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      return new Blob([ab], { type: mimeString });
+    },
+    
     stopCamera() {
       if (this.stream) {
         const tracks = this.stream.getTracks()

@@ -28,6 +28,7 @@
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/toast": "^3.3.1",
     "@syncfusion/ej2-vue-buttons": "^20.3.49",
+    "aws-sdk": "^2.1420.0",
     "cookie": "^0.5.0",
     "core-js": "^3.19.3",
     "js-cookie": "^3.0.1",

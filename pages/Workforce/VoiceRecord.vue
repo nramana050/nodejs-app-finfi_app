@@ -177,11 +177,17 @@ export default {
     submitAudio() {
       if (this.audioLink) {
         console.log('Audio Link:', this.audioLink)
-        // Call your submit function or API request here
 
+        // Create a FormData object
+        const formData = new FormData();
+        formData.append('audio', this.audioLink);
+
+        // Call your submit function or API request here using FormData
         axios
-          .post(this.$getWFMUrlBase() + '/audio', {
-            audioLink: this.audioLink,
+          .post(this.$getWFMUrlBase() + '/audio', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data' // Set the Content-Type header to 'multipart/form-data'
+            }
           })
           .then((response) => {
             console.log('Audio submitted successfully')
@@ -192,7 +198,6 @@ export default {
             console.error('Error submitting audio:', error)
           })
       }
-      
     },
 
     validatePhoneNumber() {
