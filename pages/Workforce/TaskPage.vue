@@ -26,13 +26,13 @@
         <!-- today's assigned task -->
 
       <div class="flex pt-1 pb-5 mb-5 justify-center items-center">
-    <a href="/TaskPage">
+    <a href="/ClickImage">
         <img class="ml-auto mr-5" src="../../assets/Workforce/leftIcon.svg" alt="" />
     </a>
     
     <p class="ml-2 mr-5 pt-1 text-gray-700 text-xl font-medium text-center">Today</p>
 
-    <a href="/TaskPage">
+    <a href="/ClickImage">
         <img class="ml-5" src="../../assets/Workforce/RightIcon.svg" alt="" />
     </a>
 </div> 
@@ -55,7 +55,6 @@
       <div @click="navToaddTask" class="w-8 h-8 ml-auto  mr-5 rounded-full bg-blue-500 flex justify-center items-center cursor-pointer">
         <img  src="../../assets/Workforce/PlusIcon.svg" alt="" />
       </div>
-
 
  <!-- Fourth section  Tasks-->
 

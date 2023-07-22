@@ -3,7 +3,7 @@
     <div style="width: 298.107px; height: 99.329px; flex-shrink: 0; background-color: #FFFFFF;">
       <div class="m-4 flex justify-between items-center">
         <p class="text-gray-500 text-xs font-prompt font-normal leading-normal">{{ time }} - {{timeTo}}</p>
-        <a href="/TaskPage">
+        <a href="/workforce/startjob">
           <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
         </a>
       </div>
