@@ -59,7 +59,7 @@ export default {
   },
   beforeMount() {
     if (this.$auth.strategy.token.status().valid()) {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     }
     if (!this.organization) {
       this.$router.push('/login')
@@ -141,11 +141,14 @@ export default {
         })
         await this.$auth.setUserToken(result.data.access_token)
         this.$auth.strategy.token.sync()
-        this.$router.push('/dashBoard')
+
+        
+        this.$router.push('/workforce/dashBoardscreen')
+        // this.$router.push('/workforce/dashboardscreen')
         // if(this.isTermsAccepted && !this.skipOTP){
         //   this.$router.push('/WelcomeScreen');
         // }else
-        //   this.$router.push('/dashBoard');
+        //   this.$router.push('/workforce/dashboardscreen');
         // }
       } catch (err) {
         if (this.passcode == null) {

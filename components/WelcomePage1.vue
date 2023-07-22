@@ -18,7 +18,7 @@ export default {
 
   methods: {
     navToDashboard() {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
   },
 }

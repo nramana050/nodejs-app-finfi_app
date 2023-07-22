@@ -66,7 +66,7 @@ export default {
       this.$emit('callBack')
     },
     goToHome(e) {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
     requestPhysicalCard(e) {
       this.$router.push('/RequestPhysical')

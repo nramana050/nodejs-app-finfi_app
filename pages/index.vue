@@ -38,7 +38,9 @@ export default {
   },
   beforeMount() {
     if (this.$auth.loggedIn && this.$auth.strategy.token.status().valid()) {
-      this.$router.push('/dashboard')
+      // Vikas:July22:shortcut: move to WFM dashboard
+      this.$router.push('/workforce/dashboardscreen')
+      // this.$router.push('/workforce/dashboardscreen')
     }
     else{
       this.$router.push('/login')

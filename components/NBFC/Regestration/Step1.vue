@@ -130,7 +130,7 @@ export default {
       }
     },
     cancel(e) {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
       e.preventDefault()
       // this.$emit('close')
     },

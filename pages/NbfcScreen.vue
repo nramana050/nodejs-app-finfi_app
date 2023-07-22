@@ -63,7 +63,7 @@ export default {
       )
     },
     navToDashboard() {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
   },
 }

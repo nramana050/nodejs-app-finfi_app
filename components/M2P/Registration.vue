@@ -67,7 +67,7 @@ export default {
   methods: {
     navStepBack() {
       if (this.step?.id === 1) {
-        this.$router.push('/dashboard')
+        this.$router.push('/workforce/dashboardscreen')
       } else {
         this.currentStep -= 1
       }

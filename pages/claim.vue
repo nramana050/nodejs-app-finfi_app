@@ -92,7 +92,7 @@ export default {
       if (apiResult.data?.user?.is_corporate_expense_enabled) {
         this.isCorpEnabled = true
       } else {
-        this.$router.push('/dashboard')
+        this.$router.push('/workforce/dashboardscreen')
       }
     }
   },

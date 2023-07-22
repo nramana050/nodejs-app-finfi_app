@@ -67,7 +67,7 @@ export default {
       this.isEditMode = false
     },
     navToDashBoard() {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
 
     validator(data) {

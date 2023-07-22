@@ -158,7 +158,7 @@ export default {
       e.preventDefault()
     },
     cancel() {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
     timer(remaining) {
       const self = this

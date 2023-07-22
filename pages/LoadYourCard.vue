@@ -175,7 +175,7 @@ export default {
     //       amount: amt,
     //     })
 
-    //     this.$router.push('/dashboard')
+    //     this.$router.push('/workforce/dashboardscreen')
 
     //     this.$toast.success(
     //       `Your account has been credited with a balance of ${amt}`

@@ -51,14 +51,14 @@ export default {
         if (welcome.data.message === true) {
           this.$router.push('/welcomepage')
         } else {
-          this.$router.push('/dashboard')
+          this.$router.push('/workforce/dashboardscreen')
         }
       } catch (err) {
         this.$toast.error('failed to update passcode')
       }
     },
     navToDashboard() {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
   },
 }
