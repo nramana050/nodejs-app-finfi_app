@@ -1,12 +1,12 @@
 <template lang="pug">
 div
-  div
+  div.loader(v-if="this.isLoading") Please Wait! Fetching Card Details...
+  div(v-if="!this.isLoading && isCardAvailable")
     button(@click="navToDashboard")
         FaIcon.mx-auto.ps-3(icon='angle-left')
-    div.text-center.font-bold(v-if="isCardAvailable") Card Details 
-    div.text-center.font-bold(v-else) Card is not registered
-  div
-    div(v-if="isCardAvailable && cardFetch > 0")
+    div.text-center.font-bold Card Details 
+  div(v-if="!this.isLoading && isCardAvailable && cardFetch > 0")
+    div
       div.ps-8(v-if="card.url && !isCardBlocked")
         object(:data="card.url" width="90%" height="220" type="text/html" style="margin-left: 5%;" css="{ .counter-container { diaplay: none; }}" :key="cardFetch")
       div(v-else)
@@ -16,13 +16,11 @@ div
       div
         p Please go through the 
           a.font-bold.text-blue-800(href='https://www.myfinfi.com/t-c-for-app-usage' target="_blank") Terms and Conditions
-          //- p.text-xs
-          //-   a(href='https://www.myfinfi.com/' target="_blank") *terms and conditions
         input.p-2(v-model="isTermsAccepted" :true-value="true" :false-value="false" type="checkbox")
         label  I accept the terms and condition 
       button.ps-6.h-12.w-full.text-black.rounded.uppercase.font-bold(v-if="this.isTermsAccepted" @click="openRegistrationModal")
         span Get Card
-  div.ps-1
+  div.ps-1(v-if="!this.isLoading && isCardAvailable && cardFetch > 0")
     div.ps-16.uppercase(v-if="isCardAvailable")
       div.flex.flex-row.justify-between
         span Card Status
@@ -69,7 +67,7 @@ export default {
   },
   methods: {
     navToDashboard() {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
     openRegistrationModal() {
       this.$router.push('/cardregistration')
@@ -140,6 +138,7 @@ export default {
         this.isLoading = false
       } catch (err) {
         this.isLoading = false
+        this.$router.push('/cardregistration')
         // this.$toasted.error(err.response.data.message);
       }
     },
@@ -163,6 +162,13 @@ export default {
 </script>
 
 <style scoped>
+.loader {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .ps-1 {
   height: 70vh;
   background-color: #7165e3;

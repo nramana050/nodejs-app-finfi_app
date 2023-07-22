@@ -45,20 +45,20 @@ export default {
       try {
         const welcome = await this.$axios.post('/profile/welcome')
         await this.$axios.post('/profile/passcode', {
-          passcode: Number(this.passcode_1),
+          passcode: this.passcode_1,
         })
         this.$toast.info('Passcode updated successfully')
         if (welcome.data.message === true) {
           this.$router.push('/welcomepage')
         } else {
-          this.$router.push('/dashboard')
+          this.$router.push('/workforce/dashboardscreen')
         }
       } catch (err) {
         this.$toast.error('failed to update passcode')
       }
     },
     navToDashboard() {
-      this.$router.push('/dashboard')
+      this.$router.push('/workforce/dashboardscreen')
     },
   },
 }

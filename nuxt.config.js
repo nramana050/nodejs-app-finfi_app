@@ -31,12 +31,14 @@ export default {
   ],
 
   plugins: [
+    { src: '@/plugins/globalFunctions.js', ssr: false }, // Vikas: July 20
     { src: '~/plugins/vue.modal' },
     { src: '~/plugins/date.picker', ssr: false },
     { src: '~/plugins/vuex.persist' },
     { src: '~/plugins/vue.modal.2', ssr: false },
     { src: '~/plugins/vue.iframe', ssr: false },
     { src: '~/plugins/vue.tooltip', ssr: false },
+    { src: '~/plugins/vue.calendar', ssr: false },
     // { src: '~/plugins/swiper.js', ssr: false },
 
     '~/plugins/fontawesome.js',
@@ -84,8 +86,8 @@ export default {
   components: true,
 
   axios: {
-    baseURL: 'https://uatapi.myfinfi.com',
-    //baseURL: 'http://localhost:8000'
+    //baseURL: 'https://uatapi.myfinfi.com',
+     baseURL: 'http://localhost:8000'
   },
 
   pwa: {
@@ -108,7 +110,7 @@ export default {
 
   server: {
     host: '0.0.0.0',
-    port: 8002,
+    port: 9002,
   },
 
   router: {

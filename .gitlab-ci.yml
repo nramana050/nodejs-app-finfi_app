@@ -1,0 +1,30 @@
+image: node:latest
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  only:
+    - development
+  before_script:
+    - apt-get update
+    - apt-get install -y ssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - echo $PATH
+    - export PATH="$PATH:/usr/local/bin"
+    - source ~/.bashrc
+  script:
+    - ssh $SSH_USER@$SSH_HOST "cd ~/uat_application/finfi_app && git pull origin development"
+    - npm install pm2 -g
+    - npm install --save-dev nuxt # Install Nuxt.js as a development dependency
+    - npm run build
+    - pm2 start --name="uat-app" npm -- start
+  artifacts:
+    paths:
+      - dist/ # Save the built application  

@@ -1,5 +1,5 @@
 <template lang="pug">
-div.flex.flex-col.p-8
+div.flex.flex-col.p-8.mobile-confirmation
   div.flex
     p.font-bold.tracking-wide.text-lg Thank you for your purchase.
   div.flex.py-2
@@ -26,6 +26,9 @@ export default {
 }
 </script>
 <style scoped>
+.mobile-confirmation {
+  padding-bottom: 5rem;
+}
 .btn {
   background-color: #7165e3;
 }

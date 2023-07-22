@@ -16,7 +16,7 @@
               div.flex.flex-row.justify-between
                 span.ps-7 Your Goal amount
                 span.ps-15 &#8377;
-                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue1" @keydown="nameKeydown($event)")
+                input.ps-14(class="focus:outline-none focus:shadow-outline"  type="numeric" v-bind:max="max" v-model="slidervalue1" @keydown="nameKeydown($event)")
               input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-bind:min="min" v-bind:max="max" v-bind:step="step" v-model="slidervalue1")
           div.ps-4.flex.flex-row.justify-between
             div.relative.pt-1
@@ -27,7 +27,7 @@
           div.ps-3.custom-trans
             div.ps-4.flex.flex-row.justify-between
               span.font-bold You pay
-              span.font-bold You get
+              span.font-bold Cashback
             div.ps-4.flex.flex-row.justify-between
               span.ps-12 &#8377; {{slidervalue1}}
               span.ps-12 &#8377; {{getAmount}}
@@ -41,26 +41,29 @@
         div.ps-2
           div.ps-4.flex.flex-row.justify-between
             div.relative.pt-1.custom-container
-              div.flex.flex-row.justify-between
+              div.voucherbox.flex.flex-row.justify-between
                 span.ps-7 Voucher Amount
-                span.ps-15 &#8377;
-                input.ps-14(class="focus:outline-none focus:shadow-outline" type="numeric" v-bind:max="max" v-model="slidervalue3" @keydown="nameKeydown($event)" v-if="!fixedSteps?.length")
+                div.voucherAmtTxt
+                  span &#8377;
+                  input(class="focus:outline-none focus:shadow-outline" ref='voucherAmt' type="numeric" v-bind:max="max" v-bind:maxLength="max?.toString()?.length" v-model="slidervalue3" @keydown="nameKeydown($event)" v-if="!fixedSteps?.length")
                 select.ps-14.custom-select(v-if="fixedSteps?.length" v-on:change="selectVal")
                   option(value=amt v-for="amt in this.fixedSteps") {{ amt }}
               input#customRange1.form-range.w-full.h-6.p-0.bg-transparent(type='range' class='focus:outline-none focus:ring-0 focus:shadow-none' v-if="!fixedSteps?.length" v-bind:min="min" v-bind:max="max" v-bind:step="step"  v-model="slidervalue3")
-              div.ps-5 &#8377; {{instantPayment}} will be deducted from your Salary.
-              div.ps-5 Voucher Purchase T&Cs
+              //- div.ps-5 &#8377; {{instantPayment}} will be deducted from your Salary.   // Voucher Purchase T&Cs
+              div.ps-5 
                 div.ps-3.custom-trans
                   div.ps-4.flex.flex-row.justify-between
                     span.font-bold You pay
-                    span.font-bold You get
+                    span.font-bold Cashback
                   div.ps-4.flex.flex-row.justify-between
                     span.ps-12 &#8377; {{slidervalue3}}
                     span.ps-12 &#8377; {{getMerchDis}}
         div.ps-6
           div.pt-5.font-bold.text-xl.text-center How to use the vouchers
-          div.ps-7 1.Vouchers will be delivered to your registered mobile number & registered email address. 
-          div.ps-7 2.Discount amount will be transferred to your bank account within 3 working days.
+          ol.howtouse
+            li Cashback will be processed within 24 hours.
+            li Vouchers will be delivered via registered email within one hour.
+            li Vouchers can be used directly on the brand's website & the mobile app under the gift card option.
           div.ps-7.pt-5(@click="openBlockCard" v-if="!slidervalue3==0")
             button.ps-8.font-bold Buy Now     
           div.ps-7.pt-2(@click="payViaRazor" v-if="!slidervalue3==0")
@@ -135,7 +138,11 @@ export default {
       return this.$store.state.snbl.product.product.step
     },
   },
+  updated() {
+    this.focusVoucherAmount()
+  },
   mounted() {
+    this.focusVoucherAmount()
     const _this = this
     this.product = this.selecteProduct.product
     if (this.product?.fixed_steps) {
@@ -176,6 +183,10 @@ export default {
   },
 
   methods: {
+    focusVoucherAmount() {
+      //focus voucher amount text box
+      this.$refs.voucherAmt.focus()
+    },
     selectVal(e) {
       this.slidervalue3 = e.target.value
     },
@@ -220,11 +231,13 @@ export default {
         this.$toast.error(err.message)
       }
     },
-    async buyNow(razorpay_paid) {
+
+    async buyNow(razorpay_paid, razorpay_order_id) {
       const payload = {
         product: this.selecteProduct.product,
         amount: parseInt(this.instantPayment),
         razorpay_paid: razorpay_paid,
+        razorpay_order_id: razorpay_order_id,
       }
       try {
         const res = await this.$axios.$post(`/snbl/instant-voucher`, payload)
@@ -244,42 +257,47 @@ export default {
           amount: parseInt(this.instantPayment),
           product: this.product,
         }
-        await this.$axios
-          .post('/payment/gateway/instant-voucher', data)
-          .then((res) => {
-            this.voucher_data = res.data.voucher_data
-            const options = {
-              order_id: res.data.order_id,
-              currency: res.data.currency,
-              amount: res.data.amount,
-              key: res.data.key,
-              name: res.data.name,
-              description: res.data.description,
-              image: res.data.image,
-              prefill: {
-                name: res.data.prefill.name,
-                email: res.data.prefill.email,
-                contact: res.data.prefill.contact,
-              },
-              theme: {
-                color: res.data.theme.color,
-              },
-              handler: async (response) => {
-                const verify_payment_response = await this.verifySignature(
-                  response
-                )
-                if (verify_payment_response.data.status) {
-                  this.buyNow(true)
-                  this.$toast.success('Successfully bought the voucher.')
-                } else {
-                  this.$toast.error('Failed to make the payment.')
-                }
-              },
-            }
+        const razorpayOrderId = await this.$axios.post(
+          '/payment/gateway/order_id',
+          {
+            amount: parseInt(this.instantPayment) * 100,
+            purpose: 'InstantVoucher',
+            description: 'Payment for Instant Voucher',
+          }
+        )
 
-            const rzp1 = new Razorpay(options)
-            rzp1.open()
-          })
+        const { id: orderId, amount, currency } = razorpayOrderId.data
+
+        const profileResult = await this.$axios.get('/profile')
+        const { first_name, last_name, mobile, email } = profileResult.data
+        const full_name = `${first_name} ${last_name}`
+
+        const options = {
+          order_id: orderId,
+          currency: currency,
+          image: 'https://app.myfinfi.com/_ipx/s_140x140/finfi.png',
+          amount: amount,
+          prefill: {
+            name: full_name,
+            email: email,
+            contact: mobile,
+          },
+          theme: {
+            color: '#7165E3',
+          },
+          handler: async (response) => {
+            const verify_payment_response = await this.verifySignature(response)
+            if (verify_payment_response.data.status) {
+              this.buyNow(true, orderId)
+              this.$toast.success('Successfully bought the voucher.')
+            } else {
+              this.$toast.error('Failed to make the payment.')
+            }
+          },
+        }
+
+        const rzp1 = new Razorpay(options)
+        rzp1.open()
       } catch (err) {
         console.log(err)
         this.$toast.error('Failed to buy the voucher')
@@ -287,12 +305,35 @@ export default {
     },
 
     async verifySignature(response) {
-      return await this.$axios.post('/payment/gateway/verify', response)
+      const Response = { ...response, skiplog: true }
+      return await this.$axios.post('/payment/gateway/verify', Response)
     },
   },
 }
 </script>
 <style scoped>
+.voucherbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.voucherbox > span {
+  width: 50%;
+}
+.voucherbox > .voucherAmtTxt {
+  border: 1px solid #898a8d;
+  padding-left: 5px;
+  display: flex;
+}
+.voucherbox > .voucherAmtTxt > span {
+  margin-right: 3px;
+}
+.howtouse {
+  margin: 10px 30px;
+  font-size: 14px;
+  list-style: decimal !important;
+  color: #898a8d;
+}
 .ps-2 {
   margin: 1.5rem;
   background-color: white;

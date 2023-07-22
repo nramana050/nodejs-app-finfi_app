@@ -1,19 +1,17 @@
 <template lang="pug">
-div.flex.flex-col
+div.flex.flex-col.verify-user-details
   FormulateForm(v-model="form" @submit="next")
-    div.ps-1 Note: Please enter Address as in Aadhar.
-    FormulateInput.pr-3(type="text" label="Address Line 1" name="address_line_1" validation="required" @keydown="nameKeydown($event)")
-    FormulateInput.pr-3(type="text" label="Address Line 2" name="address_line_2" validation="required" @keydown="nameKeydown($event)")
-    FormulateInput.pr-3(type="text" label="Address Line 3" name="address_line_3" validation="required" @keydown="nameKeydown($event)")
+    FormulateInput(type="text" label="Flat, House no., Building, Apartment - as per Aadhaar" name="address_line_1" validation="required" validation-name="This field" @keydown="nameKeydown($event)")
+    FormulateInput(type="text" label="Area, Street, Colony, Road, Lane - as per Aadhaar" name="address_line_2" validation="required" validation-name="This field" @keydown="nameKeydown($event)")
+    FormulateInput(type="text" label="Village, Town, City - as per Aadhaar" name="address_line_3" validation="required"  validation-name="This field" @keydown="nameKeydown($event)")
     div
-      FormulateInput.pr-3(type="text" label="City" name="city" validation="required" @keydown="nameKeydown($event)")
-      FormulateInput.pr-3(type="select" label="State" name="state" :options="states" placeholder="Select state" validation="required")
     div.flex.flex-col
-      FormulateInput.pr-3(type="text" label="Pincode" name="pincode" validation="required" maxlength="6" @keydown="nameKeydown($event)")
-    div.flex-1.pr-4
-      div.flex.flex-row.py-4.justify-between
-        button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Next
-        button.h-8.px-4.text-white.rounded.bg-gray-900.font-bold(@click="cancel") Cancel
+      FormulateInput(type="text" label="Pincode - as per Aadhaar" name="pincode" validation="required" maxlength="6" @keydown="nameKeydown($event)")
+      FormulateInput(type="text" label="City, District" name="city" validation="required" @keydown="nameKeydown($event)")
+      FormulateInput(type="select" label="State" name="state" :options="states" placeholder="Select state" validation="required")
+    div.flex.action
+        button.btn.h-8.px-4.text-white.rounded.font-bold(type="submit") Confirm
+        
 </template>
 
 <script>
@@ -71,7 +69,9 @@ export default {
             },
           }
         )
-      } catch (err) {}
+      } catch (err) {
+        console.log(err)
+      }
       this.$emit('next', this.form)
     },
     cancel(e) {
@@ -83,11 +83,55 @@ export default {
 }
 </script>
 <style scoped>
-.btn {
-  background-color: #7165e3;
+.verify-user-details {
+  height: 100vh;
 }
+.verify-user-details > form {
+  margin-top: 20px;
+  min-height: 100vh;
+}
+.verify-user-details > form > div {
+  margin-bottom: 10px;
+}
+.verify-user-details > .formulate-form label,
+.verify-user-details .custom-label {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  color: #979797;
+}
+.verify-user-details > .formulate-form input,
+.verify-user-details > .formulate-form select {
+  border: 1px solid #e9f0e6;
+  border-radius: 12px;
+  height: 42px;
+  width: 100%;
+  text-align: left;
+}
+.verify-user-details .mx-datepicker {
+  width: 100%;
+}
+.verify-user-details .btn {
+  height: 44px;
+  background: #7165e3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  width: 100%;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .ps-1 {
   margin-bottom: 1rem;
   text-align: center;
+}
+.action {
+  position: relative;
+  bottom: 0px;
 }
 </style>
