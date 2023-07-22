@@ -38,12 +38,7 @@ export default {
   },
   beforeMount() {
     if (this.$auth.loggedIn && this.$auth.strategy.token.status().valid()) {
-      // Vikas:July22:shortcut: move to WFM dashboard
-      this.$router.push('/workforce/dashboardscreen')
-      // this.$router.push('/workforce/dashboardscreen')
-    }
-    else{
-      this.$router.push('/login')
+      this.$router.push('/dashboard')
     }
     this.$store.commit('clear', 'organization')
   },
@@ -62,7 +57,6 @@ export default {
       const organization = await this.$axios.$post(`/ext/organization`, {
         code: this.organizationCode,
       })
-      
       const { status, code, name } = organization
       if (!status) {
         this.$toast.error('Organization not registered')

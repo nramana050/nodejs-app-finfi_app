@@ -2,11 +2,9 @@
 div
     div.flex-0 
       PageHeader.font-bold(:title="'Search Product'")
-      div.main-container
-        div.px-4
-          input(type='text' ref="search" id="search-product" placeholder="Search" v-model="searchKeyword" @input="search($event.target.value,$event)")  
-        div
-          ProductList(:productList="productList") 
+      input(type='text' ref="search" id="search-product" placeholder="Search" v-model="searchKeyword" @input="search($event.target.value,$event)")  
+    div
+      ProductList(:productList="productList") 
 </template>
 
 <script>
@@ -47,18 +45,11 @@ export default {
 }
 </script>
 <style scoped>
-.main-container {
-  background: #f5f5f5;
-  min-height: 100vh;
-  padding-top: 20px;
-}
 #search-product {
-  height: 48px;
+  border-bottom: 1px solid #989595;
+  height: 42px;
   width: 100%;
   font-size: 18px;
   padding: 10px;
-  background: #ffffff;
-  border: 1px solid #e6e8e6;
-  border-radius: 12px;
 }
 </style>
