@@ -170,7 +170,7 @@
 <script>
 
 // VikasRev:July22:changed ID to Id
-//import axios from 'axios';
+import axios from 'axios';
 export default {
     data() {
     return {
@@ -201,17 +201,17 @@ export default {
         meetingNotes: this.meetingNotes,
         
       };
-      debugger;
-      this.$axios.post('/tasks', data) // Vikas: trial
+      // debugger;
+      // this.$axios.post('/tasks', data) // Vikas: trial
       
-      // axios.post(this.$getWFMUrlBase() + '/tasks', data)
+      axios.post(this.$getWFMUrlBase() + '/tasks', data)
   .then(response => {
     console.log(response);
   })
   .catch(error => {
     console.log("Error occurred:", error);
   });
-     this.$router.push('/Workforce/TaskPage');
+     this.$router.push('/Workforce/DailyTask');
 
     }
   }

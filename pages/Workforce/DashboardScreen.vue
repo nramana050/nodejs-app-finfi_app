@@ -24,16 +24,35 @@
 <p class="mt-4 ml-5 text-gray-800 font-roboto text-base font-medium leading-normal tracking-wide">Hi, Gideon Guernsey</p>
 
 </div>
-<div style="border-radius: 14px; background: #E15959; width: 339px; height: 58px; flex-shrink: 0; margin-top: 40px; margin-left: 20px;">
+<div  v-if="showClockin" style="border-radius: 14px; background: #E15959; width: 339px; height: 58px; flex-shrink: 0; margin-top: 40px; margin-left: 20px;">
   <div class="flex p-3 pt-4">
         
         
        <p  class="text-white">Clock In</p>
 
         
-        <button class="ml-auto" @click="clockIn"><p class="text-white">Tap here to clock In </p> </button>
+        <button class="ml-auto" @click="toggleFilters"><p class="text-white">Tap here to clock In </p> </button>
       </div>
 </div>
+      <div  v-else
+        style="
+          border-radius: 14px;
+          background: #55adaf;
+          width: 339px;
+          height: 58px;
+          flex-shrink: 0;
+          margin-top: 40px;
+          margin-left: 20px;
+        "
+      >
+        <div class="flex p-3 pt-4">
+          <p class="text-white">Clock Out</p>
+          <button class="ml-auto" @click="toggleFilters">
+            <p class="text-white">Tap here to clock Out</p>
+          </button>
+        </div>
+      </div>
+
 
     <!-- These are Major sections of wfm like task attendance -->
 <div class="flex mt-8 ml-5">
@@ -82,7 +101,7 @@
   <div class="flex p-3 pt-4 mt-5 ml-5 mr-5">
         
         
-       <p >Clock In</p>
+       <p >Today Schedule</p>
 
         <!-- Paggination should be added there to see all the task  -->
         <button class="ml-auto">see all </button> 
@@ -90,7 +109,7 @@
         <!-- These are all the task  -->
 
     <div>
-        <ScheduleCard v-for="task in tasks" :key="task._id" :time="task.timefrom" :timeTo="task.timeTo"  :company="task.leadID"  :name="task.meetingWith"/>
+        <ScheduleCard v-for="task in tasks" :key="task._id" :time="task.timefrom" :timeTo="task.timeTo"  :company="task.leadId"  :name="task.meetingWith"/>
       </div>
 
   
@@ -147,14 +166,18 @@ export default {
         //   company: "LMN Company",
         //   name : "prasad"
         // }
-      ]
+      ],
+      showClockin: true,
     };
   },
   methods:{
     navToTaskPage(){
-      this.$router.push('/Workforce/TaskPage');
+      this.$router.push('/Workforce/DailyTask');
       
     },
+    toggleFilters() {
+    this.showClockin = !this.showClockin;
+  },
 
     navToAttendance() {
       this.$router.push('/Workforce/AttendanceForm');

@@ -3,7 +3,7 @@
   <div class="ml-4 mr-4 mb-4 mt-5 flex justify-between items-center ">
 
     <p class="text-gray-500 text-xs font-prompt font-normal leading-normal mt-3" style="color: #021639; font-size: 12px; font-family: Prompt; font-style: normal; font-weight: 400; line-height: normal;">
-  {{ time }}
+  {{ time }} &nbsp; - &nbsp; {{timeTo}}
 </p>
 
       <p class="ml-auto text-gray-500 text-xs font-prompt font-normal leading-normal mt-3"> {{work}} </p>
@@ -15,7 +15,7 @@
   {{ company }}
 </p>
 
-    <a href="/DailyTask">
+    <a href="/workforce/startjob">
       <img class="ml-auto" src="../../assets/Workforce/RightIcon.svg" alt="" />
     </a>
 </div>
@@ -36,6 +36,10 @@ export default {
   props: {
     time: {
       type: String,
+      required: true
+    },
+    timeTo: {
+      type : String,
       required: true
     },
     work: {

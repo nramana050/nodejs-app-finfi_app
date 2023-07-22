@@ -43,19 +43,23 @@
 <!-- These Are Boxes for tasks -->
 
 
-<div class="flex">
+<div class="flex mb-5">
     <ReusableBox :number="42" :task="'Pending'" color="blue-500" class="ml-8" />
     <ReusableBox :number="30" :task="'Completed'" color="green-500"/>
     <ReusableBox :number="45" :task="'Pending'" color="pink-500"/>
     <ReusableBox :number="14" :task="'Differed'" color="yellow-500"/>
-    <ReusableBox :number="15" :task="'Missed'" color="gray-500"/>
+    <!-- <ReusableBox :number="15" :task="'Missed'" color="gray-500"/> -->
 
   </div>
+
+    <div @click="navToaddTask" class="w-8 h-8 ml-auto  mr-5 rounded-full bg-blue-500 flex justify-center items-center cursor-pointer">
+        <img  src="../../assets/Workforce/PlusIcon.svg" alt="" />
+      </div>
 
 <!-- These are task assigned for today -->
 
   <div>
-        <ReusableTask v-for="task in tasks" :key="task._id" :time="task.timefrom" :work="task.meetingNotes" :company="task.leadId" :nextTask="task.meetingNotes" />
+        <ReusableTask v-for="task in tasks" :key="task._id" :time="task.timefrom" :timeTo="task.timeTo" :work="task.meetingNotes" :company="task.leadId" :nextTask="task.managerNotes" />
       </div>
  
 
@@ -90,9 +94,11 @@ export default {
 
   methods:{
     navToDashboard() {
-      this.$router.push('/workforce/dashboardscreen');
+      this.$router.push('/dashboard');
     },
-    
+     navToaddTask(){
+      this.$router.push('/Workforce/AddTask');
+    },
      fetchData() {
       axios
         .get(this.$getWFMUrlBase() + '/tasks') // Vikas: alltask -> tasks
