@@ -71,29 +71,40 @@ export default {
       }
     },
     captureImage() {
-      const video = this.video
-      const canvas = this.canvas
-      const context = canvas.getContext('2d')
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      context.drawImage(video, 0, 0, canvas.width, canvas.height)
-      const capturedDataUrl = canvas.toDataURL('image/png')
-      this.capturedImage = capturedDataUrl
-      this.stopCamera()
-    },
+  const video = this.video;
+  const canvas = this.canvas;
+  const context = canvas.getContext("2d");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const capturedDataUrl = canvas.toDataURL("image/png");
+
+  // Check if capturedDataUrl is not null or empty before setting it
+  if (capturedDataUrl) {
+    this.capturedImage = capturedDataUrl;
+    this.stopCamera();
+  } else {
+    console.error("Failed to capture the image.");
+  }
+},
+
+
     retakeImage() {
       this.capturedImage = null
       this.startCamera()
       this.video.play()
     },
     async sendImage() {
-      try {
-        // Prepare the image data for upload
+      this.$router.push("/Workforce/VoiceRecord");
+      if (this.capturedImage) {
+        
+        try {
+          // Prepare the image data for upload
         const imageData = this.capturedImage;
 
         // Convert the base64 data to a Blob (file-like object)
         const blobData = this.dataURLtoBlob(imageData);
-
+        
         // Create a new File object from the Blob
         const file = new File([blobData], "image.png", { type: "image/png" });
 
@@ -106,26 +117,33 @@ export default {
 
         // Send the image data to the backend using the HTTP POST request
         const response = await axios.post(endpoint, formData);
-
+        
         // The response from the backend should contain the image URL if the upload is successful
         const imageUrl = response.data.imageUrl;
         console.log("Image uploaded to S3:", imageUrl);
-        this.$router.push("/Workforce/VoiceRecord");
       } catch (error) {
         console.error("Error uploading image to the server:", error);
       }
+      } else {
+        console.error("No captured image to send.");
+    }
     },
     dataURLtoBlob(dataURL) {
-      // Convert base64 to Blob
-      const byteString = atob(dataURL.split(",")[1]);
-      const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-      return new Blob([ab], { type: mimeString });
-    },
+  if (!dataURL) {
+    throw new Error("Invalid dataURL: Cannot convert null/empty dataURL to Blob.");
+  }
+
+  // Convert base64 to Blob
+  const byteString = atob(dataURL.split(",")[1]);
+  const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+},
+
     
     stopCamera() {
       if (this.stream) {

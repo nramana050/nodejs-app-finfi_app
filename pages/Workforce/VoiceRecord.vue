@@ -43,7 +43,7 @@
           class="border border-black rounded-3xl mx-auto"
         ></audio>
         <br /><br />
-        <div class="flex justify-around">
+        <div class="flex justify-around" >
           <button
             :disabled="isRecording"
             @click="startRecording"
@@ -59,10 +59,17 @@
             <FaIcon class="mx-auto" icon="circle-stop" />
           </button>
         </div>
-        <br />
+        <button
+          
+          class="block mt-4 w-11/12 h-12 text-center mx-auto text-white bg-blue-400 border border-black rounded-3xl hover:bg-blue-600 hover:text-white"
+          :disabled="isRecording"
+            @click="startRecording"
+        >
+          START RECORDING
+        </button>
         <button
           :disabled="!audioLink"
-          class="block mt-4 mb-10 w-11/12 h-12 text-center mx-auto text-blue-400 bg-white border border-black rounded-3xl hover:bg-blue-600 hover:text-white"
+          class="block mt-4 w-11/12 h-12 text-center mx-auto text-blue-400 bg-white border border-black rounded-3xl hover:bg-red-600 hover:text-white"
           @click="submitAudio"
         >
           END JOB
@@ -177,29 +184,22 @@ export default {
     submitAudio() {
       if (this.audioLink) {
         console.log('Audio Link:', this.audioLink)
+        // Call your submit function or API request here
 
-        // Create a FormData object
-        const formData = new FormData();
-        formData.append('audio', this.audioLink);
-
-        // Call your submit function or API request here using FormData
         axios
-          .post(this.$getWFMUrlBase() + '/audio', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data' // Set the Content-Type header to 'multipart/form-data'
-            }
+          .post(this.$getWFMUrlBase() + '/audio', {
+            audioLink: this.audioLink,
           })
           .then((response) => {
-            console.log('Audio submitted successfully')
-            console.log(response)
             this.phone()
+            this.$toast.success("Audio submitted successfully");
+            console.log('Audio submitted successfully')
           })
           .catch((error) => {
             console.error('Error submitting audio:', error)
           })
       }
     },
-
     validatePhoneNumber() {
       return /^\d{10}$/.test(this.phoneNumber)
     },
@@ -222,9 +222,10 @@ export default {
         this.showOtpForm = true
         this.enteredOtp = ''
       } else if (this.phoneNumber.length === 0) {
-        alert('Please enter a 10-digit phone number.')
+        this.$toast.error("Please enter a 10-digit phone number.")
+        
       } else {
-        alert('Please enter a valid 10-digit phone number.')
+        this.$toast.error("Please enter a valid 10-digit phone number.")
       }
     },
 
@@ -236,14 +237,16 @@ export default {
 
     confirmOtp() {
       if (this.enteredOtp.toString() === this.otpNumber) {
+        this.$toast.success("Successfully Submitted !!!")
         this.$router.push('/Workforce/MeetPage')
       } else {
-        alert('Incorrect OTP. Please try again.')
+        this.$toast.error("Incorrect OTP. Please try again.")
         this.enteredOtp = ''
       }
     },
     resendOtp() {
       this.enteredOtp = ''
+      this.$toast.success("Otp generated successfully")
       this.generateAndSendOtp()
     },
   },

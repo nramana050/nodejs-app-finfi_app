@@ -126,61 +126,61 @@ export default {
     navToClick() {
       this.$router.push('/Workforce/ClickImage')
     },
-    async initMap() {
+     initMap() {
       // Create a map object
-      let maxDistance = 0
-      let locationArray = {}
-      await this.$axios
-        .get('/workforce/location')
-        .then((response) => {
-          // var maxDistance = 0;
-          locationArray = response.data.payload["'location'"]
-          for (let i = 0; i < locationArray.length; i++) {
-            for (let j = 0; j < locationArray.length; j++) {
-              const d =
-                1000 *
-                this.calcCrow(
-                  locationArray[i].locations.latitude,
-                  locationArray[i].locations.longitude,
-                  locationArray[j].locations.latitude,
-                  locationArray[j].locations.longitude
-                )
-              // console.log("d", d);
-              maxDistance = Math.max(d, maxDistance)
-            }
-          }
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+      // let maxDistance = 0
+      // let locationArray = {}
+      // await this.$axios
+      //   .get('/workforce/location')
+      //   .then((response) => {
+      //     // var maxDistance = 0;
+      //     locationArray = response.data.payload["'location'"]
+      //     for (let i = 0; i < locationArray.length; i++) {
+      //       for (let j = 0; j < locationArray.length; j++) {
+      //         const d =
+      //           1000 *
+      //           this.calcCrow(
+      //             locationArray[i].locations.latitude,
+      //             locationArray[i].locations.longitude,
+      //             locationArray[j].locations.latitude,
+      //             locationArray[j].locations.longitude
+      //           )
+      //         // console.log("d", d);
+      //         maxDistance = Math.max(d, maxDistance)
+      //       }
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error(error)
+      //   })
 
-      const metersPerPx = maxDistance / (Math.sqrt(2) * 25)
-      const zoomLevel = Math.floor(Math.log2(40075016.686 / metersPerPx))
+      // const metersPerPx = maxDistance / (Math.sqrt(2) * 25)
+      // const zoomLevel = Math.floor(Math.log2(40075016.686 / metersPerPx))
 
-      console.log('maxD: ', maxDistance)
-      console.log('zoom: ', zoomLevel)
+      // console.log('maxD: ', maxDistance)
+      // console.log('zoom: ', zoomLevel)
       const map = new window.google.maps.Map(this.$refs.map, {
-        center: { lat: 0, lng: 0 },
-        zoom: zoomLevel,
+        center: { lat: 12.971599, lng: 12.971599},
+        zoom: 15,
       })
-      const bounds = new window.google.maps.LatLngBounds()
+      // const bounds = new window.google.maps.LatLngBounds()
 
-      for (let count = 0; count < locationArray.length; count++) {
-        const marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(
-            locationArray[count].locations.latitude,
-            locationArray[count].locations.longitude
-          ),
-          map: self.map,
-          animation: window.google.maps.Animation.DROP,
-          title: 'Location Number: ' + count.toString(),
-        })
+      // for (let count = 0; count < locationArray.length; count++) {
+      //   const marker = new window.google.maps.Marker({
+      //     position: new window.google.maps.LatLng(
+      //       locationArray[count].locations.latitude,
+      //       locationArray[count].locations.longitude
+      //     ),
+      //     map: self.map,
+      //     animation: window.google.maps.Animation.DROP,
+      //     title: 'Location Number: ' + count.toString(),
+      //   })
 
-        bounds.extend(marker.getPosition())
-      }
-      map.setCenter(bounds.getCenter())
+      //   bounds.extend(marker.getPosition())
+      // }
+      // map.setCenter(bounds.getCenter())
 
-      map.fitBounds(bounds)
+      // map.fitBounds(bounds)
 
       // remove one zoom level to ensure no marker is on the edge.
       map.setZoom(map.getZoom() - 1)
