@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     navToDasahboard() {
-      this.$router.push('/workforce/dashboardscreen')
+      this.$router.push('/dashboard')
     },
     navToTransfer() {
       this.$router.push('/transferscreen')

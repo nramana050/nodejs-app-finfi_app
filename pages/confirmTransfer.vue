@@ -37,8 +37,6 @@ export default {
       transferAmount: null,
       cashRequestSent: false,
       cashRequestFailed: false,
-      financial_partner_type: 'FINFI',
-      web_journy_url:null,
       errorMessage: '',
       num1: null,
       num2: null,
@@ -46,15 +44,11 @@ export default {
       num4: null,
       num5: null,
       num6: null,
-
     }
   },
   computed: {
     requestAmount() {
       return this.$store.state.data.requestedAmount
-    },
-    requestDocumentForBankTransfer(){
-      return this.$store.state.data.attachments
     },
     addNumbers() {
       return (
@@ -62,25 +56,9 @@ export default {
       )
     },
   },
-  async beforeMount() {
-    if (this.$auth.strategy.token.status().valid()) {
-      const apiResult = await this.$axios.get('/organizations/config', {
-        headers: {
-          Authorization: this.token,
-        },
-      })
-      this.financial_partner_type = apiResult.data.financial_partner_type
-    }
-  },
   methods: {
     navToTransfer() {
-      if (this.financial_partner_type === 'FINFI') {
-        this.$router.push('/transferscreen')
-      } else if (this.financial_partner_type === 'NBFC') {
-        this.$router.push('/loadbankaccount')
-      } else {
-        this.$toast.error('Financial partner type not found')
-      }
+      this.$router.push('/transferscreen')
     },
     changeRange(index, value, event) {
       if (event.data != null) {
@@ -119,7 +97,6 @@ export default {
       }
     },
     async passwordVerification() {
-      alert("Password-v Call")
       try {
         const regPasscode = await this.$axios.post('/auth/transfer', {
           passcode: this.passcode,
@@ -134,10 +111,10 @@ export default {
         if (this.addNumbers === null) {
           this.$toasted.error('Please enter passcode')
         }
-        const response=await this.$axios.post('/auth/transfer', {
+        const regPasscode = await this.$axios.post('/auth/transfer', {
           passcode: this.addNumbers,
         })
-        this.web_journy_url=response.data.webJournyUrl
+        console.log('passcode ', regPasscode)
       } catch (err) {
         this.$toasted.error('Incorrect Passcode')
         return
@@ -148,7 +125,7 @@ export default {
       //   this.$toasted.error('Incorrect passcode')
       //   return
       // }
-      // alert(this.web_journy_url)
+
       this.inProgress = true
       const accountresult = await this.$axios.get('/accounts')
       this.accounts = []
@@ -182,52 +159,9 @@ export default {
           )
           return
         }
-        
-
-        // alert(this.requestDocumentForBankTransfer)
-        const formData = new FormData()
-        formData.append('amount', this.requestAmount)
-
-        if (this.requestDocumentForBankTransfer?.length) {
-        for (let i = 0; i < this.requestDocumentForBankTransfer.length; i++) {
-          formData.append('attachments', this.requestDocumentForBankTransfer[i])
-        }
-      }
-
-         await this.$axios.$post(`/accounts/${finfiAccount[0].id}/withdrawals`, formData, {
-            headers: {
-              'Content-Type': `multipart/form-data`,
-              Authorization: this.token,
-            },
-          })
-
-          // await this.$axios.post(
-          //   `/accounts/${finfiAccount[0].id}/withdrawals`,
-          //   {
-          //     amount: this.requestAmount,
-          //     // attachments:this.this.requestDocumentForBankTransfer
-          //   }
-          // )
-          // alert("This is on success full ...")
-        // Check the financial_partner_type
-        // if (this.financial_partner_type === 'NBFC'){
-        //   const url = this.web_journy_url;
-        //   const width = "375"
-        //   const height = "667";
-
-        //   const screenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-        //   const screenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
-
-        //   const screenWidth = window.innerWidth || document.documentElement.clientWidth || window.screen.width;
-        //   const screenHeight = window.innerHeight || document.documentElement.clientHeight || window.screen.height;
-
-        //   const left = screenLeft + (screenWidth / 2) - (width / 2);
-        //   const top = screenTop + (screenHeight / 2) - (height / 2);
-
-        //   const options = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top;
-        //   window.open(url, "_blank", options);
-          
-        // }
+        await this.$axios.post(`/accounts/${finfiAccount[0].id}/withdrawals`, {
+          amount: this.requestAmount,
+        })
         // this.$toast.success('Cash request sent');
         this.cashRequestSent = true
         // this.$router.push('/TransferSuccess')

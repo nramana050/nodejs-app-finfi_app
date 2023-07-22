@@ -174,7 +174,7 @@ export default {
       return specialCharactersRegex.test(charactersStrings)
     },
     navToDashboard() {
-      this.$router.push('/workforce/dashboardscreen')
+      this.$router.push('/dashboard')
     },
     async requestPhysicalCard(order_id) {
       try {

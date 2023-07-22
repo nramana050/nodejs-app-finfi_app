@@ -1,32 +1,42 @@
 <template lang="pug">
-div.ew-info
-  h3(v-if="bank_transfer_used_for === 'SALARY_ADVANCE'") Salary advance
-  h3(v-if="bank_transfer_used_for === 'POST_PAYMENT'") Payment
-  div.flex.justify-between.ew-stats(v-if="bank_transfer_used_for")
-    div.flex-0.text-left.stat-container.green
-      div.text-xs
-        div(class="card-info") Earned
-        div.amt.text-sm &#8377; {{earnedData?.earned || cashLimit?.earned}}
-    div.flex-0.text-left.stat-container.red
-      div.text-xs
-        div(class="card-info") Withdrawn
-        div.amt.text-sm &#8377; {{earnedData?.used || cashLimit?.used}}
-    div.flex-0.text-left.stat-container.yellow
-      div.text-xs
-        div(class="card-info") Available
-        div.amt.text-sm &#8377; {{earnedData?.account_balance ||cashLimit?.account_balance}}      
+div.ps-1
+  //- div.uppercase.pb-5
+  //-   p.tracking-wider.font-bold {{ user.first_name }} {{ user.last_name }}
+  //-   p.tracking-wider.text-sm {{ provider.name }}
+  //- div.flex.justify-between.pb-5
+  //-   div.flex-0
+  //-     p.tracking-wide.text-xs Available Balance
+  //-     p.font-bold.tracking-wider.text-xl &#8377; {{ parseFloat(availableLimit).toFixed(2) }}
+  div.flex.justify-between
+    div.flex-0.text-left
+      div.tracking-wide.text-xs
+        | Salary Used
+        sup.pl-1 *
+      p.ps-3.tracking-wider.text-sm &#8377; {{ payableAmount }} 
+
+    div.flex-0(v-if="earnedLimit!==null")
+      div.flex.tracking-wide.text-xs
+        p.flex-1 Limit
+        div.text-xs.ps-6(v-if="earnedCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.earnedCycle[0].credit_value} per day between ${this.earnedCycle[0].credit_start_day} and ${this.earnedCycle[0].credit_end_day} of the month`")
+          solid-information-circle-icon.w-4.h-4 
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(earnedLimit).toLocaleString('en-IN') }}
+    div.flex-0(v-if="cashLimit!==null")
+      div.flex.tracking-wide.text-xs
+        p.flex-1 Cash Limit
+        div.text-xs.ps-6(v-if="cashFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cashFundCycle[0].credit_value} per day between ${this.cashFundCycle[0].credit_start_day} and ${this.cashFundCycle[0].credit_end_day} of the month`")
+          solid-information-circle-icon.w-4.h-4
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cashLimit).toLocaleString('en-IN') }}
+    div.flex-0.text-right(v-if="cardLimit!==null")
+      div.flex.tracking-wide.text-xs
+        p.flex-1 Card Limit
+        div.flex-0(v-if="cardFundCycle.length > 0" v-popover:tooltip="`You are eligible for a limit of Rs: ${this.cardFundCycle[0].credit_value} per day between ${this.cardFundCycle[0].credit_start_day} and ${this.cardFundCycle[0].credit_end_day} of the month`")
+          solid-information-circle-icon.w-4.h-4
+      p.ps-3.tracking-wider.text-sm &#8377; {{ parseFloat(cardLimit).toLocaleString('en-IN') }}
+  div.ps-4      
   div
-    div.ew-action.flex.gap-4(v-if="financialPartnerType==='NBFC'")
-      button(v-if='nbfcStatus === "NOT_IN_FINSERV" '  @click="checkYourLimitOnClick") Check Your Credit Limit
-      button(v-else-if='nbfcStatus === "CREATED" '  @click="checkYourLimitOnClick") Check Your Credit Limit
-      button(v-else-if='nbfcStatus === "PREAPPROVED" ' @click="navToNbfcScreen") Check Your Credit Limit
-      button(v-else @click="navToNbfcScreen") Check Your Credit Limit 
-      //- // "APPROVED" 
-    div.ew-action.flex.gap-4(v-if="financialPartnerType==='FINFI'")
-      button( @click="navToTransferScreen") Transfer to Bank Account
-  //-  button(v-if='nbfcStatus === "NOT_IN_FINSERV || CREATED" '  @click="checkYourLimitOnClick") Check Your Limit
-  //-  button(v-else  @click="navToTransferScreen") Transfer to Bank Account
- 
+    p.text-xs.ps-5
+      sup.pr-1 *
+      | Employer will deduct from the next salary
 </template>
 
 <script>
@@ -40,10 +50,6 @@ export default {
       type: Object,
       required: true,
     },
-    financialPartnerType: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
@@ -51,53 +57,39 @@ export default {
       cardFundCycle: [],
       cashFundCycle: [],
       earnedCycle: [],
-      // nbfcStatus:
-      bank_transfer_used_for: null,
     }
   },
   computed: {
-    nbfcStatus() {
-      return this.$store.state.nbfc_status
-    },
-    availableLimit() {
-      return this.earnedLimit - this.payableAmount
-    },
     payableAmount() {
       const payableAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'PAYABLE'
       )
-      return payableAccount[0].account_balance || 0
+      return payableAccount[0].account_balance
     },
     cashLimit() {
       const cashAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'CASH'
       )
-      return cashAccount.length > 0 ? cashAccount[0] : 0
+      return cashAccount.length > 0 ? cashAccount[0].account_balance : null
     },
     cardLimit() {
       const cardAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'CARD'
       )
-      return cardAccount.length > 0 ? cardAccount[0].account_balance : 0
+      return cardAccount.length > 0 ? cardAccount[0].account_balance : null
     },
     earnedLimit() {
       const earnedAccount = this.accounts.filter(
         (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
       )
-      return earnedAccount.length > 0 ? earnedAccount[0].earned : 0
+      return earnedAccount.length > 0 ? earnedAccount[0].account_balance : null
     },
-    earnedData() {
-      const earnedAccount = this.accounts.filter(
-        (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
-      )
-      return earnedAccount.length > 0 ? earnedAccount[0] : {}
-    },
+    // availableLimit() {
+    //   return Number(0) + Number(0)
+    // }
   },
   mounted() {
     this.fetchFundCycle()
-    this.checkYourLimit()
-    this.bank_transfer_used_for =
-      this.$store.getters.getOrgConfig?.bank_transfer_used_for
   },
   methods: {
     calculateCreditValue(num, percentage) {
@@ -145,95 +137,28 @@ export default {
         }
       }
     },
-    navToTransferScreen() {
-      this.$router.push('/transferScreen')
-    },
-    navToNbfcScreen() {
-      this.$router.push('/nbfcscreen')
-    },
-    async checkYourLimit() {
-      try {
-        const response = await this.$axios.get(`/nbfc/borrower/hasid`)
-        this.$store.commit('setNbfcStatus', response.data.result.status)
-        this.$store.commit(
-          'setWebJourneyUrl',
-          response.data.result.webJournyUrl
-        )
-        // alert(this.nbfcStatus)
-      } catch (error) {
-        // alert(error)
-      }
-    },
-    checkYourLimitOnClick() {
-      // alert(this.financialPartnerType)
-      // this.$router.push('/NbfcRegestration')
-      this.$toast.error(`User User is not available.`)
-    },
   },
 }
 </script>
 <style scoped>
-.ew-info {
-  padding-top: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.0790811);
+.ps-3 {
+  padding-top: 7px;
+  padding-right: 15px;
 }
-.ew-info > h3 {
-  font-size: 16px;
-  line-height: 21px;
+
+.ps-4 {
+  height: 1px;
+  background: #f2f2f2;
+  margin-top: 7px;
+  margin-left: -2rem;
+  margin-right: -2rem;
 }
-.ew-stats {
-  margin-top: 20px;
+
+.ps-5 {
+  margin-top: 2rem;
 }
-.stat-container {
-  box-shadow: 1px 2px 20px 20px #f0f0f0;
-  padding-right: 35px;
-  height: 56px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  width: 94px;
-}
-.stat-container.green {
-  border-left: 5px solid #3ba99c;
-  border-radius: 5px;
-}
-.stat-container.red {
-  border-left: 5px solid #d3455b;
-  border-radius: 5px;
-}
-.stat-container.yellow {
-  border-left: 5px solid #ffd422;
-  border-radius: 5px;
-}
-.card-info {
-  padding-left: 5px;
-  color: #898a8d;
-  font-size: 11px;
-}
-.amt {
-  padding-left: 5px;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 25px;
-}
-.ew-action {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-}
-.ew-action > button {
-  width: 232px;
-  height: 35px;
-  background: #7165e3;
-  border-radius: 14px;
-  text-align: center;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 17px;
-  color: #ffffff;
+
+.ps-6 {
+  color: #1c1939;
 }
 </style>

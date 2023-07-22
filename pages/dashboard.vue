@@ -2,76 +2,34 @@
 div.home-comtainer.ps-1A
   div.ps-1
     div.flex.flex-row.justify-between
-      span.text-xl Hi {{userName}},
+      span
+        div.font-bold.text-2xl &#8377; {{this.availableLimit}}
+        div.text-xs Available balance
+      span
+        button(@click="navToFAQ")
+          FaIcon.mx-auto.ps-4A(icon='comments')
+          div.text-xs.ps-4A1 FAQ
       span.ps-4
         button(@click="navToProfile")
-          img.object-cover.h-8.w-8.rounded-full(src="~/assets/myfinfi-icons/profile.png")
+          img.object-cover.h-12.w-12.rounded-full(src="https://library.kissclipart.com/20190227/shw/kissclipart-patient-icon-png-clipart-computer-icons-ac058a2675899cf9.png")
   div(v-if="accounts.length > 0 && organization")
-    AccountCard.ps-2(:accounts="accounts" :provider="organization" :financialPartnerType="financialPartnerType")
-  div.marketing(v-if="promotionalCards.length")
-   ssr-carousel(:slides-per-page=1 :loop='true' :show-arrows='false' :feather='false' :peek-right='70' :gutter='10' :autoplay-delay='5')
-    div.card(v-for="promotionalCard in promotionalCards")
-      div.icon
-       img(:src="promotionalCard.pc_icon_file_name" crossorigin="anonymous")
-      div.content
-        h2 {{promotionalCard.pc_title}}
-        p {{promotionalCard.pc_text}}
-      div.action(v-if="promotionalCard.pc_href_page_url")
-        img(src="~/assets/myfinfi-icons/right_arrow.png" @click="()=> cardNavTo(promotionalCard.pc_href_page_url)")
-  div.account-card.no-virual(v-if='this.cardStatus === "VIRTUAL_CARD_NOT_ENABLED"' @click="gotoCardRegistration")
-    div.icon
-     img(src='~/assets/myfinfi-icons/wallet.png') 
-    div.content
-     span.header Get your Prepaid Rupay Card Now
-     span.body Earn upto 10% cashback on your monthly spends  
-  div.account-card(v-else-if='this.cardStatus === "PHYSICAL_CARD_NOT_ORDERD" || this.cardStatus === "PHYSICAL_CARD_ORDERED_ACCPECTED" ')
-   div.header
-    span.info 
-     img(src='~/assets/myfinfi-icons/wallet.png') 
-     span Prepaid Rupay card  
-    span.actions
-      img(src='~/assets/myfinfi-icons/unlock.png')
-      img(src='~/assets/myfinfi-icons/settings.png' @click="navToCard")
-   div.content
-    //- div.stats
-    //-  span.head Total Limit 
-    //-  span.amt ₹ {{ cardData?.earned || 0 }}
-    //- div.stats
-    //-  span.head Prepaid Balance (Used)
-    //-  span.amt ₹ {{ cardData?.used || 0 }} 
-    div.stats
-     span.amt ₹ {{   isEarnedWages?.isVisible ? isEarnedWages?.balance : cardData?.account_balance  }}
-     span.head Balance
-   div.card.actions
-    button(v-if="!Boolean(isEarnedWages?.isVisible)" @click="navToLoadYourCard") Add Money  
-    button(@click="navToCard") Card Details 
-   div.message 
-     img(src='~/assets/myfinfi-icons/cashback.png') 
-     span Bharat Ka Best Cashback Card
-  
-  
-  div.container.corp-exp.products.p-5(v-if="homeProducts?.length")
-    h3.font-bold
-     span Get upto 15% discount on major brands   
-     span.action(@click="navToShop") See All
-    div.latest-claim(v-if="homeProducts?.length")
-        ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='false' :feather='false' :gutter='10')
-          div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
-            div.slide-header
-             img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
-            div.slide-content
-              div.product-name {{product?.product_name}}
-              div.product-discount Get {{ product?.merchant_discount + product?.finfi_discount }}% discount
-            div.slide-product-availability
-             span.mode(v-if="product?.acceptance_mode === 'ONLINE' || product?.acceptance_mode==='BOTH'")
-              img(src="~/assets/myfinfi-icons/online.png")
-              span  Online
-             span.mode(v-if="product?.acceptance_mode === 'INSTORE' || product?.acceptance_mode==='BOTH'")
-              img(src="~/assets/myfinfi-icons/instore.png")
-              span  In-Store
+    AccountCard.ps-2(:accounts="accounts" :provider="organization")
+  div(v-if="isCardEnabled && this.enableM2P")
+    div.container.corp-exp.p-5
+      h3.font-bold.text-sm MyVirtual Card
+    div.latest-claim.p-5
+      button.card-button(@click="navToCard")
+        img.ps-6A(src="~/assets/cardimage.jpg")
+      button.claim-btn(v-if="this.card_type != 'PHYSICAL'" @click="navToPhysicalCard") Order a Physical card  
+  div.container.corp-exp.p-5(v-if="homeProducts?.length")
+    h3.font-bold.text-sm Discount On Top Brands     
+  div.latest-claim.pt-10(v-if="homeProducts?.length")
+      ssr-carousel(:slides-per-page=3 :loop='true' :show-arrows='true' :feather='true' :autoplay-delay='5')
+        div.slide.custom-pro-slide(v-for="product in homeProducts" @click="selectProduct(product)") 
+          img(:src="baseUrl+product.home_screen_image_path" crossorigin="anonymous")
   div.container.corp-exp.p-5(v-if="corpExEnabled")
     h3.font-bold.text-sm Corporate Expense    
-  div.claim-exp.p-5(v-if="corpExEnabled")
+  div.latest-claim.p-5(v-if="corpExEnabled")
     div.display-corp-limit.text-sm 
       div
         span Allocated 
@@ -85,11 +43,7 @@ div.home-comtainer.ps-1A
     h3.font-bold.text-sm Latest Claim
     ClaimItem(v-for="claim in claims" :claimData="claim" :disableActions="true")
     button.claim-btn(@click="navToClaimSettelment") Claim Your Expense 
-    button.claim-btn(@click="navToClaimHistory") Claim History
-    button.claim-btn(@click="navToGeolocation") Geolocation 
-    button.claim-btn(@click="navToTest") Go to test website 
-  div.claim-exp.p-5(v-if="deferredPrompt" )  
-   button.claim-btn(ref="addBtn" class="add-button" @click="clickCallback") Add To Mobile HomeScreen  
+    button.claim-btn(@click="navToClaimHistory") Claim History     
 </template>
 
 <script>
@@ -99,7 +53,6 @@ export default {
 
   data() {
     return {
-      deferredPrompt: null,
       claims: [],
       user: this.$auth.user,
       accounts: [],
@@ -110,8 +63,8 @@ export default {
       vciplink: null,
       availableLimit: null,
       corpExEnabled: false,
+      isCardEnabled: false,
       isCardNumber: false,
-      financialPartnerType: null,
       isCardLock: false,
       enableFinfi: false,
       enableM2P: false,
@@ -124,28 +77,14 @@ export default {
       homeProducts: [],
       selectedProduct: [],
       selected: false,
-      baseUrl: 'https://myfinfi-uat-uploads.s3.ap-south-1.amazonaws.com',
-      promotionalCards: [],
-      cardStatus: null,
+      baseUrl: this.$axios.defaults.baseURL,
     }
+  },
+  async fetch() {
+    await this.getAccountDetails()
   },
 
   computed: {
-    isEarnedWages() {
-      const ernedData = this.accounts.filter(
-        (acc) => acc?.account_type === 'EARNED_WAGES'
-      )
-      return {
-        isVisible: ernedData?.length,
-        balance: ernedData?.[0]?.account_balance,
-      }
-    },
-    earnedData() {
-      const earnedAccount = this.accounts.filter(
-        (item) => item.account_type.toUpperCase() === 'EARNED_WAGES'
-      )
-      return earnedAccount.length > 0 ? earnedAccount[0] : {}
-    },
     organization() {
       return this.$auth.user.organization
     },
@@ -158,36 +97,14 @@ export default {
     consumedCorpBalance() {
       return this.$store.getters.getUserConfig?.corpx_limit?.consumed || 0
     },
-    isCardEnabled() {
-      let isEnable = false
-      this.$store.getters.getUserConfig?.account?.forEach((accData) => {
-        if (accData?.account_type === 'CARD') {
-          isEnable = true
-        }
-      })
-
-      return isEnable
-    },
-    cardData() {
-      const cardAccount = this.accounts.filter(
-        (item) => item.account_type.toUpperCase() === 'CARD'
-      )
-      return cardAccount.length > 0 ? cardAccount[0] : {}
-    },
-    userName() {
-      return `${this.$store.getters.getUserDetails?.first_name} ${this.$store.getters.getUserDetails?.last_name}`
-    },
   },
   mounted() {
     if (this.$auth.strategy.token.status().valid()) {
       this.getHomeProducts()
     }
+    console.log('CONFIG::', this.$auth)
     this.fetchClaims()
     this.fetchUserConfig()
-    this.fetchCardStatus()
-    this.captureEvent()
-    this.fetchAccountDetails()
-    this.fetchMarketingCards()
   },
   async beforeMount() {
     if (this.$auth.strategy.token.status().valid()) {
@@ -196,41 +113,11 @@ export default {
           Authorization: this.token,
         },
       })
-      this.$store.commit('setOrgConfig', {
-        ...apiResult.data,
-      })
       this.isCardEnabled = apiResult.data.is_card_enabled
       this.corpExEnabled = apiResult.data?.user.is_corporate_expense_enabled
-      this.financialPartnerType = apiResult.data?.financial_partner_type
     }
-    this.fetchUserDetails()
   },
   methods: {
-    cardNavTo(uri) {
-      this.$router.push(uri)
-    },
-    async fetchAccountDetails() {
-      await this.getAccountDetails()
-    },
-    captureEvent() {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        // ! Prevent Chrome 67 and earlier from automatically showing the prompt
-        e.preventDefault()
-        // Stash the event so it can be triggered later.
-        this.deferredPrompt = e
-      })
-    },
-    clickCallback() {
-      // Show the prompt
-      this.deferredPrompt.prompt()
-      // Wait for the user to respond to the prompt
-      this.deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          // Call another function?
-        }
-        this.deferredPrompt = null
-      })
-    },
     async fetchUserConfig() {
       const res = await this.$axios.$get('/api/coprx/userconfig', {
         headers: {
@@ -244,9 +131,6 @@ export default {
         })
       }
     },
-    gotoCardRegistration() {
-      this.$router.push('/cards')
-    },
     navToClaimHistory() {
       this.$router.push('/claim?activeTab=claim_history')
     },
@@ -258,9 +142,6 @@ export default {
     },
     navToCard() {
       this.$router.push('/cards')
-    },
-    navToShop() {
-      this.$router.push('/shopnow')
     },
     navToTransaction() {
       this.$router.push('/transactions')
@@ -274,16 +155,6 @@ export default {
     navToFAQ() {
       this.$router.push('/askedquestions')
     },
-    navToLoadYourCard() {
-      this.$router.push('/loadyourcard')
-    },
-    navToGeolocation() {
-      this.$router.push('/workforce/showlocation')
-    },
-    navToTest() {
-      window.location.href =
-        'https://rrfincap.tech/authenicate/web/user?access_token=RPAvp18BUwFLhXA0gndlmmubi57qnOxh2tYZnJTS'
-    },
     async fetchClaims() {
       const res = await this.$axios.$get(
         '/api/coprx/claims?sort=desc&limit=1',
@@ -293,6 +164,7 @@ export default {
           },
         }
       )
+      console.log('CLAIMS', res)
       if (res?.status) {
         this.claims = res?.claims
       }
@@ -315,6 +187,7 @@ export default {
         this.$toast.error(isVartualCard.data.result)
       }
     },
+
     async getCategories() {
       const categories = await this.$axios.$get(`/snbl/category`)
       this.categories = categories.data.map((item) => item.category_name)
@@ -341,10 +214,8 @@ export default {
       this.selectedProduct = []
       this.selectedProduct.push(productObj)
       this.selected = true
-      // this.$store.commit('setProduct', productObj)
-      // this.$router.push('/startplan')
-      this.$store.commit('setCart', productObj)
-      this.$router.push('/ShoppingCart')
+      this.$store.commit('setProduct', productObj)
+      this.$router.push('/startplan')
     },
     cardNumber() {
       if (this.isCardNumber === true) {
@@ -378,7 +249,6 @@ export default {
         for (const item of accountresult.data) {
           if (orgAccountTypes.includes(item.account.account_type)) {
             this.accounts.push(item.account)
-            this.$store.commit('setAccountsBalance', this.accounts)
             if (item.account.account_type !== 'PAYABLE') {
               this.availableLimit += item.account.account_balance
             }
@@ -405,6 +275,38 @@ export default {
         this.$toast.error('Failed to fetch accounts')
       }
     },
+    // async initCashRequest() {
+    //   this.inProgress = true;
+    //   const cashAccount = this.accounts.filter((item) => item.account_type.toUpperCase() === 'CASH' );
+    //   const availableLimit = cashAccount[0].account_balance;
+    //   if (this.requestedAmount > availableLimit) {
+    //     this.$toast.error(`Cash limit available: ${availableLimit}`);
+    //     this.inProgress = false;
+    //     return;
+    //   }
+    //   try {
+    //     const bankResult = await this.$axios.get('/profile/banks');
+    //     // eslint-disable-next-line camelcase
+    //     const { ifsc_code, account_balance } = bankResult.data;
+    //     // eslint-disable-next-line camelcase
+    //     if (ifsc_code === '' || account_balance === '') {
+    //       this.inProgress = false;
+    //       this.$toasted.error('you have missing bank details. Pls update bank details in the profile menu')
+    //       return;
+    //     }
+    //     await this.$axios.post(`/accounts/${cashAccount[0].id}/withdrawals`, {
+    //       amount: this.requestedAmount
+    //       });
+    //     this.$toast.success('Cash request sent');
+    //     this.getAccountDetails();
+    //     this.fetchRecentWithdrawal();
+    //     this.requestedAmount=null;
+    //     this.inProgress = false;
+    //   } catch (err) {
+    //     this.inProgress = false;
+    //     this.$toasted.error(err.response.data.message)
+    //   }
+    // },
     async fetchRecentWithdrawal(accountId) {
       try {
         const result = await this.$axios.get(
@@ -417,51 +319,23 @@ export default {
         this.$toasted.error(err.response.data.message)
       }
     },
-    async fetchUserDetails() {
-      const profileResult = await this.$axios.get('/profile')
-      this.$store.commit('setUserDetails', profileResult.data)
-    },
-    async fetchCardStatus() {
-      const checkCardStatus = await this.$axios.get('/m2p/requestPhysicalCard')
-      this.cardStatus = checkCardStatus?.data?.card_status_code
-    },
-    async fetchMarketingCards() {
-      const promotionalCards = await this.$axios.get('/pc/cards')
-      if (
-        promotionalCards.data?.status &&
-        promotionalCards.data?.result?.length
-      ) {
-        this.promotionalCards = promotionalCards.data?.result
-      }
-    },
+    // async fetchVkyc(){
+    //   try{
+    //     if (this.kycStatus === "MIN_KYC" ){
+    //       const vkycResult = await this.$axios.post('/m2p/vkyc/link');
+    //       if(vkycResult.data.message==='Success' && vkycResult.data.data){
+    //         this.vciplink = vkycResult.data.data.vcip_link
+    //       }
+    //     }
+    //   }catch(err){
+    //     this.$toast.error('Failed to gey kyc status')
+    //   }
+    // }
   },
 }
 </script>
 
 <style scoped>
-.corp-exp.products {
-  background: rgba(229, 226, 255, 0.4);
-  margin-top: 10px;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 18px;
-  color: #000000;
-  padding-bottom: 1.25rem;
-}
-.corp-exp.products > h3 {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-.corp-exp.products > h3 > span.action {
-  color: #4c83b3;
-  cursor: pointer;
-}
-.claim-exp {
-  background-color: #ffffff;
-  margin: 10px 15px;
-  border-radius: 10px;
-}
 .display-corp-limit {
   display: flex;
   justify-content: space-between;
@@ -473,191 +347,6 @@ export default {
 .display-corp-limit > div > span {
   display: block;
 }
-
-.account-card {
-  background: #fff;
-  border-radius: 10px;
-  margin: 10px 15px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-}
-.account-card .header {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #e9e9fc;
-  margin: 10px;
-  padding: 15px 0;
-}
-.account-card .header .info img,
-.account-card .header .actions img {
-  margin-right: 10px;
-}
-.account-card .header .actions img {
-  cursor: pointer;
-}
-.account-card .header .info {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 21px;
-  color: #1c1939;
-}
-
-.account-card .header .info,
-.account-card .header .actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.account-card .content {
-  display: flex;
-  justify-content: space-around;
-  margin: 10px;
-}
-.account-card .content .stats {
-  text-align: center;
-  /* border-right: 1px solid #e9e9fc; */
-  padding-right: 20px;
-  margin-top: 10px;
-}
-.account-card .content .stats:nth-child(3) {
-  border-right: 0;
-  padding-right: 0;
-}
-.account-card .content .stats:nth-child(3) .head {
-  width: 85px;
-}
-.account-card .content .stats .head {
-  font-size: 12px;
-  line-height: 16px;
-  text-align: center;
-  color: #898a8d;
-  display: block;
-  margin: 0 auto;
-  width: 50px;
-  margin-bottom: 10px;
-}
-.account-card .content .stats .amt {
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 21px;
-  color: #1c1939;
-}
-
-.account-card .card.actions {
-  margin: 10px;
-  padding: 0px 10px 10px;
-  display: flex;
-  justify-content: space-around;
-}
-.account-card .card.actions button {
-  width: 102px;
-  height: 28px;
-  background: #ffffff;
-  border: 1px solid #d8d8d8;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  text-align: center;
-  color: #674297;
-}
-.account-card .message {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 16px;
-  text-align: center;
-  letter-spacing: 1px;
-  color: #f5f5f5;
-  height: 55px;
-  background: #7165e3;
-  border-radius: 0px 0px 10px 10px;
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-}
-
-.account-card .message > img {
-  margin-right: 10px;
-}
-
-.account-card.no-virual {
-  display: flex;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-}
-.account-card.no-virual > .icon {
-  width: 30%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.account-card.no-virual > .content {
-  background: #e5e2ff;
-  margin: 0;
-  display: block;
-  padding: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-.account-card.no-virual > .content > span {
-  display: block;
-}
-.account-card.no-virual > .content .header {
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  letter-spacing: 1px;
-  color: #232526;
-  display: block;
-  border-bottom: 0;
-  margin: 0;
-  padding: 5px 10px 5px;
-}
-.account-card.no-virual > .content .body {
-  top: calc(50% - 37px / 2 + 19px);
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  letter-spacing: 1px;
-  color: #83888a;
-  display: block;
-}
-
-.marketing {
-  margin: 10px 15px;
-}
-.marketing .card {
-  background: #ffffff;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-around;
-  min-height: 65px;
-  align-items: center;
-  padding: 10px 15px;
-  /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
-}
-.marketing .card .icon {
-  margin-right: 10px;
-}
-.marketing .card .content {
-  width: 75%;
-}
-.marketing .card .content h2 {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  color: #1c1939;
-}
-
-.marketing .card .content p {
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 21px;
-  color: #898a8d;
-}
-.add-short-cut {
-  margin: 15px;
-}
 .card-button {
   width: 100%;
 }
@@ -665,7 +354,11 @@ export default {
   height: 180px;
 }
 .latest-claim {
+  background-color: #ffffff !important;
+  padding: 20px;
   border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  margin: 0 20px;
 }
 .latest-claim > h3 {
   margin-bottom: 10px;
@@ -682,71 +375,25 @@ export default {
   margin: 10px 0;
 }
 .custom-pro-slide {
+  border-radius: 50%;
   text-align: center;
-  background-color: #fff;
-  min-width: 180px;
-  border-radius: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  position: relative;
-}
-.custom-pro-slide > .slide-header {
   display: flex;
-  align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #7165e3;
-  margin: 0 10px;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
+  align-items: center;
+  background-color: #fff;
+  height: 85px;
+  border: 1px solid #000000;
 }
-.custom-pro-slide > .slide-header > img {
-  height: 70px;
-  width: 75px;
-}
-.custom-pro-slide .slide-content {
-  padding: 0px 5px;
-  min-height: 80px;
-}
-.slide-product-availability {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-  padding-bottom: 0;
-  position: absolute;
-  top: 150px;
-}
-.slide-product-availability .mode {
-  display: flex;
-  font-size: 12px;
-  line-height: 16px;
-  color: #898a8d;
-}
-.slide-product-availability .mode img {
-  margin-right: 5px;
-  height: 12px;
-  width: 12px;
-  top: 2px;
-  position: relative;
-}
-.custom-pro-slide .slide-content .product-name {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 21px;
-  text-align: center;
-  color: #000000;
-}
-.custom-pro-slide .slide-content .product-discount {
-  font-size: 12px;
-  line-height: 18px;
-  text-align: center;
-  color: #898a8d;
+.custom-pro-slide > img {
+  height: 55px;
+  width: 60px;
 }
 .ps-1 {
-  height: 100px;
+  height: 30vh;
   background-color: #7165e3;
   padding-left: 2rem;
-  padding-top: 1rem;
-  color: #ffffff;
+  padding-top: 2rem;
+  color: white;
 }
 
 .ps-1A {
@@ -755,13 +402,14 @@ export default {
 }
 
 .ps-2 {
-  margin-top: -2.5rem;
+  margin-top: -6.5rem;
   border-radius: 10px;
-  height: 12rem;
+  height: 10rem;
   background-color: #ffffff;
   color: #1c1939;
   margin-left: 1rem;
   margin-right: 1rem;
+  padding-right: 2rem;
   box-shadow: 0px 35px 65px rgba(0, 0, 0, 0.0790811);
 }
 
@@ -791,7 +439,8 @@ export default {
 }
 
 .corp-exp {
-  padding: 10px 15px 0px 15px;
+  padding-bottom: 5px;
+  padding-left: 25px;
 }
 
 .ps-6 {

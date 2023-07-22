@@ -16,25 +16,10 @@ div
     //-       span(v-if="inProgress")
     //-         LoadingIcon.w-6.h-6.text-black.mx-auto
     //-       span(v-else) Transfer
-
-    div.upload-container(v-if="isBank_transfer_document_required !== 'NO'")
-      form.flex.justify-center.mt-6(@submit.prevent="uploadAttachment")
-          div.form-item.flex.text-sm.text-gray-600
-            label(class="addproofs relative cursor-pointer rounded-md bg-white font-medium text-indigo-600" for="addproofs")
-              span(class="w-72 inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold border border-indigo-600 text-indigo-600 shadow-sm") Upload File(s)
-                span.isRequired(v-if="isUploadRequired") *
-              input(type="file" class="file sr-only" id="addproofs" accept="image/png, image/jpeg" ref="uploader" @change="selectLocalFiles($event)" multiple) 
-      ul.px-8.mt-6.list-decimal(v-if="attachments?.length")
-            li.file-item.flex.justify-between.mt-2(v-for="(file, idx) in attachments" :key="idx") 
-              span {{file?.name}}
-              span.deleteFile.cursor-pointer.text-red-600(@click.stop="()=>onDeleteFile(idx)")  
-                FaIcon(icon='trash')
-
-    div(v-if="requestedAmount>0 && isUpload")
+    div(v-if="requestedAmount>0")
       div.flex-0.fixed.bottom-0
         button.btn.h-8.px-4.text-white.rounded.font-bold.ps-5(@click="requestAmount")
           span Transfer &#8377; {{transferAmount}}
-    
 </template>
 <script>
 export default {
@@ -44,7 +29,6 @@ export default {
   data() {
     return {
       user: this.$auth.user,
-      attachments: [],
       accounts: [],
       requestedAmount: null,
       recentTransaction: null,
@@ -57,8 +41,6 @@ export default {
         account_number: null,
       },
       interval: null,
-      isBank_transfer_document_required: null,
-      isUploadRequired: false,
     }
   },
   // async fetch() {
@@ -76,27 +58,13 @@ export default {
     this.interval = setInterval(function () {
       _this.transferAmount = _this.requestedAmount
     }, 1000)
-
-    this.isBank_transfer_document_required =
-      this.$store.getters.getOrgConfig?.bank_transfer_document_required
-    this.isUploadRequired =
-      this.$store.getters.getOrgConfig?.bank_transfer_document_required ===
-      'MANDATORY'
   },
   destroyed() {
     clearInterval(this.interval)
   },
-  computed: {
-    isUpload() {
-      if (this.isUploadRequired && this.attachments?.length <= 0) {
-        return false
-      }
-      return true
-    },
-  },
   methods: {
     navToDashboard() {
-      this.$router.push('/workforce/dashboardscreen')
+      this.$router.push('/dashboard')
     },
     async getBankAccount() {
       try {
@@ -110,12 +78,8 @@ export default {
     },
     requestAmount() {
       this.amount = []
-      this.uploadAttachment()
-
       this.amount.push(this.transferAmount)
       this.$store.commit('setrequestAmount', this.transferAmount)
-      this.$store.commit('requestDocumentForBankTransfer', this.attachments)
-      // alert(this.$store.state.data.attachments.length)
       this.$router.push('/confirmTransfer')
     },
     //   async getAccountDetails() {
@@ -190,67 +154,6 @@ export default {
         this.$toasted.error(err.response.data.message)
       }
     },
-
-    selectLocalFiles(event) {
-      const files = event.target.files
-      // console.log(files)
-      const errors = []
-      const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png']
-      const allowedFileSize = 2 * 1024 * 1024
-      if (Object.keys(files)?.length) {
-        Object.keys(files).forEach((file) => {
-          if (!allowedFormats?.includes(files[file].type)) {
-            errors.push({
-              name: files[file].name,
-              message: 'Allowed formats are [.jpg,.jpeg,.png]',
-            })
-          }
-          if (files[file].size > allowedFileSize) {
-            errors.push({
-              name: files[file].name,
-              message:
-                'Allowed file size for each file less than or equal to 2MB.',
-            })
-          }
-        })
-      }
-
-      if (!errors?.length) {
-        this.attachments = [...this.attachments, ...files]
-      } else {
-        this.$toast.error(
-          `Unable to upload ${errors[0].name}. ${errors[0].message}`
-        )
-      }
-      this.$refs.uploader.value = ''
-    },
-    onDeleteFile(idx) {
-      this.attachments.splice(idx, 1)
-    },
-
-    uploadAttachment() {
-      // if (!this.attachments?.length && !this.claimDetails?.id) {
-      //   return this.$toast.error('Please attach a supportive document(s).')
-      // }
-
-      const formData = new FormData()
-
-      if (this.attachments?.length) {
-        for (let i = 0; i < this.attachments.length; i++) {
-          formData.append('attachments', this.attachments[i])
-        }
-      }
-
-      // try {
-
-      //   alert(this.attachments.length)
-
-      // } catch (error) {
-      //   console.error(error)
-      //   this.$toast.error(error?.message)
-      // }
-    },
-
     // async fetchRecentWithdrawal(accountId) {
     //   try {
     //     const result = await this.$axios.get(
@@ -267,10 +170,6 @@ export default {
 }
 </script>
 <style scoped>
-.isRequired {
-  color: red;
-  margin-left: 5px;
-}
 .ps-7 {
   color: #ffffff;
   margin-left: 2rem;

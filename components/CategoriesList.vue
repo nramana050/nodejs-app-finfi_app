@@ -23,7 +23,7 @@ export default {
       selected: false,
       user: this.$auth.user,
       selectedValue: null,
-      baseUrl: 'https://myfinfi-uat-uploads.s3.ap-south-1.amazonaws.com',
+      baseUrl: this.$axios.defaults.baseURL,
     }
   },
   mounted() {

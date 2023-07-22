@@ -30,7 +30,7 @@ export default {
   layout: 'empty',
   methods: {
     navToDashBoard() {
-      this.$router.push('/workforce/dashboardscreen')
+      this.$router.push('/dashboard')
     },
   },
 }
