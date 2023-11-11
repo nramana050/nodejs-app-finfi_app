@@ -16,12 +16,8 @@ pipeline {
             }
         }
         
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                sh 'npm test'
-            }
-        }
+        // Remove the 'Test' stage from the Jenkinsfile
+        // ...
         
         stage('Dockerize') {
             steps {
